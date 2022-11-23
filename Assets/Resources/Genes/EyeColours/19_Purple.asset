@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
+  m_Name: 19_Purple
+  m_EditorClassIdentifier: 
+  idNumber: 190
+  colourName: Purple
+  colourFamily: 3
+  colour: {r: 0.3647059, g: 0.16470589, b: 0.5882353, a: 1}
+  colourDominance: 0
