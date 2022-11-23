@@ -73,7 +73,7 @@ public class CompareColour : MonoBehaviour
                 leastDistance = temp;
                 closestColour = canonicalColourHSV;
             }
-            Debug.Log(string.Format("Canoninal colour HSV : {0}.\nThe distance between it and the unknown colour: {1}\nThe current least distance: {2}", canonicalColourHSV.ToString(), temp, leastDistance));
+            Debug.Log(string.Format("Canoninal colour HSV : {0}, {3}.\nThe distance between it and the unknown colour: {1}\nThe current least distance: {2}", canonicalColourHSV.ToString(), temp, leastDistance, canonicalColours[canonicalColourHSV]));
         }
 
         Debug.Log(string.Format("Final least distance is {0}, HSV: {1}.", leastDistance, closestColour.ToString()));

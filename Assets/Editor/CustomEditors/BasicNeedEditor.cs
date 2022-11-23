@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(Quille.BasicNeed), true)]
+//[CustomPropertyDrawer(typeof(Quille.BasicNeed), true)]
 public class BasicNeedEditor : PropertyDrawer
 {
     bool propFoldout = true;
@@ -70,7 +70,7 @@ public class BasicNeedEditor : PropertyDrawer
     private void DrawBasicNeedFoldout(Rect position, SerializedProperty property, GUIContent label, Quille.BasicNeed currentBasicNeed)
     {
         // Set property label to display the need's name.
-        label = new GUIContent(string.Format("Basic Need: {0}", (currentBasicNeed.GetNeedName())));
+        label = new GUIContent(string.Format("Basic Need: {0}", (currentBasicNeed.NeedName)));
 
         // Begin property, ajust height.
         //EditorGUI.BeginProperty(position, label, property);

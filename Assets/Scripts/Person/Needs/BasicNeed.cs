@@ -9,70 +9,55 @@ namespace Quille
     public class BasicNeed
     {
         // VARIABLES
-        //[SerializeField]
-        //private string needName = "Undefined";
-        //[SerializeField]
-        //private string needIDName = "none";
+        [SerializeField] private BasicNeedSO needSO;
 
-        [SerializeField, Range(0, 5)] // Priorize larger values? 
-        private int aiPriorityWeighting; // Should this be static, since it'll likely by the same for all characters?
+        [SerializeField]
+        private int localAiPriorityWeighting; // ?
 
-        private float levelEmpty = 0; // Will always be 0.
-        [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
-        private float levelFull = 1,
+        [SerializeField]
+        private float localLevelFull,
                       levelCurrent; // init this?
 
-        private static float defaultChangeRate = 0; // the need's universal default decay rate.
         [SerializeField]
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
 
-
         //Default values modulated by ? (List of functions/references)
 
 
-
         // PROPERTIES
+        public string NeedName { get { return needSO.NeedName; } }
 
-        virtual public string GetNeedName()
+        public int AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
+        public int LocalAiPriorityWeighting
         {
-            return "Undefined";
-        }
-
-        virtual public string GetNeedIDName()
-        {
-            return "none";
-        }
-
-
-        public int AIPriorityWeighting // what ranges to use?
-        {
-            get { return aiPriorityWeighting; }
+            get { return localAiPriorityWeighting; }
             set
             {
                 if (value < 0)
                 {
-                    aiPriorityWeighting = 0;
+                    localAiPriorityWeighting = 0;
                     return;
                 }
                 else if (value > 5)
                 {
-                    aiPriorityWeighting = 5;
+                    localAiPriorityWeighting = 5;
                     return;
                 }
-                else aiPriorityWeighting = value;
+                else localAiPriorityWeighting = value;
             }
         } 
 
-        public float LevelEmpty { get; }
-        public float LevelFull
+        public float LevelEmpty { get { return needSO.LevelEmpty; } }
+        public float LevelFull { get { return needSO.LevelFull; } }
+        public float LocalLevelFull
         {
-            get { return levelFull; }
+            get { return localLevelFull; }
             set
             {
-                if (value > levelEmpty)
+                if (value > LocalLevelFull)
                 {
-                    levelFull = value;
+                    localLevelFull = value;
                 }
             }
         }
@@ -98,7 +83,7 @@ namespace Quille
 
         virtual public float DefaultChangeRate
         {
-            get { return defaultChangeRate; }
+            get { return needSO.DefaultChangeRate; }
         }
 
         public float BaseChangeRate
@@ -108,7 +93,7 @@ namespace Quille
         }
         public void ResetBaseDecayRate()
         {
-            baseChangeRate = defaultChangeRate;
+            baseChangeRate = needSO.DefaultChangeRate;
         }
 
         public float CurrentChangeRate
@@ -122,52 +107,39 @@ namespace Quille
         }
 
 
+
         // CONSTRUCTORS
 
-        public BasicNeed(string name,
-                         int aiPriority,
-                         float levelMax,
-                         float levelCurrent,
-                         float currentDecayRate) 
+        public BasicNeed(BasicNeedSO needSO) 
         {
-            //NeedName = name;
+            this.needSO = needSO;
+            SetParametersFromSO();
+        }
 
-            AIPriorityWeighting = aiPriority;
+        private void SetParametersFromSO()
+        {
+            LocalAiPriorityWeighting = AiPriorityWeighting;
 
-            LevelFull = 1;
+            LocalLevelFull = LevelFull;
             LevelCurrent = LevelFull;
 
             BaseChangeRate = DefaultChangeRate;
-            CurrentChangeRate = currentDecayRate;
+            CurrentChangeRate = DefaultChangeRate;
         }
-
-        public BasicNeed()
-        {
-            LevelCurrent = LevelFull;
-            BaseChangeRate = DefaultChangeRate;
-            CurrentChangeRate = BaseChangeRate;
-        }
-
-        public BasicNeed(int weight)
-        {
-            LevelCurrent = LevelFull;
-            BaseChangeRate = DefaultChangeRate;
-            CurrentChangeRate = BaseChangeRate;
-            AIPriorityWeighting = weight;
-        }
-
 
 
         // OVERRIDES
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", GetNeedName(), GetFulfillmentPercentage(), BaseChangeRate, CurrentChangeRate);
+            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, GetFulfillmentPercentage(), BaseChangeRate, CurrentChangeRate);
         }
 
 
 
         // METHODS
+
+
 
 
         // GetFullfilment*

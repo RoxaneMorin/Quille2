@@ -6,7 +6,7 @@ namespace Quille
 {
     // BASE GENE TEMPLATE
     //[System.Serializable]
-    public class Gene : ScriptableObject
+    public abstract class Gene : ScriptableObject
     {
         // LOCAL DEFINES
         internal enum ColourFamily {none};

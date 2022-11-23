@@ -15,5 +15,5 @@ MonoBehaviour:
   idNumber: 40
   colourName: Base - Tan
   colourFamily: 1
-  colour: {r: 0.73333335, g: 0.56782794, b: 0.5058824, a: 1}
+  colour: {r: 0.73333335, g: 0.5862368, b: 0.5302, a: 1}
   colourDominance: 1

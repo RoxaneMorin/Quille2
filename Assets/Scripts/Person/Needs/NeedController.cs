@@ -8,27 +8,9 @@ namespace Quille
     {
         //public BasicNeed myNeed = new BasicNeed("Undefined", 1);
 
+        public BasicNeed[] myBasicNeeds;
 
-        private NeedNourishment myNourishment = new NeedNourishment();
-        private BasicNeed myBasicNeed = new BasicNeed();
-
-
-        public BasicNeed[] myBasicNeeds = new BasicNeed[] {  };
-
-
-
-
-
-        private void initMyBasicNeeds()
-        {
-            myBasicNeeds = new BasicNeed[] { myNourishment, myBasicNeed };
-        }
-
-
-
-
-
-
+        public BasicNeedSO[] basicNeedSOs;
 
         private void StartBasicNeedDecay(BasicNeed myNeed)
         {
@@ -64,7 +46,13 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            initMyBasicNeeds();
+            myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
+            
+            for (int i = 0; i < basicNeedSOs.Length; i++)
+            {
+                myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
+            }
+
             StartBasicNeedDecay(myBasicNeeds);
 
 
@@ -74,7 +62,6 @@ namespace Quille
         // Update is called once per frame
         void Update()
         {
-
         }
     }
 }
