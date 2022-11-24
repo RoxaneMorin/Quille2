@@ -6,11 +6,15 @@ namespace Quille
 {
     public class NeedController : MonoBehaviour
     {
-        //public BasicNeed myNeed = new BasicNeed("Undefined", 1);
+        public BasicNeedSO[] basicNeedSOs;
 
         public BasicNeed[] myBasicNeeds;
 
-        public BasicNeedSO[] basicNeedSOs;
+
+        public GameObject needBarPrefab;
+        public Canvas needCanvas;
+
+        
 
         private void StartBasicNeedDecay(BasicNeed myNeed)
         {
@@ -40,9 +44,6 @@ namespace Quille
 
 
 
-
-
-
         // Start is called before the first frame update
         void Start()
         {
@@ -51,9 +52,19 @@ namespace Quille
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
+
+                NeedBar needBar = Instantiate(needBarPrefab, needCanvas.transform).GetComponentInChildren<NeedBar>();
+                needBar.associatedBasicNeed = myBasicNeeds[i];
+                myBasicNeeds[i].myNeedBar = needBar;
+
+                needBar.Prepare();
+                needBar.transform.position = new Vector3(i * 100, needBar.transform.position.y, needBar.transform.position.z);
             }
 
             StartBasicNeedDecay(myBasicNeeds);
+
+
+
 
 
 

@@ -8,6 +8,9 @@ namespace Quille
     [System.Serializable]
     public class BasicNeed
     {
+        public NeedBar myNeedBar;
+        
+        
         // VARIABLES
         [SerializeField] private BasicNeedSO needSO;
 
@@ -27,6 +30,7 @@ namespace Quille
 
         // PROPERTIES
         public string NeedName { get { return needSO.NeedName; } }
+        public Sprite NeedIcon { get { return needSO.needIcon; } }
 
         public int AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
         public int LocalAiPriorityWeighting
@@ -196,6 +200,9 @@ namespace Quille
             while(this.LevelCurrent > this.LevelEmpty )
             {
                 this.LevelCurrent += this.CurrentChangeRate;
+
+                myNeedBar.UpdateFill(this.LevelCurrent);
+
                 yield return new WaitForSeconds(1);
             }
 
