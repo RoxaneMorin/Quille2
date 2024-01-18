@@ -183,9 +183,38 @@ namespace Quille
             ResetCurrentChangeRateLeft();
             ResetCurrentChangeRateRight();
         }
+
+
+
+        /// CONSTRUCTORS
+        public SubjectiveNeed(SubjectiveNeedSO needSO)
+        {
+            this.needSO = needSO;
+            SetParametersFromSO();
+        }
+
+        private void SetParametersFromSO()
+        {
+            LocalAiPriorityWeighting = AiPriorityWeighting;
+
+            LocalLevelFullLeft = LevelFullLeft;
+            LocalLevelFullRight = LevelFullRight;
+            LevelCurrentLeft = LevelFullLeft;
+            LevelCurrentRight = LevelFullRight;
+
+            BaseChangeRateLeft = DefaultChangeRateLeft;
+            BaseChangeRateRight = DefaultChangeRateRight;
+            CurrentChangeRateLeft = DefaultChangeRateLeft;
+            CurrentChangeRateRight = DefaultChangeRateRight;
+        }
+
+
+
+        // OVERRIDES
+        // ToString
+
+
+
+        // METHODS
     }
-
-
-
-    /// CONSTRUCTORS
 }
