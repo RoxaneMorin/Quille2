@@ -47,9 +47,9 @@ namespace Quille
             get { return localAiPriorityWeighting; }
             set
             {
-                if (value < 0)
+                if (value < Constants.MIN_PRIORITY)
                 {
-                    localAiPriorityWeighting = 0;
+                    localAiPriorityWeighting = Constants.MIN_PRIORITY;
                     return;
                 }
                 else if (value > Constants.MAX_PRIORITY)
@@ -63,14 +63,16 @@ namespace Quille
 
         public float LevelEmptyLeft { get { return needSO.LevelEmptyLeft; } }
         public float LevelEmptyRight { get { return needSO.LevelEmptyRight; } }
+        public (float, float) LevelEmpty { get { return (needSO.LevelEmptyLeft, needSO.LevelEmptyRight); } }
         public float LevelFullLeft { get { return needSO.LevelFullLeft; } }
         public float LevelFullRight { get { return needSO.LevelFullRight; } }
+        public (float, float) LevelFull { get { return (needSO.LevelFullLeft, needSO.LevelFullRight); } }
         public float LocalLevelFullLeft
         {
             get { return localLevelFullLeft; }
             set
             {
-                if (value > LocalLevelFullLeft)
+                if (value > LevelEmptyLeft)
                 {
                     localLevelFullLeft = value;
                 }
@@ -81,10 +83,19 @@ namespace Quille
             get { return localLevelFullRight; }
             set
             {
-                if (value > LocalLevelFullRight)
+                if (value > LevelEmptyRight)
                 {
                     localLevelFullRight = value;
                 }
+            }
+        }
+        public (float, float) LocalLevelFull
+        {
+            get { return (localLevelFullLeft, localLevelFullRight); }
+            set
+            {
+                LocalLevelFullLeft = value.Item1;
+                LocalLevelFullRight = value.Item1;
             }
         }
         public float LevelCurrentLeft
@@ -125,14 +136,27 @@ namespace Quille
                 else levelCurrentRight = value;
             }
         }
+        public (float, float) LevelCurrent
+        {
+            get { return (levelCurrentLeft, levelCurrentRight); }
+            set
+            {
+                LevelCurrentLeft = value.Item1;
+                LevelCurrentRight = value.Item2;
+            }
+        }
 
-        virtual public float DefaultChangeRateLeft
+        public float DefaultChangeRateLeft
         {
             get { return needSO.DefaultChangeRateLeft; }
         }
-        virtual public float DefaultChangeRateRight
+        public float DefaultChangeRateRight
         {
             get { return needSO.DefaultChangeRateRight; }
+        }
+        public (float, float) DefaultChangeRate
+        {
+            get { return (needSO.DefaultChangeRateLeft, needSO.DefaultChangeRateRight); }
         }
 
         public float BaseChangeRateLeft
@@ -144,6 +168,15 @@ namespace Quille
         {
             get { return baseChangeRateRight; }
             set { baseChangeRateRight = value; }
+        }
+        public (float, float) BaseChangeRate
+        {
+            get { return (baseChangeRateLeft, baseChangeRateRight); }
+            set
+            {
+                BaseChangeRateLeft = value.Item1;
+                BaseChangeRateRight = value.Item2;
+            }
         }
 
         public void ResetBaseChangeRateLeft()
@@ -169,6 +202,15 @@ namespace Quille
         {
             get { return currentChangeRateRight; }
             set { currentChangeRateRight = value; }
+        }
+        public (float, float) CurrentChangeRate
+        {
+            get { return (currentChangeRateLeft, currentChangeRateRight); }
+            set
+            {
+                CurrentChangeRateLeft = value.Item1;
+                CurrentChangeRateRight = value.Item2;
+            }
         }
 
         public void ResetCurrentChangeRateLeft()
@@ -198,15 +240,11 @@ namespace Quille
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
 
-            LocalLevelFullLeft = LevelFullLeft;
-            LocalLevelFullRight = LevelFullRight;
-            LevelCurrentLeft = LevelFullLeft;
-            LevelCurrentRight = LevelFullRight;
+            LocalLevelFull = (LevelFullLeft, LevelFullRight);
+            LevelCurrent = (LevelFullLeft, LevelFullRight);
 
-            BaseChangeRateLeft = DefaultChangeRateLeft;
-            BaseChangeRateRight = DefaultChangeRateRight;
-            CurrentChangeRateLeft = DefaultChangeRateLeft;
-            CurrentChangeRateRight = DefaultChangeRateRight;
+            BaseChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
+            CurrentChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
         }
 
 
@@ -221,120 +259,80 @@ namespace Quille
 
         // GetFullfilment*
 
-        public float GetLeftFulfillmentDelta() // How 'far' are we from a fully fulfilled need?
+        public float GetLeftFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need? The higher the value, the needier the need.
         {
-            return LevelFullLeft - LevelCurrentLeft;
+            float delta = LevelFullLeft - LevelCurrentLeft;
+            return asPercentage ? delta : delta / LevelFullLeft;
         }
-        public float GetRightFulfillmentDelta()
+        public float GetRightFulfillmentDelta(bool asPercentage = false)
         {
-            return LevelFullRight - LevelCurrentRight;
+            float delta = LevelFullRight - LevelCurrentRight;
+            return asPercentage ? delta : delta / LevelFullRight;
         }
-        public float GetTotalFulfillmentDelta() // Return the sum of both subneeds' raw fulfillment deltas.
+        public float GetTotalFulfillmentDelta(bool byPercentage = false) // Return the sum of both subneeds' fulfillment deltas.
         {
-            return GetLeftFulfillmentDelta() + GetRightFulfillmentDelta();
+            float delta = GetLeftFulfillmentDelta() + GetRightFulfillmentDelta();
+            return byPercentage ? delta / (LevelFullLeft + LevelFullRight) : delta;
         }
-
-        public float GetLeftFulfillmentDeltaAsPercentage() // How 'far' are we from a fully fulfilled need, as a percentage?
+        public float GetAverageFulfillmentDelta(bool byPercentage = false) // Return the average fullfilment delta of the two subneeds.
         {
-            return (GetLeftFulfillmentDelta() / LevelFullLeft);
+            return GetTotalFulfillmentDelta(byPercentage) / 2;
         }
-        public float GetRightFulfillmentDeltaAsPercentage()
-        {
-            return (GetRightFulfillmentDelta() / LevelFullRight);
-        }
-        public float GetTotalFulfillmentDeltaAsPercentage() // Return the sum of both subneeds' fulfillment deltas as a percentage of their combined potential.
-        {
-            return ((GetLeftFulfillmentDelta() + GetRightFulfillmentDelta()) / (LevelFullLeft + LevelFullRight));
-        }
-
 
         // Get other relevant information.
 
-        public bool GetNeediestSide() // Returns which side of the need is the least fulfilled by raw value, where Left = 0, Right = 1.
+        public bool GetNeediestSide(bool byPercentage = false) // Returns which side of the need is the least fulfilled, where Left = 0, Right = 1.
         {
-            return GetLeftFulfillmentDelta() >= GetRightFulfillmentDelta();
-        }
-        public bool GetNeediestSideFromPercentages() // Returns which side of the need is the least fulfilled by percentage, where Left = 0, Right = 1.
-        {
-            return GetLeftFulfillmentDeltaAsPercentage() >= GetRightFulfillmentDeltaAsPercentage();
+            return GetLeftFulfillmentDelta(byPercentage) <= GetRightFulfillmentDelta(byPercentage);
         }
 
-        public float GetFulfillmentDifference() // Get the absolute difference between the two subneeds' raw levels of fulfillment.
+        public float GetFulfillmentDifference(bool byPercentage = false) // Get the absolute difference between the two subneeds' levels of fulfillment.
         {
-            return Mathf.Abs(GetLeftFulfillmentDelta() - GetRightFulfillmentDelta());
+            return Mathf.Abs(GetLeftFulfillmentDelta(byPercentage) - GetRightFulfillmentDelta(byPercentage));
         }
-        public float GetFulfillmentDifferenceFromPercentages() // Get the absolute difference between the two subneeds' percentile levels of fulfillment.
-        {
-            return Mathf.Abs(GetLeftFulfillmentDeltaAsPercentage() - GetRightFulfillmentDeltaAsPercentage());
-        }
-
-        public float GetAverageFulfillmentDelta() // Return the average raw fullfilment delta of the two subneeds.
-        {
-            return GetTotalFulfillmentDelta() / 2;
-        }
-        public float GetAverageFulfillmentDeltaFromPercentages() // Return the average percentile fullfilment delta of the two subneeds.
-        {
-            return GetTotalFulfillmentDeltaAsPercentage() / 2;
-        }
-
+        
 
         // SortByFullfilment*
 
-        // Sorts an array of subjective needs by the absolute difference between the maximum and current fulfillment levels of their neediest subneed. The most drastic difference comes first.
-        public static void SortByFulfillmentDeltaofNeediest(SubjectiveNeed[] subjectiveNeeds)
+        // Sorts an array of subjective needs by the difference between the fulfillment deltas of their neediest subneed. The most drastic difference comes first.
+        public static void SortByFulfillmentDeltaofNeediest(SubjectiveNeed[] subjectiveNeeds, bool byPercentage = false)
         {
-            SortHelper_SubjectiveNeedsbyDeltaOfNeediest sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediest();
+            SortHelper_SubjectiveNeedsbyDeltaOfNeediest sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediest(byPercentage);
             Array.Sort(subjectiveNeeds, sortHelper);
             //Array.Reverse(subjectiveNeeds);
         }
-
-        //Sorts an array of subjective needs by the percentile difference between the maximum and current fulfillment levels of their neediest subneed. The most dramatic difference comes first.
-        public static void SortByFulfillmentDeltaofNeediestAsPercentage(SubjectiveNeed[] subjectiveNeeds)
+        // Sorts an array of subjective needs by the difference between the total deltas of their subneeds. The most drastic difference comes first.
+        public static void SortByTotalFulfillmentDelta(SubjectiveNeed[] subjectiveNeeds, bool byPercentage = false)
         {
-            SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage();
+            SortHelper_SubjectiveNeedsbyTotalDelta sortHelper = new SortHelper_SubjectiveNeedsbyTotalDelta(byPercentage);
             Array.Sort(subjectiveNeeds, sortHelper);
             //Array.Reverse(subjectiveNeeds);
         }
-
-        // Sorts an array of subjective needs by the average absolute difference between the maximum and current fulfillment levels of their subneeds. The most drastic difference comes first.
-        public static void SortByAverageFulfillmentDelta(SubjectiveNeed[] subjectiveNeeds)
+        // Sorts an array of subjective needs by the difference between the average deltas of their subneeds. The most drastic difference comes first.
+        public static void SortByAverageFulfillmentDelta(SubjectiveNeed[] subjectiveNeeds, bool byPercentage = false)
         {
-            SortHelper_SubjectiveNeedsbyAverageDelta sortHelper = new SortHelper_SubjectiveNeedsbyAverageDelta();
+            SortHelper_SubjectiveNeedsbyAverageDelta sortHelper = new SortHelper_SubjectiveNeedsbyAverageDelta(byPercentage);
             Array.Sort(subjectiveNeeds, sortHelper);
             //Array.Reverse(subjectiveNeeds);
         }
-
-        // Sorts an array of subjective needs by the average percentile difference between the maximum and current fulfillment levels of their subneeds. The most drastic difference comes first.
-        public static void SortByAverageFulfillmentDeltaAsPercentage(SubjectiveNeed[] subjectiveNeeds)
-        {
-            SortHelper_SubjectiveNeedsbyAverageDeltaPercentage sortHelper = new SortHelper_SubjectiveNeedsbyAverageDeltaPercentage();
-            Array.Sort(subjectiveNeeds, sortHelper);
-            //Array.Reverse(subjectiveNeeds);
-        }
-
-
-        // With the total deficit of both needs
-
-
-
-
-
-
-
-
 
         // COMPARISON HELPERS
-
         class SortHelper_SubjectiveNeedsbyDeltaOfNeediest : IComparer
         {
+            bool byPercentage;
+            public SortHelper_SubjectiveNeedsbyDeltaOfNeediest(bool byPercentage)
+            {
+                this.byPercentage = byPercentage;
+            }
+
             // Needs will be ordered from largest to smallest fulfillment delta of their most deficient subneed.
             int IComparer.Compare(object a, object b)
             {
                 SubjectiveNeed needA = (SubjectiveNeed)a;
                 SubjectiveNeed needB = (SubjectiveNeed)b;
 
-                float needDeltaA = needA.GetNeediestSide() ? needA.GetRightFulfillmentDelta() : needA.GetLeftFulfillmentDelta();
-                float needDeltaB = needB.GetNeediestSide() ? needB.GetRightFulfillmentDelta() : needB.GetLeftFulfillmentDelta();
+                float needDeltaA = needA.GetNeediestSide(byPercentage) ? needA.GetRightFulfillmentDelta(byPercentage) : needA.GetLeftFulfillmentDelta(byPercentage);
+                float needDeltaB = needB.GetNeediestSide(byPercentage) ? needB.GetRightFulfillmentDelta(byPercentage) : needB.GetLeftFulfillmentDelta(byPercentage);
 
                 if (needDeltaA < needDeltaB)
                     return 1;
@@ -344,37 +342,22 @@ namespace Quille
                     return 0;
             }
         }
-
-        class SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage : IComparer
-        {
-            // Needs will be ordered from largest to smallest percentile fulfillment delta of their most deficient subneed.
-            int IComparer.Compare(object a, object b)
-            {
-                SubjectiveNeed needA = (SubjectiveNeed)a;
-                SubjectiveNeed needB = (SubjectiveNeed)b;
-
-                float needDeltaA = needA.GetNeediestSideFromPercentages() ? needA.GetRightFulfillmentDeltaAsPercentage() : needA.GetLeftFulfillmentDeltaAsPercentage();
-                float needDeltaB = needB.GetNeediestSideFromPercentages() ? needB.GetRightFulfillmentDeltaAsPercentage() : needB.GetLeftFulfillmentDeltaAsPercentage();
-
-                if (needDeltaA < needDeltaB)
-                    return 1;
-                if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
-
         class SortHelper_SubjectiveNeedsbyTotalDelta : IComparer
         {
+            bool byPercentage;
+            public SortHelper_SubjectiveNeedsbyTotalDelta(bool byPercentage)
+            {
+                this.byPercentage = byPercentage;
+            }
+
             // Needs will be ordered from largest to smallest total fulfillment delta.
             int IComparer.Compare(object a, object b)
             {
                 SubjectiveNeed needA = (SubjectiveNeed)a;
                 SubjectiveNeed needB = (SubjectiveNeed)b;
 
-                float needDeltaA = needA.GetTotalFulfillmentDelta();
-                float needDeltaB = needB.GetTotalFulfillmentDelta();
+                float needDeltaA = needA.GetTotalFulfillmentDelta(byPercentage);
+                float needDeltaB = needB.GetTotalFulfillmentDelta(byPercentage);
 
                 if (needDeltaA < needDeltaB)
                     return 1;
@@ -384,37 +367,22 @@ namespace Quille
                     return 0;
             }
         }
-
-        class SortHelper_SubjectiveNeedsbyTotalDeltaPercentage : IComparer
-        {
-            // Needs will be ordered from largest to smallest percentile total fulfillment delta.
-            int IComparer.Compare(object a, object b)
-            {
-                SubjectiveNeed needA = (SubjectiveNeed)a;
-                SubjectiveNeed needB = (SubjectiveNeed)b;
-
-                float needDeltaA = needA.GetTotalFulfillmentDeltaAsPercentage();
-                float needDeltaB = needB.GetTotalFulfillmentDeltaAsPercentage();
-
-                if (needDeltaA < needDeltaB)
-                    return 1;
-                if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
-
         class SortHelper_SubjectiveNeedsbyAverageDelta : IComparer
         {
+            bool byPercentage;
+            public SortHelper_SubjectiveNeedsbyAverageDelta(bool byPercentage)
+            {
+                this.byPercentage = byPercentage;
+            }
+
             // Needs will be ordered from largest to smallest average fulfillment delta.
             int IComparer.Compare(object a, object b)
             {
                 SubjectiveNeed needA = (SubjectiveNeed)a;
                 SubjectiveNeed needB = (SubjectiveNeed)b;
 
-                float needDeltaA = needA.GetAverageFulfillmentDelta();
-                float needDeltaB = needB.GetAverageFulfillmentDelta();
+                float needDeltaA = needA.GetAverageFulfillmentDelta(byPercentage);
+                float needDeltaB = needB.GetAverageFulfillmentDelta(byPercentage);
 
                 if (needDeltaA < needDeltaB)
                     return 1;
@@ -425,24 +393,9 @@ namespace Quille
             }
         }
 
-        class SortHelper_SubjectiveNeedsbyAverageDeltaPercentage : IComparer
-        {
-            // Needs will be ordered from largest to smallest percentile average fulfillment delta.
-            int IComparer.Compare(object a, object b)
-            {
-                SubjectiveNeed needA = (SubjectiveNeed)a;
-                SubjectiveNeed needB = (SubjectiveNeed)b;
 
-                float needDeltaA = needA.GetAverageFulfillmentDeltaFromPercentages();
-                float needDeltaB = needB.GetAverageFulfillmentDeltaFromPercentages();
 
-                if (needDeltaA < needDeltaB)
-                    return 1;
-                if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
+
+
     }
 }

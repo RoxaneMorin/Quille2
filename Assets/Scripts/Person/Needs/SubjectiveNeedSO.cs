@@ -25,7 +25,7 @@ namespace Quille
         public Sprite needIconRight;
 
         // NEED'S DEFAULT VALUES
-        [SerializeField, Range(0, Constants.MAX_PRIORITY)] // Priorize larger values? 
+        [SerializeField, Range(Constants.MIN_PRIORITY, Constants.MAX_PRIORITY)] // Priorize larger values? 
         private int aiPriorityWeighting; // Should this be static, since it'll likely by the same for all characters?
         public int AiPriorityWeighting { get { return aiPriorityWeighting; } }
         // Are separate priorities needed for the two sides?

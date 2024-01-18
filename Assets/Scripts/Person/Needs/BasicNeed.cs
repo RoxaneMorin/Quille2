@@ -39,9 +39,9 @@ namespace Quille
             get { return localAiPriorityWeighting; }
             set
             {
-                if (value < 0)
+                if (value < Constants.MIN_PRIORITY)
                 {
-                    localAiPriorityWeighting = 0;
+                    localAiPriorityWeighting = Constants.MIN_PRIORITY;
                     return;
                 }
                 else if (value > Constants.MAX_PRIORITY)
@@ -60,7 +60,7 @@ namespace Quille
             get { return localLevelFull; }
             set
             {
-                if (value > LocalLevelFull)
+                if (value > LevelEmpty)
                 {
                     localLevelFull = value;
                 }
@@ -86,7 +86,7 @@ namespace Quille
             }
         }
 
-        virtual public float DefaultChangeRate
+        public float DefaultChangeRate
         {
             get { return needSO.DefaultChangeRate; }
         }
@@ -138,7 +138,7 @@ namespace Quille
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, 1 - GetFulfillmentDeltaAsPercentage(), BaseChangeRate, CurrentChangeRate);
+            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, 1 - GetFulfillmentDelta(true), BaseChangeRate, CurrentChangeRate);
         }
 
 
@@ -147,35 +147,49 @@ namespace Quille
 
 
         // GetFullfilment*
-
-        public float GetFulfillmentDelta() // How 'far' are we from a fully fulfilled need?
+        public float GetFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need?
         {
-            return LevelFull - LevelCurrent;
+            float delta = LevelFull - LevelCurrent;
+            return asPercentage ? delta / LevelFull : delta;
         }
-
-        public float GetFulfillmentDeltaAsPercentage() // How 'far' are we from a fully fulfilled need, as a percentage?
-        {
-            return (GetFulfillmentDelta() / LevelFull);
-        }
-
 
         // SortByFullfilment*
 
-        // Sorts an array of basic needs by the absolute difference between their maximum and current fulfillment levels. The most drastic difference comes first.
-        public static void SortByFulfillmentDelta(BasicNeed[] basicNeeds)
+        // Sorts an array of basic needs by the difference between their maximum and current fulfillment levels. The most drastic difference comes first.
+        public static void SortByFulfillmentDelta(BasicNeed[] basicNeeds, bool byPercentage = false)
         {
-            SortHelper_BasicNeedsbyDelta sortHelper = new SortHelper_BasicNeedsbyDelta();
+            SortHelper_BasicNeedsbyDelta sortHelper = new SortHelper_BasicNeedsbyDelta(byPercentage);
             Array.Sort(basicNeeds, sortHelper);
             //Array.Reverse(basicNeeds);
         }
 
-        //Sorts an array of basic needs by the difference between their maximum and current fulfillment levels as percentages. The most dramatic difference comes first.
-        public static void SortByFulfillmentDeltaAsPercentage(BasicNeed[] basicNeeds)
+        // COMPARISON HELPERS
+        class SortHelper_BasicNeedsbyDelta : IComparer
         {
-            SortHelper_BasicNeedsbyDeltaPercentage sortHelper = new SortHelper_BasicNeedsbyDeltaPercentage();
-            Array.Sort(basicNeeds, sortHelper);
-            //Array.Reverse(basicNeeds);
+            bool byPercentage;
+            public SortHelper_BasicNeedsbyDelta(bool byPercentage)
+            {
+                this.byPercentage = byPercentage;
+            }
+
+            // Needs will be ordered from largest to smallest fulfillment delta.
+            int IComparer.Compare(object a, object b)
+            {
+                BasicNeed needA = (BasicNeed)a;
+                BasicNeed needB = (BasicNeed)b;
+
+                float needDeltaA = needA.GetFulfillmentDelta(byPercentage);
+                float needDeltaB = needB.GetFulfillmentDelta(byPercentage);
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
         }
+
 
 
 
@@ -197,59 +211,7 @@ namespace Quille
             // Do need failure here?
             Debug.Log("The need is now empty.");
         }
-
         
-        
-
-
-
-
-
-
-
-
-        // COMPARISON HELPERS
-
-        // ça ne me laisse pas le mettre private de manière explicite?
-        class SortHelper_BasicNeedsbyDelta : IComparer
-        {
-            // Needs will be ordered from largest to smallest fulfillment delta.
-            int IComparer.Compare(object a, object b)
-            {
-                BasicNeed needA = (BasicNeed)a;
-                BasicNeed needB = (BasicNeed)b;
-
-                float needDeltaA = needA.GetFulfillmentDelta();
-                float needDeltaB = needB.GetFulfillmentDelta();
-
-                if (needDeltaA < needDeltaB)
-                    return 1;
-                if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
-
-        class SortHelper_BasicNeedsbyDeltaPercentage : IComparer 
-        {
-            // Needs will be ordered from largest to smallest percentile fulfillment delta.
-            int IComparer.Compare(object a, object b)
-            {
-                BasicNeed needA = (BasicNeed)a;
-                BasicNeed needB = (BasicNeed)b;
-
-                float needDeltaA = needA.GetFulfillmentDeltaAsPercentage();
-                float needDeltaB = needB.GetFulfillmentDeltaAsPercentage();
-
-                if (needDeltaA < needDeltaB)
-                    return 1;
-                if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
     }
 
 }
