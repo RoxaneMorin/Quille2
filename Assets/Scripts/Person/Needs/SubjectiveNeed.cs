@@ -288,7 +288,7 @@ namespace Quille
             //Array.Reverse(subjectiveNeeds);
         }
 
-        //Sorts an array of subjective needs by the difference between the maximum and current fulfillment levels as percentages of their neediest subneed. The most dramatic difference comes first.
+        //Sorts an array of subjective needs by the percentile difference between the maximum and current fulfillment levels of their neediest subneed. The most dramatic difference comes first.
         public static void SortByFulfillmentDeltaofNeediestAsPercentage(SubjectiveNeed[] subjectiveNeeds)
         {
             SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage();
@@ -296,10 +296,28 @@ namespace Quille
             //Array.Reverse(subjectiveNeeds);
         }
 
+        // Sorts an array of subjective needs by the average absolute difference between the maximum and current fulfillment levels of their subneeds. The most drastic difference comes first.
+        public static void SortByAverageFulfillmentDelta(SubjectiveNeed[] subjectiveNeeds)
+        {
+            SortHelper_SubjectiveNeedsbyAverageDelta sortHelper = new SortHelper_SubjectiveNeedsbyAverageDelta();
+            Array.Sort(subjectiveNeeds, sortHelper);
+            //Array.Reverse(subjectiveNeeds);
+        }
 
-        // With the average fulfillment/deficit of both sides
+        // Sorts an array of subjective needs by the average percentile difference between the maximum and current fulfillment levels of their subneeds. The most drastic difference comes first.
+        public static void SortByAverageFulfillmentDeltaAsPercentage(SubjectiveNeed[] subjectiveNeeds)
+        {
+            SortHelper_SubjectiveNeedsbyAverageDeltaPercentage sortHelper = new SortHelper_SubjectiveNeedsbyAverageDeltaPercentage();
+            Array.Sort(subjectiveNeeds, sortHelper);
+            //Array.Reverse(subjectiveNeeds);
+        }
+
 
         // With the total deficit of both needs
+
+
+
+
 
 
 
@@ -347,5 +365,84 @@ namespace Quille
             }
         }
 
+        class SortHelper_SubjectiveNeedsbyTotalDelta : IComparer
+        {
+            // Needs will be ordered from largest to smallest total fulfillment delta.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetTotalFulfillmentDelta();
+                float needDeltaB = needB.GetTotalFulfillmentDelta();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
+        class SortHelper_SubjectiveNeedsbyTotalDeltaPercentage : IComparer
+        {
+            // Needs will be ordered from largest to smallest percentile total fulfillment delta.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetTotalFulfillmentDeltaAsPercentage();
+                float needDeltaB = needB.GetTotalFulfillmentDeltaAsPercentage();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
+        class SortHelper_SubjectiveNeedsbyAverageDelta : IComparer
+        {
+            // Needs will be ordered from largest to smallest average fulfillment delta.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetAverageFulfillmentDelta();
+                float needDeltaB = needB.GetAverageFulfillmentDelta();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
+        class SortHelper_SubjectiveNeedsbyAverageDeltaPercentage : IComparer
+        {
+            // Needs will be ordered from largest to smallest percentile average fulfillment delta.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetAverageFulfillmentDeltaFromPercentages();
+                float needDeltaB = needB.GetAverageFulfillmentDeltaFromPercentages();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
     }
 }
