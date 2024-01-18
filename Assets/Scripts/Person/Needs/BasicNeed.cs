@@ -8,6 +8,7 @@ namespace Quille
     [System.Serializable]
     public class BasicNeed
     {
+        // TEMP
         public NeedBar myNeedBar;
         
         
@@ -43,9 +44,9 @@ namespace Quille
                     localAiPriorityWeighting = 0;
                     return;
                 }
-                else if (value > 5)
+                else if (value > Constants.MAX_PRIORITY)
                 {
-                    localAiPriorityWeighting = 5;
+                    localAiPriorityWeighting = Constants.MAX_PRIORITY;
                     return;
                 }
                 else localAiPriorityWeighting = value;
@@ -95,7 +96,7 @@ namespace Quille
             get { return baseChangeRate;  }
             set { baseChangeRate = value; }
         }
-        public void ResetBaseDecayRate()
+        public void ResetBaseChangeRate()
         {
             baseChangeRate = needSO.DefaultChangeRate;
         }
@@ -105,7 +106,7 @@ namespace Quille
             get { return currentChangeRate; }
             set { currentChangeRate = value; }
         }
-        public void ResetCurrentDecayRate()
+        public void ResetCurrentChangeRate()
         {
             currentChangeRate = baseChangeRate;
         }
