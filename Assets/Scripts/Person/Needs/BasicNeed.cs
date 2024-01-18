@@ -138,14 +138,12 @@ namespace Quille
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, GetFulfillmentPercentage(), BaseChangeRate, CurrentChangeRate);
+            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, 1 - GetFulfillmentDeltaAsPercentage(), BaseChangeRate, CurrentChangeRate);
         }
 
 
 
         // METHODS
-
-
 
 
         // GetFullfilment*
@@ -157,12 +155,7 @@ namespace Quille
 
         public float GetFulfillmentDeltaAsPercentage() // How 'far' are we from a fully fulfilled need, as a percentage?
         {
-            return (GetFulfillmentDelta() / LevelFull) * 100 ;
-        }
-
-        public float GetFulfillmentPercentage() // Currently, how fulfilled is the need, as a percentage?
-        {
-            return (LevelCurrent / LevelFull) * 100;
+            return (GetFulfillmentDelta() / LevelFull);
         }
 
 
@@ -182,13 +175,6 @@ namespace Quille
             SortHelper_BasicNeedsbyDeltaPercentage sortHelper = new SortHelper_BasicNeedsbyDeltaPercentage();
             Array.Sort(basicNeeds, sortHelper);
             //Array.Reverse(basicNeeds);
-        }
-
-        // Sorts an array of basic needs by their level of fulfillment as percentages. The least fulfilled need comes first.
-        public static void SortByFulfillmentPercentage(BasicNeed[] basicNeeds)
-        {
-            SortHelper_BasicNeedsbyFulfillmentPercentage sortHelper = new SortHelper_BasicNeedsbyFulfillmentPercentage();
-            Array.Sort(basicNeeds, sortHelper);
         }
 
 
@@ -259,26 +245,6 @@ namespace Quille
                 if (needDeltaA < needDeltaB)
                     return 1;
                 if (needDeltaA > needDeltaB)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
-
-        class SortHelper_BasicNeedsbyFulfillmentPercentage : IComparer
-        {
-            // Needs will be ordered from smallest to largest percentile fulfillment value.
-            int IComparer.Compare(object a, object b)
-            {
-                BasicNeed needA = (BasicNeed)a;
-                BasicNeed needB = (BasicNeed)b;
-
-                float needFulfillmentA = needA.GetFulfillmentPercentage();
-                float needFulfillmentB = needB.GetFulfillmentPercentage();
-
-                if (needFulfillmentA > needFulfillmentB)
-                    return 1;
-                if (needFulfillmentA < needFulfillmentB)
                     return -1;
                 else
                     return 0;

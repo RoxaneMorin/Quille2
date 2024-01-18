@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -216,5 +217,135 @@ namespace Quille
 
 
         // METHODS
+
+
+        // GetFullfilment*
+
+        public float GetLeftFulfillmentDelta() // How 'far' are we from a fully fulfilled need?
+        {
+            return LevelFullLeft - LevelCurrentLeft;
+        }
+        public float GetRightFulfillmentDelta()
+        {
+            return LevelFullRight - LevelCurrentRight;
+        }
+        public float GetTotalFulfillmentDelta() // Return the sum of both subneeds' raw fulfillment deltas.
+        {
+            return GetLeftFulfillmentDelta() + GetRightFulfillmentDelta();
+        }
+
+        public float GetLeftFulfillmentDeltaAsPercentage() // How 'far' are we from a fully fulfilled need, as a percentage?
+        {
+            return (GetLeftFulfillmentDelta() / LevelFullLeft);
+        }
+        public float GetRightFulfillmentDeltaAsPercentage()
+        {
+            return (GetRightFulfillmentDelta() / LevelFullRight);
+        }
+        public float GetTotalFulfillmentDeltaAsPercentage() // Return the sum of both subneeds' fulfillment deltas as a percentage of their combined potential.
+        {
+            return ((GetLeftFulfillmentDelta() + GetRightFulfillmentDelta()) / (LevelFullLeft + LevelFullRight));
+        }
+
+
+        // Get other relevant information.
+
+        public bool GetNeediestSide() // Returns which side of the need is the least fulfilled by raw value, where Left = 0, Right = 1.
+        {
+            return GetLeftFulfillmentDelta() >= GetRightFulfillmentDelta();
+        }
+        public bool GetNeediestSideFromPercentages() // Returns which side of the need is the least fulfilled by percentage, where Left = 0, Right = 1.
+        {
+            return GetLeftFulfillmentDeltaAsPercentage() >= GetRightFulfillmentDeltaAsPercentage();
+        }
+
+        public float GetFulfillmentDifference() // Get the absolute difference between the two subneeds' raw levels of fulfillment.
+        {
+            return Mathf.Abs(GetLeftFulfillmentDelta() - GetRightFulfillmentDelta());
+        }
+        public float GetFulfillmentDifferenceFromPercentages() // Get the absolute difference between the two subneeds' percentile levels of fulfillment.
+        {
+            return Mathf.Abs(GetLeftFulfillmentDeltaAsPercentage() - GetRightFulfillmentDeltaAsPercentage());
+        }
+
+        public float GetAverageFulfillmentDelta() // Return the average raw fullfilment delta of the two subneeds.
+        {
+            return GetTotalFulfillmentDelta() / 2;
+        }
+        public float GetAverageFulfillmentDeltaFromPercentages() // Return the average percentile fullfilment delta of the two subneeds.
+        {
+            return GetTotalFulfillmentDeltaAsPercentage() / 2;
+        }
+
+
+        // SortByFullfilment*
+
+        // Sorts an array of subjective needs by the absolute difference between the maximum and current fulfillment levels of their neediest subneed. The most drastic difference comes first.
+        public static void SortByFulfillmentDeltaofNeediest(SubjectiveNeed[] subjectiveNeeds)
+        {
+            SortHelper_SubjectiveNeedsbyDeltaOfNeediest sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediest();
+            Array.Sort(subjectiveNeeds, sortHelper);
+            //Array.Reverse(subjectiveNeeds);
+        }
+
+        //Sorts an array of subjective needs by the difference between the maximum and current fulfillment levels as percentages of their neediest subneed. The most dramatic difference comes first.
+        public static void SortByFulfillmentDeltaofNeediestAsPercentage(SubjectiveNeed[] subjectiveNeeds)
+        {
+            SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage sortHelper = new SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage();
+            Array.Sort(subjectiveNeeds, sortHelper);
+            //Array.Reverse(subjectiveNeeds);
+        }
+
+
+        // With the average fulfillment/deficit of both sides
+
+        // With the total deficit of both needs
+
+
+
+
+
+        // COMPARISON HELPERS
+
+        class SortHelper_SubjectiveNeedsbyDeltaOfNeediest : IComparer
+        {
+            // Needs will be ordered from largest to smallest fulfillment delta of their most deficient subneed.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetNeediestSide() ? needA.GetRightFulfillmentDelta() : needA.GetLeftFulfillmentDelta();
+                float needDeltaB = needB.GetNeediestSide() ? needB.GetRightFulfillmentDelta() : needB.GetLeftFulfillmentDelta();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
+        class SortHelper_SubjectiveNeedsbyDeltaOfNeediestPercentage : IComparer
+        {
+            // Needs will be ordered from largest to smallest percentile fulfillment delta of their most deficient subneed.
+            int IComparer.Compare(object a, object b)
+            {
+                SubjectiveNeed needA = (SubjectiveNeed)a;
+                SubjectiveNeed needB = (SubjectiveNeed)b;
+
+                float needDeltaA = needA.GetNeediestSideFromPercentages() ? needA.GetRightFulfillmentDeltaAsPercentage() : needA.GetLeftFulfillmentDeltaAsPercentage();
+                float needDeltaB = needB.GetNeediestSideFromPercentages() ? needB.GetRightFulfillmentDeltaAsPercentage() : needB.GetLeftFulfillmentDeltaAsPercentage();
+
+                if (needDeltaA < needDeltaB)
+                    return 1;
+                if (needDeltaA > needDeltaB)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+
     }
 }

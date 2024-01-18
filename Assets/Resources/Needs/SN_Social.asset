@@ -15,8 +15,8 @@ MonoBehaviour:
   needName: Interactional
   needNameLeft: Socialization
   needNameRight: Time Alone
-  needIconLeft: {fileID: 0}
-  needIconRight: {fileID: 0}
+  needIconLeft: {fileID: 21300000, guid: 914147a614e2b6e44bf860bee8132214, type: 3}
+  needIconRight: {fileID: 21300000, guid: 31c755613f8cd744ea46b1c3e833df20, type: 3}
   aiPriorityWeighting: 3
   levelFullLeft: 1
   levelFullRight: 1
