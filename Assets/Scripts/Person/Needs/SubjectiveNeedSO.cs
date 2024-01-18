@@ -31,13 +31,13 @@ namespace Quille
         // Are separate priorities needed for the two sides?
 
         [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
-        private float levelFullLeft = Constants.LEVEL_FULL;
+        private float levelFullLeft = Constants.DEFAULT_LEVEL_FULL;
         public float LevelFullLeft { get { return levelFullLeft; } }
-        public float LevelEmptyLeft { get { return Constants.LEVEL_EMPTY; } }// Will always be 0?
+        public float LevelEmptyLeft { get { return Constants.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
         [SerializeField]
-        private float levelFullRight = Constants.LEVEL_FULL;
+        private float levelFullRight = Constants.DEFAULT_LEVEL_FULL;
         public float LevelFullRight { get { return levelFullRight; } }
-        public float LevelEmptyRight { get { return Constants.LEVEL_EMPTY; } }
+        public float LevelEmptyRight { get { return Constants.DEFAULT_LEVEL_EMPTY; } }
 
         [SerializeField]
         private float defaultChangeRateLeft = 0;

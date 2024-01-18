@@ -21,4 +21,4 @@ MonoBehaviour:
   levelFullLeft: 1
   levelFullRight: 1
   defaultChangeRateLeft: -0.001
-  defaultChangeRateRight: -0.001
+  defaultChangeRateRight: -0.0005

@@ -9,9 +9,9 @@ namespace Quille
     public class BasicNeed
     {
         // TEMP
-        public NeedBar myNeedBar;
-        
-        
+        public NeedBar myNeedBar; // comment faire pour que le need n'ai pas besoin de connaitre sa bar?
+
+
         // VARIABLES
         [SerializeField] private BasicNeedSO needSO;
 
@@ -135,16 +135,14 @@ namespace Quille
 
 
         // OVERRIDES
-
         public override string ToString()
         {
-            return string.Format("{0}: {1}% fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, 1 - GetFulfillmentDelta(true), BaseChangeRate, CurrentChangeRate);
+            return string.Format("{0}: {1:P2} fulfilled.\nBase decay rate: {2}.\nCurrent decay rate: {3}.", NeedName, 1 - GetFulfillmentDelta(true), BaseChangeRate, CurrentChangeRate);
         }
 
 
 
         // METHODS
-
 
         // GetFullfilment*
         public float GetFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need?
@@ -154,7 +152,6 @@ namespace Quille
         }
 
         // SortByFullfilment*
-
         // Sorts an array of basic needs by the difference between their maximum and current fulfillment levels. The most drastic difference comes first.
         public static void SortByFulfillmentDelta(BasicNeed[] basicNeeds, bool byPercentage = false)
         {
@@ -162,6 +159,7 @@ namespace Quille
             Array.Sort(basicNeeds, sortHelper);
             //Array.Reverse(basicNeeds);
         }
+        // TO DO: implement facultative use of the AI weight.
 
         // COMPARISON HELPERS
         class SortHelper_BasicNeedsbyDelta : IComparer
@@ -192,10 +190,7 @@ namespace Quille
 
 
 
-
-
-        // 
-
+        // Runtime
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
         {
@@ -203,7 +198,7 @@ namespace Quille
             {
                 this.LevelCurrent += this.CurrentChangeRate;
 
-                myNeedBar.UpdateFill(this.LevelCurrent);
+                myNeedBar.UpdateFill(this.LevelCurrent); // TO DO: handle this elsewhere; this object shouldn't know the UI.
 
                 yield return new WaitForSeconds(1);
             }

@@ -21,9 +21,9 @@ namespace Quille
         public int AiPriorityWeighting { get { return aiPriorityWeighting; } }
 
         [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
-        private float levelFull = Constants.LEVEL_FULL;
+        private float levelFull = Constants.DEFAULT_LEVEL_FULL;
         public float LevelFull { get { return levelFull; } }
-        public float LevelEmpty { get { return Constants.LEVEL_EMPTY; } }// Will always be 0?
+        public float LevelEmpty { get { return Constants.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
 
         [SerializeField]
         private float defaultChangeRate = 0; // the need's universal default decay rate.

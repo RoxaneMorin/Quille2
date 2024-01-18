@@ -10,6 +10,7 @@ namespace Quille
     {
         // TEMP
 
+
         // VARIABLES
         [SerializeField] private SubjectiveNeedSO needSO;
 
@@ -251,14 +252,26 @@ namespace Quille
 
         // OVERRIDES
         // ToString
+        public override string ToString()
+        {
+            return string.Format("{0}:\n\n" +
+                "{1}: {2:P2} fulfilled.\nBase decay rate: {3}.\nCurrent decay rate: {4}.\n\n" +
+                "{5}: {6:P2} fulfilled.\nBase decay rate: {7}.\nCurrent decay rate: {8}.\n\n" +
+                "The neediest subneed is {9}.\n" +
+                "The total need fulfilment is {10:P2}, the average is {11:P2}.",
+                NeedName, 
+                NeedNameLeft, 1 - GetLeftFulfillmentDelta(true), BaseChangeRateLeft, CurrentChangeRateLeft,
+                NeedNameRight, 1 - GetRightFulfillmentDelta(true), BaseChangeRateRight, CurrentChangeRateRight,
+                (GetNeediestSide() ? NeedNameRight : NeedNameLeft),
+                1-GetTotalFulfillmentDelta(), 1-GetAverageFulfillmentDelta()
+                );
+        }
 
 
 
         // METHODS
 
-
         // GetFullfilment*
-
         public float GetLeftFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need? The higher the value, the needier the need.
         {
             float delta = LevelFullLeft - LevelCurrentLeft;
@@ -280,20 +293,16 @@ namespace Quille
         }
 
         // Get other relevant information.
-
         public bool GetNeediestSide(bool byPercentage = false) // Returns which side of the need is the least fulfilled, where Left = 0, Right = 1.
         {
             return GetLeftFulfillmentDelta(byPercentage) <= GetRightFulfillmentDelta(byPercentage);
         }
-
         public float GetFulfillmentDifference(bool byPercentage = false) // Get the absolute difference between the two subneeds' levels of fulfillment.
         {
             return Mathf.Abs(GetLeftFulfillmentDelta(byPercentage) - GetRightFulfillmentDelta(byPercentage));
         }
-        
 
         // SortByFullfilment*
-
         // Sorts an array of subjective needs by the difference between the fulfillment deltas of their neediest subneed. The most drastic difference comes first.
         public static void SortByFulfillmentDeltaofNeediest(SubjectiveNeed[] subjectiveNeeds, bool byPercentage = false)
         {
@@ -392,10 +401,23 @@ namespace Quille
                     return 0;
             }
         }
+        // TO DO: implement facultative use of the AI weight.
 
 
+        // Runtime
+        // Every second, alter this need's fulfillment level by its current change rate.
+        public IEnumerator AlterLevelByChangeRate()
+        {
+            while (this.LevelCurrentLeft > this.LevelEmptyLeft | this.LevelCurrentRight > this.LevelEmptyRight)
+            {
+                this.LevelCurrentLeft += this.CurrentChangeRateLeft;
+                this.LevelCurrentRight += this.CurrentChangeRateRight;
 
+                yield return new WaitForSeconds(1);
+            }
 
-
+            // Do need failure here?
+            Debug.Log("The need is now fully empty.");
+        }
     }
 }
