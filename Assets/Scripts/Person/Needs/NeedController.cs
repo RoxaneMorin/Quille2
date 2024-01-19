@@ -12,6 +12,10 @@ namespace Quille
         public BasicNeed[] myBasicNeeds;
         public SubjectiveNeed[] mySubjectiveNeeds;
 
+        // Change to a dict <needSO, need> ?
+
+
+
         public GameObject needBarPrefab;
         public Canvas needCanvas;
 

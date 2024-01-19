@@ -18,19 +18,6 @@ public class BasePerson : MonoBehaviour
 
 
 
-
-    //Personality Scales; from -1 to 1.
-
-    [SerializeField, Range(-1, 1)]
-    int persIntroExtra = 0; // Introverted --x-- Extroverted
-    //(Need for quiet reflection, me-time vs need to socialize, share with the world)
-    
-
-
-
-
-
-
     // Start is called before the first frame update
     void Start()
     {
