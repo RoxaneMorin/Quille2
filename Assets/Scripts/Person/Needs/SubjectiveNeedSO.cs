@@ -20,6 +20,8 @@ namespace Quille
         private string needNameRight = "Undefined (Right)";
         public string NeedNameRight { get { return needNameRight; } }
 
+        // Description.
+
         // NEED GRAPHICS
         public Sprite needIconLeft;
         public Sprite needIconRight;

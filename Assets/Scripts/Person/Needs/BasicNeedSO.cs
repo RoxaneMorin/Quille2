@@ -12,6 +12,8 @@ namespace Quille
         private string needName = "Undefined";
         public string NeedName { get { return needName; } }
 
+        // Description.
+
         // NEED GRAPHICS
         public Sprite needIcon;
 
