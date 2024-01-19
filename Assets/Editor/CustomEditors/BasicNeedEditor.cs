@@ -118,19 +118,19 @@ public class BasicNeedEditor : PropertyDrawer
             EditorGUI.PropertyField(levelFullRect, property.FindPropertyRelative("levelFull"), levelFullLabel);
 
             // Ensure maximum fulfillment level is always one or larger.
-            if (currentBasicNeed.LevelFull < 1)
+            if (currentBasicNeed.DefaultLevelFull < 1)
             {
                 property.FindPropertyRelative("levelFull").floatValue = 1;
             }
 
             // Update the value of the LevelCurrent slider as needed.
-            if (currentBasicNeed.LevelCurrent > currentBasicNeed.LevelFull)
+            if (currentBasicNeed.LevelCurrent > currentBasicNeed.DefaultLevelFull)
             {
                 property.FindPropertyRelative("levelCurrent").floatValue = property.FindPropertyRelative("levelFull").floatValue;
             }
 
             // Current Fullfilment Level.
-            EditorGUI.Slider(levelCurrentRect, property.FindPropertyRelative("levelCurrent"), currentBasicNeed.LevelEmpty, currentBasicNeed.LevelFull, levelCurrentLabel);
+            EditorGUI.Slider(levelCurrentRect, property.FindPropertyRelative("levelCurrent"), currentBasicNeed.LevelEmpty, currentBasicNeed.DefaultLevelFull, levelCurrentLabel);
 
 
             // Default Decay Rate (read only)

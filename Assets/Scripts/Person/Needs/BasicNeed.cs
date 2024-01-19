@@ -16,15 +16,22 @@ namespace Quille
         [SerializeField] private BasicNeedSO needSO;
 
         [SerializeField]
-        private int localAiPriorityWeighting; // ?
+        private float localAiPriorityWeighting;
 
         [SerializeField]
-        private float localLevelFull,
+        private float levelFull,
                       levelCurrent; // init this?
 
         [SerializeField]
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
+
+        [SerializeField]
+        private float thresholdWarning,
+                      thresholdCritical;
+        
+        private bool isWarning;
+        private bool isCritical;
 
         //Default values modulated by ? (List of functions/references)
 
@@ -33,8 +40,8 @@ namespace Quille
         public string NeedName { get { return needSO.NeedName; } }
         public Sprite NeedIcon { get { return needSO.needIcon; } }
 
-        public int AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
-        public int LocalAiPriorityWeighting
+        public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
+        public float LocalAiPriorityWeighting
         {
             get { return localAiPriorityWeighting; }
             set
@@ -54,15 +61,15 @@ namespace Quille
         } 
 
         public float LevelEmpty { get { return needSO.LevelEmpty; } }
-        public float LevelFull { get { return needSO.LevelFull; } }
-        public float LocalLevelFull
+        public float DefaultLevelFull { get { return needSO.LevelFull; } }
+        public float LevelFull
         {
-            get { return localLevelFull; }
+            get { return levelFull; }
             set
             {
                 if (value > LevelEmpty)
                 {
-                    localLevelFull = value;
+                    levelFull = value;
                 }
             }
         }
@@ -71,9 +78,9 @@ namespace Quille
             get { return levelCurrent; }
             set
             {
-                if (value >= LevelFull)
+                if (value >= DefaultLevelFull)
                 {
-                    levelCurrent = LevelFull;
+                    levelCurrent = DefaultLevelFull;
                     return;
                 }
                 else if (value <= LevelEmpty)
@@ -84,6 +91,10 @@ namespace Quille
                 }
                 else levelCurrent = value;
             }
+        }
+        public float LevelCurrentAsPercentage
+        {
+            get { return levelCurrent / levelFull; }
         }
 
         public float DefaultChangeRate
@@ -111,6 +122,50 @@ namespace Quille
             currentChangeRate = baseChangeRate;
         }
 
+        public float DefaultThresholdWarning { get { return needSO.ThresholdWarning; } }
+        public float DefaultThresholdCritical { get { return needSO.ThresholdCritical; } }
+        public float ThresholdWarning
+        {
+            get { return thresholdWarning; }
+            set
+            {
+                if (value > 1)
+                {
+                    thresholdWarning = 1;
+                    return;
+                }
+                else if (value < 0)
+                {
+                    thresholdWarning = 0;
+                    return;
+                }
+                else thresholdWarning = value;
+            }
+        }
+        public float ThresholdCritical
+        {
+            get { return thresholdCritical; }
+            set
+            {
+                if (value > 1)
+                {
+                    thresholdCritical = 1;
+                    return;
+                }
+                else if (value < 0)
+                {
+                    thresholdCritical = 0;
+                    return;
+                }
+                else thresholdCritical = value;
+            }
+        }
+        public void ResetThresholds()
+        {
+            ThresholdWarning = DefaultThresholdWarning;
+            thresholdCritical = DefaultThresholdCritical;
+        }
+
 
 
         // CONSTRUCTORS
@@ -125,11 +180,14 @@ namespace Quille
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
 
-            LocalLevelFull = LevelFull;
-            LevelCurrent = LevelFull;
+            LevelFull = DefaultLevelFull;
+            LevelCurrent = DefaultLevelFull;
 
             BaseChangeRate = DefaultChangeRate;
             CurrentChangeRate = DefaultChangeRate;
+
+            ThresholdWarning = DefaultThresholdWarning;
+            ThresholdCritical = DefaultThresholdCritical;
         }
 
 
@@ -148,25 +206,28 @@ namespace Quille
         public float GetFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need?
         {
             float delta = LevelFull - LevelCurrent;
-            return asPercentage ? delta / LevelFull : delta;
+            return asPercentage ? (delta / LevelFull) : delta;
         }
 
         // SortByFullfilment*
         // Sorts an array of basic needs by the difference between their maximum and current fulfillment levels. The most drastic difference comes first.
-        public static void SortByFulfillmentDelta(BasicNeed[] basicNeeds, bool byPercentage = false)
+        public static void SortByFulfillmentDelta(BasicNeed[] basicNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
-            SortHelper_BasicNeedsbyDelta sortHelper = new SortHelper_BasicNeedsbyDelta(byPercentage);
+            SortHelper_BasicNeedsbyDelta sortHelper = new SortHelper_BasicNeedsbyDelta(usePriorityWeights, byPercentage);
             Array.Sort(basicNeeds, sortHelper);
             //Array.Reverse(basicNeeds);
         }
-        // TO DO: implement facultative use of the AI weight.
+        
+        // Return neediest of the set.
 
         // COMPARISON HELPERS
         class SortHelper_BasicNeedsbyDelta : IComparer
         {
+            bool usePriorityWeights;
             bool byPercentage;
-            public SortHelper_BasicNeedsbyDelta(bool byPercentage)
+            public SortHelper_BasicNeedsbyDelta(bool usePriorityWeights, bool byPercentage)
             {
+                this.usePriorityWeights = usePriorityWeights;
                 this.byPercentage = byPercentage;
             }
 
@@ -178,6 +239,12 @@ namespace Quille
 
                 float needDeltaA = needA.GetFulfillmentDelta(byPercentage);
                 float needDeltaB = needB.GetFulfillmentDelta(byPercentage);
+
+                if (usePriorityWeights)
+                {
+                    needDeltaA *= needA.localAiPriorityWeighting;
+                    needDeltaB *= needB.localAiPriorityWeighting;
+                }
 
                 if (needDeltaA < needDeltaB)
                     return 1;
@@ -198,13 +265,27 @@ namespace Quille
             {
                 this.LevelCurrent += this.CurrentChangeRate;
 
+                // Threshold detection.
+                if (!isCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                {
+                    Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
+                    isCritical = true;
+                }
+                else if (!isWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
+                {
+                    Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
+                    isWarning = true;
+                }
+
                 myNeedBar.UpdateFill(this.LevelCurrent); // TO DO: handle this elsewhere; this object shouldn't know the UI.
 
                 yield return new WaitForSeconds(1);
             }
 
             // Do need failure here?
-            Debug.Log("The need is now empty.");
+            Debug.Log(string.Format("{0} is now empty.", this.NeedName));
+
+            // TO DO: ability to bounce back while the need is empty?
         }
         
     }

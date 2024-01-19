@@ -123,7 +123,7 @@ namespace Quille
 
             if (Input.GetKeyDown(KeyCode.M))
             {
-                BasicNeed.SortByFulfillmentDelta(myBasicNeeds, true);
+                BasicNeed.SortByFulfillmentDelta(myBasicNeeds, true, true);
 
                 foreach (BasicNeed need in myBasicNeeds)
                 {
