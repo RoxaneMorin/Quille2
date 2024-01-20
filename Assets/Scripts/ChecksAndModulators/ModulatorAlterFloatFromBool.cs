@@ -6,27 +6,28 @@ namespace ChecksAndMods
 {
     // Wrapper / instantiable class for use with modulator SOs.
     [System.Serializable]
-    public class ModulatorAlterFloatFromFloat
+    public class ModulatorAlterFloatFromBool
     {
         // VARIABLES/PARAM
         // sourceObj, target given by the handler.
         [SerializeField]
-        ModulatorAlterFloatFromFloatSO modulator;
-        
+        ModulatorAlterFloatFromBoolSO modulator;
+
         [SerializeField]
-        public OperationsArithmetic mainOpIdx;
+        public ChecksBoolean checkOpIdx;
         [SerializeField]
         public OperationsArithmetic modOpIdx;
 
         [SerializeField]
+        public bool expectedParam;
+        [SerializeField]
         public float modifier;
-
 
         // METHODS
         // Execute.
         public float Execute(UnityEngine.Object sourceObj, float target)
         {
-            return modulator.Modulate(sourceObj, target, modifier, ((int)mainOpIdx), (int)modOpIdx);
+            return modulator.Modulate(sourceObj, target, expectedParam, modifier, ((int)checkOpIdx), (int)modOpIdx);
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    public abstract class ModulatorAlterFloatFromFloatSO : ModulatorSO
+    public abstract class ModulatorAlterFloatFromFloatSO : ScriptableObject
     {
         // VARIABLES/PARAM
         protected float param;
@@ -14,7 +14,7 @@ namespace ChecksAndMods
         protected abstract void FetchParam(UnityEngine.Object sourceObj);
 
         // returns target ?1 (param ?2 mod)
-        public override float Modulate(UnityEngine.Object sourceObj, float target, float modifier, int mainOpIdx, int modOpIdx)
+        public float Modulate(UnityEngine.Object sourceObj, float target, float modifier, int mainOpIdx, int modOpIdx)
         {
             // Will need to be cleaned up/refined to ensure safety and efficiency.
             try
@@ -27,8 +27,8 @@ namespace ChecksAndMods
                 return target;
             }
 
-            float moddedParam = Operators.operationsArithmethic[modOpIdx](param, modifier);
-            float result = Operators.operationsArithmethic[mainOpIdx](target, moddedParam);
+            float moddedParam = Operators.operationsArithmetic[modOpIdx](param, modifier);
+            float result = Operators.operationsArithmetic[mainOpIdx](target, moddedParam);
             return result;
         }
     }

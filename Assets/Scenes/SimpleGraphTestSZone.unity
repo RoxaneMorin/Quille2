@@ -157,17 +157,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personalityController: {fileID: 172503376}
-  originalTarget: 1
-  finalResult: 0
-  modulators:
+  originalTargetForFloat: 1
+  finalResultForFloat: 0
+  floatModulators:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
     mainOpIdx: 1
     modOpIdx: 3
     modifier: 0.5
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 1
-    modOpIdx: 0
-    modifier: 0
+  originalTargetForBool: 1
+  finalResultForBool: 0
+  boolModulators:
+  - modulator: {fileID: 11400000, guid: a5f01fa8be777cb4ea8157c21ae04006, type: 2}
+    checkOpIdx: 0
+    modOpIdx: 3
+    expectedParam: 0
+    modifier: 3
 --- !u!114 &172503376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,12 +259,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172503374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.52, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &245582501
 GameObject:
@@ -450,7 +454,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -523,7 +527,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1340810219
 GameObject:
@@ -629,7 +633,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1888947982
 MonoBehaviour:
   m_ObjectHideFlags: 0

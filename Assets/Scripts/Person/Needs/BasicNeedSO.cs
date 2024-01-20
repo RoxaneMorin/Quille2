@@ -39,6 +39,7 @@ namespace Quille
         public float ThresholdCritical { get { return thresholdCritical; } }
 
 
+        // MODULATORS
         //Default values modulated by ? (List of functions/references)
         [SerializeField]
         public ChecksAndMods.ModulatorAlterFloatFromFloat[] changeRateModulatedBy;

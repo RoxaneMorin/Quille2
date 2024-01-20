@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    public abstract class ModulatorAlterFloatFromBoolSO : ModulatorSO
+    public abstract class ModulatorAlterFloatFromBoolSO : ScriptableObject
     {
         // VARIABLES/PARAM
         protected bool param;
-        public bool expectedParam; // Have in the wrapper instead?
+
 
         // METHODS
         protected abstract void FetchParam(UnityEngine.Object sourceObj);
 
         // returns (param ?2 mod) if target ?1.
-        public override float Modulate(UnityEngine.Object sourceObj, float target, float modifier, int mainOpIdx, int modOpIdx)
+        public float Modulate(UnityEngine.Object sourceObj, float target, bool expectedParam, float modifier, int checkOpIdx, int modOpIdx)
         {
             // Will need to be cleaned up/refined to ensure safety and efficiency.
             try
@@ -27,10 +27,10 @@ namespace ChecksAndMods
                 return target;
             }
 
-            // Compare the fetched param to the expectedParam. Execute the operation if they comform.
-            if (Operators.checksBoolean[mainOpIdx](param, expectedParam))
+            // Compare the fetched param to the expectedParam. Execute the following operation if this one returns true.
+            if (Operators.checksBoolean[checkOpIdx](param, expectedParam))
             {
-                float result = Operators.operationsArithmethic[modOpIdx](target, modifier);
+                float result = Operators.operationsArithmetic[modOpIdx](target, modifier);
                 return result;
             }
             else // Else, return the original target value.

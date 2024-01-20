@@ -12,7 +12,7 @@ namespace ChecksAndMods
 
     static class Operators
     {
-        public static Func<float, float, float>[] operationsArithmethic = {
+        public static Func<float, float, float>[] operationsArithmetic = {
             ((a, b) => a),
             ((a, b) => a + b),
             ((a, b) => a - b),
@@ -30,6 +30,17 @@ namespace ChecksAndMods
             ((a, b) => a = !a)
         };
 
+        public static Func<float, float, bool>[] checksArithmetic =
+        {
+            ((a, b) => a == b),
+            ((a, b) => a != b),
+            ((a, b) => MathF.Abs(a - b) <= Constants.THRESHOLD_ROUGHLY_EQUAL),
+            ((a, b) => a > b),
+            ((a, b) => a >= b),
+            ((a, b) => a < b),
+            ((a, b) => a <= b)
+        };
+
         public static Func<bool, bool, bool>[] checksBoolean =
         {
             ((a, b) => a),
@@ -39,7 +50,7 @@ namespace ChecksAndMods
     }
 
     // The mapping of Modulators' potential operations. Both names and indices will be used.
-    public enum OperationsArithmethic
+    public enum OperationsArithmetic
     {
         PreserveNumber,
         Add,
@@ -58,7 +69,7 @@ namespace ChecksAndMods
     }
 
     // The mapping of Checks' potential operations. Both names and indices will be used.
-    public enum ChecksArithmethic
+    public enum ChecksArithmetic
     {
         Equal,
         NotEqual,
