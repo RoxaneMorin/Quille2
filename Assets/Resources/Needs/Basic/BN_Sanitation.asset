@@ -19,3 +19,4 @@ MonoBehaviour:
   defaultChangeRate: -0.001
   thresholdWarning: 0.25
   thresholdCritical: 0.1
+  changeRateModulatedBy: []

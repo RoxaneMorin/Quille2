@@ -24,9 +24,9 @@ namespace ChecksAndMods
 
         // METHODS
         // Execute.
-        public void Execute()
+        public float Execute(UnityEngine.Object sourceObj, float target)
         {
-            //Modulate(UnityEngine.Object sourceObj, float target, float modifier, int mainOpIdx, int modOpIdx)
+            return modulator.Modulate(sourceObj, target, modifier, ((int)mainOpIdx), (int)modOpIdx);
         }
     }
 }

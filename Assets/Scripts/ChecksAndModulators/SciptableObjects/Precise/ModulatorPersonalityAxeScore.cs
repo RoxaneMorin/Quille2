@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [CreateAssetMenu(fileName = "ModulatorPersonalityAxe", menuName = "Checks&dModulators/Modulators/Personality Axe", order = 0)]
-    public class ModulatorPersonalityAxe : ModulatorAlterFloatFromFloatSO
+    public class ModulatorPersonalityAxeScore : ModulatorAlterFloatFromFloatSO
     {
         // VARIABLES/PARAM
         [SerializeField]
