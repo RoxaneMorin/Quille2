@@ -38,6 +38,9 @@ namespace Quille
         private float thresholdCritical = Constants.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCritical { get { return thresholdCritical; } }
 
+
         //Default values modulated by ? (List of functions/references)
+        [SerializeField]
+        public ChecksAndMods.ModulatorAlterFloatFromFloat[] changeRateModulatedBy;
     }
 }

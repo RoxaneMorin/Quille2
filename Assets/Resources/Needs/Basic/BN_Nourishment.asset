@@ -19,3 +19,8 @@ MonoBehaviour:
   defaultChangeRate: -0.003
   thresholdWarning: 0.25
   thresholdCritical: 0.1
+  changeRateModulatedBy:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 1
+    modOpIdx: 3
+    modifier: 0.5
