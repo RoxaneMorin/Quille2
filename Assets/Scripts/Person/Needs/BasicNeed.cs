@@ -247,7 +247,12 @@ namespace Quille
             //Array.Reverse(basicNeeds);
         }
         
-        // Return neediest of the set.
+        // Calculates and returns the neediest need from an array of them.
+        public static BasicNeed ReturnNeediest(BasicNeed[] basicNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            SortByFulfillmentDelta(basicNeeds, usePriorityWeights, byPercentage);
+            return basicNeeds[0];
+        }
 
         // COMPARISON HELPERS
         class SortHelper_BasicNeedsbyDelta : IComparer

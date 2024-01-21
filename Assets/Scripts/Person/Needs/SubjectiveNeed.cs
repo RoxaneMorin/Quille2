@@ -524,6 +524,21 @@ namespace Quille
         }
 
         // Return neediest of the set.
+        public static SubjectiveNeed ReturnNeediestbyNeediestDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            SortByFulfillmentDeltaofNeediest(subjectiveNeeds, usePriorityWeights, byPercentage);
+            return subjectiveNeeds[0];
+        }
+        public static SubjectiveNeed ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            SortByTotalFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
+            return subjectiveNeeds[0];
+        }
+        public static SubjectiveNeed ReturnNeediestbyAverageDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            SortByAverageFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
+            return subjectiveNeeds[0];
+        }
 
         // COMPARISON HELPERS
         class SortHelper_SubjectiveNeedsbyDeltaOfNeediest : IComparer
