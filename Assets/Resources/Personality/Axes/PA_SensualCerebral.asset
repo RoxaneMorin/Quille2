@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d48d72294332430479085b4bb9b5bbd3, type: 3}
-  m_Name: PA_Social
+  m_Name: PA_SensualCerebral
   m_EditorClassIdentifier: 
-  axeName: Social Temperament
-  axeNameLeft: Introverted
-  axeNameRight: Extraverted
-  axeIconLeft: {fileID: 21300000, guid: 1db466e2b3cf0ab4d83e9d0ca2867d32, type: 3}
-  axeIconRight: {fileID: 21300000, guid: cea1e87df626818468927e4ceea38f99, type: 3}
-  axeSpan:
-    Item1: -1
-    Item2: 1
+  axeName: Mentality
+  axeNameLeft: Grounded/Sensual
+  axeNameRight: Abstractive/Cerebral
+  axeIconLeft: {fileID: 0}
+  axeIconRight: {fileID: 0}

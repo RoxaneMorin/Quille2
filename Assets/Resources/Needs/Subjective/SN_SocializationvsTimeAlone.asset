@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92019ba86c7b24b4f9f9abf35a6e5c2b, type: 3}
+  m_Name: SN_SocializationvsTimeAlone
+  m_EditorClassIdentifier: 
+  needName: Socialization vs Time Alone
+  needNameLeft: Socialization
+  needNameRight: Time Alone
+  needIconLeft: {fileID: 21300000, guid: 914147a614e2b6e44bf860bee8132214, type: 3}
+  needIconRight: {fileID: 21300000, guid: 31c755613f8cd744ea46b1c3e833df20, type: 3}
+  aiPriorityWeighting: 1
+  levelFullLeft: 1
+  levelFullRight: 1
+  defaultChangeRateLeft: -0.0005
+  defaultChangeRateRight: -0.0005
+  thresholdWarningLeft: 0.25
+  thresholdCriticalLeft: 0.1
+  thresholdWarningRight: 0.25
+  thresholdCriticalRight: 0.1

@@ -164,6 +164,10 @@ MonoBehaviour:
     mainOpIdx: 1
     modOpIdx: 3
     modifier: 0.5
+  - modulator: {fileID: 11400000, guid: 4b66bec892398b942bd60b76a997191c, type: 2}
+    mainOpIdx: 1
+    modOpIdx: 3
+    modifier: 0.1
   originalTargetForBool: 1
   finalResultForBool: 0
   boolModulators:
@@ -172,6 +176,11 @@ MonoBehaviour:
     modOpIdx: 3
     expectedParam: 0
     modifier: 3
+  checkTester: 0
+  arithmeticChecks:
+  - check: {fileID: 11400000, guid: a83b25aa3b2750448a6b1446c9132544, type: 2}
+    opIdx: 3
+    compareTo: 0
 --- !u!114 &172503376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +197,10 @@ MonoBehaviour:
     _serializedList:
     - Key: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
       Value: 0.5
+    - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
+      Value: -0.5
+    - Key: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}
+      Value: 0.25
 --- !u!135 &172503377
 SphereCollider:
   m_ObjectHideFlags: 0

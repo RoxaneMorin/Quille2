@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Quille
 {
-    [CreateAssetMenu(fileName = "BasicNeed", menuName = "Quille/Personality/Personality Axe", order = 0)]
+    [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Personality/Personality Axe", order = 0)]
     public class PersonalityAxeSO : ScriptableObject
     {
         // VARIABLES/PARAMS 
@@ -27,7 +27,8 @@ namespace Quille
         public Sprite axeIconRight;
 
         // OTHER VALUES
-        private (float, float) axeSpan = (-Constants.AXE_HALF_SPAN, Constants.AXE_HALF_SPAN);
-        public (float, float) AxeSpan { get { return axeSpan; } }
+        [SerializeField, InspectorReadOnly]
+        private floatPair axeSpan = (-Constants.AXE_HALF_SPAN, Constants.AXE_HALF_SPAN);
+        public floatPair AxeSpan { get { return axeSpan; } }
     }
 }

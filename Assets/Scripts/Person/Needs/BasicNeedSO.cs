@@ -42,6 +42,6 @@ namespace Quille
         // MODULATORS
         //Default values modulated by ? (List of functions/references)
         [SerializeField]
-        public ChecksAndMods.ModulatorAlterFloatFromFloat[] changeRateModulatedBy;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] changeRateModulatedBy;
     }
 }

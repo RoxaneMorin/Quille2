@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [CreateAssetMenu(fileName = "ModulatorBoolTest", menuName = "Checks&dModulators/Modulators/BoolTest", order = 0)]
-    public class ModulatorBoolTestSO : ModulatorAlterFloatFromBoolSO
+    public class ModulatorBoolTestSO : ModulatorArithmeticFromBoolSO
     {
         public bool theParam;
 

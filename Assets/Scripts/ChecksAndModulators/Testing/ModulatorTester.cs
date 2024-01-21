@@ -8,12 +8,16 @@ public class ModulatorTester : MonoBehaviour
     
     public float originalTargetForFloat = 1;
     public float finalResultForFloat;
-    public ChecksAndMods.ModulatorAlterFloatFromFloat[] floatModulators;
+    public ChecksAndMods.ModulatorArithmeticFromFloat[] floatModulators;
 
 
     public float originalTargetForBool = 1;
     public float finalResultForBool;
-    public ChecksAndMods.ModulatorAlterFloatFromBool[] boolModulators;
+    public ChecksAndMods.ModulatorArithmeticFromBool[] boolModulators;
+
+    public bool checkTester;
+    public ChecksAndMods.CheckArithmetic[] arithmeticChecks;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +32,8 @@ public class ModulatorTester : MonoBehaviour
         {
             TestFloatModulators();
             TestBoolModulators();
+
+            TestArithmeticChecks();
         }
     }
 
@@ -35,7 +41,7 @@ public class ModulatorTester : MonoBehaviour
     {
         finalResultForFloat = originalTargetForFloat;
 
-        foreach (ChecksAndMods.ModulatorAlterFloatFromFloat modulator in floatModulators)
+        foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in floatModulators)
             finalResultForFloat = modulator.Execute(personalityController, finalResultForFloat);
     }
 
@@ -43,7 +49,13 @@ public class ModulatorTester : MonoBehaviour
     {
         finalResultForBool = originalTargetForBool;
 
-        foreach (ChecksAndMods.ModulatorAlterFloatFromBool modulator in boolModulators)
+        foreach (ChecksAndMods.ModulatorArithmeticFromBool modulator in boolModulators)
             finalResultForBool = modulator.Execute(personalityController, finalResultForBool);
+    }
+
+    void TestArithmeticChecks()
+    {
+        foreach (ChecksAndMods.CheckArithmetic check in arithmeticChecks)
+            checkTester = check.Execute(personalityController);
     }
 }
