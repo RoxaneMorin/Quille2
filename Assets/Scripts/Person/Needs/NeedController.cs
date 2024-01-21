@@ -16,14 +16,9 @@ namespace Quille
 
 
 
-        public GameObject needBarPrefab;
-        public Canvas needCanvas;
-
-        
-
         private void StartBasicNeedDecay(BasicNeed myNeed)
         {
-            myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
+            //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
             StartCoroutine(myNeed.AlterLevelByChangeRate());
         }
         private void StopBasicNeedDecay(BasicNeed myNeed)
@@ -33,7 +28,7 @@ namespace Quille
 
         private void StartSubjectiveNeedDecay(SubjectiveNeed myNeed)
         {
-            myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
+            //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
             StartCoroutine(myNeed.AlterLevelByChangeRate());
         }
         private void StopSubjectiveNeedDecay(SubjectiveNeed myNeed)
@@ -81,13 +76,6 @@ namespace Quille
             {
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
                 Debug.Log(myBasicNeeds[i].ToString());
-
-                NeedBar needBar = Instantiate(needBarPrefab, needCanvas.transform).GetComponentInChildren<NeedBar>();
-                needBar.associatedBasicNeed = myBasicNeeds[i];
-                myBasicNeeds[i].myNeedBar = needBar;
-
-                needBar.Prepare();
-                needBar.transform.position = new Vector3(i * 100, needBar.transform.position.y, needBar.transform.position.z);
             }
 
             StartBasicNeedDecay(myBasicNeeds);
@@ -100,9 +88,6 @@ namespace Quille
             }
 
             StartSubjectiveNeedDecay(mySubjectiveNeeds);
-
-
-
         } 
 
         // Update is called once per frame

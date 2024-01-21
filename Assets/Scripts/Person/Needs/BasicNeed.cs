@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Quille
@@ -8,10 +7,6 @@ namespace Quille
     [System.Serializable]
     public class BasicNeed
     {
-        // TEMP
-        public NeedBar myNeedBar; // comment faire pour que le need n'ai pas besoin de connaitre sa bar?
-
-
         // VARIABLES
         [SerializeField] private BasicNeedSO needSO;
 
@@ -29,14 +24,21 @@ namespace Quille
         [SerializeField]
         private float thresholdWarning,
                       thresholdCritical;
-        
-        private bool isWarning;
-        private bool isCritical;
 
-        //Default values modulated by ? (List of functions/references)
+        [BeginInspectorReadOnlyGroup]
+        [SerializeField]
+        private bool isWarning;
+        [SerializeField]
+        private bool isCritical;
+        [SerializeField]
+        private bool isFailure;
+        //[EndInspectorReadOnlyGroup]
+
 
 
         // PROPERTIES
+        public BasicNeedSO NeedSO { get { return needSO; } }
+
         public string NeedName { get { return needSO.NeedName; } }
         public Sprite NeedIcon { get { return needSO.needIcon; } }
 
@@ -166,6 +168,31 @@ namespace Quille
             thresholdCritical = DefaultThresholdCritical;
         }
 
+        public bool IsWarning { get { return isWarning; } private set { isWarning = value; } }
+        public bool IsCritical { get { return isCritical; } private set { isCritical = value; } }
+        public bool IsFailure { get { return isFailure; } private set { isFailure = value; } }// Should the set be public?
+
+
+
+        // EVENTS
+        // The need's level has been updated.
+        public delegate void BasicNeedLevelCurrentUpdate(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
+        private event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
+
+        // General update event for all values? Pass a reference to this object itself?
+
+        // The Warning threshold is reached.
+        public delegate void BasicNeedReachedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
+        private event BasicNeedReachedWarning OnBNReachedWarning;
+
+        // The Critical threshold is reached.
+        public delegate void BasicNeedReachedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
+        private event BasicNeedReachedCritical OnBNReachedCritical;
+
+        // Need failure is reached.
+        public delegate void BasicNeedFailure(BasicNeedSO needIdentity); // Is the other information needed?
+        private event BasicNeedFailure OnBNFailure;
+
 
 
         // CONSTRUCTORS
@@ -189,6 +216,8 @@ namespace Quille
             ThresholdWarning = DefaultThresholdWarning;
             ThresholdCritical = DefaultThresholdCritical;
         }
+
+        // Modulate default values.
 
 
 
@@ -257,37 +286,67 @@ namespace Quille
 
 
 
-        // Runtime
+        // COROUTINES
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
         {
-            while(this.LevelCurrent > this.LevelEmpty )
+            while (true)
             {
-                this.LevelCurrent += this.CurrentChangeRate;
-
-                // Threshold detection.
-                if (!isCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                if (this.LevelCurrent > this.LevelEmpty) // The need is not empty.
                 {
-                    Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
-                    isCritical = true;
+                    this.LevelCurrent += this.CurrentChangeRate;
+                    // Invoke need change event?
+
+                    // Threshold detection.
+                    if (!isCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                    {
+                        this.IsCritical = true;
+                        Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
+                        
+                        OnBNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else if (!isWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
+                    {
+                        this.IsWarning = true;
+                        Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
+
+                        OnBNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else // Unset the Warning and Critical booleans as needed.
+                    {
+                        if (this.IsCritical & this.LevelCurrent > this.ThresholdCritical)
+                        {
+                            this.IsCritical = false;
+                            Debug.Log(string.Format("{0} is no longer critically low.", this.NeedName));
+                        }
+                        if (this.IsWarning & this.LevelCurrent > this.ThresholdWarning)
+                        {
+                            this.IsWarning = false;
+                            Debug.Log(string.Format("{0} is no longer low.", this.NeedName));
+                        }
+                    }
                 }
-                else if (!isWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
+                else // The need is currently empty.
                 {
-                    Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
-                    isWarning = true;
+                    if (!this.IsFailure) // First detection of the need failure.
+                    {
+                        this.IsFailure = true;
+                        Debug.Log(string.Format("{0} is now empty.", this.NeedName));
+
+                        OnBNFailure?.Invoke(NeedSO);
+                    }
+
+                    if (this.CurrentChangeRate > 0) // Only apply the change if it would increase it.
+                    {
+                        this.LevelCurrent += this.CurrentChangeRate;
+                        // Invoke need change event?
+
+                        this.IsFailure = false; // Undo the need failure.
+                        Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedName));
+                    }
                 }
-
-                myNeedBar.UpdateFill(this.LevelCurrent); // TO DO: handle this elsewhere; this object shouldn't know the UI.
-
                 yield return new WaitForSeconds(1);
             }
-
-            // Do need failure here?
-            Debug.Log(string.Format("{0} is now empty.", this.NeedName));
-
-            // TO DO: ability to bounce back while the need is empty?
         }
-        
     }
-
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   needName: Stress Relief
   needIcon: {fileID: 21300000, guid: 4e6d5961b51feb846aec87b7d7aa192f, type: 3}
-  aiPriorityWeighting: 0.85
+  aiPriorityWeighting: 0.9
   levelFull: 1
   defaultChangeRate: -0.0015
   thresholdWarning: 0.25

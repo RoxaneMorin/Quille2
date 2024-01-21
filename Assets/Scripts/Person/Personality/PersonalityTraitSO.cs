@@ -18,18 +18,22 @@ namespace Quille
         public Sprite traitIcon;
 
         // OTHER VALUES
-        [SerializeField, InspectorReadOnly]
+        // The intensity of traits is either 0.5 or 1.
+        [BeginInspectorReadOnlyGroup]
+        [SerializeField]
         private float traitSpan = Constants.AXE_HALF_SPAN;
         public float TraitSpan { get { return traitSpan; } }
 
-        [SerializeField, InspectorReadOnly]
+        [BeginInspectorReadOnlyGroup]
+        [SerializeField]
         private float trainMidpoint = Constants.AXE_HALF_SPAN / 2;
         public float TrainMidpoint { get { return trainMidpoint; } }
-        // The intensity of traits is either 0.5 or 1.
 
+        [EndInspectorReadOnlyGroup]
+        
         // INCOMPATIBILITIES
         [SerializeField]
-        private PersonalityAxeSO[] incompatibleTraits;
+        private PersonalityTraitSO[] incompatibleTraits;
 
         // Array of checks for incompatible personality scores.
         [SerializeField]

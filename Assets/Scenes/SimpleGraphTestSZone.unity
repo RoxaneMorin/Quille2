@@ -763,6 +763,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
   myBasicNeeds: []
   mySubjectiveNeeds: []
-  needBarPrefab: {fileID: 2074222220232275478, guid: 575525fa2fb48354cbfaf838b1b7741b,
-    type: 3}
-  needCanvas: {fileID: 369270422}
