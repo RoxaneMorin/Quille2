@@ -107,6 +107,8 @@ namespace Quille
                     float randomRateLeft = Random.Range(-0.005f, 0.001f);
                     float randomRateRight = Random.Range(-0.005f, 0.001f);
                     need.CurrentChangeRate = (randomRateLeft, randomRateRight);
+
+                    need.AverageLocalAiPriorityWeighting();
                 }
             }
 

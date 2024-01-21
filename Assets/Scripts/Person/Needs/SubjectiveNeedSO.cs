@@ -30,7 +30,7 @@ namespace Quille
         [SerializeField, Range(Constants.MIN_PRIORITY, Constants.MAX_PRIORITY)] // Priorize larger values? 
         private float aiPriorityWeighting = 1; // Should this be static, since it'll likely by the same for all characters?
         public float AiPriorityWeighting { get { return aiPriorityWeighting; } }
-        // Are separate priorities needed for the two sides?
+        // Are separate priorities needed for the two sides? Only bother on a per character basis?
 
         [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
         private float levelFullLeft = Constants.DEFAULT_LEVEL_FULL;

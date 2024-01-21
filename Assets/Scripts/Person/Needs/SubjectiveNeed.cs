@@ -15,8 +15,9 @@ namespace Quille
         [SerializeField] private SubjectiveNeedSO needSO;
 
         [SerializeField]
-        private float localAiPriorityWeighting;
-        // Are separate priorities needed for the two sides?
+        private float localAiPriorityWeighting,
+                      localAiPriorityWeightingLeft, 
+                      localAiPriorityWeightingRight;
 
         [SerializeField]
         private float levelFullLeft,
@@ -36,15 +37,22 @@ namespace Quille
         private float thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
 
-        private bool isWarningLeft;
-        private bool isCriticalLeft;
-        private bool isWarningRight;
-        private bool isCriticalRight;
+        [BeginInspectorReadOnlyGroup]
+        [SerializeField]
+        private bool isWarningLeft,
+                     isWarningRight;
+        [SerializeField]
+        private bool isCriticalLeft,
+                     isCriticalRight;
+        [SerializeField]
+        private bool isFailureLeft,
+                     isFailureRight;
+        //[EndInspectorReadOnlyGroup]
 
-        //Default values modulated by ? (List of functions/references)
 
 
         // PROPERTIES
+        public SubjectiveNeedSO NeedSO { get { return needSO; } }
         public string NeedName { get { return needSO.NeedName; } }
         public string NeedNameLeft { get { return needSO.NeedNameLeft; } }
         public string NeedNameRight { get { return needSO.NeedNameRight; } }
@@ -69,6 +77,46 @@ namespace Quille
                 }
                 else localAiPriorityWeighting = value;
             }
+        }
+        public float LocalAiPriorityWeightingLeft
+        {
+            get { return localAiPriorityWeightingLeft; }
+            set
+            {
+                if (value < Constants.MIN_PRIORITY)
+                {
+                    localAiPriorityWeightingLeft = Constants.MIN_PRIORITY;
+                    return;
+                }
+                else if (value > Constants.MAX_PRIORITY)
+                {
+                    localAiPriorityWeightingLeft = Constants.MAX_PRIORITY;
+                    return;
+                }
+                else localAiPriorityWeightingLeft = value;
+            }
+        }
+        public float LocalAiPriorityWeightingRight
+        {
+            get { return localAiPriorityWeightingRight; }
+            set
+            {
+                if (value < Constants.MIN_PRIORITY)
+                {
+                    localAiPriorityWeightingRight = Constants.MIN_PRIORITY;
+                    return;
+                }
+                else if (value > Constants.MAX_PRIORITY)
+                {
+                    localAiPriorityWeightingRight = Constants.MAX_PRIORITY;
+                    return;
+                }
+                else localAiPriorityWeightingRight = value;
+            }
+        }
+        public void AverageLocalAiPriorityWeighting()
+        {
+            LocalAiPriorityWeighting = (LocalAiPriorityWeightingLeft + LocalAiPriorityWeightingRight) / 2;
         }
 
         public float LevelEmptyLeft { get { return needSO.LevelEmptyLeft; } }
@@ -333,6 +381,37 @@ namespace Quille
             thresholdCriticalRight = DefaultThresholdCriticalRight;
         }
 
+        public bool IsWarningLeft { get { return isWarningLeft; } private set { isWarningLeft = value; } }
+        public bool IsWarningRight { get { return isWarningRight; } private set { isWarningRight = value; } }
+        public bool IsWarning { get { return (IsWarningLeft || IsWarningRight); } }
+        public bool IsCriticalLeft { get { return isCriticalLeft; } private set { isCriticalLeft = value; } }
+        public bool IsCriticalRight { get { return isCriticalRight; } private set { isCriticalRight = value; } }
+        public bool IsCritical { get { return (IsCriticalLeft || IsCriticalRight); } }
+        public bool IsFailureLeft { get { return isFailureLeft; } private set { isFailureLeft = value; } }
+        public bool IsFailureRight { get { return isFailureRight; } private set { isFailureRight = value; } }
+        public bool IsFailure { get { return (IsFailureLeft || IsFailureRight); } }
+
+
+
+        // EVENTS
+        // The need's level has been updated.
+        public delegate void SubjectiveNeedLevelCurrentUpdate(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
+        private event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
+
+        // General update event for all values? Pass a reference to this object itself?
+
+        // The Warning threshold is reached.
+        public delegate void SubjectiveNeedReachedWarning(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
+        private event SubjectiveNeedReachedWarning OnSNReachedWarning;
+
+        // The Critical threshold is reached.
+        public delegate void SubjectiveNeedReachedCritical(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
+        private event SubjectiveNeedReachedCritical OnSNReachedCritical;
+
+        // Need failure is reached.
+        public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity); // Is the other information needed?
+        private event SubjectiveNeedFailure OnSNFailure;
+
 
 
         /// CONSTRUCTORS
@@ -345,6 +424,8 @@ namespace Quille
         private void SetParametersFromSO()
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
+            LocalAiPriorityWeightingLeft = AiPriorityWeighting;
+            LocalAiPriorityWeightingRight = AiPriorityWeighting;
 
             LevelFull = (DefaultLevelFullLeft, DefaultLevelFullRight);
             LevelCurrent = (DefaultLevelFullLeft, DefaultLevelFullRight);
@@ -357,6 +438,9 @@ namespace Quille
             ThresholdWarningRight = DefaultThresholdWarningRight;
             ThresholdCriticalRight = DefaultThresholdCriticalRight;
         }
+
+        // Modulate default values.
+        // Should include averaging the left and right AI weighting.
 
 
 
@@ -458,13 +542,16 @@ namespace Quille
                 SubjectiveNeed needA = (SubjectiveNeed)a;
                 SubjectiveNeed needB = (SubjectiveNeed)b;
 
-                float needDeltaA = needA.GetNeediestSide(byPercentage) ? needA.GetRightFulfillmentDelta(byPercentage) : needA.GetLeftFulfillmentDelta(byPercentage);
-                float needDeltaB = needB.GetNeediestSide(byPercentage) ? needB.GetRightFulfillmentDelta(byPercentage) : needB.GetLeftFulfillmentDelta(byPercentage);
+                bool isNeediestSideRightA = needA.GetNeediestSide(byPercentage);
+                bool isNeediestSideRightB = needB.GetNeediestSide(byPercentage);
+
+                float needDeltaA = isNeediestSideRightA ? needA.GetRightFulfillmentDelta(byPercentage) : needA.GetLeftFulfillmentDelta(byPercentage);
+                float needDeltaB = isNeediestSideRightB ? needB.GetRightFulfillmentDelta(byPercentage) : needB.GetLeftFulfillmentDelta(byPercentage);
 
                 if (usePriorityWeights)
                 {
-                    needDeltaA *= needA.localAiPriorityWeighting;
-                    needDeltaB *= needB.localAiPriorityWeighting;
+                    needDeltaA *= isNeediestSideRightA ? needA.localAiPriorityWeightingRight : needA.localAiPriorityWeightingLeft;
+                    needDeltaB *= isNeediestSideRightB ? needB.localAiPriorityWeightingRight : needB.localAiPriorityWeightingLeft;
                 }
 
                 if (needDeltaA < needDeltaB)
@@ -543,44 +630,125 @@ namespace Quille
         }
 
 
-        // Runtime
+
+        // COROUTINES
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
         {
-            while (this.LevelCurrentLeft > this.LevelEmptyLeft | this.LevelCurrentRight > this.LevelEmptyRight)
+            while (true)
             {
-                this.LevelCurrentLeft += this.CurrentChangeRateLeft;
-                this.LevelCurrentRight += this.CurrentChangeRateRight;
+                // Handle LeftSide subneed.
+                if (this.LevelCurrentLeft > this.LevelEmptyLeft) // The need is not empty.
+                {
+                    this.LevelCurrentLeft += this.CurrentChangeRateLeft;
+                    // Invoke need change event?
 
-                // Threshold detection.
-                if (!isCriticalLeft && this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft)
-                {
-                    Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
-                    isCriticalLeft = true;
+                    // Threshold detection.
+                    if (!this.IsCriticalLeft & this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft)
+                    {
+                        this.IsCriticalLeft = true;
+                        Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+
+                        OnSNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else if (!this.IsWarningLeft & this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft)
+                    {
+                        this.IsWarningLeft = true;
+                        Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+
+                        OnSNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else // Unset the Warning and Critical booleans as needed.
+                    {
+                        if (this.IsCriticalLeft & this.LevelCurrentLeft > this.ThresholdCriticalLeft)
+                        {
+                            this.IsCriticalLeft = false;
+                            Debug.Log(string.Format("{0} is no longer critically low.", this.NeedNameLeft));
+                        }
+                        if (this.IsWarningLeft & this.LevelCurrentLeft > this.ThresholdWarningLeft)
+                        {
+                            this.IsWarningLeft = false;
+                            Debug.Log(string.Format("{0} is no longer low.", this.NeedNameLeft));
+                        }
+                    }
                 }
-                else if (!isWarningLeft && this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft)
+                else // The need is currently empty.
                 {
-                    Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
-                    isWarningLeft = true;
+                    if (!this.IsFailureLeft) // First detection of the need failure.
+                    {
+                        this.IsFailureLeft = true;
+                        Debug.Log(string.Format("{0} is now empty.", this.NeedNameLeft));
+
+                        OnSNFailure?.Invoke(NeedSO);
+                    }
+
+                    if (this.CurrentChangeRateLeft > 0) // Only apply the change if it would increase it.
+                    {
+                        this.LevelCurrentLeft += this.CurrentChangeRateLeft;
+                        // Invoke need change event?
+
+                        this.IsFailureLeft = false; // Undo the need failure.
+                        Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameLeft));
+                    }
                 }
-                if (!isCriticalRight && this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
+
+                // Handle RightSide subneed.
+                if (this.LevelCurrentRight > this.LevelEmptyRight) // The need is not empty.
                 {
-                    Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
-                    isCriticalRight = true;
+                    this.LevelCurrentRight += this.CurrentChangeRateRight;
+                    // Invoke need change event?
+
+                    // Threshold detection.
+                    if (!this.IsCriticalRight & this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
+                    {
+                        this.IsCriticalRight = true;
+                        Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+
+                        OnSNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else if (!this.IsWarningRight & this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
+                    {
+                        this.IsWarningRight = true;
+                        Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+
+                        OnSNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                    }
+                    else // Unset the Warning and Critical booleans as needed.
+                    {
+                        if (this.IsCriticalRight & this.LevelCurrentRight > this.ThresholdCriticalRight)
+                        {
+                            this.IsCriticalRight = false;
+                            Debug.Log(string.Format("{0} is no longer critically low.", this.NeedNameRight));
+                        }
+                        if (this.IsWarningRight & this.LevelCurrentRight > this.ThresholdWarningRight)
+                        {
+                            this.IsWarningRight = false;
+                            Debug.Log(string.Format("{0} is no longer low.", this.NeedNameRight));
+                        }
+                    }
                 }
-                else if (!isWarningRight && this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
+                else // The need is currently empty.
                 {
-                    Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
-                    isWarningRight = true;
+                    if (!this.IsFailureRight) // First detection of the need failure.
+                    {
+                        this.IsFailureRight = true;
+                        Debug.Log(string.Format("{0} is now empty.", this.NeedNameRight));
+
+                        OnSNFailure?.Invoke(NeedSO);
+                    }
+
+                    if (this.CurrentChangeRateRight > 0) // Only apply the change if it would increase it.
+                    {
+                        this.LevelCurrentRight += this.CurrentChangeRateRight;
+                        // Invoke need change event?
+
+                        this.IsFailureRight = false; // Undo the need failure.
+                        Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameRight));
+                    }
                 }
 
                 yield return new WaitForSeconds(1);
             }
-
-            // Do need failure here?
-            Debug.Log(string.Format("{0} is now fully empty.", this.NeedName));
-
-            // TO DO: ability to bounce back while the need is empty?
         }
     }
 }

@@ -298,14 +298,14 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (!isCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                    if (!this.IsCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
                     {
                         this.IsCritical = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
                         
                         OnBNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
                     }
-                    else if (!isWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
+                    else if (!this.IsWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
                     {
                         this.IsWarning = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
