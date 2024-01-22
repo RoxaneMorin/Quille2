@@ -13,16 +13,20 @@ namespace Quille
 
 
         // VARIABLES
-        public BasicNeed[] myBasicNeeds;
-        public SubjectiveNeed[] mySubjectiveNeeds;
+        [SerializeField]
+        private BasicNeed[] myBasicNeeds;
+        [SerializeField]
+        private SubjectiveNeed[] mySubjectiveNeeds;
 
         // Change to a dict <needSO, need> ?
 
 
 
-
         // METHODS
 
+        // Coroutine management.
+
+        // Individual needs.
         private void StartBasicNeedDecay(BasicNeed myNeed)
         {
             //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
@@ -32,7 +36,6 @@ namespace Quille
         {
             StopCoroutine(myNeed.AlterLevelByChangeRate());
         }
-
         private void StartSubjectiveNeedDecay(SubjectiveNeed myNeed)
         {
             //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
@@ -43,8 +46,8 @@ namespace Quille
             StopCoroutine(myNeed.AlterLevelByChangeRate());
         }
 
-
-        private void StartBasicNeedDecay(BasicNeed[] myBasicNeeds) // what would be a better name??
+        // Array of needs.
+        private void StartBasicNeedDecay(BasicNeed[] myBasicNeeds)
         {
             foreach (BasicNeed myNeed in myBasicNeeds)
             {
@@ -58,7 +61,7 @@ namespace Quille
                 StopBasicNeedDecay(myNeed);
             }
         }
-        private void StartSubjectiveNeedDecay(SubjectiveNeed[] myBasicNeeds) // what would be a better name??
+        private void StartSubjectiveNeedDecay(SubjectiveNeed[] myBasicNeeds)
         {
             foreach (SubjectiveNeed myNeed in mySubjectiveNeeds)
             {
@@ -74,9 +77,8 @@ namespace Quille
         }
 
 
-
-        // Start is called before the first frame update
-        void Start()
+        // Init.
+        private void InitBasicNeeds()
         {
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             for (int i = 0; i < basicNeedSOs.Length; i++)
@@ -86,7 +88,9 @@ namespace Quille
             }
 
             StartBasicNeedDecay(myBasicNeeds);
-
+        }
+        private void InitSubjectiveNeeds()
+        {
             mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
@@ -95,6 +99,51 @@ namespace Quille
             }
 
             StartSubjectiveNeedDecay(mySubjectiveNeeds);
+        }
+
+
+        // Testing.
+        private void RandomizeNeedChangeRates(float min, float max)
+        {
+            foreach (BasicNeed need in myBasicNeeds)
+            {
+                float randomRate = Random.Range(min, max);
+                need.CurrentChangeRate = randomRate;
+            }
+
+            foreach (SubjectiveNeed need in mySubjectiveNeeds)
+            {
+                float randomRateLeft = Random.Range(min, max);
+                float randomRateRight = Random.Range(min, max);
+                need.CurrentChangeRate = (randomRateLeft, randomRateRight);
+
+                need.AverageLocalAiPriorityWeighting();
+            }
+        }
+        private void SortAndPrintNeedInfo()
+        {
+            BasicNeed.SortByFulfillmentDelta(myBasicNeeds, true, true);
+            SubjectiveNeed.SortByFulfillmentDeltaofNeediest(mySubjectiveNeeds, true, true);
+
+            foreach (BasicNeed need in myBasicNeeds)
+            {
+                Debug.Log(need.ToString());
+            }
+
+            foreach (SubjectiveNeed need in mySubjectiveNeeds)
+            {
+                Debug.Log(need.ToString());
+            }
+        }
+
+
+        // Built in.
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            InitBasicNeeds();
+            InitSubjectiveNeeds();
         } 
 
         // Update is called once per frame
@@ -103,35 +152,12 @@ namespace Quille
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                foreach (BasicNeed need in myBasicNeeds)
-                {
-                    float randomRate = Random.Range(-0.005f, 0.001f);
-                    need.CurrentChangeRate = randomRate;
-                }
-
-                foreach (SubjectiveNeed need in mySubjectiveNeeds)
-                {
-                    float randomRateLeft = Random.Range(-0.005f, 0.001f);
-                    float randomRateRight = Random.Range(-0.005f, 0.001f);
-                    need.CurrentChangeRate = (randomRateLeft, randomRateRight);
-
-                    need.AverageLocalAiPriorityWeighting();
-                }
+                RandomizeNeedChangeRates(-0.005f, 0.001f);
             }
 
             if (Input.GetKeyDown(KeyCode.M))
             {
-                BasicNeed.SortByFulfillmentDelta(myBasicNeeds, true, true);
-
-                foreach (BasicNeed need in myBasicNeeds)
-                {
-                    Debug.Log(need.ToString());
-                }
-
-                foreach (SubjectiveNeed need in mySubjectiveNeeds)
-                {
-                    Debug.Log(need.ToString());
-                }
+                SortAndPrintNeedInfo();
             }
         }
     }
