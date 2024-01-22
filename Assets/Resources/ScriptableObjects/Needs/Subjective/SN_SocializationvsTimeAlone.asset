@@ -26,3 +26,25 @@ MonoBehaviour:
   thresholdCriticalLeft: 0.1
   thresholdWarningRight: 0.25
   thresholdCriticalRight: 0.1
+  baseAIWeightingModulatedByLeft:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 1
+    modOpIdx: 3
+    modifier: 0.1
+  baseChangeRateModulatedByLeft:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 2
+    modOpIdx: 3
+    modifier: 0.0005
+  thresholdsModulatedByLeft: []
+  baseAIWeightingModulatedByRight:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 2
+    modOpIdx: 3
+    modifier: 0.1
+  baseChangeRateModulatedByRight:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 1
+    modOpIdx: 3
+    modifier: 0.0005
+  thresholdsModulatedByRight: []

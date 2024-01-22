@@ -9,21 +9,29 @@ namespace ChecksAndMods
         // Fetch a specific personality score.
         public static float FetchPersonalityAxeScore(UnityEngine.Object sourceObj, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
-            // TO DO: edit to be able to receive both a basePerson and a personalityController.
-            
             Quille.PersonalityController sourcePersonalityController;
 
-            // Will need to be cleaned up/refined to ensure safety and efficiency.
-            try
+            if (sourceObj is Quille.BasePerson)
+            {
+                Quille.BasePerson sourceQuille = (Quille.BasePerson)sourceObj;
+                sourcePersonalityController = sourceQuille.MyPersonalityController;
+                return FetchFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
+            }
+            else if (sourceObj is Quille.PersonalityController)
             {
                 sourcePersonalityController = (Quille.PersonalityController)sourceObj;
+                return FetchFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
             }
-            catch
+            else 
             {
-                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a PersonalityAxe modulator.", sourceObj.name));
-                throw;
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a PersonalityAxe modulator.\nThis modulator or check will return a zero.", sourceObj.name));
+                return 0;
+                // Throw error.
             }
+        }
 
+        public static float FetchFromPersonalityController(Quille.PersonalityController sourcePersonalityController, Quille.PersonalityAxeSO relevantPersonalityAxe)
+        {
             return sourcePersonalityController.GetScore(relevantPersonalityAxe);
         }
     }

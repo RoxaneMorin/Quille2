@@ -303,12 +303,12 @@ namespace Quille
             get { return thresholdWarningLeft; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD)
                 {
-                    thresholdWarningLeft = 1;
+                    thresholdWarningLeft = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD + 0.5f)
                 {
                     thresholdWarningLeft = 0;
                     return;
@@ -321,14 +321,14 @@ namespace Quille
             get { return thresholdCriticalLeft; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD - 0.05f)
                 {
-                    thresholdCriticalLeft = 1;
+                    thresholdCriticalLeft = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD)
                 {
-                    thresholdCriticalLeft = 0;
+                    thresholdCriticalLeft = Constants.MIN_THREDHOLD;
                     return;
                 }
                 else thresholdCriticalLeft = value;
@@ -339,14 +339,14 @@ namespace Quille
             get { return thresholdWarningRight; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD)
                 {
-                    thresholdWarningRight = 1;
+                    thresholdWarningRight = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD + 0.5f)
                 {
-                    thresholdWarningRight = 0;
+                    thresholdWarningRight = Constants.MIN_THREDHOLD + 0.5f;
                     return;
                 }
                 else thresholdWarningRight = value;
@@ -357,14 +357,14 @@ namespace Quille
             get { return thresholdCriticalRight; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD - 0.05f)
                 {
-                    thresholdCriticalRight = 1;
+                    thresholdCriticalRight = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD)
                 {
-                    thresholdCriticalRight = 0;
+                    thresholdCriticalRight = Constants.MIN_THREDHOLD;
                     return;
                 }
                 else thresholdCriticalRight = value;
@@ -633,6 +633,47 @@ namespace Quille
                     return -1;
                 else
                     return 0;
+            }
+        }
+
+
+
+        // Init.
+        public void Init(BasePerson sourceBasePerson)
+        {
+            // Run the modulators.
+
+            // AI weighting.
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedByLeft)
+            {
+                LocalAiPriorityWeightingLeft = modulator.Execute(sourceBasePerson, LocalAiPriorityWeightingLeft);
+            }
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedByRight)
+            {
+                LocalAiPriorityWeightingRight = modulator.Execute(sourceBasePerson, LocalAiPriorityWeightingRight);
+            }
+
+            // Base change rates.
+            // TO DO: disallow static base change rates?
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedByLeft)
+            {
+                BaseChangeRateLeft = modulator.Execute(sourceBasePerson, BaseChangeRateLeft);
+            }
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedByRight)
+            {
+                BaseChangeRateRight = modulator.Execute(sourceBasePerson, BaseChangeRateRight);
+            }
+
+            // Thresholds.
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedByLeft)
+            {
+                ThresholdWarningLeft = modulator.Execute(sourceBasePerson, ThresholdWarningLeft);
+                ThresholdCriticalLeft = modulator.Execute(sourceBasePerson, ThresholdCriticalLeft);
+            }
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedByRight)
+            {
+                ThresholdWarningRight = modulator.Execute(sourceBasePerson, ThresholdWarningRight);
+                ThresholdCriticalRight = modulator.Execute(sourceBasePerson, ThresholdWarningRight);
             }
         }
 

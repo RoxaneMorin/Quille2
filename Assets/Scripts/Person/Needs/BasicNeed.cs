@@ -131,14 +131,14 @@ namespace Quille
             get { return thresholdWarning; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD)
                 {
-                    thresholdWarning = 1;
+                    thresholdWarning = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD + 0.5f)
                 {
-                    thresholdWarning = 0;
+                    thresholdWarning = Constants.MIN_THREDHOLD + 0.5f;
                     return;
                 }
                 else thresholdWarning = value;
@@ -149,14 +149,14 @@ namespace Quille
             get { return thresholdCritical; }
             set
             {
-                if (value > 1)
+                if (value > Constants.MAX_THRESHOLD - 0.05f)
                 {
-                    thresholdCritical = 1;
+                    thresholdCritical = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < 0)
+                else if (value < Constants.MIN_THREDHOLD)
                 {
-                    thresholdCritical = 0;
+                    thresholdCritical = Constants.MIN_THREDHOLD;
                     return;
                 }
                 else thresholdCritical = value;

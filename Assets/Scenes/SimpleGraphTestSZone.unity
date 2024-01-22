@@ -638,8 +638,10 @@ GameObject:
   - component: {fileID: 1888947985}
   - component: {fileID: 1888947984}
   - component: {fileID: 1888947983}
+  - component: {fileID: 1888947990}
+  - component: {fileID: 1888947989}
+  - component: {fileID: 1888947988}
   - component: {fileID: 1888947987}
-  - component: {fileID: 1888947982}
   m_Layer: 0
   m_Name: Pseudoquille
   m_TagString: Untagged
@@ -647,22 +649,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1888947982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a52e574a6e7916d47b91229d7dc96fb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myPersonalityAxes:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
-      Value: 0.5
 --- !u!136 &1888947983
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -751,6 +737,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 1888947981}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edaca75bb3f34043a612ced8caeebe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  charID: 0
+  firstName: 
+  lastName: 
+  nickName: 
+  secondaryNames: []
+  myPersonalityController: {fileID: 0}
+  myNeedController: {fileID: 0}
+  myPersonAI: {fileID: 0}
+--- !u!114 &1888947988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888947981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81b203ed2ed51d449f3b22c7889efaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1888947989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888947981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac4f1ab8d4a9d4e4c8ae8c2ef0b7ac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -763,26 +781,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
   myBasicNeeds: []
   mySubjectiveNeeds: []
-  test:
-    needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
-    localAiPriorityWeighting: 0
-    localAiPriorityWeightingLeft: 0
-    localAiPriorityWeightingRight: 0
-    levelFullLeft: 0
-    levelCurrentLeft: -0.63
-    levelFullRight: 0
-    levelCurrentRight: 0
-    baseChangeRateLeft: 0
-    currentChangeRateLeft: 1.68
-    baseChangeRateRight: 0
-    currentChangeRateRight: 0
-    thresholdWarningLeft: 0
-    thresholdWarningRight: 0
-    thresholdCriticalLeft: 0
-    thresholdCriticalRight: 0
-    isWarningLeft: 0
-    isWarningRight: 0
-    isCriticalLeft: 0
-    isCriticalRight: 0
-    isFailureLeft: 0
-    isFailureRight: 0
+  myBasicNeedsMapped:
+    _serializedList: []
+  mySubjectiveNeedsMapped:
+    _serializedList: []
+--- !u!114 &1888947990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888947981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52e574a6e7916d47b91229d7dc96fb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPersonalityAxes:
+    _serializedList: []

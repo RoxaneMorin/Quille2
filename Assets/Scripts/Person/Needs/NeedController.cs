@@ -21,7 +21,9 @@ namespace Quille
         private SubjectiveNeed[] mySubjectiveNeeds;
 
         // For use by external functions that only know of a BasicNeedSO.
+        [SerializeField, HideInInspector]
         private AYellowpaper.SerializedCollections.SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        [SerializeField, HideInInspector]
         private AYellowpaper.SerializedCollections.SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
 
 
@@ -34,7 +36,7 @@ namespace Quille
 
 
 
-        // PARAMS & GETTERS/SETTERS
+        // PROPERTIES & GETTERS/SETTERS
         public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)
         {
             try // including this just to be safe.
@@ -57,6 +59,8 @@ namespace Quille
                 return null;
             }
         }
+        
+        // Option to add or remove a need?;
 
         public float NoticeBasicNeed 
         {
@@ -221,6 +225,14 @@ namespace Quille
             foreach (SubjectiveNeed need in mySubjectiveNeeds)
             {
                 Debug.Log(need.ToString());
+            }
+        }
+
+        public void ModulateSubjectiveNeeds(BasePerson sourceBasePerson)
+        {
+            foreach (SubjectiveNeed need in mySubjectiveNeeds)
+            {
+                need.Init(sourceBasePerson);
             }
         }
 

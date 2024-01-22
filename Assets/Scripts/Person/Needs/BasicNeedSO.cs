@@ -41,11 +41,13 @@ namespace Quille
 
         // MODULATORS
         //Default values modulated by ? (List of functions/references)
-        // -> Per character AI weight.
-        // -> Per character change rate.
-        // -> Per character thresholds (both at once).
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseAIWeightingModulatedBy;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseAIWeightingModulatedBy  { get { return baseAIWeightingModulatedBy; } }
 
-        [SerializeField]
-        public ChecksAndMods.ModulatorArithmeticFromFloat[] changeRateModulatedBy;
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseChangeRateModulatedBy;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseChangeRateModulatedBy { get { return baseChangeRateModulatedBy; } }
+
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] thresholdsModulatedBy;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] ThresholdsModulatedBy { get { return thresholdsModulatedBy; } }
     }
 }

@@ -21,6 +21,13 @@ public class SubjectiveNeedSOEditor : Editor
     private SerializedProperty thresholdWarningRight;
     private SerializedProperty thresholdCriticalRight;
 
+    private SerializedProperty baseAIWeightingModulatedByLeft;
+    private SerializedProperty baseChangeRateModulatedByLeft;
+    private SerializedProperty thresholdsModulatedByLeft;
+    private SerializedProperty baseAIWeightingModulatedByRight;
+    private SerializedProperty baseChangeRateModulatedByRight;
+    private SerializedProperty thresholdsModulatedByRight;
+
     private void OnEnable()
     {
         needName = serializedObject.FindProperty("needName");
@@ -38,6 +45,13 @@ public class SubjectiveNeedSOEditor : Editor
         thresholdCriticalLeft = serializedObject.FindProperty("thresholdCriticalLeft");
         thresholdWarningRight = serializedObject.FindProperty("thresholdWarningRight");
         thresholdCriticalRight = serializedObject.FindProperty("thresholdCriticalRight");
+
+        baseAIWeightingModulatedByLeft = serializedObject.FindProperty("baseAIWeightingModulatedByLeft");
+        baseChangeRateModulatedByLeft = serializedObject.FindProperty("baseChangeRateModulatedByLeft");
+        thresholdsModulatedByLeft = serializedObject.FindProperty("thresholdsModulatedByLeft");
+        baseAIWeightingModulatedByRight = serializedObject.FindProperty("baseAIWeightingModulatedByRight");
+        baseChangeRateModulatedByRight = serializedObject.FindProperty("baseChangeRateModulatedByRight");
+        thresholdsModulatedByRight = serializedObject.FindProperty("thresholdsModulatedByRight");
     }
 
     public override void OnInspectorGUI()
@@ -64,7 +78,9 @@ public class SubjectiveNeedSOEditor : Editor
         drawAmbidextrousProperty(thresholdWarningLeft, thresholdWarningRight);
         drawAmbidextrousProperty(thresholdCriticalLeft, thresholdCriticalRight);
 
-        // Add the various checks when I get there.
+        drawAmbidextrousProperty(baseAIWeightingModulatedByLeft, baseAIWeightingModulatedByRight);
+        drawAmbidextrousProperty(baseChangeRateModulatedByLeft, baseChangeRateModulatedByRight);
+        drawAmbidextrousProperty(thresholdsModulatedByLeft, thresholdsModulatedByRight);
 
         serializedObject.ApplyModifiedProperties();
     }

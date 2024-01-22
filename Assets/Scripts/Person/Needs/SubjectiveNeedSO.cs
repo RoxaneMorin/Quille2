@@ -61,9 +61,26 @@ namespace Quille
         private float thresholdCriticalRight = Constants.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCriticalRight { get { return thresholdCriticalRight; } }
 
+
+        // MODULATORS
         //Default values modulated by ? (List of functions/references)
-        // -> Per character AI weight.
-        // -> Per character change rate.
-        // -> Per character thresholds (both at once).
+        // Left
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseAIWeightingModulatedByLeft;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseAIWeightingModulatedByLeft { get { return baseAIWeightingModulatedByLeft; } }
+
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseChangeRateModulatedByLeft;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseChangeRateModulatedByLeft { get { return baseChangeRateModulatedByLeft; } }
+
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] thresholdsModulatedByLeft;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] ThresholdsModulatedByLeft { get { return thresholdsModulatedByLeft; } }
+        // Right
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseAIWeightingModulatedByRight;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseAIWeightingModulatedByRight { get { return baseAIWeightingModulatedByRight; } }
+
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseChangeRateModulatedByRight;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseChangeRateModulatedByRight { get { return baseChangeRateModulatedByRight; } }
+
+        [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] thresholdsModulatedByRight;
+        public ChecksAndMods.ModulatorArithmeticFromFloat[] ThresholdsModulatedByRight { get { return thresholdsModulatedByRight; } }
     }
 }
