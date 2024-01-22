@@ -7,6 +7,8 @@ namespace Quille
     public class NeedController : MonoBehaviour
     {
         // TEMP
+        // Have these be loaded automatically from the resource folder instead?
+        // Will have to edit the init functions.
         public BasicNeedSO[] basicNeedSOs;
         public SubjectiveNeedSO[] subjectiveNeedSOs;
 
@@ -18,7 +20,82 @@ namespace Quille
         [SerializeField]
         private SubjectiveNeed[] mySubjectiveNeeds;
 
-        // Change to a dict <needSO, need> ?
+        // For use by external functions that only know of a BasicNeedSO.
+        private AYellowpaper.SerializedCollections.SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        private AYellowpaper.SerializedCollections.SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
+
+
+        // General need-related parameters.
+
+        // Percentile thresholds at which the character AI will consider a need to require its attention.
+        private float noticeBasicNeed = Constants.DEFAULT_NOTICE_BASIC_NEED;
+        private float noticeSubjectiveNeed = Constants.DEFAULT_NOTICE_SUBJECTIVE_NEED;
+        // Should these be stored instead in the PersonAI class?
+
+
+
+        // PARAMS & GETTERS/SETTERS
+        public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)
+        {
+            try // including this just to be safe.
+            {
+                return myBasicNeedsMapped[basicNeedSO];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public SubjectiveNeed GetSubjectiveNeed(SubjectiveNeedSO subjectiveNeedSO)
+        {
+            try // including this just to be safe.
+            {
+                return mySubjectiveNeedsMapped[subjectiveNeedSO];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public float NoticeBasicNeed 
+        {
+            get { return noticeBasicNeed; }
+            set
+            {
+                if (value > Constants.MAX_NOTICE_NEED)
+                {
+                    noticeBasicNeed = Constants.MAX_NOTICE_NEED;
+                }
+                else if (value < Constants.MIN_NOTICE_NEED)
+                {
+                    noticeBasicNeed = Constants.MIN_NOTICE_NEED;
+                }
+                else
+                {
+                    noticeBasicNeed = value;
+                }
+            }
+        }
+        public float NoticeSubjectiveNeed
+        {
+            get { return noticeSubjectiveNeed; }
+            set
+            {
+                if (value > Constants.MAX_NOTICE_NEED)
+                {
+                    noticeSubjectiveNeed = Constants.MAX_NOTICE_NEED;
+                }
+                else if (value < Constants.MIN_NOTICE_NEED)
+                {
+                    noticeSubjectiveNeed = Constants.MIN_NOTICE_NEED;
+                }
+                else
+                {
+                    noticeSubjectiveNeed = value;
+                }
+            }
+        }
 
 
 
@@ -78,12 +155,21 @@ namespace Quille
 
 
         // Init.
+        private void Init()
+        {
+            InitBasicNeeds();
+            InitSubjectiveNeeds();
+        }
         private void InitBasicNeeds()
         {
+            
+            
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
+                myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
+
                 Debug.Log(myBasicNeeds[i].ToString());
             }
 
@@ -95,6 +181,8 @@ namespace Quille
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
                 mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
+                mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
+
                 Debug.Log(mySubjectiveNeeds[i].ToString());
             }
 
@@ -142,8 +230,7 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            InitBasicNeeds();
-            InitSubjectiveNeeds();
+            Init();
         } 
 
         // Update is called once per frame

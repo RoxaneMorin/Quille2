@@ -6,6 +6,10 @@ namespace Quille
 {
     public class PersonAI : MonoBehaviour
     {
+        // VARIABLES
+
+        // CONTROLLERS
+        
         NeedController myNeedController; // 
 
 
