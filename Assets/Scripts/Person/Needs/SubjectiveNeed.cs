@@ -308,7 +308,7 @@ namespace Quille
                     thresholdWarningLeft = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD + 0.05f)
                 {
                     thresholdWarningLeft = 0;
                     return;
@@ -326,9 +326,9 @@ namespace Quille
                     thresholdCriticalLeft = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD)
+                else if (value < Constants.MIN_THRESHOLD)
                 {
-                    thresholdCriticalLeft = Constants.MIN_THREDHOLD;
+                    thresholdCriticalLeft = Constants.MIN_THRESHOLD;
                     return;
                 }
                 else thresholdCriticalLeft = value;
@@ -344,9 +344,9 @@ namespace Quille
                     thresholdWarningRight = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD + 0.05f)
                 {
-                    thresholdWarningRight = Constants.MIN_THREDHOLD + 0.05f;
+                    thresholdWarningRight = Constants.MIN_THRESHOLD + 0.05f;
                     return;
                 }
                 else thresholdWarningRight = value;
@@ -362,9 +362,9 @@ namespace Quille
                     thresholdCriticalRight = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD)
+                else if (value < Constants.MIN_THRESHOLD)
                 {
-                    thresholdCriticalRight = Constants.MIN_THREDHOLD;
+                    thresholdCriticalRight = Constants.MIN_THRESHOLD;
                     return;
                 }
                 else thresholdCriticalRight = value;
@@ -395,11 +395,8 @@ namespace Quille
 
         // General update event for all values? Pass a reference to this object itself?
 
-        // The Warning threshold is reached.
-        public event SubjectiveNeedReachedWarning OnSNReachedWarning;
-
-        // The Critical threshold is reached.
-        public event SubjectiveNeedReachedCritical OnSNReachedCritical;
+        // The Warning or Critical threshold is reached.
+        public event SubjectiveNeedReachedThreshold ONSNReachedThreshold;
 
         // Need failure is reached.
         public event SubjectiveNeedFailure OnSNFailure;
@@ -683,6 +680,8 @@ namespace Quille
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
         {
+            // Change rate division stuff.
+
             while (true)
             {
                 // Handle LeftSide subneed.
@@ -697,14 +696,14 @@ namespace Quille
                         this.IsCriticalLeft = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
-                        OnSNReachedCritical?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage);
+                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (!this.IsWarningLeft & this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft)
                     {
                         this.IsWarningLeft = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
-                        OnSNReachedWarning?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage);
+                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
@@ -752,14 +751,14 @@ namespace Quille
                         this.IsCriticalRight = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
 
-                        OnSNReachedCritical?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage);
+                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (!this.IsWarningRight & this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
                     {
                         this.IsWarningRight = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
 
-                        OnSNReachedWarning?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage);
+                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Quille
@@ -58,14 +57,12 @@ namespace Quille
         // EVENTS
         // Basic needs.
         public event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
-        public event BasicNeedReachedWarning OnBNReachedWarning;
-        public event BasicNeedReachedCritical OnBNReachedCritical;
+        public event BasicNeedReachedThreshold OnBNReachedThreshold;
         public event BasicNeedFailure OnBNFailure;
 
         // Subjective needs.
         public event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
-        public event SubjectiveNeedReachedWarning OnSNReachedWarning;
-        public event SubjectiveNeedReachedCritical OnSNReachedCritical;
+        public event SubjectiveNeedReachedThreshold OnSNReachedThreshold;
         public event SubjectiveNeedFailure OnSNFailure;
 
 
@@ -143,8 +140,7 @@ namespace Quille
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
                 myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
 
-                myBasicNeeds[i].OnBNReachedWarning += OnBasicNeedWarning;
-                myBasicNeeds[i].OnBNReachedCritical += OnBasicNeedCritical;
+                myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
                 myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
 
                 Debug.Log(myBasicNeeds[i].ToString());
@@ -162,8 +158,7 @@ namespace Quille
                 mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
                 mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
 
-                mySubjectiveNeeds[i].OnSNReachedWarning += OnSubjectiveNeedWarning;
-                mySubjectiveNeeds[i].OnSNReachedCritical += OnSubjectiveNeedCritical;
+                mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedWarning;
                 mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
 
                 Debug.Log(mySubjectiveNeeds[i].ToString());
@@ -176,19 +171,22 @@ namespace Quille
 
         // Event handlers.
         // Basic needs.
-        private void OnBasicNeedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
+        private void OnBasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState)
         {
-            Debug.Log(string.Format("{0} threw a Warning event.", needIdentity.NeedName));
+            if (needState == NeedStates.Warning)
+            {
+                Debug.Log(string.Format("{0} threw a Warning event.", needIdentity.NeedName));
 
-            // Throw the event upwards.
-            OnBNReachedWarning?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
-        }
-        private void OnBasicNeedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
-        {
-            Debug.Log(string.Format("{0} threw a Critical event.", needIdentity.NeedName));
+                // Throw the event upwards.
+                OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Warning);
+            }
+            else if (needState == NeedStates.Critical)
+            {
+                Debug.Log(string.Format("{0} threw a Critical event.", needIdentity.NeedName));
 
-            // Throw the event upwards.
-            OnBNReachedCritical?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
+                // Throw the event upwards.
+                OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Critical);
+            }
         }
         private void OnBasicNeedFailure(BasicNeedSO needIdentity)
         {
@@ -197,19 +195,22 @@ namespace Quille
             // Throw the event upwards.
             OnBNFailure?.Invoke(needIdentity);
         }
-        private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
+        private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
-            Debug.Log(string.Format("{0} threw a Warning event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+            if (needState == NeedStates.Warning)
+            {
+                Debug.Log(string.Format("{0} threw a Warning event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
 
-            // Throw the event upwards.
-            OnSNReachedWarning?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage);
-        }
-        private void OnSubjectiveNeedCritical(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
-        {
-            Debug.Log(string.Format("{0} threw a Critical event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+                // Throw the event upwards.
+                OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Warning);
+            }
+            else if (needState == NeedStates.Critical)
+            {
+                Debug.Log(string.Format("{0} threw a Critical event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
 
-            // Throw the event upwards.
-            OnSNReachedCritical?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage);
+                // Throw the event upwards.
+                OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Critical);
+            }
         }
         private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
         {

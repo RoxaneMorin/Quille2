@@ -136,9 +136,9 @@ namespace Quille
                     thresholdWarning = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD + 0.05f)
                 {
-                    thresholdWarning = Constants.MIN_THREDHOLD + 0.05f;
+                    thresholdWarning = Constants.MIN_THRESHOLD + 0.05f;
                     return;
                 }
                 else thresholdWarning = value;
@@ -154,9 +154,9 @@ namespace Quille
                     thresholdCritical = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD)
+                else if (value < Constants.MIN_THRESHOLD)
                 {
-                    thresholdCritical = Constants.MIN_THREDHOLD;
+                    thresholdCritical = Constants.MIN_THRESHOLD;
                     return;
                 }
                 else thresholdCritical = value;
@@ -180,11 +180,8 @@ namespace Quille
 
         // General update event for all values? Pass a reference to this object itself?
 
-        // The Warning threshold is reached.
-        public event BasicNeedReachedWarning OnBNReachedWarning;
-
-        // The Critical threshold is reached.
-        public event BasicNeedReachedCritical OnBNReachedCritical;
+        // The Warning or Critical threshold is reached.
+        public event BasicNeedReachedThreshold OnBNReachedThreshold;
 
         // Need failure is reached.
         public event BasicNeedFailure OnBNFailure;
@@ -319,6 +316,8 @@ namespace Quille
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
         {
+            // Change rate division stuff.
+
             while (true)
             {
                 if (this.LevelCurrent > this.LevelEmpty) // The need is not empty.
@@ -331,15 +330,15 @@ namespace Quille
                     {
                         this.IsCritical = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
-                        
-                        OnBNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+
+                        OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (!this.IsWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
                     {
                         this.IsWarning = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
 
-                        OnBNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                        OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {

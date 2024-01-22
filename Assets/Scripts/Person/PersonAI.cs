@@ -14,10 +14,12 @@ namespace Quille
 
         // Values.
         // Percentile thresholds at which the character AI will consider a need to require its attention.
-        [SerializeField, InspectorReadOnly] private float noticeBasicNeed = Constants.DEFAULT_NOTICE_BASIC_NEED;
-        [SerializeField, InspectorReadOnly] private float noticeSubjectiveNeed = Constants.DEFAULT_NOTICE_SUBJECTIVE_NEED;
+        [SerializeField] private float noticeBasicNeed = Constants.DEFAULT_NOTICE_BASIC_NEED;
+        [SerializeField] private float noticeSubjectiveNeed = Constants.DEFAULT_NOTICE_SUBJECTIVE_NEED;
 
-
+        // Checks/bools.
+        [SerializeField] private bool inAction; // Is the character currently absorbed in something? 
+        // Info about the  action: reference, potentially its interuptability level.
 
         // PROPERTIES
         public float NoticeBasicNeed
@@ -25,13 +27,13 @@ namespace Quille
             get { return noticeBasicNeed; }
             set
             {
-                if (value > Constants.MAX_NOTICE_NEED)
+                if (value > Constants.MAX_THRESHOLD + 0.05f)
                 {
-                    noticeBasicNeed = Constants.MAX_NOTICE_NEED;
+                    noticeBasicNeed = Constants.MAX_THRESHOLD + 0.05f;
                 }
-                else if (value < Constants.MIN_NOTICE_NEED)
+                else if (value < Constants.MIN_THRESHOLD + 0.1f)
                 {
-                    noticeBasicNeed = Constants.MIN_NOTICE_NEED;
+                    noticeBasicNeed = Constants.MIN_THRESHOLD + 0.1f;
                 }
                 else
                 {
@@ -44,13 +46,13 @@ namespace Quille
             get { return noticeSubjectiveNeed; }
             set
             {
-                if (value > Constants.MAX_NOTICE_NEED)
+                if (value > Constants.MAX_THRESHOLD + 0.05f)
                 {
-                    noticeSubjectiveNeed = Constants.MAX_NOTICE_NEED;
+                    noticeSubjectiveNeed = Constants.MAX_THRESHOLD + 0.05f;
                 }
-                else if (value < Constants.MIN_NOTICE_NEED)
+                else if (value < Constants.MIN_THRESHOLD + 0.1f)
                 {
-                    noticeSubjectiveNeed = Constants.MIN_NOTICE_NEED;
+                    noticeSubjectiveNeed = Constants.MIN_THRESHOLD + 0.1f;
                 }
                 else
                 {
@@ -73,6 +75,8 @@ namespace Quille
             if (neediestBasicNeed.Item2 <= noticeBasicNeed)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", neediestBasicNeed.Item1.NeedName));
+
+                // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }
             // Else. Will it need to be an actual else clause?
 
@@ -81,6 +85,8 @@ namespace Quille
             if (neediestSubjectiveNeed.Item3 <+ noticeSubjectiveNeed)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", (neediestSubjectiveNeed.Item2 ? neediestSubjectiveNeed.Item1.NeedNameRight : neediestSubjectiveNeed.Item1.NeedNameLeft)));
+
+                // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }
 
             // Once the action is done, check again in case multiple needs were at or below notice.

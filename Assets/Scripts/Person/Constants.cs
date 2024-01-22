@@ -4,6 +4,15 @@ using UnityEngine;
 
 namespace Quille
 {
+    public enum NeedStates
+    {
+        Failure,
+        Critical,
+        Warning,
+        Normal,
+        Elated
+    }
+    
     public static class Constants
     {
         // PERSONALITY
@@ -28,19 +37,23 @@ namespace Quille
 
         // Bounds for threshold values.
         public const float MAX_THRESHOLD = 0.75f;
-        public const float MIN_THREDHOLD = 0.05f;
+        public const float MIN_THRESHOLD = 0.05f;
 
         // Percentile thresholds at which the character AI will consider a need to require its attention.
         public const float DEFAULT_NOTICE_BASIC_NEED = 0.5f;
         public const float DEFAULT_NOTICE_SUBJECTIVE_NEED = 0.5f;
 
-        // Bounds for need notice values.
-        public const float MAX_NOTICE_NEED = 0.8f;
-        public const float MIN_NOTICE_NEED = 0.1f;
+        // Bounds for need notice values. 
+        //public const float MAX_NOTICE_NEED = 0.8f; // Should be 0.05f higher than the MAX_THRESHOLD;
+        //public const float MIN_NOTICE_NEED = 0.15f; // Should be 0.1f higher than the MIN_THREDHOLD;
+        // Calculated from the MAX and MIN TRESHOLDS.
 
         // Interval (in seconds) at which the PersonAI will check the current state of needs.
         public const float NEED_CHECK_INTERVAL = 5f;
 
         // Do we need mins and maxes for needs' base change rates?
+        // Tweak these on a per-need basis?
+
+        public const float NEED_CHANGE_RATE_DIVIDER = 100f;
     }
 }

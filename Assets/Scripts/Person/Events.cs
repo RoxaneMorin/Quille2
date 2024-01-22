@@ -10,11 +10,8 @@ namespace Quille
 
     // General update event for all values? Pass a reference to this object itself?
 
-    // A basic need's Warning threshold is reached.
-    public delegate void BasicNeedReachedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
-
-    // A basic need's Critical threshold is reached.
-    public delegate void BasicNeedReachedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
+    // A basic need's Warning or Critical threshold is reached.
+    public delegate void BasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState);
 
     // A basic need is failing.
     public delegate void BasicNeedFailure(BasicNeedSO needIdentity); // Is the other information needed?
@@ -27,11 +24,8 @@ namespace Quille
 
     // General update event for all values? Pass a reference to this object itself?
 
-    //  A subjective need's Warning threshold is reached.
-    public delegate void SubjectiveNeedReachedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
-
-    // A subjective need's Critical threshold is reached.
-    public delegate void SubjectiveNeedReachedCritical(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
+    //  A subjective need's Warning or Critical threshold is reached.
+    public delegate void SubjectiveNeedReachedThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needStates);
 
     // A subjective need is failing.
     public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed); // Is the other information needed?
