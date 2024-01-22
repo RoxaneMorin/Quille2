@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 172503377}
   - component: {fileID: 172503376}
   - component: {fileID: 172503375}
+  - component: {fileID: 172503381}
   m_Layer: 0
   m_Name: ModulatorTester
   m_TagString: Untagged
@@ -280,6 +281,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &172503381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172503374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4f1ab8d4a9d4e4c8ae8c2ef0b7ac64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicNeedSOs:
+  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+  subjectiveNeedSOs: []
+  myBasicNeeds: []
+  mySubjectiveNeeds: []
 --- !u!1 &245582501
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,10 +881,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
   myBasicNeeds: []
   mySubjectiveNeeds: []
-  myBasicNeedsMapped:
-    _serializedList: []
-  mySubjectiveNeedsMapped:
-    _serializedList: []
 --- !u!114 &1888947990
 MonoBehaviour:
   m_ObjectHideFlags: 0

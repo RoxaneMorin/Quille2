@@ -19,10 +19,8 @@ namespace Quille
         [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
 
         // For use by external functions that only know of a BasicNeedSO.
-        [SerializeField, HideInInspector]
-        private AYellowpaper.SerializedCollections.SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
-        [SerializeField, HideInInspector]
-        private AYellowpaper.SerializedCollections.SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
+        private Dictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        private Dictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
 
 
         // General need-related parameters.
@@ -137,6 +135,8 @@ namespace Quille
         }
         private void InitBasicNeeds()
         {
+            myBasicNeedsMapped = new Dictionary<BasicNeedSO, BasicNeed>();
+
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
@@ -154,6 +154,8 @@ namespace Quille
         }
         private void InitSubjectiveNeeds()
         {
+            mySubjectiveNeedsMapped = new Dictionary<SubjectiveNeedSO, SubjectiveNeed>();
+            
             mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
