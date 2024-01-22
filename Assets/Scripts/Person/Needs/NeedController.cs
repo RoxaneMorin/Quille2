@@ -15,10 +15,8 @@ namespace Quille
 
 
         // VARIABLES
-        [SerializeField]
-        private BasicNeed[] myBasicNeeds;
-        [SerializeField]
-        private SubjectiveNeed[] mySubjectiveNeeds;
+        [SerializeField] private BasicNeed[] myBasicNeeds;
+        [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
 
         // For use by external functions that only know of a BasicNeedSO.
         [SerializeField, HideInInspector]
@@ -54,8 +52,23 @@ namespace Quille
                 return null;
             }
         }
-        
+
         // Option to add or remove a need?;
+
+
+
+        // EVENTS
+        // Basic needs.
+        public event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
+        public event BasicNeedReachedWarning OnBNReachedWarning;
+        public event BasicNeedReachedCritical OnBNReachedCritical;
+        public event BasicNeedFailure OnBNFailure;
+
+        // Subjective needs.
+        public event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
+        public event SubjectiveNeedReachedWarning OnSNReachedWarning;
+        public event SubjectiveNeedReachedCritical OnSNReachedCritical;
+        public event SubjectiveNeedFailure OnSNFailure;
 
 
 
@@ -164,28 +177,45 @@ namespace Quille
         private void OnBasicNeedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
         {
             Debug.Log(string.Format("{0} threw a Warning event.", needIdentity.NeedName));
+
+            // Throw the event upwards.
+            OnBNReachedWarning?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
         }
         private void OnBasicNeedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
         {
             Debug.Log(string.Format("{0} threw a Critical event.", needIdentity.NeedName));
+
+            // Throw the event upwards.
+            OnBNReachedCritical?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
         }
         private void OnBasicNeedFailure(BasicNeedSO needIdentity)
         {
             Debug.Log(string.Format("{0} threw a Failure event.", needIdentity.NeedName));
+
+            // Throw the event upwards.
+            OnBNFailure?.Invoke(needIdentity);
         }
         private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
         {
             Debug.Log(string.Format("{0} threw a Warning event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+
+            // Throw the event upwards.
+            OnSNReachedWarning?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage);
         }
         private void OnSubjectiveNeedCritical(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
         {
             Debug.Log(string.Format("{0} threw a Critical event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+
+            // Throw the event upwards.
+            OnSNReachedCritical?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage);
         }
         private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
         {
             Debug.Log(string.Format("{0} threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
-        }
 
+            // Throw the event upwards.
+            OnSNFailure?.Invoke(needIdentity, subNeed);
+        }
 
 
 
@@ -242,7 +272,6 @@ namespace Quille
                 Debug.Log(need.ToString());
             }
         }
-
         public void ModulateSubjectiveNeeds(BasePerson sourceBasePerson)
         {
             foreach (SubjectiveNeed need in mySubjectiveNeeds)

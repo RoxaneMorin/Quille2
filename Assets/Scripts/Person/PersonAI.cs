@@ -67,24 +67,26 @@ namespace Quille
         void NeedMonitorLoop()
         {
             // Even X seconds, verify if:
-            //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
 
+            //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
             (BasicNeedSO, float) neediestBasicNeed = myBasePerson.MyNeedController.PerformBasicNeedCheck();
             if (neediestBasicNeed.Item2 <= noticeBasicNeed)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", neediestBasicNeed.Item1.NeedName));
             }
+            // Else. Will it need to be an actual else clause?
 
-            /*
-         * 
-         * 
-         * -> Any subjective need is at or below notice. If so, do action unless otherwise occupied.
-         * Once the action is done, check again in case multiple needs were at or below notice.
-         * 
-         * Receiving a need Warning, Critical or Failure event can overwrite other actions depending on the importance of said need.
-         */
+            //-> Any subjective need is at or below notice. If so, do action unless otherwise occupied.
+            (SubjectiveNeedSO, bool, float) neediestSubjectiveNeed = myBasePerson.MyNeedController.PerformSubjectiveNeedCheck();
+            if (neediestSubjectiveNeed.Item3 <+ noticeSubjectiveNeed)
+            {
+                Debug.Log(string.Format("Something must be done about our {0} need.", (neediestSubjectiveNeed.Item2 ? neediestSubjectiveNeed.Item1.NeedNameRight : neediestSubjectiveNeed.Item1.NeedNameLeft)));
+            }
 
+            // Once the action is done, check again in case multiple needs were at or below notice.
             // Should it reinvoke itself here, or run as a coroutine?
+
+            // Receiving a need Warning, Critical or Failure event can overwrite other actions depending on the importance of said need.
         }
 
 

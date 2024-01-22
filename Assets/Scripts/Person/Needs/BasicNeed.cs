@@ -25,12 +25,12 @@ namespace Quille
         private float thresholdWarning,
                       thresholdCritical;
 
-        [BeginInspectorReadOnlyGroup]
-        [SerializeField]
+        //[BeginInspectorReadOnlyGroup]
+        [SerializeField, InspectorReadOnly]
         private bool isWarning;
-        [SerializeField]
+        [SerializeField, InspectorReadOnly]
         private bool isCritical;
-        [SerializeField]
+        [SerializeField, InspectorReadOnly]
         private bool isFailure;
         //[EndInspectorReadOnlyGroup]
 
