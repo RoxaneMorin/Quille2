@@ -763,3 +763,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
   myBasicNeeds: []
   mySubjectiveNeeds: []
+  test:
+    needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+    localAiPriorityWeighting: 0
+    localAiPriorityWeightingLeft: 0
+    localAiPriorityWeightingRight: 0
+    levelFullLeft: 0
+    levelCurrentLeft: -0.63
+    levelFullRight: 0
+    levelCurrentRight: 0
+    baseChangeRateLeft: 0
+    currentChangeRateLeft: 1.68
+    baseChangeRateRight: 0
+    currentChangeRateRight: 0
+    thresholdWarningLeft: 0
+    thresholdWarningRight: 0
+    thresholdCriticalLeft: 0
+    thresholdCriticalRight: 0
+    isWarningLeft: 0
+    isWarningRight: 0
+    isCriticalLeft: 0
+    isCriticalRight: 0
+    isFailureLeft: 0
+    isFailureRight: 0

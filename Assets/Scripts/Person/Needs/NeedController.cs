@@ -6,15 +6,22 @@ namespace Quille
 {
     public class NeedController : MonoBehaviour
     {
+        // TEMP
         public BasicNeedSO[] basicNeedSOs;
         public SubjectiveNeedSO[] subjectiveNeedSOs;
 
+
+
+        // VARIABLES
         public BasicNeed[] myBasicNeeds;
         public SubjectiveNeed[] mySubjectiveNeeds;
 
         // Change to a dict <needSO, need> ?
 
 
+
+
+        // METHODS
 
         private void StartBasicNeedDecay(BasicNeed myNeed)
         {

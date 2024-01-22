@@ -176,21 +176,17 @@ namespace Quille
 
         // EVENTS
         // The need's level has been updated.
-        public delegate void BasicNeedLevelCurrentUpdate(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
         private event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
 
         // General update event for all values? Pass a reference to this object itself?
 
         // The Warning threshold is reached.
-        public delegate void BasicNeedReachedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
         private event BasicNeedReachedWarning OnBNReachedWarning;
 
         // The Critical threshold is reached.
-        public delegate void BasicNeedReachedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);
         private event BasicNeedReachedCritical OnBNReachedCritical;
 
         // Need failure is reached.
-        public delegate void BasicNeedFailure(BasicNeedSO needIdentity); // Is the other information needed?
         private event BasicNeedFailure OnBNFailure;
 
 

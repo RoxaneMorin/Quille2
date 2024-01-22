@@ -62,5 +62,8 @@ namespace Quille
         public float ThresholdCriticalRight { get { return thresholdCriticalRight; } }
 
         //Default values modulated by ? (List of functions/references)
+        // -> Per character AI weight.
+        // -> Per character change rate.
+        // -> Per character thresholds (both at once).
     }
 }

@@ -8,9 +8,6 @@ namespace Quille
     [System.Serializable]
     public class SubjectiveNeed
     {
-        // TEMP
-
-
         // VARIABLES
         [SerializeField] private SubjectiveNeedSO needSO;
 
@@ -37,7 +34,7 @@ namespace Quille
         private float thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
 
-        [BeginInspectorReadOnlyGroup]
+        //[BeginInspectorReadOnlyGroup]
         [SerializeField]
         private bool isWarningLeft,
                      isWarningRight;
@@ -394,22 +391,17 @@ namespace Quille
 
 
         // EVENTS
-        // The need's level has been updated.
-        public delegate void SubjectiveNeedLevelCurrentUpdate(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
         private event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
 
         // General update event for all values? Pass a reference to this object itself?
 
         // The Warning threshold is reached.
-        public delegate void SubjectiveNeedReachedWarning(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
         private event SubjectiveNeedReachedWarning OnSNReachedWarning;
 
         // The Critical threshold is reached.
-        public delegate void SubjectiveNeedReachedCritical(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage);
         private event SubjectiveNeedReachedCritical OnSNReachedCritical;
 
         // Need failure is reached.
-        public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity); // Is the other information needed?
         private event SubjectiveNeedFailure OnSNFailure;
 
 
