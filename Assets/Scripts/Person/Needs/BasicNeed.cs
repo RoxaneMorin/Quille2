@@ -287,6 +287,34 @@ namespace Quille
 
 
 
+        // Init.
+        public void Init(BasePerson sourceBasePerson)
+        {
+            // Run the modulators.
+
+            // AI weighting.
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedBy)
+            {
+                LocalAiPriorityWeighting = modulator.Execute(sourceBasePerson, LocalAiPriorityWeighting);
+            }
+
+            // Base change rates.
+            // TO DO: disallow static base change rates?
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedBy)
+            {
+                BaseChangeRate = modulator.Execute(sourceBasePerson, BaseChangeRate);
+            }
+
+            // Thresholds.
+            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedBy)
+            {
+                ThresholdWarning = modulator.Execute(sourceBasePerson, ThresholdWarning);
+                ThresholdCritical = modulator.Execute(sourceBasePerson, ThresholdCritical);
+            }
+        }
+
+
+
         // COROUTINES
         // Every second, alter this need's fulfillment level by its current change rate.
         public IEnumerator AlterLevelByChangeRate()
