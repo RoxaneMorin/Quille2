@@ -308,7 +308,7 @@ namespace Quille
                     thresholdWarningLeft = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.5f)
+                else if (value < Constants.MIN_THREDHOLD + 0.05f)
                 {
                     thresholdWarningLeft = 0;
                     return;
@@ -344,9 +344,9 @@ namespace Quille
                     thresholdWarningRight = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.5f)
+                else if (value < Constants.MIN_THREDHOLD + 0.05f)
                 {
-                    thresholdWarningRight = Constants.MIN_THREDHOLD + 0.5f;
+                    thresholdWarningRight = Constants.MIN_THREDHOLD + 0.05f;
                     return;
                 }
                 else thresholdWarningRight = value;
@@ -391,18 +391,18 @@ namespace Quille
 
 
         // EVENTS
-        private event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
+        public event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
 
         // General update event for all values? Pass a reference to this object itself?
 
         // The Warning threshold is reached.
-        private event SubjectiveNeedReachedWarning OnSNReachedWarning;
+        public event SubjectiveNeedReachedWarning OnSNReachedWarning;
 
         // The Critical threshold is reached.
-        private event SubjectiveNeedReachedCritical OnSNReachedCritical;
+        public event SubjectiveNeedReachedCritical OnSNReachedCritical;
 
         // Need failure is reached.
-        private event SubjectiveNeedFailure OnSNFailure;
+        public event SubjectiveNeedFailure OnSNFailure;
 
 
 
@@ -515,21 +515,21 @@ namespace Quille
             //Array.Reverse(subjectiveNeeds);
         }
 
-        // Return neediest of the set.
-        public static SubjectiveNeed ReturnNeediestbyNeediestDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        // Return neediest of the set. The returned bool indicates which side is neediest, where Left = 0, Right = 1.
+        public static (SubjectiveNeed, bool) ReturnNeediestbyNeediestDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByFulfillmentDeltaofNeediest(subjectiveNeeds, usePriorityWeights, byPercentage);
-            return subjectiveNeeds[0];
+            return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
-        public static SubjectiveNeed ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        public static (SubjectiveNeed, bool) ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByTotalFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
-            return subjectiveNeeds[0];
+            return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
-        public static SubjectiveNeed ReturnNeediestbyAverageDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        public static (SubjectiveNeed, bool) ReturnNeediestbyAverageDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByAverageFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
-            return subjectiveNeeds[0];
+            return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
 
         // COMPARISON HELPERS
@@ -697,14 +697,14 @@ namespace Quille
                         this.IsCriticalLeft = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
-                        OnSNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                        OnSNReachedCritical?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage);
                     }
                     else if (!this.IsWarningLeft & this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft)
                     {
                         this.IsWarningLeft = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
-                        OnSNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                        OnSNReachedWarning?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
@@ -727,7 +727,7 @@ namespace Quille
                         this.IsFailureLeft = true;
                         Debug.Log(string.Format("{0} is now empty.", this.NeedNameLeft));
 
-                        OnSNFailure?.Invoke(NeedSO);
+                        OnSNFailure?.Invoke(NeedSO, false);
                     }
 
                     if (this.CurrentChangeRateLeft > 0) // Only apply the change if it would increase it.
@@ -752,14 +752,14 @@ namespace Quille
                         this.IsCriticalRight = true;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
 
-                        OnSNReachedCritical?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                        OnSNReachedCritical?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage);
                     }
                     else if (!this.IsWarningRight & this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
                     {
                         this.IsWarningRight = true;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
 
-                        OnSNReachedWarning?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+                        OnSNReachedWarning?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
@@ -782,7 +782,7 @@ namespace Quille
                         this.IsFailureRight = true;
                         Debug.Log(string.Format("{0} is now empty.", this.NeedNameRight));
 
-                        OnSNFailure?.Invoke(NeedSO);
+                        OnSNFailure?.Invoke(NeedSO, true);
                     }
 
                     if (this.CurrentChangeRateRight > 0) // Only apply the change if it would increase it.

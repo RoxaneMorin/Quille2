@@ -40,5 +40,7 @@ namespace Quille
 
         // Interval (in seconds) at which the PersonAI will check the current state of needs.
         public const float NEED_CHECK_INTERVAL = 5f;
+
+        // Do we need mins and maxes for needs' base change rates?
     }
 }

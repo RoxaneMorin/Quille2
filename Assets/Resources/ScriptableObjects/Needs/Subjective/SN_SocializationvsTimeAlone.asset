@@ -35,7 +35,7 @@ MonoBehaviour:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
     mainOpIdx: 2
     modOpIdx: 3
-    modifier: 0.0005
+    modifier: 0.00025
   thresholdsModulatedByLeft: []
   baseAIWeightingModulatedByRight:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
@@ -46,5 +46,5 @@ MonoBehaviour:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
     mainOpIdx: 1
     modOpIdx: 3
-    modifier: 0.0005
+    modifier: 0.00025
   thresholdsModulatedByRight: []

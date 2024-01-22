@@ -78,6 +78,7 @@ public class SubjectiveNeedSOEditor : Editor
         drawAmbidextrousProperty(thresholdWarningLeft, thresholdWarningRight);
         drawAmbidextrousProperty(thresholdCriticalLeft, thresholdCriticalRight);
 
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
         drawAmbidextrousProperty(baseAIWeightingModulatedByLeft, baseAIWeightingModulatedByRight);
         drawAmbidextrousProperty(baseChangeRateModulatedByLeft, baseChangeRateModulatedByRight);
         drawAmbidextrousProperty(thresholdsModulatedByLeft, thresholdsModulatedByRight);

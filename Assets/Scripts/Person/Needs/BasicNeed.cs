@@ -136,9 +136,9 @@ namespace Quille
                     thresholdWarning = Constants.MAX_THRESHOLD;
                     return;
                 }
-                else if (value < Constants.MIN_THREDHOLD + 0.5f)
+                else if (value < Constants.MIN_THREDHOLD + 0.05f)
                 {
-                    thresholdWarning = Constants.MIN_THREDHOLD + 0.5f;
+                    thresholdWarning = Constants.MIN_THREDHOLD + 0.05f;
                     return;
                 }
                 else thresholdWarning = value;
@@ -176,18 +176,18 @@ namespace Quille
 
         // EVENTS
         // The need's level has been updated.
-        private event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
+        public event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
 
         // General update event for all values? Pass a reference to this object itself?
 
         // The Warning threshold is reached.
-        private event BasicNeedReachedWarning OnBNReachedWarning;
+        public event BasicNeedReachedWarning OnBNReachedWarning;
 
         // The Critical threshold is reached.
-        private event BasicNeedReachedCritical OnBNReachedCritical;
+        public event BasicNeedReachedCritical OnBNReachedCritical;
 
         // Need failure is reached.
-        private event BasicNeedFailure OnBNFailure;
+        public event BasicNeedFailure OnBNFailure;
 
 
 

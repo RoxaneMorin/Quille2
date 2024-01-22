@@ -29,11 +29,6 @@ namespace Quille
 
         // General need-related parameters.
 
-        // Percentile thresholds at which the character AI will consider a need to require its attention.
-        private float noticeBasicNeed = Constants.DEFAULT_NOTICE_BASIC_NEED;
-        private float noticeSubjectiveNeed = Constants.DEFAULT_NOTICE_SUBJECTIVE_NEED;
-        // Should these be stored instead in the PersonAI class?
-
 
 
         // PROPERTIES & GETTERS/SETTERS
@@ -61,45 +56,6 @@ namespace Quille
         }
         
         // Option to add or remove a need?;
-
-        public float NoticeBasicNeed 
-        {
-            get { return noticeBasicNeed; }
-            set
-            {
-                if (value > Constants.MAX_NOTICE_NEED)
-                {
-                    noticeBasicNeed = Constants.MAX_NOTICE_NEED;
-                }
-                else if (value < Constants.MIN_NOTICE_NEED)
-                {
-                    noticeBasicNeed = Constants.MIN_NOTICE_NEED;
-                }
-                else
-                {
-                    noticeBasicNeed = value;
-                }
-            }
-        }
-        public float NoticeSubjectiveNeed
-        {
-            get { return noticeSubjectiveNeed; }
-            set
-            {
-                if (value > Constants.MAX_NOTICE_NEED)
-                {
-                    noticeSubjectiveNeed = Constants.MAX_NOTICE_NEED;
-                }
-                else if (value < Constants.MIN_NOTICE_NEED)
-                {
-                    noticeSubjectiveNeed = Constants.MIN_NOTICE_NEED;
-                }
-                else
-                {
-                    noticeSubjectiveNeed = value;
-                }
-            }
-        }
 
 
 
@@ -163,16 +119,20 @@ namespace Quille
         {
             InitBasicNeeds();
             InitSubjectiveNeeds();
+
+            // TO DO: Hook up the modulations here.
         }
         private void InitBasicNeeds()
         {
-            
-            
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
                 myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
+
+                myBasicNeeds[i].OnBNReachedWarning += OnBasicNeedWarning;
+                myBasicNeeds[i].OnBNReachedCritical += OnBasicNeedCritical;
+                myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
 
                 Debug.Log(myBasicNeeds[i].ToString());
             }
@@ -187,10 +147,65 @@ namespace Quille
                 mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
                 mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
 
+                mySubjectiveNeeds[i].OnSNReachedWarning += OnSubjectiveNeedWarning;
+                mySubjectiveNeeds[i].OnSNReachedCritical += OnSubjectiveNeedCritical;
+                mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
+
                 Debug.Log(mySubjectiveNeeds[i].ToString());
             }
 
             StartSubjectiveNeedDecay(mySubjectiveNeeds);
+        }
+
+
+
+        // Event handlers.
+        // Basic needs.
+        private void OnBasicNeedWarning(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a Warning event.", needIdentity.NeedName));
+        }
+        private void OnBasicNeedCritical(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a Critical event.", needIdentity.NeedName));
+        }
+        private void OnBasicNeedFailure(BasicNeedSO needIdentity)
+        {
+            Debug.Log(string.Format("{0} threw a Failure event.", needIdentity.NeedName));
+        }
+        private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a Warning event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+        }
+        private void OnSubjectiveNeedCritical(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a Critical event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+        }
+        private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
+        {
+            Debug.Log(string.Format("{0} threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+        }
+
+
+
+
+        // For use by personAI.
+
+        // Return the neediest need of each type as well as its level.
+        public (BasicNeedSO, float) PerformBasicNeedCheck() 
+        {
+            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(myBasicNeeds);
+            float neediestNeedLevel = neediestNeed.LevelCurrentAsPercentage;
+
+            return (neediestNeed.NeedSO, neediestNeedLevel);
+        }
+        // The returned bool indicates which side is neediest, where Left = 0, Right = 1.
+        public (SubjectiveNeedSO, bool, float) PerformSubjectiveNeedCheck()
+        {
+            (SubjectiveNeed, bool) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(mySubjectiveNeeds);
+            float neediestNeedLevel = neediestNeed.Item2 ? neediestNeed.Item1.LevelCurrentRightAsPercentage : neediestNeed.Item1.LevelCurrentLeftAsPercentage;
+
+            return (neediestNeed.Item1.NeedSO, neediestNeed.Item2, neediestNeedLevel);
         }
 
 
