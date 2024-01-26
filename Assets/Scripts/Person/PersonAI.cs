@@ -68,6 +68,8 @@ namespace Quille
         // AI Logic
         void NeedMonitorLoop()
         {
+            Debug.Log("In NeedMonitorLoop");
+            
             // Even X seconds, verify if:
 
             //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
@@ -111,6 +113,8 @@ namespace Quille
         void Start()
         {
             Init();
+
+            InvokeRepeating("NeedMonitorLoop", 5f, 5f);
         }
 
         // Update is called once per frame

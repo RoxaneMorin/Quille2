@@ -45,7 +45,7 @@ namespace Quille
         private bool isFailureLeft,
                      isFailureRight;
         //[EndInspectorReadOnlyGroup]
-
+        // Add state enum?
 
 
         // PROPERTIES

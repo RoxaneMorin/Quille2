@@ -142,6 +142,7 @@ namespace Quille
 
                 myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
                 myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
+                myBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
 
                 Debug.Log(myBasicNeeds[i].ToString());
             }
@@ -195,6 +196,12 @@ namespace Quille
             // Throw the event upwards.
             OnBNFailure?.Invoke(needIdentity);
         }
+        private void OnBasicNeedLeftThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates previousNeedState)
+        {
+            Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", needIdentity.NeedName, previousNeedState));
+        }
+
+
         private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
             if (needState == NeedStates.Warning)
@@ -219,6 +226,7 @@ namespace Quille
             // Throw the event upwards.
             OnSNFailure?.Invoke(needIdentity, subNeed);
         }
+
 
 
 

@@ -25,14 +25,8 @@ namespace Quille
         private float thresholdWarning,
                       thresholdCritical;
 
-        //[BeginInspectorReadOnlyGroup]
         [SerializeField, InspectorReadOnly]
-        private bool isWarning;
-        [SerializeField, InspectorReadOnly]
-        private bool isCritical;
-        [SerializeField, InspectorReadOnly]
-        private bool isFailure;
-        //[EndInspectorReadOnlyGroup]
+        private NeedStates needState = NeedStates.Normal;
 
 
 
@@ -168,9 +162,7 @@ namespace Quille
             thresholdCritical = DefaultThresholdCritical;
         }
 
-        public bool IsWarning { get { return isWarning; } private set { isWarning = value; } }
-        public bool IsCritical { get { return isCritical; } private set { isCritical = value; } }
-        public bool IsFailure { get { return isFailure; } private set { isFailure = value; } }// Should the set be public?
+        public NeedStates NeedState { get { return needState; } private set { needState = value; } }
 
 
 
@@ -182,6 +174,9 @@ namespace Quille
 
         // The Warning or Critical threshold is reached.
         public event BasicNeedReachedThreshold OnBNReachedThreshold;
+
+        // The need is no longer in Failure, Critical or Warning.
+        public event BasicNeedLeftThreshold OnBNLeftThreshold;
 
         // Need failure is reached.
         public event BasicNeedFailure OnBNFailure;
@@ -211,7 +206,7 @@ namespace Quille
         }
 
         // Modulate default values.
-
+        // Clamp the result
 
 
         // OVERRIDES
@@ -326,39 +321,43 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (!this.IsCritical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                    if (this.needState > NeedStates.Critical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
                     {
-                        this.IsCritical = true;
+                        this.needState = NeedStates.Critical;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
 
                         OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
-                    else if (!this.IsWarning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
+                    else if (this.needState > NeedStates.Warning & this.LevelCurrentAsPercentage <= this.ThresholdWarning)
                     {
-                        this.IsWarning = true;
+                        this.needState = NeedStates.Warning;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
 
                         OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
-                        if (this.IsCritical & this.LevelCurrent > this.ThresholdCritical)
+                        if (this.needState == NeedStates.Critical & this.LevelCurrent > this.ThresholdCritical)
                         {
-                            this.IsCritical = false;
+                            this.needState = NeedStates.Warning;
                             Debug.Log(string.Format("{0} is no longer critically low.", this.NeedName));
+
+                            OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
-                        if (this.IsWarning & this.LevelCurrent > this.ThresholdWarning)
+                        if (this.needState == NeedStates.Warning & this.LevelCurrent > this.ThresholdWarning)
                         {
-                            this.IsWarning = false;
+                            this.needState = NeedStates.Normal;
                             Debug.Log(string.Format("{0} is no longer low.", this.NeedName));
+
+                            OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
                     }
                 }
                 else // The need is currently empty.
                 {
-                    if (!this.IsFailure) // First detection of the need failure.
+                    if (this.needState != NeedStates.Failure) // First detection of the need failure.
                     {
-                        this.IsFailure = true;
+                        this.needState = NeedStates.Failure;
                         Debug.Log(string.Format("{0} is now empty.", this.NeedName));
 
                         OnBNFailure?.Invoke(NeedSO);
@@ -367,10 +366,11 @@ namespace Quille
                     if (this.CurrentChangeRate > 0) // Only apply the change if it would increase it.
                     {
                         this.LevelCurrent += this.CurrentChangeRate;
-                        // Invoke need change event?
 
-                        this.IsFailure = false; // Undo the need failure.
+                        this.needState = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedName));
+
+                        OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
                 }
                 yield return new WaitForSeconds(1);

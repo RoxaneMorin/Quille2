@@ -13,6 +13,9 @@ namespace Quille
     // A basic need's Warning or Critical threshold is reached.
     public delegate void BasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState);
 
+    // A basic need is no longer in Failure, Critical or Warning state.
+    public delegate void BasicNeedLeftThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates pastNeedState);
+
     // A basic need is failing.
     public delegate void BasicNeedFailure(BasicNeedSO needIdentity); // Is the other information needed?
 
@@ -26,6 +29,9 @@ namespace Quille
 
     //  A subjective need's Warning or Critical threshold is reached.
     public delegate void SubjectiveNeedReachedThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needStates);
+
+    // A subjective need is no longer in Failure, Critical or Warning state.
+    public delegate void SubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates pastNeedState);
 
     // A subjective need is failing.
     public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed); // Is the other information needed?

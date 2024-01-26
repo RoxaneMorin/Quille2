@@ -52,7 +52,10 @@ namespace Quille
         public const float NEED_CHECK_INTERVAL = 5f;
 
         // Do we need mins and maxes for needs' base change rates?
+        public const float MIN_BASE_CHANGE_RATE = 0.0001f;
+        public const float MAX_BASE_CHANGE_RATE = 0.5f;
         // Tweak these on a per-need basis?
+        // Only apply to basic needs, as subjective needs could plausibly static for certain extreme personalities?
 
         public const float NEED_CHANGE_RATE_DIVIDER = 100f;
     }
