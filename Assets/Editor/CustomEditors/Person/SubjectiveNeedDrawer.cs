@@ -49,9 +49,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         SerializedProperty currentChangeRate = property.FindPropertyRelative("currentChangeRate" + direction);
         SerializedProperty thresholdWarning = property.FindPropertyRelative("thresholdWarning" + direction);
         SerializedProperty thresholdCritical = property.FindPropertyRelative("thresholdCritical" + direction);
-        SerializedProperty isWarning = property.FindPropertyRelative("isWarning" + direction);
-        SerializedProperty isCritical = property.FindPropertyRelative("isCritical" + direction);
-        SerializedProperty isFailure = property.FindPropertyRelative("isFailure" + direction);
+        SerializedProperty needState = property.FindPropertyRelative("needState" + direction);
 
         // Draw properties.
         newPosition.y += EditorGUIUtility.singleLineHeight;
@@ -71,11 +69,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
         GUI.enabled = false;
         newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, isWarning);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, isCritical);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, isFailure);
+        EditorGUI.PropertyField(newPosition, needState);
         GUI.enabled = true;
 
         EditorGUI.indentLevel--;
@@ -85,7 +79,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight/2;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

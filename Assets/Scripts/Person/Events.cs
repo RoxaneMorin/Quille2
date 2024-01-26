@@ -31,7 +31,7 @@ namespace Quille
     public delegate void SubjectiveNeedReachedThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needStates);
 
     // A subjective need is no longer in Failure, Critical or Warning state.
-    public delegate void SubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates pastNeedState);
+    public delegate void SubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates pastNeedState);
 
     // A subjective need is failing.
     public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed); // Is the other information needed?
