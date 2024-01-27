@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2074222220232275479}
   m_RootOrder: 2
@@ -103,6 +104,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2074222220232275479}
   m_RootOrder: 1
@@ -177,6 +179,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2074222221525191329}
   - {fileID: 2074222220157844263}
@@ -202,13 +205,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   associatedBasicNeed:
-    myNeedBar: {fileID: 0}
     needSO: {fileID: 0}
     localAiPriorityWeighting: 0
-    localLevelFull: 0
+    levelFull: 0
     levelCurrent: 0
     baseChangeRate: 0
     currentChangeRate: 0
+    currentChangeRateScaled: 0
+    thresholdWarning: 0
+    thresholdCritical: 0
+    needState: 0
   needIcon: {fileID: 2074222219822856893}
   needFill: {fileID: 2074222221525191326}
 --- !u!1 &2074222221525191328
@@ -239,6 +245,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2074222220232275479}
   m_RootOrder: 0
