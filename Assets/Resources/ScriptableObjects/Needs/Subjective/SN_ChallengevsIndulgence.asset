@@ -20,9 +20,15 @@ MonoBehaviour:
   aiPriorityWeighting: 0.5
   levelFullLeft: 1
   levelFullRight: 1
-  defaultChangeRateLeft: -0.0005
-  defaultChangeRateRight: -0.0005
+  defaultChangeRateLeft: -0.05
+  defaultChangeRateRight: -0.05
   thresholdWarningLeft: 0.25
   thresholdCriticalLeft: 0.1
   thresholdWarningRight: 0.25
   thresholdCriticalRight: 0.1
+  baseAIWeightingModulatedByLeft: []
+  baseChangeRateModulatedByLeft: []
+  thresholdsModulatedByLeft: []
+  baseAIWeightingModulatedByRight: []
+  baseChangeRateModulatedByRight: []
+  thresholdsModulatedByRight: []

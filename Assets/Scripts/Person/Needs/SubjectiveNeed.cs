@@ -30,6 +30,10 @@ namespace Quille
         private float baseChangeRateRight,
                       currentChangeRateRight;
 
+        [SerializeField, InspectorReadOnly]
+        private float currentChangeRateLeftScaled,
+                      currentChangeRateRightScaled;
+
         [SerializeField]
         private float thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
@@ -256,30 +260,54 @@ namespace Quille
         public float CurrentChangeRateLeft
         {
             get { return currentChangeRateLeft; }
-            set { currentChangeRateLeft = value; }
+            set
+            {
+                currentChangeRateLeft = value;
+                currentChangeRateLeftScaled = currentChangeRateLeft / Constants.NEED_CHANGE_RATE_DIVIDER;
+            }
         }
         public float CurrentChangeRateRight
         {
             get { return currentChangeRateRight; }
-            set { currentChangeRateRight = value; }
+            set
+            {
+                currentChangeRateRight = value;
+                currentChangeRateRightScaled = currentChangeRateRight / Constants.NEED_CHANGE_RATE_DIVIDER;
+            }
         }
         public (float, float) CurrentChangeRate
         {
             get { return (currentChangeRateLeft, currentChangeRateRight); }
             set
             {
-                CurrentChangeRateLeft = value.Item1;
-                CurrentChangeRateRight = value.Item2;
+                currentChangeRateLeft = value.Item1;
+                currentChangeRateLeftScaled = currentChangeRateLeft / Constants.NEED_CHANGE_RATE_DIVIDER;
+
+                currentChangeRateRight = value.Item2;
+                currentChangeRateRightScaled = currentChangeRateRight / Constants.NEED_CHANGE_RATE_DIVIDER;
             }
+        }
+
+        public float CurrentChangeRateLeftScaled
+        {
+            get { return currentChangeRateLeftScaled; }
+        }
+        public float CurrentChangeRateRightScaled
+        {
+            get { return currentChangeRateRightScaled; }
+        }
+        public (float, float) CurrentChangeRateScaled
+        {
+            get { return (currentChangeRateLeftScaled, currentChangeRateLeftScaled); }
         }
 
         public void ResetCurrentChangeRateLeft()
         {
-            currentChangeRateLeft = baseChangeRateLeft;
+            CurrentChangeRateLeft = baseChangeRateLeft;
         }
         public void ResetCurrentChangeRateRight()
         {
-            currentChangeRateRight = baseChangeRateRight;
+            CurrentChangeRateRight = baseChangeRateRight;
         }
         public void ResetCurrentChangeRate()
         {
@@ -651,6 +679,8 @@ namespace Quille
                 BaseChangeRateRight = modulator.Execute(sourceBasePerson, BaseChangeRateRight);
             }
 
+            CurrentChangeRate = (BaseChangeRateLeft, BaseChangeRateRight);
+
             // Thresholds.
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedByLeft)
             {
@@ -677,7 +707,7 @@ namespace Quille
                 // Handle LeftSide subneed.
                 if (this.LevelCurrentLeft > this.LevelEmptyLeft) // The need is not empty.
                 {
-                    this.LevelCurrentLeft += this.CurrentChangeRateLeft;
+                    this.LevelCurrentLeft += this.CurrentChangeRateLeftScaled;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -723,9 +753,9 @@ namespace Quille
                         OnSNFailure?.Invoke(NeedSO, false);
                     }
 
-                    if (this.CurrentChangeRateLeft > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRateLeftScaled > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrentLeft += this.CurrentChangeRateLeft;
+                        this.LevelCurrentLeft += this.CurrentChangeRateLeftScaled;
 
                         this.NeedStateLeft = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameLeft));
@@ -737,7 +767,7 @@ namespace Quille
                 // Handle RightSide subneed.
                 if (this.LevelCurrentRight > this.LevelEmptyRight) // The need is not empty.
                 {
-                    this.LevelCurrentRight += this.CurrentChangeRateRight;
+                    this.LevelCurrentRight += this.CurrentChangeRateRightScaled;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -783,9 +813,9 @@ namespace Quille
                         OnSNFailure?.Invoke(NeedSO, true);
                     }
 
-                    if (this.CurrentChangeRateRight > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRateRightScaled > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrentRight += this.CurrentChangeRateRight;
+                        this.LevelCurrentRight += this.CurrentChangeRateRightScaled;
 
                         this.NeedStateRight = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameRight));

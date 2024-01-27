@@ -20,8 +20,8 @@ MonoBehaviour:
   aiPriorityWeighting: 1
   levelFullLeft: 1
   levelFullRight: 1
-  defaultChangeRateLeft: -0.0005
-  defaultChangeRateRight: -0.0005
+  defaultChangeRateLeft: -0.05
+  defaultChangeRateRight: -0.05
   thresholdWarningLeft: 0.25
   thresholdCriticalLeft: 0.1
   thresholdWarningRight: 0.25
@@ -35,7 +35,7 @@ MonoBehaviour:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
     mainOpIdx: 2
     modOpIdx: 3
-    modifier: 0.00025
+    modifier: 0.025
   thresholdsModulatedByLeft: []
   baseAIWeightingModulatedByRight:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
@@ -46,5 +46,5 @@ MonoBehaviour:
   - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
     mainOpIdx: 1
     modOpIdx: 3
-    modifier: 0.00025
+    modifier: 0.025
   thresholdsModulatedByRight: []

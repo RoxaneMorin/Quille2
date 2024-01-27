@@ -21,6 +21,9 @@ namespace Quille
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
 
+        [SerializeField, InspectorReadOnly]
+        private float currentChangeRateScaled;
+
         [SerializeField]
         private float thresholdWarning,
                       thresholdCritical;
@@ -111,11 +114,19 @@ namespace Quille
         public float CurrentChangeRate
         {
             get { return currentChangeRate; }
-            set { currentChangeRate = value; }
+            set 
+            { 
+                currentChangeRate = value;
+                currentChangeRateScaled = currentChangeRate/Constants.NEED_CHANGE_RATE_DIVIDER;
+            }
+        }
+        public float CurrentChangeRateScaled
+        {
+            get { return currentChangeRateScaled; }
         }
         public void ResetCurrentChangeRate()
         {
-            currentChangeRate = baseChangeRate;
+            CurrentChangeRate = baseChangeRate;
         }
 
         public float DefaultThresholdWarning { get { return needSO.ThresholdWarning; } }
@@ -317,7 +328,7 @@ namespace Quille
             {
                 if (this.LevelCurrent > this.LevelEmpty) // The need is not empty.
                 {
-                    this.LevelCurrent += this.CurrentChangeRate;
+                    this.LevelCurrent += this.CurrentChangeRateScaled;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -363,9 +374,9 @@ namespace Quille
                         OnBNFailure?.Invoke(NeedSO);
                     }
 
-                    if (this.CurrentChangeRate > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRateScaled > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrent += this.CurrentChangeRate;
+                        this.LevelCurrent += this.CurrentChangeRateScaled;
 
                         this.NeedState = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedName));

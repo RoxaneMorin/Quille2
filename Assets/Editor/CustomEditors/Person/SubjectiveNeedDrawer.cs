@@ -47,6 +47,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         SerializedProperty levelCurrent = property.FindPropertyRelative("levelCurrent" + direction);
         SerializedProperty baseChangeRate = property.FindPropertyRelative("baseChangeRate" + direction);
         SerializedProperty currentChangeRate = property.FindPropertyRelative("currentChangeRate" + direction);
+        SerializedProperty currentChangeRateScaled = property.FindPropertyRelative("currentChangeRate" + direction + "Scaled");
         SerializedProperty thresholdWarning = property.FindPropertyRelative("thresholdWarning" + direction);
         SerializedProperty thresholdCritical = property.FindPropertyRelative("thresholdCritical" + direction);
         SerializedProperty needState = property.FindPropertyRelative("needState" + direction);
@@ -62,6 +63,10 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         EditorGUI.PropertyField(newPosition, baseChangeRate);
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, currentChangeRate);
+        newPosition.y += EditorGUIUtility.singleLineHeight;
+        GUI.enabled = false;
+        EditorGUI.PropertyField(newPosition, currentChangeRateScaled);
+        GUI.enabled = true;
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, thresholdWarning);
         newPosition.y += EditorGUIUtility.singleLineHeight;

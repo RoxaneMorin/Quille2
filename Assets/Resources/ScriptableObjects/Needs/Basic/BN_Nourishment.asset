@@ -16,7 +16,9 @@ MonoBehaviour:
   needIcon: {fileID: 21300000, guid: 0fc80e68a07174e4f8486444f35b7afb, type: 3}
   aiPriorityWeighting: 1.25
   levelFull: 1
-  defaultChangeRate: -0.003
+  defaultChangeRate: -0.3
   thresholdWarning: 0.25
   thresholdCritical: 0.1
-  changeRateModulatedBy: []
+  baseAIWeightingModulatedBy: []
+  baseChangeRateModulatedBy: []
+  thresholdsModulatedBy: []
