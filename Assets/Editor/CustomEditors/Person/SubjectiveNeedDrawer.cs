@@ -64,9 +64,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, currentChangeRate);
         newPosition.y += EditorGUIUtility.singleLineHeight;
-        GUI.enabled = false;
         EditorGUI.PropertyField(newPosition, currentChangeRateScaled);
-        GUI.enabled = true;
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, thresholdWarning);
         newPosition.y += EditorGUIUtility.singleLineHeight;

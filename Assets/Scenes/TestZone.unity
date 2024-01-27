@@ -494,6 +494,7 @@ GameObject:
   - component: {fileID: 1568759640}
   - component: {fileID: 1568759639}
   - component: {fileID: 1568759638}
+  - component: {fileID: 1568759642}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -584,6 +585,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1568759642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568759637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2553977ab5d524a44992d1a3e43cd64c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4881047869735100192, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}
+  myCanvas: {fileID: 0}
+  targetNeedController: {fileID: 1888947989}
 --- !u!1 &1691983026
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,6 +958,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NeedBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4881047869735100195, guid: 719d7ebe42aed22488d7c2f4bd057d56,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}

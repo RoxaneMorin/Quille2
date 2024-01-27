@@ -21,7 +21,7 @@ namespace Quille
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
 
-        [SerializeField, InspectorReadOnly]
+        [SerializeField] //, InspectorReadOnly]
         private float currentChangeRateScaled;
 
         [SerializeField]

@@ -50,6 +50,15 @@ namespace Quille
             }
         }
 
+        public BasicNeed[] MyBasicNeeds
+        {
+            get { return myBasicNeeds; }
+        }
+        public SubjectiveNeed[] MySubjectiveNeeds
+        {
+            get { return mySubjectiveNeeds; }
+        }
+
         // Option to add or remove a need?;
 
 

@@ -30,7 +30,7 @@ namespace Quille
         private float baseChangeRateRight,
                       currentChangeRateRight;
 
-        [SerializeField, InspectorReadOnly]
+        [SerializeField] //, InspectorReadOnly]
         private float currentChangeRateLeftScaled,
                       currentChangeRateRightScaled;
 
