@@ -320,7 +320,7 @@ namespace Quille
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                RandomizeNeedChangeRates(-0.005f, 0.001f);
+                RandomizeNeedChangeRates(-0.3f, 0.1f);
             }
 
             if (Input.GetKeyDown(KeyCode.M))
