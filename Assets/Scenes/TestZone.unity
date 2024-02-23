@@ -203,6 +203,8 @@ MonoBehaviour:
       Value: -0.5
     - Key: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}
       Value: 0.25
+  myPersonalityTraits:
+    _serializedList: []
 --- !u!135 &172503377
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -598,8 +600,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4881047869735100192, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}
-  myCanvas: {fileID: 0}
+  ownerCanvas: {fileID: 0}
   targetNeedController: {fileID: 1888947989}
+  needbarTransforms: []
 --- !u!1 &1691983026
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,6 +829,10 @@ MonoBehaviour:
   folderPath: ScriptableObjects/Personality/Axes
   myPersonalityAxes:
     _serializedList: []
+  myPersonalityTraits:
+    _serializedList:
+    - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
+      Value: 0.5
 --- !u!114 &1888947991
 MonoBehaviour:
   m_ObjectHideFlags: 0

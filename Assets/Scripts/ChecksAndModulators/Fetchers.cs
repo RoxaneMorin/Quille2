@@ -30,6 +30,15 @@ namespace ChecksAndMods
             }
         }
 
+        public static float FetchPersonalityTraitScore(UnityEngine.Object sourceObj, Quille.PersonalityTraitSO relevantPersonalityTrait)
+        {
+            Quille.PersonalityController sourcePersonalityController;
+
+
+
+            return 1;
+        }
+
         public static float FetchFromPersonalityController(Quille.PersonalityController sourcePersonalityController, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
             return sourcePersonalityController.GetScore(relevantPersonalityAxe);
