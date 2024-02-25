@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    [CreateAssetMenu(fileName = "Modulator_PersonalityTrait_", menuName = "Checks&dModulators/Modulators/Personality Trait", order = 10)]
-    public class ModulatorPersonalityTraitScore : ModulatorArithmeticFromFloatSO
+    [CreateAssetMenu(fileName = "Check_PersonalityTrait_", menuName = "Checks&dModulators/Check/Personality Trait", order = 10)]
+    public class CheckPersonalityTraitScore : CheckArithmeticSO
     {
         // VARIABLES/PARAM
         [SerializeField]
@@ -19,6 +19,6 @@ namespace ChecksAndMods
             param = Fetchers.FetchPersonalityTraitScore(sourceObj, relevantPersonalityTrait);
         }
 
-        // Modulate defined in parent class.
+        // Check defined in parent class.
     }
 }

@@ -32,8 +32,8 @@ namespace Quille
 
 
         // PROPERTIES
-        // Personality traits.
-        public float GetScore(PersonalityAxeSO targetPersonalityAxe)
+        // Personality axe scores.
+        public float GetAxeScore(PersonalityAxeSO targetPersonalityAxe)
         {
             if (myPersonalityAxes.ContainsKey(targetPersonalityAxe))
             {
@@ -44,7 +44,7 @@ namespace Quille
                 return 0;
             }
         }
-        public void SetScore(PersonalityAxeSO targetPersonalityAxe, float value)
+        public void SetAxeScore(PersonalityAxeSO targetPersonalityAxe, float value)
         {
             if (myPersonalityAxes.ContainsKey(targetPersonalityAxe))
             {
@@ -57,8 +57,8 @@ namespace Quille
             }
         }
 
-        // Personality scores.
-        public float GetScore(PersonalityTraitSO targetPersonalityTrait)
+        // Personality trait scores.
+        public float GetTraitScore(PersonalityTraitSO targetPersonalityTrait)
         {
             if (myPersonalityTraits.ContainsKey(targetPersonalityTrait))
             {
@@ -69,7 +69,7 @@ namespace Quille
                 return 0;
             }
         }
-        public void SetScore(PersonalityTraitSO targetPersonalityTrait, float value)
+        public void SetTraitScore(PersonalityTraitSO targetPersonalityTrait, float value)
         {
             if (value < Constants.AXE_HALF_SPAN/2)
             {

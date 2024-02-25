@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    [CreateAssetMenu(fileName = "ModulatorPersonalityAxe", menuName = "Checks&dModulators/Modulators/Personality Axe", order = 0)]
+    [CreateAssetMenu(fileName = "Modulator_PersonalityAxe_", menuName = "Checks&dModulators/Modulators/Personality Axe", order = 0)]
     public class ModulatorPersonalityAxeScore : ModulatorArithmeticFromFloatSO
     {
         // VARIABLES/PARAM

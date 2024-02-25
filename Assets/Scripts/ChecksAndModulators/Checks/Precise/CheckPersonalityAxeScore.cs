@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    [CreateAssetMenu(fileName = "CheckPersonalityAxe", menuName = "Checks&dModulators/Check/Personality Axe", order = 0)]
+    [CreateAssetMenu(fileName = "Check_PersonalityAxe_", menuName = "Checks&dModulators/Check/Personality Axe", order = 0)]
     public class CheckPersonalityAxeScore : CheckArithmeticSO
     {
         // VARIABLES/PARAM

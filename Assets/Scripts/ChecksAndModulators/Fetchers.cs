@@ -6,7 +6,7 @@ namespace ChecksAndMods
 {
     public static class Fetchers
     {
-        // Fetch a specific personality score.
+        // Fetch a specific personality axe score.
         public static float FetchPersonalityAxeScore(UnityEngine.Object sourceObj, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
             Quille.PersonalityController sourcePersonalityController;
@@ -15,12 +15,12 @@ namespace ChecksAndMods
             {
                 Quille.BasePerson sourceQuille = (Quille.BasePerson)sourceObj;
                 sourcePersonalityController = sourceQuille.MyPersonalityController;
-                return FetchFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
+                return FetchAxeScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
             }
             else if (sourceObj is Quille.PersonalityController)
             {
                 sourcePersonalityController = (Quille.PersonalityController)sourceObj;
-                return FetchFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
+                return FetchAxeScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
             }
             else 
             {
@@ -29,19 +29,38 @@ namespace ChecksAndMods
                 // Throw error.
             }
         }
+        public static float FetchAxeScoreFromPersonalityController(Quille.PersonalityController sourcePersonalityController, Quille.PersonalityAxeSO relevantPersonalityAxe)
+        {
+            return sourcePersonalityController.GetAxeScore(relevantPersonalityAxe);
+        }
 
+
+        // Fetch a specific personality trait score.
         public static float FetchPersonalityTraitScore(UnityEngine.Object sourceObj, Quille.PersonalityTraitSO relevantPersonalityTrait)
         {
             Quille.PersonalityController sourcePersonalityController;
 
-
-
-            return 1;
+            if (sourceObj is Quille.BasePerson)
+            {
+                Quille.BasePerson sourceQuille = (Quille.BasePerson)sourceObj;
+                sourcePersonalityController = sourceQuille.MyPersonalityController;
+                return FetchTraitScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityTrait);
+            }
+            else if (sourceObj is Quille.PersonalityController)
+            {
+                sourcePersonalityController = (Quille.PersonalityController)sourceObj;
+                return FetchTraitScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityTrait);
+            }
+            else
+            {
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a PersonalityAxe modulator.\nThis modulator or check will return a zero.", sourceObj.name));
+                return 0;
+                // Throw error.
+            }
         }
-
-        public static float FetchFromPersonalityController(Quille.PersonalityController sourcePersonalityController, Quille.PersonalityAxeSO relevantPersonalityAxe)
+        public static float FetchTraitScoreFromPersonalityController(Quille.PersonalityController sourcePersonalityController, Quille.PersonalityTraitSO relevantPersonalityTrait)
         {
-            return sourcePersonalityController.GetScore(relevantPersonalityAxe);
+            return sourcePersonalityController.GetTraitScore(relevantPersonalityTrait);
         }
     }
 }

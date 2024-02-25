@@ -20,5 +20,9 @@ MonoBehaviour:
   thresholdWarning: 0.25
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
-  baseChangeRateModulatedBy: []
+  baseChangeRateModulatedBy:
+  - modulator: {fileID: 11400000, guid: 05e16bf82ca3d684f8bdf12d3b151543, type: 2}
+    mainOpIdx: 2
+    modOpIdx: 3
+    modifier: 0.5
   thresholdsModulatedBy: []
