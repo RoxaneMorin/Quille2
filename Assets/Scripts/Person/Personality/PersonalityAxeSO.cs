@@ -29,7 +29,7 @@ namespace Quille
         // OTHER VALUES
         [BeginInspectorReadOnlyGroup]
         [SerializeField]
-        private floatPair axeSpan = (-Constants.AXE_HALF_SPAN, Constants.AXE_HALF_SPAN);
+        private floatPair axeSpan = (-Constants.PERSONALITY_HALF_SPAN, Constants.PERSONALITY_HALF_SPAN);
         //[EndInspectorReadOnlyGroup]
         public floatPair AxeSpan { get { return axeSpan; } }
     }

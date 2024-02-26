@@ -21,12 +21,12 @@ namespace Quille
         // The intensity of traits is either 0.5 or 1.
         [BeginInspectorReadOnlyGroup]
         [SerializeField]
-        private float traitSpan = Constants.AXE_HALF_SPAN;
+        private float traitSpan = Constants.PERSONALITY_HALF_SPAN;
         public float TraitSpan { get { return traitSpan; } }
 
         [BeginInspectorReadOnlyGroup]
         [SerializeField]
-        private float trainMidpoint = Constants.AXE_HALF_SPAN / 2;
+        private float trainMidpoint = Constants.PERSONALITY_HALF_SPAN / 2;
         public float TrainMidpoint { get { return trainMidpoint; } }
 
         [EndInspectorReadOnlyGroup]

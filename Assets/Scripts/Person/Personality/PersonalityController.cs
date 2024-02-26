@@ -48,10 +48,10 @@ namespace Quille
         {
             if (myPersonalityAxes.ContainsKey(targetPersonalityAxe))
             {
-                if (value < -Constants.AXE_HALF_SPAN)
-                    myPersonalityAxes[targetPersonalityAxe] = -Constants.AXE_HALF_SPAN;
-                else if (value > Constants.AXE_HALF_SPAN)
-                    myPersonalityAxes[targetPersonalityAxe] = Constants.AXE_HALF_SPAN;
+                if (value < -Constants.PERSONALITY_HALF_SPAN)
+                    myPersonalityAxes[targetPersonalityAxe] = -Constants.PERSONALITY_HALF_SPAN;
+                else if (value > Constants.PERSONALITY_HALF_SPAN)
+                    myPersonalityAxes[targetPersonalityAxe] = Constants.PERSONALITY_HALF_SPAN;
                 else
                     myPersonalityAxes[targetPersonalityAxe] = value;
             }
@@ -71,17 +71,17 @@ namespace Quille
         }
         public void SetTraitScore(PersonalityTraitSO targetPersonalityTrait, float value)
         {
-            if (value < Constants.AXE_HALF_SPAN/2)
+            if (value < Constants.PERSONALITY_HALF_SPAN/2)
             {
                 if (value <= 0)
                 {
                     Debug.Log(string.Format("Scores for personality traits should not be null or negative. {0} will be rounded up to half intensity.", targetPersonalityTrait.name));
                 }
-                myPersonalityTraits[targetPersonalityTrait] = Constants.AXE_HALF_SPAN / 2;
+                myPersonalityTraits[targetPersonalityTrait] = Constants.PERSONALITY_HALF_SPAN / 2;
             }
             else
             {
-                myPersonalityTraits[targetPersonalityTrait] = Constants.AXE_HALF_SPAN;
+                myPersonalityTraits[targetPersonalityTrait] = Constants.PERSONALITY_HALF_SPAN;
             }
         }
 

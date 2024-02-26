@@ -18,8 +18,11 @@ namespace Quille
         // PERSONALITY
         // Maximum value of personality axes and traits. 
         // Personality axes have the negative equivalent as their minimum value.
-        // Traits have AXE_HALF_SPAN/2 as their middle step value.
-        public const float AXE_HALF_SPAN = 1;
+        // Traits have PERSONALITY_HALF_SPAN/2 as their middle step value.
+        public const float PERSONALITY_HALF_SPAN = 1;
+
+        // Maximum value of interests. Their minimum value is the negative equivalent.
+        public const float INTEREST_HALF_SPAN = 1;
 
 
         // NEEDS
