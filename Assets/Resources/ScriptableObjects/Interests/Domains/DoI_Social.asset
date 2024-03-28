@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Social
   m_EditorClassIdentifier: 
   domainName: Social
-  domainColour: {r: 1, g: 0.879965, b: 0.5896226, a: 0}
+  domainColour: {r: 1, g: 0.7576219, b: 0.2216981, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain: []

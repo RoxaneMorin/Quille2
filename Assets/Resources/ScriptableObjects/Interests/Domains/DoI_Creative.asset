@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: DoI_Creative
   m_EditorClassIdentifier: 
   domainName: Creative
-  domainColour: {r: 0.8773585, g: 0.43454075, b: 0.7439415, a: 0}
+  domainColour: {r: 1, g: 0.3537736, b: 0.7539335, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain:
+  - {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
+  - {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}

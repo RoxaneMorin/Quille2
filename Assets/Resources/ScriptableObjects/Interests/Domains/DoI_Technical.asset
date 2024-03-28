@@ -15,3 +15,5 @@ MonoBehaviour:
   domainName: Technical
   domainColour: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain:
+  - {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}

@@ -15,3 +15,4 @@ MonoBehaviour:
   domainName: Civic / Societal
   domainColour: {r: 0.3726415, g: 0.38758874, b: 1, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain: []

@@ -27,13 +27,15 @@ namespace Quille
 
         // IN DOMAINS
         [SerializeField]
-        private InterestDomainSO[] inDomains;
+        private List<InterestDomainSO> inDomains;
+        public List<InterestDomainSO> InDomains { get { return inDomains; } set { inDomains = value; } }
         // To do: how to ensure every interest is in at least one domain?
         // Add UI warning if empty?
 
         // RELATED INTERESTS
         [SerializeField]
-        private InterestSO[] relatedInterests;
+        private List<InterestSO> relatedInterests;
+        public List<InterestSO> RelatedInterests { get { return relatedInterests; } set { relatedInterests = value; } }
 
         // MISC
         // Should we have related personality axes or traits?

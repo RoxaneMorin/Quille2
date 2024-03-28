@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: DoI_Cultural
   m_EditorClassIdentifier: 
   domainName: Cultural
-  domainColour: {r: 0.9433962, g: 0.28034887, b: 0.33207166, a: 0}
+  domainColour: {r: 0.94509804, g: 0.33108792, b: 0.27843142, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain:
+  - {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}

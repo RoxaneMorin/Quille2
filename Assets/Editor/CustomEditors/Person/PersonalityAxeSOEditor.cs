@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomEditor(typeof(Quille.PersonalityAxeSO))]
 public class PersonalityAxeSOEditor : Editor
 {
+    private SerializedProperty scriptProperty;
+
     private SerializedProperty axeName;
     private SerializedProperty axeNameLeft;
     private SerializedProperty axeNameRight;
@@ -15,6 +17,8 @@ public class PersonalityAxeSOEditor : Editor
 
     private void OnEnable()
     {
+        scriptProperty = serializedObject.FindProperty("m_Script");
+
         axeName = serializedObject.FindProperty("axeName");
         axeNameLeft = serializedObject.FindProperty("axeNameLeft");
         axeNameRight = serializedObject.FindProperty("axeNameRight");
@@ -26,6 +30,10 @@ public class PersonalityAxeSOEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        // Draw script field.
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUILayout.PropertyField(scriptProperty);
 
         // Draw generic properties.
         EditorGUILayout.PropertyField(axeName);

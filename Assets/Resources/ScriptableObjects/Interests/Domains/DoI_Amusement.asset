@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Amusement
   m_EditorClassIdentifier: 
   domainName: Amusement
-  domainColour: {r: 0.68898565, g: 0.33521718, b: 0.8773585, a: 0}
+  domainColour: {r: 0.77915585, g: 0.3333333, b: 0.8784314, a: 0}
   domainIcon: {fileID: 0}
+  interestsInThisDomain: []

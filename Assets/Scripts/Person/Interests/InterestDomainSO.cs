@@ -19,8 +19,13 @@ namespace Quille
         public Color domainColour;
         public Sprite domainIcon;
 
+
         // Anything else?
         // Keep track of the interests in this domain?
         // Automatize through UI script?
+
+        [SerializeField]
+        private List<InterestSO> interestsInThisDomain;
+        public List<InterestSO> InterestInThisDomain { get { return interestsInThisDomain; } set { interestsInThisDomain = value; } }
     }
 }

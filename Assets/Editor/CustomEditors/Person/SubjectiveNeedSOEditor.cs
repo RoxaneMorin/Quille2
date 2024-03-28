@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomEditor(typeof(Quille.SubjectiveNeedSO))]
 public class SubjectiveNeedSOEditor : Editor
 {
+    private SerializedProperty scriptProperty;
+
     private SerializedProperty needName;
     private SerializedProperty needNameLeft;
     private SerializedProperty needNameRight;
@@ -30,6 +32,8 @@ public class SubjectiveNeedSOEditor : Editor
 
     private void OnEnable()
     {
+        scriptProperty = serializedObject.FindProperty("m_Script");
+
         needName = serializedObject.FindProperty("needName");
         aiPriorityWeighting = serializedObject.FindProperty("aiPriorityWeighting");
 
@@ -57,6 +61,10 @@ public class SubjectiveNeedSOEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        // Draw script field.
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUILayout.PropertyField(scriptProperty);
 
         // Draw generic properties.
         EditorGUILayout.PropertyField(needName);
