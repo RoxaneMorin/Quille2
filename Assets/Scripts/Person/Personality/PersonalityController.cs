@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
+using System.IO;
+
 namespace Quille
 {
     public class PersonalityController : MonoBehaviour
@@ -13,9 +15,11 @@ namespace Quille
         // VARIABLES/PARAMS
 
         // Management
+        // TODO: Move to a Factory script.
         [SerializeField]
         private string folderPath = "ScriptableObjects/Personality/Axes";
         private PersonalityAxeSO[] personalityAxes;
+
 
         // Personality scores.
         [SerializeField, SerializedDictionary("Personality Axe", "Score")]
@@ -28,6 +32,15 @@ namespace Quille
         // A trait with a score of zero should be pruned away.
 
 
+        // Interests and preferences.
+        [SerializeField, SerializedDictionary("Interest", "Score")]
+        private SerializedDictionary<InterestSO, float> myInterests;
+        //Scores range between 1 (loved) and -1 (hated).
+        // A score of zero means the character know of this interest but is indifferent to it.
+        // Interests that do not appear in the dictionary are unknown.
+
+        // Misc favourites
+        // Colours, styles, etc.
 
 
 
@@ -76,7 +89,9 @@ namespace Quille
                 if (value <= 0)
                 {
                     Debug.Log(string.Format("Scores for personality traits should not be null or negative. {0} will be rounded up to half intensity.", targetPersonalityTrait.name));
+                    // TODO: simply ignore the value instead?
                 }
+                // TODO: display the warning message here?
                 myPersonalityTraits[targetPersonalityTrait] = Constants.PERSONALITY_HALF_SPAN / 2;
             }
             else
@@ -90,6 +105,7 @@ namespace Quille
         // METHODS
 
         // Init.
+        // TODO: move this to a Quille Factory script.
         private void LoadAndCreatePersonalityAxes()
         {
             personalityAxes = Resources.LoadAll<PersonalityAxeSO>(folderPath);
@@ -105,12 +121,21 @@ namespace Quille
         }
 
 
+        private void SerializeToJSON(string filePath)
+        {
+            string json = JsonUtility.ToJson(this);
+            File.WriteAllText(filePath, json);
+        }
+
+
         // Built in.
 
         // Start is called before the first frame update
         void Start()
         {
             LoadAndCreatePersonalityAxes();
+
+            SerializeToJSON(Application.dataPath + "/personality_data.json");
         }
 
         // Update is called once per frame
