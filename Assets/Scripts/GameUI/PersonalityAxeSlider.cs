@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,8 @@ namespace QuilleUI
 
         public float MySliderValue { get { return mySlider.value; } }
 
+        public (Quille.PersonalityAxeSO, float) MyAxeSOAndValue { get { return (MyPersonalityAxeSO, MySliderValue); } }
+
 
 
         // CONSTRUCTOR
@@ -30,6 +33,7 @@ namespace QuilleUI
             myPersonalityAxeSO = correspondingPersonalityAxe;
             Init();
         }
+
 
 
         // METHODS
@@ -68,12 +72,10 @@ namespace QuilleUI
         // UTILITY
         public void RoundValue()
         {
+            float[] specificValues = { -0.75f, -0.25f, 0.25f, 0.75f };
             float temp = Mathf.Round(mySlider.value * 20) / 20;
 
-            if (Mathf.Approximately(temp, -0.75f) || Mathf.Approximately(temp, -0.25f) || Mathf.Approximately(temp, 0.25f) || Mathf.Approximately(temp, 0.75f))
-                mySlider.value = temp;
-            else
-                mySlider.value = Mathf.Round(mySlider.value * 10) / 10;
+            mySlider.value = specificValues.Contains(temp) ? temp : Mathf.Round(mySlider.value * 10) / 10;
         }
     }
 }

@@ -5,13 +5,13 @@
     "nickName": "",
     "secondaryNames": [],
     "myPersonalityController": {
-        "instanceID": 19888
+        "instanceID": 20454
     },
     "myNeedController": {
-        "instanceID": 19886
+        "instanceID": 20452
     },
     "myPersonAI": {
-        "instanceID": 19890
+        "instanceID": 20456
     }
 }{
     "folderPath": "ScriptableObjects/Personality/Axes",
@@ -22,7 +22,7 @@
         "_serializedList": [
             {
                 "Key": {
-                    "instanceID": 19924
+                    "instanceID": 5314
                 },
                 "Value": 0.5
             }

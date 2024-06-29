@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PersonalityAxesMenu : MonoBehaviour
@@ -19,10 +20,15 @@ public class PersonalityAxesMenu : MonoBehaviour
 
     [SerializeField] private Quille.PersonalityAxeSO[] personalityAxes;
 
-    
-   
+
+
 
     // METHODS
+
+    (Quille.PersonalityAxeSO, float)[] ReturnAxeSOValuePairs()
+    {
+        return theSliders.Select(slider => slider.MyAxeSOAndValue).ToArray();
+    }
 
     // INIT
     void FetchComponents()
