@@ -35,10 +35,13 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
     private Rect DrawVariablesBlock(Rect position, SerializedProperty property, string direction)
     {
+        // Get the subneed's name.
+        // TODO: Find a cleaner way to do this.
+        SerializedProperty subneedName = property.FindPropertyRelative(string.Format("needName{0}ForUI", direction));
+
         // Draw title.
         Rect newPosition = new Rect(position.x, position.y + 1.2f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-        EditorGUI.LabelField(newPosition, direction + " Need Variables", EditorStyles.boldLabel);
-
+        EditorGUI.LabelField(newPosition, string.Format("{0} Need ({1}) Variables", direction, subneedName.stringValue), EditorStyles.boldLabel);
         EditorGUI.indentLevel++;
 
         // Collect properties.
@@ -82,7 +85,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight/2;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight*3;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

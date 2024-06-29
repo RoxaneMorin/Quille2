@@ -15,8 +15,8 @@ MonoBehaviour:
   needName: Socialization vs Time Alone
   needNameLeft: Socialization
   needNameRight: Time Alone
-  needIconLeft: {fileID: 21300000, guid: 914147a614e2b6e44bf860bee8132214, type: 3}
-  needIconRight: {fileID: 21300000, guid: 31c755613f8cd744ea46b1c3e833df20, type: 3}
+  needIconLeft: {fileID: 21300000, guid: 5adfd28db80f4514985ce1089bef391b, type: 3}
+  needIconRight: {fileID: 21300000, guid: 4544c12d5089aa342b0f3de9fa5861c9, type: 3}
   aiPriorityWeighting: 1
   levelFullLeft: 1
   levelFullRight: 1

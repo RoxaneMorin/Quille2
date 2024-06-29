@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BN_StressRelief
   m_EditorClassIdentifier: 
   needName: Stress Relief
-  needIcon: {fileID: 21300000, guid: 4e6d5961b51feb846aec87b7d7aa192f, type: 3}
+  needIcon: {fileID: 21300000, guid: c4e138d4f2ad7844e956661ee4ea32d7, type: 3}
   aiPriorityWeighting: 0.9
   levelFull: 1
   defaultChangeRate: -0.15
@@ -24,5 +24,5 @@ MonoBehaviour:
   - modulator: {fileID: 11400000, guid: 05e16bf82ca3d684f8bdf12d3b151543, type: 2}
     mainOpIdx: 2
     modOpIdx: 3
-    modifier: 0.5
+    modifier: 0.15
   thresholdsModulatedBy: []

@@ -16,7 +16,7 @@ MonoBehaviour:
   needNameLeft: Challenge
   needNameRight: Indulgence
   needIconLeft: {fileID: 21300000, guid: 00c1913565851604b93972b2584d5ef8, type: 3}
-  needIconRight: {fileID: 21300000, guid: d5dbfaf72f8795a468f54c3bd1cf6ce8, type: 3}
+  needIconRight: {fileID: 21300000, guid: fa23ea57c71c3084aa1f558427bef8b5, type: 3}
   aiPriorityWeighting: 0.5
   levelFullLeft: 1
   levelFullRight: 1

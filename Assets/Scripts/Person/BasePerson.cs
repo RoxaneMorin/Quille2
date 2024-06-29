@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -56,12 +57,27 @@ namespace Quille
         }
 
 
+        private void SerializeToJSON(string filePath)
+        {
+            string json = JsonUtility.ToJson(this, true);
+
+            json += myPersonalityController.SerializeToJSON();
+
+            File.WriteAllText(filePath, json);
+
+            Debug.Log(string.Format("Serialized at path {0}.", filePath));
+        }
+
+
+
         // Built in.
 
         // Start is called before the first frame update
         void Start()
         {
             Init();
+
+            SerializeToJSON(Application.dataPath + "/personality_data.json");
         }
 
         // Update is called once per frame
@@ -69,6 +85,7 @@ namespace Quille
         {
             if (Input.GetKeyDown(KeyCode.B))
             {
+                myNeedController.ModulateBasicNeeds(this);
                 myNeedController.ModulateSubjectiveNeeds(this);
             }
         }

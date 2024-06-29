@@ -15,8 +15,8 @@ MonoBehaviour:
   needName: Stimulation
   needNameLeft: Sensory
   needNameRight: Cognitive
-  needIconLeft: {fileID: 21300000, guid: c3c9c7f5f40cbff40a611fd86ab69630, type: 3}
-  needIconRight: {fileID: 21300000, guid: d5686a51767e2fc458da31810b1960b2, type: 3}
+  needIconLeft: {fileID: 21300000, guid: 727fe75804c1017438e04cf6695de795, type: 3}
+  needIconRight: {fileID: 21300000, guid: eb52f472bd405714d832b720a56ff273, type: 3}
   aiPriorityWeighting: 1
   levelFullLeft: 1
   levelFullRight: 1

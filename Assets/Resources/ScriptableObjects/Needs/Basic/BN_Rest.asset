@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BN_Rest
   m_EditorClassIdentifier: 
   needName: Rest
-  needIcon: {fileID: 21300000, guid: d035a6862f2ac8547bbf1091fdffd4c0, type: 3}
+  needIcon: {fileID: 21300000, guid: d467712d1917b5c4f8d1bb78c3f39cb4, type: 3}
   aiPriorityWeighting: 1
   levelFull: 1
   defaultChangeRate: -0.05

@@ -1,0 +1,34 @@
+{
+    "charID": 0,
+    "firstName": "",
+    "lastName": "",
+    "nickName": "",
+    "secondaryNames": [],
+    "myPersonalityController": {
+        "instanceID": 19888
+    },
+    "myNeedController": {
+        "instanceID": 19886
+    },
+    "myPersonAI": {
+        "instanceID": 19890
+    }
+}{
+    "folderPath": "ScriptableObjects/Personality/Axes",
+    "myPersonalityAxes": {
+        "_serializedList": []
+    },
+    "myPersonalityTraits": {
+        "_serializedList": [
+            {
+                "Key": {
+                    "instanceID": 19924
+                },
+                "Value": 0.5
+            }
+        ]
+    },
+    "myInterests": {
+        "_serializedList": []
+    }
+}

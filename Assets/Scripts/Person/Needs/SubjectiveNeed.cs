@@ -43,6 +43,12 @@ namespace Quille
         [SerializeField, InspectorReadOnly]
         private NeedStates needStateRight = NeedStates.Normal;
 
+        [SerializeField, InspectorReadOnly]
+        private string needNameLeftForUI;
+        [SerializeField, InspectorReadOnly]
+        private string needNameRightForUI;
+
+
 
 
         // PROPERTIES
@@ -444,6 +450,10 @@ namespace Quille
             ThresholdCriticalLeft = DefaultThresholdCriticalLeft;
             ThresholdWarningRight = DefaultThresholdWarningRight;
             ThresholdCriticalRight = DefaultThresholdCriticalRight;
+
+            // Hacky UI shit.
+            needNameLeftForUI = needSO.NeedNameLeft;
+            needNameRightForUI = needSO.NeedNameRight;
         }
 
         // Modulate default values.
@@ -658,6 +668,9 @@ namespace Quille
         {
             // Run the modulators.
 
+            // TODO: Move to their own function?
+            // Will we need to add arithmetic from bool?
+
             // AI weighting.
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedByLeft)
             {
@@ -825,6 +838,8 @@ namespace Quille
                 }
 
                 yield return new WaitForSeconds(1);
+
+                // TODO: WaitForSeconds' parameter defined in Quille.Constants?
             }
         }
     }

@@ -295,6 +295,9 @@ namespace Quille
         {
             // Run the modulators.
 
+            // TODO: Move to their own function?
+            // Will we need to add arithmetic from bool?
+
             // AI weighting.
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedBy)
             {
@@ -307,6 +310,8 @@ namespace Quille
             {
                 BaseChangeRate = modulator.Execute(sourceBasePerson, BaseChangeRate);
             }
+
+            CurrentChangeRate = BaseChangeRate;
 
             // Thresholds.
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedBy)
@@ -385,6 +390,8 @@ namespace Quille
                     }
                 }
                 yield return new WaitForSeconds(1);
+
+                // TODO: WaitForSeconds' parameter defined in Quille.Constants?
             }
         }
     }

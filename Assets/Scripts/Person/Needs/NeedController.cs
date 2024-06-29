@@ -6,7 +6,7 @@ namespace Quille
     public class NeedController : MonoBehaviour
     {
         // TEMP
-        // Have these be loaded automatically from the resource folder instead?
+        // TODO: Have these be loaded automatically from the resource folder instead?
         // Will have to edit the init functions.
         public BasicNeedSO[] basicNeedSOs;
         public SubjectiveNeedSO[] subjectiveNeedSOs;
@@ -137,7 +137,7 @@ namespace Quille
             InitBasicNeeds();
             InitSubjectiveNeeds();
 
-            // TO DO: Hook up the modulations here.
+            // TODO: Hook up the modulations here?
         }
         private void InitBasicNeeds()
         {
@@ -152,6 +152,9 @@ namespace Quille
                 myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
                 myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
                 myBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
+
+                //myBasicNeeds[i].Init(myBasePerson);
+                // TODO: Init modulators here?
 
                 Debug.Log(myBasicNeeds[i].ToString());
             }
@@ -171,6 +174,9 @@ namespace Quille
                 mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedWarning;
                 mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
                 mySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
+
+                //mySubjectiveNeeds[i].Init(myBasePerson);
+                // TODO: Init modulators here?
 
                 Debug.Log(mySubjectiveNeeds[i].ToString());
             }
@@ -304,6 +310,13 @@ namespace Quille
                 need.Init(sourceBasePerson);
             }
         }
+        public void ModulateBasicNeeds(BasePerson sourceBasePerson)
+        {
+            foreach (BasicNeed need in myBasicNeeds)
+            {
+                need.Init(sourceBasePerson);
+            }
+        }
 
 
         // Built in.
@@ -311,6 +324,8 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
+            //myBasePerson = gameObject.GetComponent<BasePerson>();
+
             Init();
         } 
 

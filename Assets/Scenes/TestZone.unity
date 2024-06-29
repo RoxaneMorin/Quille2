@@ -300,6 +300,7 @@ MonoBehaviour:
   basicNeedSOs:
   - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
   subjectiveNeedSOs: []
+  myBasePerson: {fileID: 0}
   myBasicNeeds: []
   mySubjectiveNeeds: []
 --- !u!1 &245582501
@@ -479,7 +480,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340810219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1.17, z: -1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -883,6 +884,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
   subjectiveNeedSOs:
   - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
+  myBasePerson: {fileID: 0}
   myBasicNeeds: []
   mySubjectiveNeeds: []
 --- !u!114 &1888947990

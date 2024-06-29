@@ -121,10 +121,9 @@ namespace Quille
         }
 
 
-        private void SerializeToJSON(string filePath)
+        public string SerializeToJSON()
         {
-            string json = JsonUtility.ToJson(this);
-            File.WriteAllText(filePath, json);
+            return JsonUtility.ToJson(this, true);
         }
 
 
@@ -135,7 +134,7 @@ namespace Quille
         {
             LoadAndCreatePersonalityAxes();
 
-            SerializeToJSON(Application.dataPath + "/personality_data.json");
+            //SerializeToJSON(Application.dataPath + "/personality_data.json");
         }
 
         // Update is called once per frame
