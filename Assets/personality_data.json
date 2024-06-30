@@ -1,34 +1,16 @@
 {
     "charID": 0,
-    "firstName": "",
-    "lastName": "",
+    "firstName": "Pseudoquille",
+    "lastName": "McQuillington",
     "nickName": "",
     "secondaryNames": [],
     "myPersonalityController": {
-        "instanceID": 20454
+        "instanceID": 29078
     },
     "myNeedController": {
-        "instanceID": 20452
+        "instanceID": 29076
     },
     "myPersonAI": {
-        "instanceID": 20456
-    }
-}{
-    "folderPath": "ScriptableObjects/Personality/Axes",
-    "myPersonalityAxes": {
-        "_serializedList": []
-    },
-    "myPersonalityTraits": {
-        "_serializedList": [
-            {
-                "Key": {
-                    "instanceID": 5314
-                },
-                "Value": 0.5
-            }
-        ]
-    },
-    "myInterests": {
-        "_serializedList": []
+        "instanceID": 29080
     }
 }

@@ -11,9 +11,9 @@ namespace ChecksAndMods
         {
             Quille.PersonalityController sourcePersonalityController;
 
-            if (sourceObj is Quille.BasePerson)
+            if (sourceObj is Quille.Person)
             {
-                Quille.BasePerson sourceQuille = (Quille.BasePerson)sourceObj;
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
                 sourcePersonalityController = sourceQuille.MyPersonalityController;
                 return FetchAxeScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
             }
@@ -40,9 +40,9 @@ namespace ChecksAndMods
         {
             Quille.PersonalityController sourcePersonalityController;
 
-            if (sourceObj is Quille.BasePerson)
+            if (sourceObj is Quille.Person)
             {
-                Quille.BasePerson sourceQuille = (Quille.BasePerson)sourceObj;
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
                 sourcePersonalityController = sourceQuille.MyPersonalityController;
                 return FetchTraitScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityTrait);
             }

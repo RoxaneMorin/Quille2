@@ -9,7 +9,7 @@ namespace Quille
         // VARIABLES
 
         // References
-        [SerializeField, InspectorReadOnly] private BasePerson myBasePerson;
+        [SerializeField, InspectorReadOnly] private Person myBasePerson;
         // Do we need additional controller references here?
 
         // Values.
@@ -68,8 +68,8 @@ namespace Quille
         // AI Logic
         void NeedMonitorLoop()
         {
-            Debug.Log("In NeedMonitorLoop");
-            
+            //Debug.Log("In NeedMonitorLoop");
+
             // Even X seconds, verify if:
 
             //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
@@ -103,7 +103,7 @@ namespace Quille
         void Init()
         {
             // Fetch our various components.
-            myBasePerson = GetComponent<BasePerson>();
+            myBasePerson = GetComponent<Person>();
         }
 
 

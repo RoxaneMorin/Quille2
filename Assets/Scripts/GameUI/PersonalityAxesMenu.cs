@@ -18,7 +18,7 @@ public class PersonalityAxesMenu : MonoBehaviour
     [SerializeField] private Transform[] theSlidersTransforms;
     //[SerializeField] private Dictionary<Quille.PersonalityAxeSO, QuilleUI.PersonalityAxeSlider> mappedSliders;
 
-    [SerializeField] private Quille.PersonalityAxeSO[] personalityAxes;
+    //[SerializeField] private Quille.PersonalityAxeSO[] personalityAxes;
 
 
 
@@ -42,7 +42,7 @@ public class PersonalityAxesMenu : MonoBehaviour
     {
         FetchComponents();
 
-        personalityAxes = Resources.LoadAll<Quille.PersonalityAxeSO>("ScriptableObjects/Personality/Axes");
+        Quille.PersonalityAxeSO[] personalityAxes = Resources.LoadAll<Quille.PersonalityAxeSO>("ScriptableObjects/Personality/Axes");
         int nofOfAxes = personalityAxes.Length;
 
         theSliders = new QuilleUI.PersonalityAxeSlider[nofOfAxes];

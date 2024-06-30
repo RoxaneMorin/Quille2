@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿
+
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Quille
@@ -303,14 +305,14 @@ namespace Quille
                 Debug.Log(need.ToString());
             }
         }
-        public void ModulateSubjectiveNeeds(BasePerson sourceBasePerson)
+        public void ModulateSubjectiveNeeds(Person sourceBasePerson)
         {
             foreach (SubjectiveNeed need in mySubjectiveNeeds)
             {
                 need.Init(sourceBasePerson);
             }
         }
-        public void ModulateBasicNeeds(BasePerson sourceBasePerson)
+        public void ModulateBasicNeeds(Person sourceBasePerson)
         {
             foreach (BasicNeed need in myBasicNeeds)
             {

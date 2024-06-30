@@ -24,7 +24,6 @@ namespace Quille
         // Personality scores.
         [SerializeField, SerializedDictionary("Personality Axe", "Score")]
         private SerializedDictionary<PersonalityAxeSO, float> myPersonalityAxes;
-        // Should be private, but is not visible in editor when it is.
 
         [SerializeField, SerializedDictionary("Personality Trait", "Score")]
         private SerializedDictionary<PersonalityTraitSO, float> myPersonalityTraits;
@@ -59,15 +58,12 @@ namespace Quille
         }
         public void SetAxeScore(PersonalityAxeSO targetPersonalityAxe, float value)
         {
-            if (myPersonalityAxes.ContainsKey(targetPersonalityAxe))
-            {
-                if (value < -Constants.PERSONALITY_HALF_SPAN)
-                    myPersonalityAxes[targetPersonalityAxe] = -Constants.PERSONALITY_HALF_SPAN;
-                else if (value > Constants.PERSONALITY_HALF_SPAN)
-                    myPersonalityAxes[targetPersonalityAxe] = Constants.PERSONALITY_HALF_SPAN;
-                else
-                    myPersonalityAxes[targetPersonalityAxe] = value;
-            }
+            if (value < -Constants.PERSONALITY_HALF_SPAN)
+                myPersonalityAxes[targetPersonalityAxe] = -Constants.PERSONALITY_HALF_SPAN;
+            else if (value > Constants.PERSONALITY_HALF_SPAN)
+                myPersonalityAxes[targetPersonalityAxe] = Constants.PERSONALITY_HALF_SPAN;
+            else
+                myPersonalityAxes[targetPersonalityAxe] = value;
         }
 
         // Personality trait scores.
@@ -100,11 +96,45 @@ namespace Quille
             }
         }
 
+        // Interest scores.
+        public float GetInterestScore(InterestSO targetInterestSO)
+        {
+            if (myInterests.ContainsKey(targetInterestSO))
+            {
+                return myInterests[targetInterestSO];
+            }
+            else
+            {
+                return 0; 
+                // TODO: how to differentiate from unknown and known-but-neutral interests?
+            }
+        }
+        public void SetInterestScore(InterestSO targetInterestSO, float value)
+        {
+            if (value < -Constants.INTEREST_HALF_SPAN)
+                myInterests[targetInterestSO] = -Constants.PERSONALITY_HALF_SPAN;
+            else if (value > Constants.INTEREST_HALF_SPAN)
+                myInterests[targetInterestSO] = Constants.PERSONALITY_HALF_SPAN;
+            else
+                myInterests[targetInterestSO] = value;
+        }
+
+
+
+        // CONSTRUCTORS
+        public PersonalityController()
+        {
+            myPersonalityAxes = new SerializedDictionary<PersonalityAxeSO, float>();
+            myPersonalityTraits = new SerializedDictionary<PersonalityTraitSO, float>();
+            myInterests = new SerializedDictionary<InterestSO, float>();
+        }
+
+
 
 
         // METHODS
 
-        // Init.
+        // INIT
         // TODO: move this to a Quille Factory script.
         private void LoadAndCreatePersonalityAxes()
         {
@@ -121,20 +151,13 @@ namespace Quille
         }
 
 
-        public string SerializeToJSON()
-        {
-            return JsonUtility.ToJson(this, true);
-        }
 
-
-        // Built in.
+        // BUILT IN
 
         // Start is called before the first frame update
         void Start()
         {
             LoadAndCreatePersonalityAxes();
-
-            //SerializeToJSON(Application.dataPath + "/personality_data.json");
         }
 
         // Update is called once per frame

@@ -7,7 +7,7 @@ namespace Quille
 {
     // Add more as they are needed.
     [RequireComponent(typeof(PersonalityController)), RequireComponent(typeof(NeedController)), RequireComponent(typeof(PersonAI))]
-    public class BasePerson : MonoBehaviour
+    public class Person : MonoBehaviour
     {
         // VARIABLES
 
@@ -45,6 +45,20 @@ namespace Quille
 
 
 
+        // CONSTRUCTORS
+        //public Person()
+        //{
+
+        //}
+
+
+        private void PersonPopulator(PersonalityController personalityController)
+        {
+            myPersonalityController = personalityController;
+        }
+
+
+
         // METHODS
 
         // Init.
@@ -60,8 +74,6 @@ namespace Quille
         private void SerializeToJSON(string filePath)
         {
             string json = JsonUtility.ToJson(this, true);
-
-            json += myPersonalityController.SerializeToJSON();
 
             File.WriteAllText(filePath, json);
 

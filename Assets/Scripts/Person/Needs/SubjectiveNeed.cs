@@ -664,7 +664,7 @@ namespace Quille
 
 
         // Init.
-        public void Init(BasePerson sourceBasePerson)
+        public void Init(Person sourceBasePerson)
         {
             // Run the modulators.
 
