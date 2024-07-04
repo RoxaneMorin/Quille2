@@ -13,6 +13,8 @@ namespace Quille
     {
         // Very likely to rewrite this class.
 
+        // TODO: change into PersonIdentity or the like, a basic C# object.
+
 
         // VARIABLES/PARAMS
 
@@ -148,6 +150,8 @@ namespace Quille
                 if (!myPersonalityAxes.ContainsKey(personalityAxe))
                 {
                     myPersonalityAxes.Add(personalityAxe, Random.Range(-1f, 1f));
+
+                    Debug.Log(personalityAxe.name);
                 }
             }
         }
@@ -164,11 +168,11 @@ namespace Quille
             //string jsonString = JsonUtility.ToJson(this, true);
             //System.IO.File.WriteAllText("test_quille_personality.json", jsonString);
 
-            string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-            System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
+            //string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+            //System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
 
         }
 

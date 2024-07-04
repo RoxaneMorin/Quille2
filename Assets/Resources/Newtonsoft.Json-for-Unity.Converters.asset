@@ -126,6 +126,10 @@ MonoBehaviour:
     converterAssembly: Newtonsoft.Json.UnityConverters
     settings: []
   - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.PersonalityAxeSOConverter
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
     converterName: Newtonsoft.Json.UnityConverters.Random.RandomStateConverter
     converterAssembly: Newtonsoft.Json.UnityConverters
     settings: []
