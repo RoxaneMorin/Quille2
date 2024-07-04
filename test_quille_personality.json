@@ -1,0 +1,50 @@
+{
+    "folderPath": "ScriptableObjects/Personality/Axes",
+    "myPersonalityAxes": {
+        "_serializedList": [
+            {
+                "Key": {
+                    "instanceID": 5498
+                },
+                "Value": -0.8624789714813232
+            },
+            {
+                "Key": {
+                    "instanceID": 5620
+                },
+                "Value": 0.0407177209854126
+            },
+            {
+                "Key": {
+                    "instanceID": 5528
+                },
+                "Value": 0.5061063766479492
+            },
+            {
+                "Key": {
+                    "instanceID": 5430
+                },
+                "Value": 0.48090407252311709
+            },
+            {
+                "Key": {
+                    "instanceID": 5438
+                },
+                "Value": 0.153006911277771
+            }
+        ]
+    },
+    "myPersonalityTraits": {
+        "_serializedList": [
+            {
+                "Key": {
+                    "instanceID": 5398
+                },
+                "Value": 0.5
+            }
+        ]
+    },
+    "myInterests": {
+        "_serializedList": []
+    }
+}

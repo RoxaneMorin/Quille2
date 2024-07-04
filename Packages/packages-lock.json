@@ -32,6 +32,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.test-framework": {
       "version": "1.1.33",
       "depth": 0,
@@ -72,6 +79,13 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "jillejr.newtonsoft.json-for-unity.converters": {
+      "version": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.Converters.git#1.6.3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "464cdbbabb67661751cb73fd39c4e99e5b5eedb0"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

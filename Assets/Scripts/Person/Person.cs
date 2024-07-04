@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Quille
 {
-    // Add more as they are needed.
-    [RequireComponent(typeof(PersonalityController)), RequireComponent(typeof(NeedController)), RequireComponent(typeof(PersonAI))]
+    [System.Serializable]
+    [RequireComponent(typeof(PersonalityController)), RequireComponent(typeof(NeedController)), RequireComponent(typeof(PersonAI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
@@ -89,7 +90,10 @@ namespace Quille
         {
             Init();
 
-            SerializeToJSON(Application.dataPath + "/personality_data.json");
+            //SerializeToJSON(Application.dataPath + "/personality_data.json");
+
+            //string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
+            //System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
         }
 
         // Update is called once per frame

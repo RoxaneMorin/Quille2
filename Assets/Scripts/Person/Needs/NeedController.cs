@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Quille
 {
+    [System.Serializable]
     public class NeedController : MonoBehaviour
     {
         // TEMP

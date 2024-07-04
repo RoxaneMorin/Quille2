@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Newtonsoft.Json;
 
 using System.IO;
 
 namespace Quille
 {
+    [System.Serializable]
     public class PersonalityController : MonoBehaviour
     {
         // Very likely to rewrite this class.
@@ -16,7 +18,7 @@ namespace Quille
 
         // Management
         // TODO: Move to a Factory script.
-        [SerializeField]
+        //[SerializeField]
         private string folderPath = "ScriptableObjects/Personality/Axes";
         private PersonalityAxeSO[] personalityAxes;
 
@@ -158,12 +160,21 @@ namespace Quille
         void Start()
         {
             LoadAndCreatePersonalityAxes();
+
+            //string jsonString = JsonUtility.ToJson(this, true);
+            //System.IO.File.WriteAllText("test_quille_personality.json", jsonString);
+
+            string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
+
         }
 
         // Update is called once per frame
         void Update()
         {
-
         }
     }
 }
