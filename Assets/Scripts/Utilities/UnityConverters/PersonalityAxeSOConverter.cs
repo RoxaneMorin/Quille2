@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.UnityConverters.Helpers;
@@ -9,13 +10,22 @@ using Quille;
 
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
-    public class PersonalityAxeSOConverter : PartialConverter<PersonalityAxeSO>
+    public class PersonalityAxeSOConverter : JsonConverter<PersonalityAxeSO>
     {
-        protected override void ReadValue(ref PersonalityAxeSO value, string name, JsonReader reader, JsonSerializer serializer)
+        public override PersonalityAxeSO ReadJson(JsonReader reader, Type objectType, PersonalityAxeSO existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            value = Resources.Load<PersonalityAxeSO>("ScriptableObjects/Personality/Axes/" + reader.ReadAsString());
+            string jsonValue = (string)reader.Value;
+            Debug.Log(jsonValue);
+
+            string path = "ScriptableObjects/Personality/Axes/" + jsonValue;
+            Debug.Log(path);
+
+            PersonalityAxeSO theSO = Resources.Load<PersonalityAxeSO>(path);
+            Debug.Log(theSO);
+
+            return theSO;
         }
-        protected override void WriteJsonProperties(JsonWriter writer, PersonalityAxeSO value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, PersonalityAxeSO value, JsonSerializer serializer)
         {
             writer.WriteValue(value.name);
         }
