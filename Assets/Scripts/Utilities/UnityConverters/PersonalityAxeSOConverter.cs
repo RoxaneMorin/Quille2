@@ -1,12 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Newtonsoft.Json.UnityConverters.Helpers;
 using UnityEngine;
 using Quille;
-
-
-// TO DO: try and hook it up.
 
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
@@ -14,13 +8,18 @@ namespace Newtonsoft.Json.UnityConverters.Quille
     {
         public override PersonalityAxeSO ReadJson(JsonReader reader, Type objectType, PersonalityAxeSO existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
+            Debug.Log("In ReadJSON");
+
             string jsonValue = (string)reader.Value;
             Debug.Log(jsonValue);
 
-            string path = "ScriptableObjects/Personality/Axes/" + jsonValue;
+            // Remove the  (Quille.PersonalityAxeSO) if needed.
+
+            string path = Constants.PATH_PERSONALITYAXES + jsonValue;
             Debug.Log(path);
 
             PersonalityAxeSO theSO = Resources.Load<PersonalityAxeSO>(path);
+
             Debug.Log(theSO);
 
             return theSO;
