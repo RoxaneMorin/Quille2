@@ -1,0 +1,267 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8167966592532917144
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dfa6baab7934d957491b14eed91f, type: 3}
+  m_Name: TestPostProcessPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 0
+--- !u!114 &-7589263517409972489
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827ae1977749e434b860406fbc3812b1, type: 3}
+  m_Name: PostProcessTestPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  scale:
+    overrideState: 1
+    value: 1
+  normalThreshold:
+    overrideState: 1
+    value: 2.14
+  depthThreshold:
+    overrideState: 1
+    value: 2.7
+  depthNormalThreshold:
+    overrideState: 1
+    value: 2
+  depthNormalThresholdScale:
+    overrideState: 1
+    value: 5
+  outlineColour:
+    overrideState: 1
+    value: {r: 0.46885002, g: 0.41669068, b: 0.46363407, a: 0}
+  multiplicativeOutline:
+    overrideState: 1
+    value: 1
+--- !u!114 &-7516657929921181745
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dfa6baab7934d957491b14eed91f, type: 3}
+  m_Name: TestPostProcessPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+--- !u!114 &-6107416932782459295
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69a058bedda8854eb06303db9db9a28, type: 3}
+  m_Name: PostProcessTestPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _MainTex:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+--- !u!114 &-5612606632484446498
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd862bd3d3d7594ca50ff97b234606b, type: 3}
+  m_Name: TestSmudgePPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  noiseTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 8a67c669e9dec564cbd477e728ae9d7f, type: 3}
+    defaultState: 1
+  noiseTile:
+    overrideState: 1
+    value: 1.5
+  smudgeIntensity:
+    overrideState: 1
+    value: 0.005
+  smudgeOpacity:
+    overrideState: 1
+    value: 0.5
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
+  m_Name: Post-process Volume Profile
+  m_EditorClassIdentifier: 
+  settings:
+  - {fileID: -7589263517409972489}
+  - {fileID: 6610983500296073683}
+  - {fileID: -5612606632484446498}
+--- !u!114 &1124572475409158483
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c1dfa6baab7934d957491b14eed91f, type: 3}
+  m_Name: TestPostProcessPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+--- !u!114 &5364972146367907275
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69a058bedda8854eb06303db9db9a28, type: 3}
+  m_Name: PostProcessTestPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _MainTex:
+    overrideState: 1
+    value: {fileID: 2800000, guid: a9f953c7353804247b8c3ed6e1c46a2e, type: 3}
+    defaultState: 1
+--- !u!114 &5467501205237480162
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c492285fe0520964ebc09b6dbc4203ac, type: 3}
+  m_Name: TestPostProcess2024PPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+--- !u!114 &6610983500296073683
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b88245b2885a974d89cbe1d73f4ada8, type: 3}
+  m_Name: Outline_SobelPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 0
+  useDepthThreshold:
+    overrideState: 1
+    value: 1
+  useAltLaplacian:
+    overrideState: 1
+    value: 1
+  outlineThickness:
+    overrideState: 1
+    value: 2
+  outlineIntensity:
+    overrideState: 1
+    value: 26
+  depthThreshold:
+    overrideState: 1
+    value: 1
+  depthThresholdMultiplier:
+    overrideState: 1
+    value: 1
+  outlineColour:
+    overrideState: 1
+    value: {r: 0, g: 0, b: 0, a: 1}
+  multiplicativeOutline:
+    overrideState: 1
+    value: 0
+  useBothLaplacians:
+    overrideState: 1
+    value: 1
+  outlineThicknessA:
+    overrideState: 1
+    value: 2
+  outlineThicknessB:
+    overrideState: 1
+    value: 4
+  outlineIntensityA:
+    overrideState: 1
+    value: 99
+  outlineIntensityB:
+    overrideState: 1
+    value: 150
+  depthThresholdA:
+    overrideState: 1
+    value: 1
+  depthThresholdMultiplierA:
+    overrideState: 1
+    value: 0.5
+  depthThresholdB:
+    overrideState: 1
+    value: 0.585
+  depthThresholdMultiplierB:
+    overrideState: 1
+    value: 0.5
+  outlineColourA:
+    overrideState: 1
+    value: {r: 1, g: 1, b: 1, a: 1}
+  outlineColourB:
+    overrideState: 1
+    value: {r: 0.485938, g: 0.30317068, b: 0.39046445, a: 1}
+  multiplicativeOutlineA:
+    overrideState: 1
+    value: 0
+  multiplicativeOutlineB:
+    overrideState: 1
+    value: 1
