@@ -6,9 +6,17 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 [Serializable]
-[PostProcess( typeof( Outline_Laplacian ), PostProcessEvent.AfterStack, "Outline_Laplacian", true )]
-public sealed class Outline_LaplacianPPSSettings : PostProcessEffectSettings
+[PostProcess( typeof( Outline_LaplacianPreBlur ), PostProcessEvent.AfterStack, "Outline_LaplacianPreBlur", true )]
+public sealed class Outline_LaplacianPreBlurPPSSettings : PostProcessEffectSettings
 {
+	[Range(2, 10)]
+	public IntParameter blurHalfSize = new IntParameter { value = 1 };
+	[Range(1.5f, 5)]
+	public FloatParameter blurStandardDeviation = new FloatParameter { value = 1 };
+
+	[Space]
+	[Space]
+
 	[Range(0, 1)]
 	public IntParameter useBothLaplacians = new IntParameter { value = 0 };
 
@@ -60,13 +68,37 @@ public sealed class Outline_LaplacianPPSSettings : PostProcessEffectSettings
 	public IntParameter multiplicativeOutline = new IntParameter { value = 0 };
 }
 
-public sealed class Outline_Laplacian : PostProcessEffectRenderer<Outline_LaplacianPPSSettings>
+public sealed class Outline_LaplacianPreBlur : PostProcessEffectRenderer<Outline_LaplacianPreBlurPPSSettings>
 {
 	public override void Render( PostProcessRenderContext context )
 	{
-		var sheet = context.propertySheets.Get( Shader.Find("Hidden/Outline_Laplacian") );
+		var sheet = context.propertySheets.Get( Shader.Find("Hidden/Outline_LaplacianPreBlur") );
 
 		// Set shader properties.
+		sheet.properties.SetInt("_BlurSize", settings.blurHalfSize);
+
+		int halfSize = settings.blurHalfSize;
+		float[] gaussianValues = new float[21];
+		float sum = 0;
+
+		float twoSigmaSquare = 2.0f * settings.blurStandardDeviation * settings.blurStandardDeviation;
+		float sigmaRoot = Mathf.Sqrt(twoSigmaSquare * Mathf.PI);
+
+		for (int i = -halfSize; i <= halfSize; i++)
+		{
+			gaussianValues[i + halfSize] = Mathf.Exp(-(i * i) / twoSigmaSquare) / sigmaRoot;
+			sum += gaussianValues[i + halfSize];
+
+			//Debug.Log(i +  " : " + gaussianValues[i + halfSize]);
+		}
+
+		for (int i = 0; i < halfSize * 2 + 1; i++)
+		{
+			gaussianValues[i] /= sum;
+			//Debug.Log(i + " : " + gaussianValues[i]);
+		}
+		sheet.properties.SetFloatArray("_GaussianValues", gaussianValues);
+
 		sheet.properties.SetInt("_UseBothLaplacians", settings.useBothLaplacians);
 		sheet.properties.SetInt("_OutlineThicknessA", settings.outlineThicknessA);
 		sheet.properties.SetInt("_OutlineThicknessB", settings.outlineThicknessB);
@@ -87,8 +119,23 @@ public sealed class Outline_Laplacian : PostProcessEffectRenderer<Outline_Laplac
 		sheet.properties.SetInt("_OutlineIntensity", settings.outlineIntensity);
 		sheet.properties.SetColor("_OutlineColour", settings.outlineColour);
 		sheet.properties.SetInt("_OpaqueOutline", settings.multiplicativeOutline);
-		
-		context.command.BlitFullscreenTriangle( context.source, context.destination, sheet, 0 );
+
+
+		// Blits and shit.
+		var depth = RenderTexture.GetTemporary(context.width, context.height);
+		var depthBlur1D = RenderTexture.GetTemporary(context.width, context.height);
+		var depthBlur2D = RenderTexture.GetTemporary(context.width, context.height);
+
+		context.command.BlitFullscreenTriangle(context.source, depth, sheet, 0);
+		context.command.BlitFullscreenTriangle(depth, depthBlur1D, sheet, 1);
+		context.command.BlitFullscreenTriangle(depthBlur1D, depthBlur2D, sheet, 2);
+
+		sheet.properties.SetTexture("_BlurredDepth", depthBlur2D);
+		context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 3);
+
+		RenderTexture.ReleaseTemporary(depth);
+		RenderTexture.ReleaseTemporary(depthBlur1D);
+		RenderTexture.ReleaseTemporary(depthBlur2D);
 	}
 }
 #endif

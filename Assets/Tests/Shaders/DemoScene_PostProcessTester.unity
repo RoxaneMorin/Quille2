@@ -390,7 +390,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 215606124}
   m_LocalRotation: {x: 0.0069878898, y: -0.04437415, z: -0.010831603, w: 0.9989318}
-  m_LocalPosition: {x: 0.937, y: 0.887, z: -1.764}
+  m_LocalPosition: {x: 1.1, y: 0.887, z: -2.09}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -442,7 +442,7 @@ MonoBehaviour:
     quality: 2
   fastApproximateAntialiasing:
     fastMode: 0
-    keepAlpha: 0
+    keepAlpha: 1
   fog:
     enabled: 1
     excludeSkybox: 1
@@ -483,6 +483,14 @@ MonoBehaviour:
   - assemblyQualifiedName: Outline_LaplacianPPSSettings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - assemblyQualifiedName: Outline_RoystanPPSSettings, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: Outline_LaplacianSplitPPSSettings, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: Outline_LaplacianPreBlurPPSSettings, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: Blur_BoxPPSSettings, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: Blur_GaussianPPSSettings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &232221261
 GameObject:
@@ -668,7 +676,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307678965}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.8, y: 0.3, z: 2.99}
+  m_LocalPosition: {x: 2.92, y: 0.474, z: 2.99}
   m_LocalScale: {x: 1.5432249, y: 1.5432249, z: 1.5432249}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1386,17 +1394,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.08976333
+      value: 0.017890833
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99596316
+      value: 0.99983996
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
@@ -1411,7 +1419,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 190.3
+      value: 177.95
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}

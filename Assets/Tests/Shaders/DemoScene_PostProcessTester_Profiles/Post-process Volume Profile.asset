@@ -1,5 +1,84 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8991672072544717209
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4dd0de7f0b4b2b4b941efaa465da8da, type: 3}
+  m_Name: Outline_LaplacianPreBlurPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  blurHalfSize:
+    overrideState: 1
+    value: 2
+  blurStandardDeviation:
+    overrideState: 1
+    value: 1.5
+  useBothLaplacians:
+    overrideState: 1
+    value: 0
+  outlineThicknessA:
+    overrideState: 0
+    value: 1
+  outlineIntensityA:
+    overrideState: 0
+    value: 100
+  depthThresholdA:
+    overrideState: 0
+    value: 1
+  depthThresholdMultiplierA:
+    overrideState: 0
+    value: 0.25
+  outlineColourA:
+    overrideState: 0
+    value: {r: 1, g: 0, b: 0, a: 1}
+  multiplicativeOutlineA:
+    overrideState: 0
+    value: 0
+  outlineThicknessB:
+    overrideState: 0
+    value: 1
+  outlineIntensityB:
+    overrideState: 0
+    value: 100
+  depthThresholdB:
+    overrideState: 0
+    value: 1
+  depthThresholdMultiplierB:
+    overrideState: 0
+    value: 0.25
+  outlineColourB:
+    overrideState: 0
+    value: {r: 0, g: 0, b: 1, a: 1}
+  multiplicativeOutlineB:
+    overrideState: 0
+    value: 0
+  outlineMode:
+    overrideState: 1
+    value: 0
+  useAltLaplacian:
+    overrideState: 1
+    value: 1
+  outlineThickness:
+    overrideState: 1
+    value: 1
+  outlineIntensity:
+    overrideState: 1
+    value: 40
+  outlineColour:
+    overrideState: 1
+    value: {r: 0, g: 0, b: 0, a: 0}
+  multiplicativeOutline:
+    overrideState: 1
+    value: 0
 --- !u!114 &-8167966592532917144
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -28,13 +107,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 827ae1977749e434b860406fbc3812b1, type: 3}
   m_Name: PostProcessTestPPSSettings
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
   scale:
     overrideState: 1
-    value: 1
+    value: 2
   normalThreshold:
     overrideState: 1
     value: 2.14
@@ -69,6 +148,31 @@ MonoBehaviour:
   enabled:
     overrideState: 1
     value: 1
+--- !u!114 &-7143560932666041507
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b9ab0f98edfc847b25db50a1836d7a, type: 3}
+  m_Name: Blur_GaussianPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  doDownscaling:
+    overrideState: 1
+    value: 0
+  blurHalfSize:
+    overrideState: 1
+    value: 10
+  blurStandardDeviation:
+    overrideState: 1
+    value: 5
 --- !u!114 &-6107416932782459295
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -111,13 +215,69 @@ MonoBehaviour:
     defaultState: 1
   noiseTile:
     overrideState: 1
-    value: 1.5
+    value: 2
   smudgeIntensity:
     overrideState: 1
-    value: 0.005
+    value: 0.0065
   smudgeOpacity:
     overrideState: 1
-    value: 0.5
+    value: 0.55
+--- !u!114 &-3034833511111467268
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae81335bd59c07e4abe800b5c4e7cf30, type: 3}
+  m_Name: Outline_LaplacianSplitPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  useAbsoluteValueA:
+    overrideState: 1
+    value: 0
+  useAbsoluteValueB:
+    overrideState: 1
+    value: 1
+  outlineSpread:
+    overrideState: 1
+    value: 2
+  outlineMultiplier:
+    overrideState: 1
+    value: 22.6
+  outlineThreshold:
+    overrideState: 1
+    value: 1
+  kernelA:
+    overrideState: 1
+    value: {x: 1, y: -2, z: 1}
+  kernelB:
+    overrideState: 1
+    value: {x: -1, y: 2, z: -1}
+  noiseTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: afa16661f56b3c843a93a217bd78b73b, type: 3}
+    defaultState: 1
+  noiseTileA:
+    overrideState: 1
+    value: 3
+  smudgeIntensityA:
+    overrideState: 1
+    value: 0.003
+  noiseTileB:
+    overrideState: 1
+    value: 1
+  smudgeIntensityB:
+    overrideState: 1
+    value: 0.0035
+  outlineColour:
+    overrideState: 1
+    value: {r: 0.4245283, g: 0.3504361, b: 0.36690104, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +294,10 @@ MonoBehaviour:
   - {fileID: -7589263517409972489}
   - {fileID: 6610983500296073683}
   - {fileID: -5612606632484446498}
+  - {fileID: 5909738146362161891}
+  - {fileID: -3034833511111467268}
+  - {fileID: -7143560932666041507}
+  - {fileID: -8991672072544717209}
 --- !u!114 &1124572475409158483
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -186,6 +350,31 @@ MonoBehaviour:
   enabled:
     overrideState: 1
     value: 1
+--- !u!114 &5909738146362161891
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d49aee1d03d63f47864ac5c6b20d847, type: 3}
+  m_Name: Blur_GaussianPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  doDownscaling:
+    overrideState: 1
+    value: 0
+  blurHalfSizeX:
+    overrideState: 1
+    value: 10
+  blurHalfSizeY:
+    overrideState: 1
+    value: 10
 --- !u!114 &6610983500296073683
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -198,70 +387,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b88245b2885a974d89cbe1d73f4ada8, type: 3}
   m_Name: Outline_SobelPPSSettings
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
-    value: 0
-  useDepthThreshold:
-    overrideState: 1
     value: 1
-  useAltLaplacian:
-    overrideState: 1
-    value: 1
-  outlineThickness:
-    overrideState: 1
-    value: 2
-  outlineIntensity:
-    overrideState: 1
-    value: 26
-  depthThreshold:
-    overrideState: 1
-    value: 1
-  depthThresholdMultiplier:
-    overrideState: 1
-    value: 1
-  outlineColour:
-    overrideState: 1
-    value: {r: 0, g: 0, b: 0, a: 1}
-  multiplicativeOutline:
-    overrideState: 1
-    value: 0
   useBothLaplacians:
     overrideState: 1
     value: 1
   outlineThicknessA:
     overrideState: 1
     value: 2
-  outlineThicknessB:
-    overrideState: 1
-    value: 4
   outlineIntensityA:
-    overrideState: 1
-    value: 99
-  outlineIntensityB:
     overrideState: 1
     value: 150
   depthThresholdA:
     overrideState: 1
-    value: 1
+    value: 0.75
   depthThresholdMultiplierA:
     overrideState: 1
-    value: 0.5
-  depthThresholdB:
-    overrideState: 1
-    value: 0.585
-  depthThresholdMultiplierB:
-    overrideState: 1
-    value: 0.5
+    value: 1
   outlineColourA:
     overrideState: 1
     value: {r: 1, g: 1, b: 1, a: 1}
-  outlineColourB:
-    overrideState: 1
-    value: {r: 0.485938, g: 0.30317068, b: 0.39046445, a: 1}
   multiplicativeOutlineA:
     overrideState: 1
     value: 0
+  outlineThicknessB:
+    overrideState: 1
+    value: 3
+  outlineIntensityB:
+    overrideState: 1
+    value: 113.1
+  depthThresholdB:
+    overrideState: 1
+    value: 0
+  depthThresholdMultiplierB:
+    overrideState: 1
+    value: 0.5
+  outlineColourB:
+    overrideState: 1
+    value: {r: 0.3584906, g: 0.2823959, b: 0.32044324, a: 1}
   multiplicativeOutlineB:
+    overrideState: 1
+    value: 1
+  outlineMode:
+    overrideState: 1
+    value: 2
+  useAltLaplacian:
+    overrideState: 1
+    value: 1
+  outlineThickness:
+    overrideState: 1
+    value: 3
+  outlineIntensity:
+    overrideState: 1
+    value: 40
+  outlineColour:
+    overrideState: 1
+    value: {r: 0.41509432, g: 0.30348876, b: 0.30348876, a: 1}
+  multiplicativeOutline:
     overrideState: 1
     value: 1

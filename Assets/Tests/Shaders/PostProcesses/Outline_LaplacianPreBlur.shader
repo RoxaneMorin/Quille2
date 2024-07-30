@@ -1,4 +1,4 @@
-Shader "Hidden/Outline_Laplacian"
+Shader "Hidden/Outline_LaplacianPreBlur"
 {
     HLSLINCLUDE
     #include "Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl"
@@ -16,6 +16,10 @@ Shader "Hidden/Outline_Laplacian"
     TEXTURE2D_SAMPLER2D(_CameraNormalsTexture, sampler_CameraNormalsTexture); // Camera Normals
 
     // Parameters.
+    int _BlurSize;
+    float _GaussianValues[21];
+    TEXTURE2D_SAMPLER2D (_BlurredDepth, sampler_BlurredDepth);
+
     int _OutlineMode;
     int _UseAltLaplacian;
     int _OutlineThickness;
@@ -41,6 +45,44 @@ Shader "Hidden/Outline_Laplacian"
     int _OpaqueOutlineA;
     int _OpaqueOutlineB;
 
+
+    // Grab Depth texture.
+    float3 FragDepth(VaryingsDefault i) : SV_Target
+    {
+        return SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoord);
+    }
+
+    // Gaussian Blur;
+    float3 GaussianBlur(float2 texcoord, int halfSize, float2 side)
+    {
+        float3 accumulator = 0;
+
+        for (int x = -halfSize; x <= halfSize; x++)
+        {
+            float2 uv = texcoord + (x * side) * _MainTex_TexelSize;
+            float GaussAt = _GaussianValues[x + halfSize];
+   
+            float3 weightedPixel = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv) * GaussAt;
+            accumulator += weightedPixel;
+        }
+        return accumulator;
+    }
+
+    // X axis pass.
+    float3 FragX(VaryingsDefault i) : SV_Target
+    {
+        float3 blurredTexture = GaussianBlur(i.texcoord, _BlurSize, float2(1, 0));
+        return blurredTexture;
+    }
+    
+    // Y axis pass.
+    float3 FragY(VaryingsDefault i) : SV_Target
+    {
+        float3 blurredTexture = GaussianBlur(i.texcoord, _BlurSize, float2(0, 1));
+        return blurredTexture;
+    }
+
+
     // Laplacian
     float3x3 GetLaplacianKernelA()
     {
@@ -62,17 +104,17 @@ Shader "Hidden/Outline_Laplacian"
             1, 1, 1
         );
     }
-    
-    // TODO: Try doing a Gaussian Blur first?
-
-    // Main.
-    float3 Frag(VaryingsDefault i) : SV_Target
+ 
+    float3 FragLaplacian(VaryingsDefault i) : SV_Target
     {   
         int halfKernelSize = 1;
         float laplacian = 0;
     
         float laplacianA = 0;
         float laplacianB = 0;
+    
+        //return SAMPLE_DEPTH_TEXTURE(_BlurredDepth, sampler_BlurredDepth, i.texcoord);
+
         
         float originalDepth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoord).r;
         //float alteredOutlineThickness = _OutlineThickness * originalDepth + 1;
@@ -87,8 +129,8 @@ Shader "Hidden/Outline_Laplacian"
                     float2 offsetA = _OutlineThicknessA * float2(x, y) * _MainTex_TexelSize.xy;
                     float2 offsetB = _OutlineThicknessB * float2(x, y) * _MainTex_TexelSize.xy;
                 
-                    float sampleDepthA = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoord + offsetA).r;
-                    float sampleDepthB = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoord + offsetB).r;
+                float sampleDepthA = SAMPLE_DEPTH_TEXTURE(_BlurredDepth, sampler_BlurredDepth, i.texcoord + offsetA).r;
+                float sampleDepthB = SAMPLE_DEPTH_TEXTURE(_BlurredDepth, sampler_BlurredDepth, i.texcoord + offsetB).r;
                 
                     float weightA = GetLaplacianKernelA()[y + halfKernelSize][x + halfKernelSize];
                     laplacianA += sampleDepthA * weightA;
@@ -99,7 +141,7 @@ Shader "Hidden/Outline_Laplacian"
                 else
                 {
                     float2 offset = _OutlineThickness * float2(x, y) * _MainTex_TexelSize.xy;
-                    float sampleDepth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoord + offset).r;
+                float sampleDepth = SAMPLE_DEPTH_TEXTURE(_BlurredDepth, sampler_BlurredDepth, i.texcoord + offset).r;
                 
                     float weight = (_UseAltLaplacian ? GetLaplacianKernelB() : GetLaplacianKernelA())[y + halfKernelSize][x + halfKernelSize];
                     laplacian += sampleDepth * weight;
@@ -159,12 +201,36 @@ Shader "Hidden/Outline_Laplacian"
         Cull Off
         ZWrite Off
         ZTest Always
-
-            Pass
+        
+        Pass
         {
             HLSLPROGRAM
                 #pragma vertex VertDefault
-                #pragma fragment Frag
+                #pragma fragment FragDepth
+            ENDHLSL
+        }
+        
+        Pass
+        {
+            HLSLPROGRAM
+                #pragma vertex VertDefault
+                #pragma fragment FragX
+            ENDHLSL
+        }
+
+        Pass
+        {
+            HLSLPROGRAM
+                #pragma vertex VertDefault
+                #pragma fragment FragY
+            ENDHLSL
+        }
+        
+        Pass
+        {
+            HLSLPROGRAM
+                #pragma vertex VertDefault
+                #pragma fragment FragLaplacian
             ENDHLSL
         }
     }
