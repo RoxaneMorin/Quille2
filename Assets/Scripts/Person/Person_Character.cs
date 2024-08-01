@@ -9,21 +9,9 @@ using System.IO;
 namespace Quille
 {
     [System.Serializable]
-    public class PersonalityController : MonoBehaviour
+    public class Person_Character
     {
-        // Very likely to rewrite this class.
-
-        // TODO: change into PersonIdentity or the like, a basic C# object.
-
-
         // VARIABLES/PARAMS
-
-        // Management
-        // TODO: Move to a Factory script.
-        //[SerializeField]
-        private string folderPath = "ScriptableObjects/Personality/Axes";
-        private PersonalityAxeSO[] personalityAxes;
-
 
         // Personality scores.
         [SerializeField, SerializedDictionary("Personality Axe", "Score")]
@@ -126,7 +114,7 @@ namespace Quille
 
 
         // CONSTRUCTORS
-        public PersonalityController()
+        public Person_Character()
         {
             myPersonalityAxes = new SerializedDictionary<PersonalityAxeSO, float>();
             myPersonalityTraits = new SerializedDictionary<PersonalityTraitSO, float>();
@@ -137,48 +125,5 @@ namespace Quille
 
 
         // METHODS
-
-        // INIT
-        // TODO: move this to a Quille Factory script.
-        private void LoadAndCreatePersonalityAxes()
-        {
-            personalityAxes = Resources.LoadAll<PersonalityAxeSO>(folderPath);
-
-            foreach (PersonalityAxeSO personalityAxe in personalityAxes)
-            {
-                // Init them with random values for now.
-                if (!myPersonalityAxes.ContainsKey(personalityAxe))
-                {
-                    myPersonalityAxes.Add(personalityAxe, Random.Range(-1f, 1f));
-
-                    Debug.Log(personalityAxe.name);
-                }
-            }
-        }
-
-
-
-        // BUILT IN
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            LoadAndCreatePersonalityAxes();
-
-            //string jsonString = JsonUtility.ToJson(this, true);
-            //System.IO.File.WriteAllText("test_quille_personality.json", jsonString);
-
-            //string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
-            //System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
     }
 }

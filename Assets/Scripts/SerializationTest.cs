@@ -9,16 +9,26 @@ public class SerializationTest : MonoBehaviour
     [System.Serializable]
     public class SerializationTester
     {
-        [SerializeField] private float testFloat = 13f;
+        //[SerializeField] private float testFloat = 13f;
 
-        [SerializeField] private Color testColour;
+        //[SerializeField] private Color testColour;
 
-        [SerializeField, SerializedDictionary("String", "Float")] private SerializedDictionary<string, float> testDict;
+        //[SerializeField, SerializedDictionary("String", "Float")] private SerializedDictionary<string, float> testDict;
 
-        [SerializeField] private Quille.PersonalityAxeSO testSO;
+        //[SerializeField, SerializedDictionary("String", "Colour")] private SerializedDictionary<string, Color> testDictColour;
 
-        [SerializeField, SerializedDictionary("Axe", "Score")] private SerializedDictionary<Quille.PersonalityAxeSO, float> testDict2;
-        // TODO: Find why the dic won't deserialize properly.
+        //[SerializeField] private Quille.PersonalityAxeSO testSO;
+
+        //[SerializeField] private Quille.BasicNeedSO testSOBN;
+
+        //[SerializeField, SerializedDictionary("Axe", "Score")] private SerializedDictionary<Quille.PersonalityAxeSO, float> testDict2;
+
+        //[SerializeField] private Quille.Person_Character personality;
+
+        [SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.BasicNeedSO, Quille.BasicNeed> testDictSO;
+
+        //[SerializeField, SerializedDictionary("1", "2")] private SerializedDictionary<int, Quille.BasicNeedSO> testDictSO;
+
 
         public SerializationTester()
         {
@@ -41,6 +51,15 @@ public class SerializationTest : MonoBehaviour
     void Start()
     {
         //SerializationTester tester = new SerializationTester();
+
+        //Newtonsoft.Json.UnityConverters.UnityTypeContractResolver contractResolver = new Newtonsoft.Json.UnityConverters.UnityTypeContractResolver
+        //{
+        //    NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy
+        //    {
+        //        ProcessDictionaryKeys = true,
+        //        ProcessExtensionDataNames = true
+        //    }
+        //};
 
         string jsonString = JsonConvert.SerializeObject(tester, Formatting.Indented);
         Debug.Log(jsonString);

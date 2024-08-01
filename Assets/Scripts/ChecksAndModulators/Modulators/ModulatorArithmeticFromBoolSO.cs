@@ -11,10 +11,10 @@ namespace ChecksAndMods
 
 
         // METHODS
-        protected abstract void FetchParam(UnityEngine.Object sourceObj);
+        protected abstract void FetchParam(System.Object sourceObj);
 
         // returns (param ?2 mod) if target ?1.
-        public float Modulate(UnityEngine.Object sourceObj, float target, bool expectedParam, float modifier, int checkOpIdx, int modOpIdx)
+        public float Modulate(System.Object sourceObj, float target, bool expectedParam, float modifier, int checkOpIdx, int modOpIdx)
         {
             // Will need to be cleaned up/refined to ensure safety and efficiency.
             try

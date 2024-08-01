@@ -10,7 +10,7 @@ namespace Quille
 
 
 
-        PersonalityController personalityController;
+        Person_Character personalityController;
 
         (Quille.PersonalityAxeSO, float)[] axeSOValuePairs;
 
@@ -22,9 +22,9 @@ namespace Quille
 
 
         // PERSONALITY CONTROLLER
-        PersonalityController InitPersonalityController()
+        Person_Character InitPersonalityController()
         {
-            personalityController = new PersonalityController();
+            personalityController = new Person_Character();
 
             System.Array.ForEach(axeSOValuePairs, axeSOValuePair => personalityController.SetAxeScore(axeSOValuePair.Item1, axeSOValuePair.Item2));
 

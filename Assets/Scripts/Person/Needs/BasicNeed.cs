@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Quille
 {
@@ -28,19 +29,19 @@ namespace Quille
         private float thresholdWarning,
                       thresholdCritical;
 
-        [SerializeField, InspectorReadOnly]
+        [SerializeField, InspectorReadOnly, JsonIgnore]
         private NeedStates needState = NeedStates.Normal;
 
 
 
         // PROPERTIES
-        public BasicNeedSO NeedSO { get { return needSO; } }
+        [JsonIgnore] public BasicNeedSO NeedSO { get { return needSO; } }
 
-        public string NeedName { get { return needSO.NeedName; } }
-        public Sprite NeedIcon { get { return needSO.needIcon; } }
+        [JsonIgnore] public string NeedName { get { return needSO.NeedName; } }
+        [JsonIgnore] public Sprite NeedIcon { get { return needSO.needIcon; } }
 
-        public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
-        public float LocalAiPriorityWeighting
+        [JsonIgnore] public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
+        [JsonIgnore] public float LocalAiPriorityWeighting
         {
             get { return localAiPriorityWeighting; }
             set
@@ -57,11 +58,11 @@ namespace Quille
                 }
                 else localAiPriorityWeighting = value;
             }
-        } 
+        }
 
-        public float LevelEmpty { get { return needSO.LevelEmpty; } }
-        public float DefaultLevelFull { get { return needSO.LevelFull; } }
-        public float LevelFull
+        [JsonIgnore] public float LevelEmpty { get { return needSO.LevelEmpty; } }
+        [JsonIgnore] public float DefaultLevelFull { get { return needSO.LevelFull; } }
+        [JsonIgnore] public float LevelFull
         {
             get { return levelFull; }
             set
@@ -72,7 +73,7 @@ namespace Quille
                 }
             }
         }
-        public float LevelCurrent
+        [JsonIgnore] public float LevelCurrent
         {
             get { return levelCurrent; }
             set
@@ -91,17 +92,17 @@ namespace Quille
                 else levelCurrent = value;
             }
         }
-        public float LevelCurrentAsPercentage
+        [JsonIgnore] public float LevelCurrentAsPercentage
         {
             get { return levelCurrent / levelFull; }
         }
 
-        public float DefaultChangeRate
+        [JsonIgnore] public float DefaultChangeRate
         {
             get { return needSO.DefaultChangeRate; }
         }
 
-        public float BaseChangeRate
+        [JsonIgnore] public float BaseChangeRate
         {
             get { return baseChangeRate;  }
             set { baseChangeRate = value; }
@@ -111,7 +112,7 @@ namespace Quille
             baseChangeRate = needSO.DefaultChangeRate;
         }
 
-        public float CurrentChangeRate
+        [JsonIgnore] public float CurrentChangeRate
         {
             get { return currentChangeRate; }
             set 
@@ -120,7 +121,7 @@ namespace Quille
                 currentChangeRateScaled = currentChangeRate/Constants.NEED_CHANGE_RATE_DIVIDER;
             }
         }
-        public float CurrentChangeRateScaled
+        [JsonIgnore] public float CurrentChangeRateScaled
         {
             get { return currentChangeRateScaled; }
         }
@@ -129,9 +130,9 @@ namespace Quille
             CurrentChangeRate = baseChangeRate;
         }
 
-        public float DefaultThresholdWarning { get { return needSO.ThresholdWarning; } }
-        public float DefaultThresholdCritical { get { return needSO.ThresholdCritical; } }
-        public float ThresholdWarning
+        [JsonIgnore] public float DefaultThresholdWarning { get { return needSO.ThresholdWarning; } }
+        [JsonIgnore] public float DefaultThresholdCritical { get { return needSO.ThresholdCritical; } }
+        [JsonIgnore] public float ThresholdWarning
         {
             get { return thresholdWarning; }
             set
@@ -149,7 +150,7 @@ namespace Quille
                 else thresholdWarning = value;
             }
         }
-        public float ThresholdCritical
+        [JsonIgnore] public float ThresholdCritical
         {
             get { return thresholdCritical; }
             set
@@ -173,7 +174,7 @@ namespace Quille
             thresholdCritical = DefaultThresholdCritical;
         }
 
-        public NeedStates NeedState { get { return needState; } private set { needState = value; } }
+        [JsonIgnore] public NeedStates NeedState { get { return needState; } private set { needState = value; } }
 
 
 

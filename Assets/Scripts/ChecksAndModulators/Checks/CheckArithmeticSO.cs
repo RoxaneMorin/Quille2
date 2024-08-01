@@ -11,10 +11,10 @@ namespace ChecksAndMods
 
 
         // METHODS
-        protected abstract void FetchParam(UnityEngine.Object sourceObj);
+        protected abstract void FetchParam(System.Object sourceObj);
 
         // returns param ? compareTo
-        public bool Check(UnityEngine.Object sourceObj, float compareTo, int opIdx)
+        public bool Check(System.Object sourceObj, float compareTo, int opIdx)
         {
             // Will need to be cleaned up/refined to ensure safety and efficiency.
             try

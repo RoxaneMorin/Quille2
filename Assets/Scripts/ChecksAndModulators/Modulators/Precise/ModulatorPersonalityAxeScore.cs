@@ -14,7 +14,7 @@ namespace ChecksAndMods
 
         // METHODS
         // Fetch the value of the revelant personality axe.
-        protected override void FetchParam(UnityEngine.Object sourceObj)
+        protected override void FetchParam(System.Object sourceObj)
         {
             param = Fetchers.FetchPersonalityAxeScore(sourceObj, relevantPersonalityAxe);
         }

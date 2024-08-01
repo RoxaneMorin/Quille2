@@ -12,7 +12,7 @@ namespace QuilleUI
         [SerializeField] private Transform prefab;
 
         [SerializeField] private Canvas ownerCanvas;
-        [SerializeField] private Quille.NeedController targetNeedController;
+        [SerializeField] private Quille.Person_NeedController targetNeedController;
 
         [SerializeField] private Transform[] needbarTransforms;
         [SerializeField] private Dictionary<Image, Quille.BasicNeed> needbarFillTargets;

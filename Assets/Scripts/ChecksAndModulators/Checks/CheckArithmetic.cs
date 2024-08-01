@@ -21,7 +21,7 @@ namespace ChecksAndMods
 
         // METHODS
         // Execute.
-        public bool Execute(UnityEngine.Object sourceObj)
+        public bool Execute(System.Object sourceObj)
         {
             return check.Check(sourceObj, compareTo, (int)opIdx);
         }

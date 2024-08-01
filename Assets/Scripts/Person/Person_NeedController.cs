@@ -1,12 +1,12 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Quille
 {
     [System.Serializable]
-    public class NeedController : MonoBehaviour
+    public class Person_NeedController : MonoBehaviour
     {
         // TEMP
         // TODO: Have these be loaded automatically from the resource folder instead?
@@ -21,7 +21,9 @@ namespace Quille
         [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
 
         // For use by external functions that only know of a BasicNeedSO.
-        private Dictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")]
+        private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        //[SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")]
         private Dictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
 
 
@@ -144,7 +146,7 @@ namespace Quille
         }
         private void InitBasicNeeds()
         {
-            myBasicNeedsMapped = new Dictionary<BasicNeedSO, BasicNeed>();
+            myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
 
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             for (int i = 0; i < basicNeedSOs.Length; i++)
@@ -330,12 +332,34 @@ namespace Quille
             //myBasePerson = gameObject.GetComponent<BasePerson>();
 
             Init();
-        } 
+
+            //foreach (BasicNeed need in myBasicNeeds)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(need, Formatting.Indented);
+            //    Debug.Log(jsonString);
+            //}
+
+            //foreach (SubjectiveNeed need in mySubjectiveNeeds)
+            //{
+            //    string jsonString = JsonConvert.SerializeObject(need, Formatting.Indented);
+            //    Debug.Log(jsonString);
+            //}
+
+            string jsonStringBN = JsonConvert.SerializeObject(myBasicNeedsMapped, Formatting.Indented);
+            Debug.Log(jsonStringBN);
+
+            //string jsonStringSD = JsonConvert.SerializeObject(mySubjectiveNeedsMapped, Formatting.Indented);
+            //Debug.Log(jsonStringSD);
+
+
+            myBasicNeedsMapped = JsonConvert.DeserializeObject<SerializedDictionary<BasicNeedSO, BasicNeed>>(jsonStringBN);
+
+
+        }
 
         // Update is called once per frame
         void Update()
         {
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 RandomizeNeedChangeRates(-0.3f, 0.1f);

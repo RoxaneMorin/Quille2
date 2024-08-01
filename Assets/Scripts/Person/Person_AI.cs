@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Quille
 {
-    public class PersonAI : MonoBehaviour
+    public class Person_AI : MonoBehaviour
     {
         // VARIABLES
 

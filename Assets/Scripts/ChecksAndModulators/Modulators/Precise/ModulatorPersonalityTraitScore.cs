@@ -14,7 +14,7 @@ namespace ChecksAndMods
 
         // METHODS
         // Fetch the value of the revelant personality trait.
-        protected override void FetchParam(UnityEngine.Object sourceObj)
+        protected override void FetchParam(System.Object sourceObj)
         {
             param = Fetchers.FetchPersonalityTraitScore(sourceObj, relevantPersonalityTrait);
         }

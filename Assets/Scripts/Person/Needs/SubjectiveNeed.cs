@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Quille
 {
@@ -38,29 +39,29 @@ namespace Quille
         private float thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
 
-        [SerializeField, InspectorReadOnly]
+        [SerializeField, InspectorReadOnly, JsonIgnore]
         private NeedStates needStateLeft = NeedStates.Normal;
-        [SerializeField, InspectorReadOnly]
+        [SerializeField, InspectorReadOnly, JsonIgnore]
         private NeedStates needStateRight = NeedStates.Normal;
 
-        [SerializeField, InspectorReadOnly]
-        private string needNameLeftForUI;
-        [SerializeField, InspectorReadOnly]
-        private string needNameRightForUI;
+        [InspectorReadOnly, JsonIgnore]
+        public string needNameLeftForUI;
+        [InspectorReadOnly, JsonIgnore]
+        public string needNameRightForUI;
 
 
 
 
         // PROPERTIES
-        public SubjectiveNeedSO NeedSO { get { return needSO; } }
-        public string NeedName { get { return needSO.NeedName; } }
-        public string NeedNameLeft { get { return needSO.NeedNameLeft; } }
-        public string NeedNameRight { get { return needSO.NeedNameRight; } }
-        public Sprite NeedIconLeft { get { return needSO.needIconLeft; } }
-        public Sprite NeedIconRight { get { return needSO.needIconRight; } }
+        [JsonIgnore] public SubjectiveNeedSO NeedSO { get { return needSO; } }
+        [JsonIgnore] public string NeedName { get { return needSO.NeedName; } }
+        [JsonIgnore] public string NeedNameLeft { get { return needSO.NeedNameLeft; } }
+        [JsonIgnore] public string NeedNameRight { get { return needSO.NeedNameRight; } }
+        [JsonIgnore] public Sprite NeedIconLeft { get { return needSO.needIconLeft; } }
+        [JsonIgnore] public Sprite NeedIconRight { get { return needSO.needIconRight; } }
 
-        public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
-        public float LocalAiPriorityWeighting
+        [JsonIgnore] public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
+        [JsonIgnore] public float LocalAiPriorityWeighting
         {
             get { return localAiPriorityWeighting; }
             set
@@ -78,7 +79,7 @@ namespace Quille
                 else localAiPriorityWeighting = value;
             }
         }
-        public float LocalAiPriorityWeightingLeft
+        [JsonIgnore] public float LocalAiPriorityWeightingLeft
         {
             get { return localAiPriorityWeightingLeft; }
             set
@@ -96,7 +97,7 @@ namespace Quille
                 else localAiPriorityWeightingLeft = value;
             }
         }
-        public float LocalAiPriorityWeightingRight
+        [JsonIgnore] public float LocalAiPriorityWeightingRight
         {
             get { return localAiPriorityWeightingRight; }
             set
@@ -119,13 +120,13 @@ namespace Quille
             LocalAiPriorityWeighting = (LocalAiPriorityWeightingLeft + LocalAiPriorityWeightingRight) / 2;
         }
 
-        public float LevelEmptyLeft { get { return needSO.LevelEmptyLeft; } }
-        public float LevelEmptyRight { get { return needSO.LevelEmptyRight; } }
-        public (float, float) LevelEmpty { get { return (needSO.LevelEmptyLeft, needSO.LevelEmptyRight); } }
-        public float DefaultLevelFullLeft { get { return needSO.LevelFullLeft; } }
-        public float DefaultLevelFullRight { get { return needSO.LevelFullRight; } }
-        public (float, float) DefaultLevelFull { get { return (needSO.LevelFullLeft, needSO.LevelFullRight); } }
-        public float LevelFullLeft
+        [JsonIgnore] public float LevelEmptyLeft { get { return needSO.LevelEmptyLeft; } }
+        [JsonIgnore] public float LevelEmptyRight { get { return needSO.LevelEmptyRight; } }
+        [JsonIgnore] public (float, float) LevelEmpty { get { return (needSO.LevelEmptyLeft, needSO.LevelEmptyRight); } }
+        [JsonIgnore] public float DefaultLevelFullLeft { get { return needSO.LevelFullLeft; } }
+        [JsonIgnore] public float DefaultLevelFullRight { get { return needSO.LevelFullRight; } }
+        [JsonIgnore] public (float, float) DefaultLevelFull { get { return (needSO.LevelFullLeft, needSO.LevelFullRight); } }
+        [JsonIgnore] public float LevelFullLeft
         {
             get { return levelFullLeft; }
             set
@@ -136,7 +137,7 @@ namespace Quille
                 }
             }
         }
-        public float LevelFullRight
+        [JsonIgnore] public float LevelFullRight
         {
             get { return levelFullRight; }
             set
@@ -147,7 +148,7 @@ namespace Quille
                 }
             }
         }
-        public (float, float) LevelFull
+        [JsonIgnore] public (float, float) LevelFull
         {
             get { return (levelFullLeft, levelFullRight); }
             set
@@ -156,7 +157,7 @@ namespace Quille
                 LevelFullRight = value.Item2;
             }
         }
-        public float LevelCurrentLeft
+        [JsonIgnore] public float LevelCurrentLeft
         {
             get { return levelCurrentLeft; }
             set
@@ -175,11 +176,11 @@ namespace Quille
                 else levelCurrentLeft = value;
             }
         }
-        public float LevelCurrentLeftAsPercentage
+        [JsonIgnore] public float LevelCurrentLeftAsPercentage
         {
             get { return levelCurrentLeft/levelFullLeft; }
         }
-        public float LevelCurrentRight
+        [JsonIgnore] public float LevelCurrentRight
         {
             get { return levelCurrentRight; }
             set
@@ -198,11 +199,11 @@ namespace Quille
                 else levelCurrentRight = value;
             }
         }
-        public float LevelCurrentRightAsPercentage
+        [JsonIgnore] public float LevelCurrentRightAsPercentage
         {
             get { return levelCurrentRight / levelFullRight; }
         }
-        public (float, float) LevelCurrent
+        [JsonIgnore] public (float, float) LevelCurrent
         {
             get { return (levelCurrentLeft, levelCurrentRight); }
             set
@@ -211,35 +212,35 @@ namespace Quille
                 LevelCurrentRight = value.Item2;
             }
         }
-        public (float, float) LevelCurrentAsPercentage
+        [JsonIgnore] public (float, float) LevelCurrentAsPercentage
         {
             get { return (levelCurrentLeft/levelFullLeft, levelCurrentRight/levelFullRight); }
         }
 
-        public float DefaultChangeRateLeft
+        [JsonIgnore] public float DefaultChangeRateLeft
         {
             get { return needSO.DefaultChangeRateLeft; }
         }
-        public float DefaultChangeRateRight
+        [JsonIgnore] public float DefaultChangeRateRight
         {
             get { return needSO.DefaultChangeRateRight; }
         }
-        public (float, float) DefaultChangeRate
+        [JsonIgnore] public (float, float) DefaultChangeRate
         {
             get { return (needSO.DefaultChangeRateLeft, needSO.DefaultChangeRateRight); }
         }
 
-        public float BaseChangeRateLeft
+        [JsonIgnore] public float BaseChangeRateLeft
         {
             get { return baseChangeRateLeft; }
             set { baseChangeRateLeft = value; }
         }
-        public float BaseChangeRateRight
+        [JsonIgnore] public float BaseChangeRateRight
         {
             get { return baseChangeRateRight; }
             set { baseChangeRateRight = value; }
         }
-        public (float, float) BaseChangeRate
+        [JsonIgnore] public (float, float) BaseChangeRate
         {
             get { return (baseChangeRateLeft, baseChangeRateRight); }
             set
@@ -263,7 +264,7 @@ namespace Quille
             ResetBaseChangeRateRight();
         }
 
-        public float CurrentChangeRateLeft
+        [JsonIgnore] public float CurrentChangeRateLeft
         {
             get { return currentChangeRateLeft; }
             set
@@ -272,7 +273,7 @@ namespace Quille
                 currentChangeRateLeftScaled = currentChangeRateLeft / Constants.NEED_CHANGE_RATE_DIVIDER;
             }
         }
-        public float CurrentChangeRateRight
+        [JsonIgnore] public float CurrentChangeRateRight
         {
             get { return currentChangeRateRight; }
             set
@@ -281,7 +282,7 @@ namespace Quille
                 currentChangeRateRightScaled = currentChangeRateRight / Constants.NEED_CHANGE_RATE_DIVIDER;
             }
         }
-        public (float, float) CurrentChangeRate
+        [JsonIgnore] public (float, float) CurrentChangeRate
         {
             get { return (currentChangeRateLeft, currentChangeRateRight); }
             set
@@ -294,15 +295,15 @@ namespace Quille
             }
         }
 
-        public float CurrentChangeRateLeftScaled
+        [JsonIgnore] public float CurrentChangeRateLeftScaled
         {
             get { return currentChangeRateLeftScaled; }
         }
-        public float CurrentChangeRateRightScaled
+        [JsonIgnore] public float CurrentChangeRateRightScaled
         {
             get { return currentChangeRateRightScaled; }
         }
-        public (float, float) CurrentChangeRateScaled
+        [JsonIgnore] public (float, float) CurrentChangeRateScaled
         {
             get { return (currentChangeRateLeftScaled, currentChangeRateLeftScaled); }
         }
@@ -321,11 +322,11 @@ namespace Quille
             ResetCurrentChangeRateRight();
         }
 
-        public float DefaultThresholdWarningLeft { get { return needSO.ThresholdWarningLeft; } }
-        public float DefaultThresholdCriticalLeft { get { return needSO.ThresholdCriticalLeft; } }
-        public float DefaultThresholdWarningRight { get { return needSO.ThresholdWarningRight; } }
-        public float DefaultThresholdCriticalRight { get { return needSO.ThresholdCriticalRight; } }
-        public float ThresholdWarningLeft
+        [JsonIgnore] public float DefaultThresholdWarningLeft { get { return needSO.ThresholdWarningLeft; } }
+        [JsonIgnore] public float DefaultThresholdCriticalLeft { get { return needSO.ThresholdCriticalLeft; } }
+        [JsonIgnore] public float DefaultThresholdWarningRight { get { return needSO.ThresholdWarningRight; } }
+        [JsonIgnore] public float DefaultThresholdCriticalRight { get { return needSO.ThresholdCriticalRight; } }
+        [JsonIgnore] public float ThresholdWarningLeft
         {
             get { return thresholdWarningLeft; }
             set
@@ -343,7 +344,7 @@ namespace Quille
                 else thresholdWarningLeft = value;
             }
         }
-        public float ThresholdCriticalLeft
+        [JsonIgnore] public float ThresholdCriticalLeft
         {
             get { return thresholdCriticalLeft; }
             set
@@ -361,7 +362,7 @@ namespace Quille
                 else thresholdCriticalLeft = value;
             }
         }
-        public float ThresholdWarningRight
+        [JsonIgnore] public float ThresholdWarningRight
         {
             get { return thresholdWarningRight; }
             set
@@ -379,7 +380,7 @@ namespace Quille
                 else thresholdWarningRight = value;
             }
         }
-        public float ThresholdCriticalRight
+        [JsonIgnore] public float ThresholdCriticalRight
         {
             get { return thresholdCriticalRight; }
             set
@@ -405,9 +406,9 @@ namespace Quille
             thresholdCriticalRight = DefaultThresholdCriticalRight;
         }
 
-        public NeedStates NeedStateLeft { get { return needStateLeft; } private set { needStateLeft = value; } }
-        public NeedStates NeedStateRight { get { return needStateRight; } private set { needStateRight = value; } }
-        public (NeedStates, NeedStates) NeedState { get { return (needStateLeft, needStateRight); } }
+        [JsonIgnore] public NeedStates NeedStateLeft { get { return needStateLeft; } private set { needStateLeft = value; } }
+        [JsonIgnore] public NeedStates NeedStateRight { get { return needStateRight; } private set { needStateRight = value; } }
+        [JsonIgnore] public (NeedStates, NeedStates) NeedState { get { return (needStateLeft, needStateRight); } }
 
 
 

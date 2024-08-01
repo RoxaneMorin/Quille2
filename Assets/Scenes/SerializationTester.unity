@@ -156,43 +156,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tester:
-    testFloat: 13
-    testColour: {r: 0.52011395, g: 0.07638413, b: 0, a: 1}
-    testDict:
+    testDictSO:
       _serializedList:
-      - Key: Test 1
-        Value: 456
-      - Key: Test 2
-        Value: 14
-      - Key: Test 3
-        Value: 3
-    testSO: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}
-    testDict2:
-      _serializedList:
-      - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
-        Value: 0.5
-      - Key: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
-        Value: -0.2
-      - Key: {fileID: 11400000, guid: e771b483ef734df4091f97e046289c92, type: 2}
-        Value: 0.8
-      - Key: {fileID: 11400000, guid: e0642ea1362d360489bf32fa1e7056a6, type: 2}
-        Value: -0.7
-      - Key: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}
-        Value: 1
+      - Key: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+        Value:
+          needSO: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+          localAiPriorityWeighting: 3
+          levelFull: 2
+          levelCurrent: 34
+          baseChangeRate: 3
+          currentChangeRate: 3
+          currentChangeRateScaled: 3
+          thresholdWarning: 344
+          thresholdCritical: 3
+          needState: 0
+      - Key: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+        Value:
+          needSO: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+          localAiPriorityWeighting: 3
+          levelFull: 33
+          levelCurrent: 3
+          baseChangeRate: 0
+          currentChangeRate: 3
+          currentChangeRateScaled: 33
+          thresholdWarning: 3
+          thresholdCritical: 3
+          needState: 0
   tester2:
-    testFloat: 1513
-    testColour: {r: 0, g: 1, b: 0, a: 1}
-    testDict:
-      _serializedList:
-      - Key: Test 1
-        Value: 2
-      - Key: Test 2
-        Value: 45
-    testSO: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
-    testDict2:
-      _serializedList:
-      - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
-        Value: 0.2
+    testDictSO:
+      _serializedList: []
 --- !u!65 &14641133
 BoxCollider:
   m_ObjectHideFlags: 0

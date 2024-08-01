@@ -215,7 +215,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!224 &886029134 stripped
 RectTransform:
@@ -305,7 +305,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1470149522
 PrefabInstance:
@@ -317,7 +317,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
@@ -332,7 +332,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.09072885
+      value: 0.86
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
         type: 3}
@@ -472,7 +472,7 @@ RectTransform:
   m_Children:
   - {fileID: 886029134}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -492,9 +492,85 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4881047869735100192, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}
-  ownerCanvas: {fileID: 0}
-  targetNeedController: {fileID: 1888947989}
+  ownerCanvas: {fileID: 1568759640}
+  targetNeedController: {fileID: 1635557743}
   needbarTransforms: []
+--- !u!1 &1635557739 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1470149522}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1635557742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635557739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae12b56b29b5c644b8ed2bb6e8afa5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myBasePerson: {fileID: 0}
+  noticeBasicNeed: 0.5
+  noticeSubjectiveNeed: 0.5
+  inAction: 0
+--- !u!114 &1635557743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635557739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da5c30a8a0c35c449567caf9bc38862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicNeedSOs:
+  - {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
+  - {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
+  - {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+  subjectiveNeedSOs:
+  - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
+  myBasicNeeds: []
+  mySubjectiveNeeds: []
+  myBasicNeedsMapped:
+    _serializedList: []
+--- !u!114 &1635557744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635557739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  charID: 0
+  firstName: Pseudoquille
+  lastName: McQuillington
+  nickName: Pseud
+  secondaryNames:
+  - Quillebert
+  myPersonalityController:
+    myPersonalityAxes:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
+        Value: 0.5
+    myPersonalityTraits:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
+        Value: 1
+    myInterests:
+      _serializedList: []
+  myNeedController: {fileID: 1635557743}
+  myPersonAI: {fileID: 1635557742}
 --- !u!1 &1691983026
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,194 +631,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691983026}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1888947981
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1888947986}
-  - component: {fileID: 1888947985}
-  - component: {fileID: 1888947984}
-  - component: {fileID: 1888947983}
-  - component: {fileID: 1888947990}
-  - component: {fileID: 1888947989}
-  - component: {fileID: 1888947987}
-  - component: {fileID: 1888947991}
-  m_Layer: 0
-  m_Name: Pseudoquille
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!136 &1888947983
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1888947984
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1888947985
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1888947986
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.215}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1888947987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  charID: 0
-  firstName: Pseudoquille
-  lastName: McQuillington
-  nickName: 
-  secondaryNames: []
-  myPersonalityController: {fileID: 1888947990}
-  myNeedController: {fileID: 1888947989}
-  myPersonAI: {fileID: 1888947991}
---- !u!114 &1888947989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac4f1ab8d4a9d4e4c8ae8c2ef0b7ac64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basicNeedSOs:
-  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
-  - {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
-  - {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
-  - {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
-  subjectiveNeedSOs:
-  - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
-  myBasicNeeds: []
-  mySubjectiveNeeds: []
---- !u!114 &1888947990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a52e574a6e7916d47b91229d7dc96fb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  folderPath: ScriptableObjects/Personality/Axes
-  myPersonalityAxes:
-    _serializedList: []
-  myPersonalityTraits:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
-      Value: 0.5
-  myInterests:
-    _serializedList: []
---- !u!114 &1888947991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888947981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c81b203ed2ed51d449f3b22c7889efaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myBasePerson: {fileID: 0}
-  noticeBasicNeed: 0.5
-  noticeSubjectiveNeed: 0.5
-  inAction: 0
 --- !u!1001 &4881047868874646638
 PrefabInstance:
   m_ObjectHideFlags: 0

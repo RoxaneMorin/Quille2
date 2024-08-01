@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Quille
 {
     [System.Serializable]
-    [RequireComponent(typeof(PersonalityController)), RequireComponent(typeof(NeedController)), RequireComponent(typeof(PersonAI))] // Add more as they are needed.
+    [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
@@ -17,10 +17,12 @@ namespace Quille
         [SerializeField] private string firstName, lastName, nickName;
         [SerializeField] private List<string> secondaryNames; // In case of multiple middle names :p not sure it'll actually be useful.
 
+        // Age and gender?
+
         // Controllers and other compotents.
-        [SerializeField] private PersonalityController myPersonalityController;
-        [SerializeField] private NeedController myNeedController;
-        [SerializeField] private PersonAI myPersonAI;
+        [SerializeField] private Person_Character myPersonalityController;
+        [SerializeField] private Person_NeedController myNeedController;
+        [SerializeField] private Person_AI myPersonAI;
 
 
 
@@ -40,8 +42,8 @@ namespace Quille
 
 
         // Controllers.
-        public PersonalityController MyPersonalityController { get { return myPersonalityController; } }
-        public NeedController MyNeedController { get { return myNeedController; } }
+        public Person_Character MyPersonalityController { get { return myPersonalityController; } }
+        public Person_NeedController MyNeedController { get { return myNeedController; } }
         // Should we be able to return the AI one?
 
 
@@ -53,7 +55,7 @@ namespace Quille
         //}
 
 
-        private void PersonPopulator(PersonalityController personalityController)
+        private void PersonPopulator(Person_Character personalityController)
         {
             myPersonalityController = personalityController;
         }
@@ -66,9 +68,8 @@ namespace Quille
         private void Init()
         {
             // Fetch our various components.
-            myPersonalityController = GetComponent<PersonalityController>();
-            myNeedController = GetComponent<NeedController>();
-            myPersonAI = GetComponent<PersonAI>();
+            myNeedController = GetComponent<Person_NeedController>();
+            myPersonAI = GetComponent<Person_AI>();
         }
 
 
