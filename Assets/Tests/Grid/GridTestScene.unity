@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSize: 1
-  gridLenghtX: 10
+  gridLengthX: 10
   gridLengthZ: 10
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
 --- !u!23 &297820117

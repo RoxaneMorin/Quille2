@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Mathematics;
+using static Unity.Mathematics.math;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,7 +13,7 @@ public class TestGrid : MonoBehaviour
 
     // Grid parameters.
     [SerializeField] private float tileSize = 1f;
-    [SerializeField] private int gridLenghtX = 10;
+    [SerializeField] private int gridLengthX = 10;
     [SerializeField] private int gridLengthZ = 10;
 
     public Material gridMaterial;
@@ -45,59 +47,68 @@ public class TestGrid : MonoBehaviour
     private void Generate()
     {
         // Handle mesh data
-        //int vertexAttributeCount = 4;
+        int vertexAttributeCount = 4;
+        int vertexCount = (gridLengthX + 1) * (gridLengthZ + 1);
+        int triangleCount = gridLengthX * gridLengthZ * 6;
 
-        //Mesh.MeshDataArray meshDataArray = Mesh.AllocateWritableMeshData(1);
-        //Mesh.MeshData meshData = meshDataArray[0];
+        Mesh.MeshDataArray meshDataArray = Mesh.AllocateWritableMeshData(1);
+        Mesh.MeshData meshData = meshDataArray[0];
 
-        //var vertexAttributes = new NativeArray<VertexAttributeDescriptor>(vertexAttributeCount, Allocator.Temp);
+        var vertexAttributes = new NativeArray<VertexAttributeDescriptor>(vertexAttributeCount, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+        vertexAttributes[0] = new VertexAttributeDescriptor(VertexAttribute.Position, dimension: 3, stream: 0);
+        vertexAttributes[1] = new VertexAttributeDescriptor(VertexAttribute.Normal, dimension: 3, stream: 1);
+        vertexAttributes[2] = new VertexAttributeDescriptor(VertexAttribute.Tangent, VertexAttributeFormat.Float16, 4, 2);
+        vertexAttributes[3] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float16, 2, 3);
+        meshData.SetVertexBufferParams(vertexCount, vertexAttributes);
+        vertexAttributes.Dispose();
 
-        var mesh = new Mesh { name = "Grid" };
-        //Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);
-        GetComponent<MeshFilter>().mesh = mesh;
-
-
-        // Handle vertices and their info. Keep track of grid points.
-        vertices = new Vector3[(gridLenghtX + 1) * (gridLengthZ + 1)];
-        gridPointIndices = new Dictionary<(int, int), int>();
-
-        Vector3[] normals = new Vector3[vertices.Length];
-        Vector4[] tangents = new Vector4[vertices.Length];
-        Vector2[] uv = new Vector2[vertices.Length];  
+        // Handle vertices and their info.
+        NativeArray<float3> positions = meshData.GetVertexData<float3>(0);
+        NativeArray<float3> normals = meshData.GetVertexData<float3>(1);
+        NativeArray<half4> tangents = meshData.GetVertexData<half4>(2);
+        NativeArray<half2> uv = meshData.GetVertexData<half2>(3);
+        half h0 = half(0f), h1 = half(1f);
 
         for (int i = 0, z = 0; z <= gridLengthZ; z++)
         {
-            for (int x = 0; x <= gridLenghtX; x++, i++)
+            for (int x = 0; x <= gridLengthX; x++, i++)
             {
-                vertices[i] = new Vector3(x * tileSize, 0, z * tileSize);
-                gridPointIndices.Add((x, z), i);
-
-                normals[i] = Vector3.up;
-                tangents[i] = new Vector4(1f, 0f, 0f, -1f);
-
-                uv[i] = new Vector3(x, z);
+                positions[i] = new float3(x * tileSize, 0, z * tileSize);
+                normals[i] = float3(0, 1, 0);
+                tangents[i] = half4(h1, h0, h0, half(-1f));
+                uv[i] = half2(half(x), half(z));
             }
         }
-        mesh.vertices = vertices;
 
         // Handle triangles.
-        triangles = new int[gridLenghtX * gridLengthZ * 6];
-        for (int ti = 0, vi = 0, z = 0; z < gridLengthZ; z++, vi++)
+        meshData.SetIndexBufferParams(triangleCount, IndexFormat.UInt16);
+        NativeArray<ushort> triangles = meshData.GetIndexData<ushort>();
+        for (ushort ti = 0, vi = 0, z = 0; z < gridLengthZ; z++, vi++)
         {
-            for (int x = 0; x < gridLenghtX; x++, ti += 6, vi++)
+            for (ushort x = 0; x < gridLengthX; x++, ti += 6, vi++)
             {
                 triangles[ti] = vi;
-                triangles[ti + 3] = triangles[ti + 2] = vi + 1;
-                triangles[ti + 4] = triangles[ti + 1] = vi + gridLenghtX + 1;
-                triangles[ti + 5] = vi + gridLenghtX + 2;
+                triangles[ti + 1] = triangles[ti + 4] = (ushort)(vi + gridLengthX + 1);
+                triangles[ti + 2] = triangles[ti + 3] = (ushort)(vi + 1);
+                triangles[ti + 5] = (ushort)(vi + gridLengthX + 2);
             }
         }
-        mesh.triangles = triangles;
-        mesh.normals = normals;
-        mesh.tangents = tangents;
-        mesh.uv = uv;
 
-        mesh.RecalculateNormals();
+        // Calculate and set bounds.
+        float sizeX = tileSize * gridLengthX;
+        float sizeZ = tileSize * gridLengthZ;
+        float centerX = sizeX / 2;
+        float centerZ = sizeZ / 2;
+        
+        var bounds = new Bounds(new Vector3(centerX, 0, centerZ), new Vector3(sizeX, 0, sizeZ));
+
+        // Set mesh and submesh.
+        meshData.subMeshCount = 1;
+        meshData.SetSubMesh(0, new SubMeshDescriptor(0, triangleCount) { bounds = bounds, vertexCount = vertexCount}, MeshUpdateFlags.DontRecalculateBounds);
+
+        var mesh = new Mesh { bounds = bounds, name = "Grid" };
+        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);
+        GetComponent<MeshFilter>().mesh = mesh;
     }
 
 
@@ -109,9 +120,9 @@ public class TestGrid : MonoBehaviour
 
 
 
-        vertices[gridPointIndices[(2, 1)]] = vertices[gridPointIndices[(2, 1)]] + new Vector3(0f, 2f, 0f);
+        //vertices[gridPointIndices[(2, 1)]] = vertices[gridPointIndices[(2, 1)]] + new Vector3(0f, 2f, 0f);
 
-        GetComponent<MeshFilter>().mesh.SetVertices(vertices);
+        //GetComponent<MeshFilter>().mesh.SetVertices(vertices);
     }
 
 }
