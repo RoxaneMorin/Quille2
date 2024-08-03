@@ -7,7 +7,7 @@ namespace ChecksAndMods
     public abstract class ModulatorArithmeticFromFloatSO : ScriptableObject
     {
         // VARIABLES/PARAM
-        protected float param;
+        protected float? param;
 
 
         // METHODS
@@ -20,16 +20,21 @@ namespace ChecksAndMods
             try
             {
                 FetchParam(sourceObj);
+                if (param == null)
+                {
+                    // Do not modulate.
+                    return target;
+                }
+
+                float moddedParam = Operators.operationsArithmetic[modOpIdx]((float)param, modifier);
+                float result = Operators.operationsArithmetic[mainOpIdx](target, moddedParam);
+                return result;
             }
             catch
             {
                 Debug.LogError("Modulate operation failed. The original target value will be returned.");
                 return target;
             }
-
-            float moddedParam = Operators.operationsArithmetic[modOpIdx](param, modifier);
-            float result = Operators.operationsArithmetic[mainOpIdx](target, moddedParam);
-            return result;
         }
     }
 }

@@ -22,10 +22,13 @@ namespace Newtonsoft.Json.UnityConverters.Quille
     {
         protected override void ReadValue(ref SerializedDictionary<PersonalityTraitSO, float> value, string name, JsonReader reader, JsonSerializer serializer)
         {
-            // TODO: figure out how to use ReadAsFloat directly.
-
             PersonalityTraitSO theSO = ConstantsAndHelpers.loadPersonalityTraitSO(name);
-            value.Add(theSO, (float)reader.ReadAsDouble());
+            float theScore = reader.ReadAsFloat() ?? 0f;
+
+            if (theScore > 0) // Precaution against invalid negative trait scores.
+            {
+                value.Add(theSO, (float)reader.ReadAsDouble());
+            }
         }
         protected override void WriteJsonProperties(JsonWriter writer, SerializedDictionary<PersonalityTraitSO, float> value, JsonSerializer serializer)
         {

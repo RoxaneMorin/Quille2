@@ -16,7 +16,6 @@ MonoBehaviour:
   traitIcon: {fileID: 0}
   traitSpan: 1
   trainMidpoint: 0.5
-  incompatibleTraits: []
   incompatiblePersonalityScores:
   - check: {fileID: 11400000, guid: a83b25aa3b2750448a6b1446c9132544, type: 2}
     opIdx: 4

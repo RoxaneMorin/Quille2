@@ -7,7 +7,7 @@ namespace ChecksAndMods
     public abstract class CheckArithmeticSO : ScriptableObject
     {
         // VARIABLES/PARAM
-        protected float param;
+        protected float? param;
 
 
         // METHODS
@@ -20,14 +20,19 @@ namespace ChecksAndMods
             try
             {
                 FetchParam(sourceObj);
+                if (param == null)
+                {
+                    // Return false. See if we should return null instead?
+                    return false;
+                }
+
+                return Operators.checksArithmetic[opIdx]((float)param, compareTo);
             }
             catch
             {
                 Debug.LogError("Modulate operation failed. The check will return false.");
                 return false;
             }
-
-            return Operators.checksArithmetic[opIdx](param, compareTo);
         }
     }
 }

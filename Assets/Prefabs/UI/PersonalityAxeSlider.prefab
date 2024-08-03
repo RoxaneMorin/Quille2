@@ -315,7 +315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 140}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1414731332235455245
@@ -340,9 +340,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -381,6 +381,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1414731332235455246}
+        m_TargetAssemblyTypeName: QuilleUI.PersonalityAxeSlider, Assembly-CSharp
+        m_MethodName: SetColourByValue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1414731332235455246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,10 +407,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPersonalityAxeSO: {fileID: 0}
   mySlider: {fileID: 1414731332235455245}
+  myHandle: {fileID: 1414731333247819230}
   myIconLeft: {fileID: 1414731333018653825}
   myIconRight: {fileID: 1414731333437250383}
   myCaptionLeft: {fileID: 1414731331567052636}
   myCaptionRight: {fileID: 1414731331703568410}
+  myColourLeft: {r: 0, g: 0.71949184, b: 0.9245283, a: 1}
+  myColourCenter: {r: 1, g: 1, b: 1, a: 1}
+  myColourRight: {r: 1, g: 0.2971698, b: 0.30412588, a: 1}
+  stepped: 1
+  roundingValue: 8
+  snapToSpecificValues: 0
+  specificValues:
+  - -0.75
+  - 0.25
+  - 0.25
+  - 0.75
+  specificRoundingValue: 20
 --- !u!1 &1414731332921975361
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,8 +458,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -13, y: -20}
+  m_AnchoredPosition: {x: 0, y: -0.5449999}
+  m_SizeDelta: {x: -13, y: -19.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1414731333018653831
 GameObject:
@@ -548,7 +573,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 11, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1414731333247819231
 CanvasRenderer:
@@ -570,7 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 4b2155d87a4cf5a459b02a3d650de296, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -578,9 +603,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 610ec20fd47f31445acea3b4cd542ebd, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

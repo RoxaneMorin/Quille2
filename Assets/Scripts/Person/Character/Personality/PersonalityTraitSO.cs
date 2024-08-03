@@ -30,14 +30,11 @@ namespace Quille
         public float TrainMidpoint { get { return trainMidpoint; } }
 
         [EndInspectorReadOnlyGroup]
-        
-        // INCOMPATIBILITIES
-        [SerializeField]
-        private PersonalityTraitSO[] incompatibleTraits;
 
-        // Array of checks for incompatible personality scores.
+        // INCOMPATIBILITIES]
         [SerializeField]
         private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
+        // Remove the separate incompatible traits category as we can now check for a full or half trait.
     }
 }
 

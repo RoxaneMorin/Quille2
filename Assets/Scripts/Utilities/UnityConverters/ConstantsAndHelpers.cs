@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using Quille;
 
@@ -19,6 +20,28 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
 
         // METHODS
+
+        // Extension methods.
+        public static float? ReadAsFloat(this JsonReader reader)
+        {
+            // Copy-pasted from the JsonHelperExtensions as it is internal and idk how to ping Unity.
+
+            var str = reader.ReadAsString();
+
+            if (string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+            else if (float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out var valueParsed))
+            {
+                return valueParsed;
+            }
+            else
+            {
+                return 0f;
+            }
+        }
+
 
         // Load scriptable objects from name string.
         public static PersonalityAxeSO loadPersonalityAxeSO(string nameString)
