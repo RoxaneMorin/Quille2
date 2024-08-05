@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace proceduralGrid
+namespace proceduralGridOld
 {
     [System.Serializable]
     public class Grid_Square : Grid_Item
@@ -22,7 +22,7 @@ namespace proceduralGrid
         // METHODS
 
         // INIT
-        public void SetVariables(Grid_Base myParentGrid, CoordPair myGridCoordinates, Grid_Point[,] myGridPoints)
+        public void SetVariables(Grid_BaseOld myParentGrid, CoordPair myGridCoordinates, Grid_Point[,] myGridPoints)
         {
             this.myParentGrid = myParentGrid;
             this.myGridCoordinates = myGridCoordinates;

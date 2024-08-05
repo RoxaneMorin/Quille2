@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace proceduralGridOld
 {
     // ENUMS
     public enum Adjacencies { bl, br, tl, tr, b, t, l, r };

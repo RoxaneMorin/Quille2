@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e91d9b17f0c131e42ad9a3162e936804
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - myMeshFilter: {instanceID: 0}
+  - myMeshRenderer: {instanceID: 0}
+  - myMaterial: {instanceID: 0}
+  - useThisMesh: {instanceID: 0}
+  - useThisMaterial: {instanceID: 0}
+  - myParentGrid: {instanceID: 0}
+  - myHandles: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

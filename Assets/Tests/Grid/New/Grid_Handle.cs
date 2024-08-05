@@ -1,0 +1,160 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace proceduralGrid
+{
+    public class Grid_Handle : MonoBehaviour
+    {
+        // VARIABLES
+
+        // Components
+        [Header("Components")]
+        [SerializeField] protected MeshCollider myMeshCollider;
+        [SerializeField] protected MeshRenderer myMeshRenderer;
+
+        // Config
+        [Header("Config")]
+        [SerializeField] protected float cursorMovementNoticeDistance = 1f;
+        [SerializeField] protected float cursorFadeDistance = 100f;
+
+        // References
+        [Header("References")]
+        [SerializeField] protected Grid_Base myParentGrid;
+        [SerializeField] protected Grid_Items myParentGridItems;
+        [SerializeField] [SerializeReference] protected Grid_Item myCurrentItem;
+
+
+        // Cursor State
+        protected Vector3 previousCursorPosition;
+        protected float previousCursorPositionDelta;
+
+        protected Vector3 myScreenPos;
+        protected float myCurrentDistanceFromCursor;
+
+        protected bool mouseHoveringOnMe;
+        protected bool mouseClickingOnMe;
+        // TODO: find a better name for these.
+        protected bool mouseHoveringSibling;
+        protected bool mouseClickingSibling;
+
+
+
+        // PROPERTIES
+        public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
+        public Grid_Items MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
+        public Grid_Item MyCurrentItem { get { return myCurrentItem; } set { myCurrentItem = value; } }
+
+        public CoordPair MyItemsGridCoordinates { get { return myCurrentItem.MyGridCoordinates; } }
+        public Vector3 MyItemsRelativePosition { get { return myCurrentItem.MyRelativeWorldPosition; } }
+        public Vector3 MyRelativePosition { get { return transform.localPosition; } }
+        public Vector3 MyWorldPosition { get { return transform.position; } }
+        
+
+
+        // METHODS
+
+        // CONSTRUCTION
+        protected void Init()
+        {
+            myMeshCollider = GetComponent<MeshCollider>();
+            myMeshRenderer = GetComponent<MeshRenderer>();
+
+            myMeshRenderer.material.SetFloat("_CursorFadeDistance", cursorFadeDistance);
+        }
+        
+        public void SetReferences(Grid_Base parentGrid, Grid_Items parentGridItems)
+        {
+            myParentGrid = parentGrid;
+            myParentGridItems = parentGridItems;
+        }
+
+
+        // UTILITY
+        protected void UpdateMaterialDistanceParameter()
+        {
+            // Update my material's cursor distance param.
+            myScreenPos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+            myScreenPos.z = 0;
+
+            myCurrentDistanceFromCursor = Vector3.Distance(Input.mousePosition, myScreenPos);
+            myMeshRenderer.material.SetFloat("_CurrentDistanceFromCursor", myCurrentDistanceFromCursor);
+        }
+
+        // Alter both material parameters.
+        public void AlterMaterial(bool newDoCursorDistanceFade, Color newColour)
+        {
+            myMeshRenderer.material.SetColor("_Color", newColour);
+            myMeshRenderer.material.SetFloat("_DoCursorDistanceFade", (newDoCursorDistanceFade ? 1f : 0f));
+        }
+        public void AlterMaterial(bool newDoCursorDistanceFade, Color newColour, float newAlpha)
+        {
+            Color combinedColour = new Color(newColour.r, newColour.g, newColour.b, newAlpha);
+            myMeshRenderer.material.SetColor("_Color", combinedColour);
+            myMeshRenderer.material.SetFloat("_DoCursorDistanceFade", (newDoCursorDistanceFade ? 1f : 0f));
+        }
+        // Alter distance fade only.
+        public void AlterMaterial(bool newDoCursorDistanceFade)
+        {
+            myMeshRenderer.material.SetFloat("_DoCursorDistanceFade", (newDoCursorDistanceFade ? 1f : 0f));
+        }
+        // Alter colour only.
+        public void AlterMaterial(Color newColour)
+        {
+            myMeshRenderer.material.SetColor("_Color", newColour);
+        }
+        public void AlterMaterial(Color newColour, float newAlpha)
+        {
+            Color combinedColour = new Color(newColour.r, newColour.g, newColour.b, newAlpha);
+            myMeshRenderer.material.SetColor("_Color", combinedColour);
+        }
+        
+
+
+
+
+        // BUILT IN
+        protected void Awake()
+        {
+            Init();
+        }
+
+        protected void FixedUpdate()
+        {
+            previousCursorPositionDelta = Vector3.Distance(previousCursorPosition, Input.mousePosition);
+
+            if (previousCursorPositionDelta >= cursorMovementNoticeDistance)
+            {
+                UpdateMaterialDistanceParameter();
+            }
+
+            previousCursorPosition = Input.mousePosition;
+        }
+
+        // MOUSE HOVER
+        protected void OnMouseEnter()
+        {
+            mouseHoveringOnMe = true;
+
+            Debug.Log(string.Format("Mouse entered {0}.", gameObject));
+        }
+        protected void OnMouseExit()
+        {
+            mouseHoveringOnMe = false;
+
+            Debug.Log(string.Format("Mouse exited {0}.", gameObject));
+        }
+
+        // MOUSE CLICK
+        protected void OnMouseDown()
+        {
+            mouseClickingOnMe = true;
+            Debug.Log(string.Format("Mouse down on {0}.", gameObject));
+        }
+        protected void OnMouseUp()
+        {
+            mouseClickingOnMe = false;
+            Debug.Log(string.Format("Mouse up on {0}.", gameObject));
+        }
+    }
+}

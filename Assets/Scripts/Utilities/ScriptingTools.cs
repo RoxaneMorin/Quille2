@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class ExtensionMethods
 {
+    // ARRAY
     public static void InvertedSort(this Array array)
     {
         Array.Sort(array);
@@ -23,5 +24,4 @@ public static class ExtensionMethods
 
         return highestVal;
     }
-
 }

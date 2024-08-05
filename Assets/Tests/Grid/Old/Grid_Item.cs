@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace proceduralGridOld
 {
     public class Grid_Item : MonoBehaviour
     {
@@ -36,7 +36,7 @@ namespace proceduralGrid
 
 
         // Grid information
-        protected Grid_Base myParentGrid;
+        protected Grid_BaseOld myParentGrid;
         [SerializeField] protected CoordPair myGridCoordinates;
 
 
@@ -50,7 +50,7 @@ namespace proceduralGrid
             myMaterial = myMeshRenderer.material;
             myDefaultColour = myMaterial.color;
         }
-        public void SetVariables(Grid_Base myParentGrid, CoordPair myGridCoordinates)
+        public void SetVariables(Grid_BaseOld myParentGrid, CoordPair myGridCoordinates)
         {
             this.myParentGrid = myParentGrid;
             this.myGridCoordinates = myGridCoordinates;
