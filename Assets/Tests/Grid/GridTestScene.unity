@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &297820116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,9 +155,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSize: 1
-  gridLengthX: 10
-  gridLengthZ: 10
+  gridLengthX: 5
+  gridLengthZ: 5
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
+  gridPointPrefab: {fileID: 5208551304491064622, guid: dead181d6bbbfe94e8d075b8ee06eabe,
+    type: 3}
+  gridSquarePrefab: {fileID: 4098746911963097759, guid: 5a469979058e7f24aa82000e5c404b74,
+    type: 3}
 --- !u!23 &297820117
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -272,11 +276,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.0001
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -299,14 +303,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500601807}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 5, y: 20, z: 5}
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!1 &1467363615
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,3 +405,66 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1969458979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1969458981}
+  - component: {fileID: 1969458980}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1969458980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969458979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e91d9b17f0c131e42ad9a3162e936804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useThisMesh: {fileID: -7929139438592967118, guid: 5e7792851208cb74597d7ff6e1ff9a8e,
+    type: 3}
+  useThisMaterial: {fileID: 2100000, guid: f4edbe87eb1be4e4e8c025b106aaddb0, type: 2}
+  defaultMeshOrientation: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
+  defaultMeshSize: {x: 1, y: 1, z: 1}
+  defaultColour: {r: 1, g: 0, b: 0, a: 0}
+  defaultOpacity: 0.5
+  selectionColour: {r: 0, g: 0, b: 0, a: 0}
+  selectionOpacity: 1
+  secondarySelectionColour: {r: 0, g: 0, b: 0, a: 0}
+  secondarySelectionOpacity: 0.75
+  cursorMotionNoticeDistance: 0.01
+  fadeDistanceFromCursor: 100
+  myMeshFilter: {fileID: 0}
+  myMeshRenderer: {fileID: 0}
+  myMaterial: {fileID: 0}
+  myParentGrid: {fileID: 0}
+  testItem:
+    myCollider: {fileID: 0}
+--- !u!4 &1969458981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969458979}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
