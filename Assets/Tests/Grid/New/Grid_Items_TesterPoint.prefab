@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8614100621927568035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8614100621927568033}
+  - component: {fileID: 8614100621927568034}
+  m_Layer: 0
+  m_Name: Grid_Items_TesterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8614100621927568033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614100621927568035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8614100621927568034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614100621927568035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e91d9b17f0c131e42ad9a3162e936804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasVisuals: 1
+  useThisMesh: {fileID: -7929139438592967118, guid: 5e7792851208cb74597d7ff6e1ff9a8e,
+    type: 3}
+  useThisMaterial: {fileID: 2100000, guid: 74f1722583e883646a43961f8a20abee, type: 2}
+  defaultMeshOffset: {x: 0, y: 0.01, z: 0}
+  defaultMeshOrientation: {x: 270, y: 0, z: 0}
+  defaultMeshSize: {x: 1, y: 1, z: 1}
+  handlePrefab: {fileID: 3070486708743796043, guid: da338f0f4390d58439e474906b365fca,
+    type: 3}
+  handleDefaultColour: {r: 0.8631186, g: 0.885141, b: 1, a: 0}
+  handleDefaultOpacity: 0.5
+  handleSelectedColour: {r: 1, g: 0, b: 0.053588867, a: 0}
+  handleSelectedOpacity: 1
+  handleSecondarySelectionColour: {r: 0.88750446, g: 0.39446402, b: 0.5437939, a: 0}
+  handleSecondarySelectionOpacity: 0.75
+  boundsGizmoVertexPos: []
+  boundsGizmoColour: {r: 1, g: 0.6440351, b: 0, a: 1}
+  boundsGizmoHeight: 0
+  itemGizmoColour: {r: 0, g: 0, b: 0, a: 1}
+  itemGizmoRadius: 0.05
+  cursorMovementNoticeDistance: 1
+  cursorFadeDistance: 100
+  myParentGrid: {fileID: 0}
+  myTileSize: 0
+  myLengthX: 0
+  myLengthZ: 0
+  myYOffset: 0
+  myXOffset: 0
+  myZOffset: 0

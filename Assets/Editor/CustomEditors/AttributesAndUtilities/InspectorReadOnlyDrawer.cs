@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 // Group logic by FuzzyLogic here https://discussions.unity.com/t/how-to-make-a-readonly-property-in-inspector/75448/4
+// TODO: check whether they open and close properly.
 
 [CustomPropertyDrawer(typeof(InspectorReadOnlyAttribute))]
 public class InspectorReadOnlyDrawer : PropertyDrawer

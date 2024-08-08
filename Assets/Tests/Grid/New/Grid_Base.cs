@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Mathematics;
-using static Unity.Mathematics.math;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static Unity.Mathematics.math;
 
 namespace proceduralGrid
 {
@@ -16,31 +14,31 @@ namespace proceduralGrid
         // VARIABLES
         // Components
         [Header("Components")]
-        private MeshFilter myMeshFilter;
-        private MeshRenderer myMeshRenderer;
+        protected MeshFilter myMeshFilter;
+        protected MeshRenderer myMeshRenderer;
 
         // Grid parameters.
-        [Header("Grid Parameters")]
-        [SerializeField] private float tileSize = 1f;
-        [SerializeField] private int gridLengthX = 10;
-        [SerializeField] private int gridLengthZ = 10;
+        [Header("Grid Parameters - Dimensions")]
+        [SerializeField] protected float tileSize = 1f;
+        [SerializeField] protected int gridLengthX = 10;
+        [SerializeField] protected int gridLengthZ = 10;
 
-        [Header("Grid Components")]
-        [SerializeField] private Material gridMaterial;
+        [Header("Grid Parameters - Components")]
+        [SerializeField] protected Material gridMaterial;
+        [SerializeField] protected GameObject gridPointPrefab;
+        [SerializeField] protected GameObject gridTilePrefab;
 
-        // Mesh stuff
+        // Grid data.
+        [SerializeField] protected int[,] gridVertexIndexByCoords;
+        [Header("Grid Data")] // Wouldn't appear if placed above gridVertexIndexByCoords :/
+        [SerializeField] protected Grid_Items myGridPoints;
+        [SerializeField] protected Grid_Items myGridTiles;
         
 
-        // Control stuff
-        [SerializeField] private GameObject gridPointPrefab;
 
-        // Grid point information
-        private int[,] gridVertexIndexByCoords;
-        //private Grid_Point[,] gridPointsByCoords;
-        //private Grid_Square[,] gridSquaresByCoords;
-
-        private bool cursorBusy;
+        protected bool cursorBusy;
         public bool CursorBusy { get { return cursorBusy; } set { cursorBusy = value; } }
+
 
 
         // STRUCTS
@@ -60,14 +58,17 @@ namespace proceduralGrid
         // METHODS
 
         // SET UP
-        private void Init()
+        protected void Init()
         {
             myMeshFilter = this.GetComponent<MeshFilter>();
             myMeshRenderer = this.GetComponent<MeshRenderer>();
 
             myMeshRenderer.material = gridMaterial;
+
+            Generate();
+            Populate();
         }
-        private void Generate()
+        protected void Generate()
         {
             // Handle mesh data
             int vertexAttributeCount = 4;
@@ -139,21 +140,32 @@ namespace proceduralGrid
             myMeshFilter.mesh = mesh;
         }
 
-        private void Populate()
+        protected void Populate()
         {
-            
+            // Create grid points.
+            myGridPoints = Instantiate(gridPointPrefab, transform).GetComponent<Grid_Items>();
+            myGridPoints.Init(this, gridLengthX, gridLengthZ, tileSize, 0f);
+            myGridPoints.name = "GridPoints";
+            myGridPoints.CreateHandles(2);
+
+            // Create grid tiles.
+            myGridTiles = Instantiate(gridTilePrefab, transform).GetComponent<Grid_Items>();
+            myGridTiles.Init(this, gridLengthX - 1, gridLengthZ - 1, tileSize, 0f, 0.5f, 0.5f);
+            myGridTiles.name = "GridTiles";
         }
 
 
         // MANIPULATIONS
         public void MoveVertex(CoordPair vertexCoords, Vector3 positionDelta)
         {
+            // TODO: can this be done via jobs?
             var previousVertices = myMeshFilter.mesh.vertices;
             previousVertices[gridVertexIndexByCoords[vertexCoords.x, vertexCoords.z]] += positionDelta;
             myMeshFilter.mesh.vertices = previousVertices;
         }
         public void MoveQuad(CoordPair[,] vertexCoords, Vector3 positionDelta)
         {
+            // TODO: can this be done via jobs?
             var previousVertices = myMeshFilter.mesh.vertices;
             foreach (CoordPair coordPair in vertexCoords)
             {
@@ -164,15 +176,17 @@ namespace proceduralGrid
 
 
         // BUILT IN
-        private void Awake()
+        protected void Awake()
         {
             Init();
-            Generate();
-            Populate();
         }
 
-        private void Update()
+        protected void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log(string.Format("Cursor's ScreenPosition: {0}.", Input.mousePosition));
+            }
         }
 
     }

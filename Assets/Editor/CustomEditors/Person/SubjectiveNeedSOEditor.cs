@@ -79,37 +79,18 @@ public class SubjectiveNeedSOEditor : Editor
         EditorGUILayout.EndHorizontal();
 
         // Draw the paired properties.
-        drawAmbidextrousProperty(needNameLeft, needNameRight);
-        drawAmbidextrousProperty(needIconLeft, needIconRight);
-        drawAmbidextrousProperty(levelFullLeft, levelFullRight);
-        drawAmbidextrousProperty(defaultChangeRateLeft, defaultChangeRateRight);
-        drawAmbidextrousProperty(thresholdWarningLeft, thresholdWarningRight);
-        drawAmbidextrousProperty(thresholdCriticalLeft, thresholdCriticalRight);
+        EditorUtilities.drawAmbidextrousProperty(needNameLeft, needNameRight);
+        EditorUtilities.drawAmbidextrousProperty(needIconLeft, needIconRight);
+        EditorUtilities.drawAmbidextrousProperty(levelFullLeft, levelFullRight);
+        EditorUtilities.drawAmbidextrousProperty(defaultChangeRateLeft, defaultChangeRateRight);
+        EditorUtilities.drawAmbidextrousProperty(thresholdWarningLeft, thresholdWarningRight);
+        EditorUtilities.drawAmbidextrousProperty(thresholdCriticalLeft, thresholdCriticalRight);
 
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-        drawAmbidextrousProperty(baseAIWeightingModulatedByLeft, baseAIWeightingModulatedByRight);
-        drawAmbidextrousProperty(baseChangeRateModulatedByLeft, baseChangeRateModulatedByRight);
-        drawAmbidextrousProperty(thresholdsModulatedByLeft, thresholdsModulatedByRight);
+        EditorUtilities.drawAmbidextrousProperty(baseAIWeightingModulatedByLeft, baseAIWeightingModulatedByRight);
+        EditorUtilities.drawAmbidextrousProperty(baseChangeRateModulatedByLeft, baseChangeRateModulatedByRight);
+        EditorUtilities.drawAmbidextrousProperty(thresholdsModulatedByLeft, thresholdsModulatedByRight);
 
         serializedObject.ApplyModifiedProperties();
-    }
-
-    private void drawAmbidextrousProperty(SerializedProperty left, SerializedProperty right)
-    {
-        // Draw labels
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label(left.displayName);
-        GUILayout.FlexibleSpace();
-        GUILayout.Label(right.displayName);
-        EditorGUILayout.EndHorizontal();
-
-        // Draw properties.
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(left, GUIContent.none);
-        GUILayout.FlexibleSpace();
-        EditorGUILayout.PropertyField(right, GUIContent.none);
-        EditorGUILayout.EndHorizontal();
-
-        //GUILayout.Space(EditorGUIUtility.singleLineHeight/5);
     }
 }

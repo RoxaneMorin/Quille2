@@ -9,17 +9,19 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Mat_GridHandle
   m_Shader: {fileID: 4800000, guid: 7b5399e5feb3bc54e9d25d27d7cb6ac6, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISTANCEFADE_ON
-  - _DOCURSORDISTANCEFADE_ON
   - _DODISTANCEFADE_ON
   m_LightmapFlags: 0
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
@@ -29,7 +31,7 @@ Material:
     - _CursorFadeDistance: 250
     - _DistanceFade: 1
     - _DistanceFromCursor: 0
-    - _DoCursorDistanceFade: 1
+    - _DoCursorDistanceFade: 0
     - _DoDistanceFade: 1
     - _EmissiveIntensity: 0.45
     - _Float0: 0.45

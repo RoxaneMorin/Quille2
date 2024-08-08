@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d12998a3ce4ed4e81f353bdbec2b46, type: 3}
   m_Name: Outline_ZucconiPPSSettings
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae81335bd59c07e4abe800b5c4e7cf30, type: 3}
   m_Name: Outline_LaplacianSplitPPSSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1

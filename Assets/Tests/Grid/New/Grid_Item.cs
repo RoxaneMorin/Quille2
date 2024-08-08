@@ -5,7 +5,7 @@ using UnityEngine;
 namespace proceduralGrid
 {
     [System.Serializable]
-    public class Grid_Item
+    public class Grid_Item : MonoBehaviour
     {
         // VARIABLES
 
@@ -18,8 +18,7 @@ namespace proceduralGrid
         // Coordinates
         [Header("Coordinates")]
         [SerializeField] protected CoordPair myGridCoordinates;
-        [SerializeField] protected Vector3 myRelativeWorldPosition;
-
+        // Keep track of activity here?
         // Keep track of neighbhors here?
 
 
@@ -27,10 +26,6 @@ namespace proceduralGrid
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
         public Grid_Items MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
         public Grid_Handle MyCurrentHandle { get { return myCurrentHandle; } set { myCurrentHandle = value; } }
-
-        public CoordPair MyGridCoordinates { get { return myGridCoordinates; } set { myGridCoordinates = value; } }
-        public Vector3 MyRelativeWorldPosition { get { return myRelativeWorldPosition; } set { myRelativeWorldPosition = value; } }
-
 
 
         // CONSTRUCTOR
@@ -41,17 +36,12 @@ namespace proceduralGrid
             this.myParentGridItems = myParentGridItems;
             this.myGridCoordinates = myGridCoordinates;
 
-            Debug.Log("Grid Item created at " + myGridCoordinates);
+            //Debug.Log("Grid Item created at " + myGridCoordinates);
         }
-
-        public Grid_Item(Grid_Base myParentGrid, Grid_Items myParentGridItems, CoordPair myGridCoordinates, Vector3 myRelativeWorldPosition)
+        public Grid_Item(Grid_Base myParentGrid, Grid_Items myParentGridItems, CoordPair myGridCoordinates, Vector3 myRelativePosition) 
+            : this (myParentGrid, myParentGridItems, myGridCoordinates)
         {
-            this.myParentGrid = myParentGrid;
-            this.myParentGridItems = myParentGridItems;
-            this.myGridCoordinates = myGridCoordinates;
-            this.myRelativeWorldPosition = myRelativeWorldPosition;
-
-            Debug.Log("Grid Item created at " + myGridCoordinates);
+            transform.position = myRelativePosition;
         }
 
 

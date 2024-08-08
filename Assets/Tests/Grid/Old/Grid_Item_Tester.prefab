@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3079160399806522256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3079160399806522262}
+  - component: {fileID: 3079160399806522263}
+  m_Layer: 0
+  m_Name: Grid_Item_Tester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3079160399806522262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079160399806522256}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3079160399806522263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079160399806522256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e91d9b17f0c131e42ad9a3162e936804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myMeshFilter: {fileID: 0}
+  myMeshRenderer: {fileID: 0}
+  myMaterial: {fileID: 0}
+  hasVisuals: 0
+  useThisMesh: {fileID: 0}
+  useThisMaterial: {fileID: 0}
+  defaultMeshPosition: {x: 0, y: 0, z: 0}
+  defaultMeshOrientation: {x: 0, y: 0, z: 0, w: 0}
+  defaultMeshSize: {x: 0, y: 0, z: 0}
+  handlePrefab: {fileID: 3070486708743796043, guid: da338f0f4390d58439e474906b365fca,
+    type: 3}
+  handleDefaultColour: {r: 0.885413, g: 0.91463697, b: 0.9528302, a: 0}
+  handleDefaultOpacity: 0.5
+  handleSelectedColour: {r: 1, g: 0, b: 0, a: 0}
+  handleSelectedOpacity: 1
+  handleSecondarySelectionColour: {r: 1, g: 0.4481132, b: 0.6538168, a: 0}
+  handleSecondarySelectionOpacity: 0.75
+  myParentGrid: {fileID: 0}

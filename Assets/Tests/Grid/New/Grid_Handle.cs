@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace proceduralGrid
 {
+    [RequireComponent(typeof(MeshFilter)), RequireComponent(typeof(MeshRenderer))]
     public class Grid_Handle : MonoBehaviour
     {
         // VARIABLES
 
         // Components
-        [Header("Components")]
-        [SerializeField] protected MeshCollider myMeshCollider;
-        [SerializeField] protected MeshRenderer myMeshRenderer;
+        //[Header("Components")]
+        protected MeshCollider myMeshCollider;
+        protected MeshRenderer myMeshRenderer;
 
         // Config
         [Header("Config")]
@@ -62,12 +63,37 @@ namespace proceduralGrid
 
             myMeshRenderer.material.SetFloat("_CursorFadeDistance", cursorFadeDistance);
         }
-        
+
+        public void SetReferencesAndPosition(Grid_Base parentGrid, Grid_Items parentGridItems, Grid_Item gridItem)
+        {
+            SetReferences(parentGrid, parentGridItems);
+            AssignGridItem(gridItem);
+        }
         public void SetReferences(Grid_Base parentGrid, Grid_Items parentGridItems)
         {
             myParentGrid = parentGrid;
             myParentGridItems = parentGridItems;
         }
+        public void AssignGridItem(Grid_Item gridItem)
+        {
+            myCurrentItem = gridItem;
+            transform.position = myCurrentItem.MyWorldPosition;
+        }
+        public void ClearAndDeactivate()
+        {
+            myCurrentItem = null;
+
+            mouseHoveringOnMe = false;
+            mouseClickingOnMe = false;
+            mouseHoveringSibling = false;
+            mouseClickingSibling = false;
+
+            transform.localPosition = Vector3.zero;
+
+            gameObject.SetActive(false);
+        }
+        
+
 
 
         // UTILITY

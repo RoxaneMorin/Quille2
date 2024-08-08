@@ -5,7 +5,7 @@ using UnityEngine;
 namespace proceduralGrid
 {
     // ENUMS
-    public enum Adjacencies { bl, br, tl, tr, b, t, l, r };
+    public enum Adjacencies { bl, br, tl, tr, b, t, l, r }; // Useless?
 
 
     // STRUCTS
