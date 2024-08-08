@@ -22,7 +22,7 @@ namespace proceduralGrid
         // References
         [Header("References")]
         [SerializeField] protected Grid_Base myParentGrid;
-        [SerializeField] protected Grid_Items myParentGridItems;
+        [SerializeField] protected Grid_ItemManager myParentGridItems;
         [SerializeField] [SerializeReference] protected Grid_Item myCurrentItem;
 
 
@@ -35,21 +35,19 @@ namespace proceduralGrid
 
         protected bool mouseHoveringOnMe;
         protected bool mouseClickingOnMe;
-        // TODO: find a better name for these.
         protected bool mouseHoveringSibling;
         protected bool mouseClickingSibling;
+        // TODO: find a better name for these.
 
 
 
         // PROPERTIES
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
-        public Grid_Items MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
+        public Grid_ItemManager MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
         public Grid_Item MyCurrentItem { get { return myCurrentItem; } set { myCurrentItem = value; } }
 
         public CoordPair MyItemsGridCoordinates { get { return myCurrentItem.MyGridCoordinates; } }
-        public Vector3 MyItemsRelativePosition { get { return myCurrentItem.MyRelativeWorldPosition; } }
-        public Vector3 MyRelativePosition { get { return transform.localPosition; } }
-        public Vector3 MyWorldPosition { get { return transform.position; } }
+        public Vector3 MyItemsPosition { get { return myCurrentItem.transform.position; } }
         
 
 
@@ -64,12 +62,12 @@ namespace proceduralGrid
             myMeshRenderer.material.SetFloat("_CursorFadeDistance", cursorFadeDistance);
         }
 
-        public void SetReferencesAndPosition(Grid_Base parentGrid, Grid_Items parentGridItems, Grid_Item gridItem)
+        public void SetReferencesAndPosition(Grid_Base parentGrid, Grid_ItemManager parentGridItems, Grid_Item gridItem)
         {
             SetReferences(parentGrid, parentGridItems);
             AssignGridItem(gridItem);
         }
-        public void SetReferences(Grid_Base parentGrid, Grid_Items parentGridItems)
+        public void SetReferences(Grid_Base parentGrid, Grid_ItemManager parentGridItems)
         {
             myParentGrid = parentGrid;
             myParentGridItems = parentGridItems;
@@ -77,7 +75,7 @@ namespace proceduralGrid
         public void AssignGridItem(Grid_Item gridItem)
         {
             myCurrentItem = gridItem;
-            transform.position = myCurrentItem.MyWorldPosition;
+            transform.position = myCurrentItem.transform.position;
         }
         public void ClearAndDeactivate()
         {

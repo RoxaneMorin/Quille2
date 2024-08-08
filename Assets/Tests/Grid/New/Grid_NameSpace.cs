@@ -34,10 +34,10 @@ namespace proceduralGrid
             return GetEnumerator();
         }
 
-        // OVERRIDE
+        // OVERRIDES
         public override string ToString()
         {
-            return string.Format("CoordPair : ({0}, {1}.)", x, z);
+            return string.Format("({0}, {1})", x, z);
         }
     }
 }

@@ -344,20 +344,12 @@ MonoBehaviour:
   gridLengthX: 10
   gridLengthZ: 10
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
-  gridPointPrefab: {fileID: 8614100621927568035, guid: 210606e86dc97f6428035f73f1443f71,
+  gridPointManagerPrefab: {fileID: 968247738274387119, guid: 03bf36ddf6d29ba4f91acf485741282b,
     type: 3}
-  gridTilePrefab: {fileID: 8614100621927568035, guid: 2a680818525c0e847976c450f016c32c,
+  gridTileManagerPrefab: {fileID: 4477886038587408647, guid: cf53553f37c746b439d55cdc4b3ac984,
     type: 3}
   myGridPoints: {fileID: 0}
   myGridTiles: {fileID: 0}
-  testItem:
-    myParentGrid: {fileID: 0}
-    myParentGridItems: {fileID: 0}
-    myCurrentHandle: {fileID: 0}
-    myGridCoordinates:
-      x: 0
-      z: 0
-    myRelativeWorldPosition: {x: 0, y: 0, z: 0}
 --- !u!23 &1814107587
 MeshRenderer:
   m_ObjectHideFlags: 0

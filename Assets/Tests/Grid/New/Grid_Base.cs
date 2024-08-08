@@ -25,14 +25,14 @@ namespace proceduralGrid
 
         [Header("Grid Parameters - Components")]
         [SerializeField] protected Material gridMaterial;
-        [SerializeField] protected GameObject gridPointPrefab;
-        [SerializeField] protected GameObject gridTilePrefab;
+        [SerializeField] protected GameObject gridPointManagerPrefab;
+        [SerializeField] protected GameObject gridTileManagerPrefab;
 
         // Grid data.
         [SerializeField] protected int[,] gridVertexIndexByCoords;
         [Header("Grid Data")] // Wouldn't appear if placed above gridVertexIndexByCoords :/
-        [SerializeField] protected Grid_Items myGridPoints;
-        [SerializeField] protected Grid_Items myGridTiles;
+        [SerializeField] protected Grid_ItemManager myGridPointManager;
+        [SerializeField] protected Grid_ItemManager myGridTileManager;
         
 
 
@@ -143,15 +143,20 @@ namespace proceduralGrid
         protected void Populate()
         {
             // Create grid points.
-            myGridPoints = Instantiate(gridPointPrefab, transform).GetComponent<Grid_Items>();
-            myGridPoints.Init(this, gridLengthX, gridLengthZ, tileSize, 0f);
-            myGridPoints.name = "GridPoints";
-            myGridPoints.CreateHandles(2);
+            if (gridPointManagerPrefab)
+            {
+                myGridPointManager = Instantiate(gridPointManagerPrefab, transform).GetComponent<Grid_ItemManager>();
+                myGridPointManager.Init(this, gridLengthX, gridLengthZ, tileSize, Vector3.zero);
+                myGridPointManager.name = "GridPoints";
+            }
 
             // Create grid tiles.
-            myGridTiles = Instantiate(gridTilePrefab, transform).GetComponent<Grid_Items>();
-            myGridTiles.Init(this, gridLengthX - 1, gridLengthZ - 1, tileSize, 0f, 0.5f, 0.5f);
-            myGridTiles.name = "GridTiles";
+            if (gridTileManagerPrefab)
+            {
+                myGridTileManager = Instantiate(gridTileManagerPrefab, transform).GetComponent<Grid_ItemManager>();
+                myGridTileManager.Init(this, gridLengthX - 1, gridLengthZ - 1, tileSize, new Vector3(0.5f, 0.01f, 0.5f));
+                myGridTileManager.name = "GridTiles";
+            }
         }
 
 
