@@ -31,8 +31,9 @@ namespace proceduralGrid
         // Grid data.
         [SerializeField] protected int[,] gridVertexIndexByCoords;
         [Header("Grid Data")] // Wouldn't appear if placed above gridVertexIndexByCoords :/
-        [SerializeField] protected Grid_ItemManager myGridPointManager;
-        [SerializeField] protected Grid_ItemManager myGridTileManager;
+        [SerializeField] protected Grid_ItemGOManager myGridPointManager;
+        //[SerializeField] protected Grid_ItemGOManager myGridTileManager;
+        [SerializeField] protected Grid_ItemPureManager myGridTileManager;
         
 
 
@@ -145,7 +146,7 @@ namespace proceduralGrid
             // Create grid points.
             if (gridPointManagerPrefab)
             {
-                myGridPointManager = Instantiate(gridPointManagerPrefab, transform).GetComponent<Grid_ItemManager>();
+                myGridPointManager = Instantiate(gridPointManagerPrefab, transform).GetComponent<Grid_ItemGOManager>();
                 myGridPointManager.Init(this, gridLengthX, gridLengthZ, tileSize, Vector3.zero);
                 myGridPointManager.name = "GridPoints";
             }
@@ -153,7 +154,7 @@ namespace proceduralGrid
             // Create grid tiles.
             if (gridTileManagerPrefab)
             {
-                myGridTileManager = Instantiate(gridTileManagerPrefab, transform).GetComponent<Grid_ItemManager>();
+                myGridTileManager = Instantiate(gridTileManagerPrefab, transform).GetComponent<Grid_ItemPureManager>();
                 myGridTileManager.Init(this, gridLengthX - 1, gridLengthZ - 1, tileSize, new Vector3(0.5f, 0.01f, 0.5f));
                 myGridTileManager.name = "GridTiles";
             }

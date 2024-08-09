@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6472716864974380282}
   - component: {fileID: 7013500246300036436}
   m_Layer: 0
-  m_Name: Grid_ItemPoint
+  m_Name: Grid_ItemGO_Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -7929139438592967118, guid: 5e7792851208cb74597d7ff6e1ff9a8e, type: 3}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &7013500246300036436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,11 +120,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemGizmoColour: {r: 0, g: 0, b: 0, a: 1}
-  itemGizmoRadius: 0.05
+  itemGizmoRadius: 0.3
   myGridCoordinates:
     x: 0
     z: 0
   myRelativeSize: 0
   myParentGrid: {fileID: 0}
-  myParentGridItems: {fileID: 0}
+  myParentGridItemManager: {fileID: 0}
   myCurrentHandle: {fileID: 0}
+  amIActive: 0
+  isANeighborActive: 0

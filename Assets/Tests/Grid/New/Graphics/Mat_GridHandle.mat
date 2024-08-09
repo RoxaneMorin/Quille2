@@ -14,7 +14,6 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISTANCEFADE_ON
-  - _DOCURSORDISTANCEFADE_ON
   - _DODISTANCEFADE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
@@ -32,7 +31,7 @@ Material:
     - _CursorFadeDistance: 250
     - _DistanceFade: 1
     - _DistanceFromCursor: 0
-    - _DoCursorDistanceFade: 1
+    - _DoCursorDistanceFade: 0
     - _DoDistanceFade: 1
     - _EmissiveIntensity: 0.45
     - _Float0: 0.45

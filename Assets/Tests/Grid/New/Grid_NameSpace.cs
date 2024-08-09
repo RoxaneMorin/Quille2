@@ -40,4 +40,24 @@ namespace proceduralGrid
             return string.Format("({0}, {1})", x, z);
         }
     }
+
+
+    [System.Serializable]
+    public class TransformMatrix
+    {
+        // VARIABLES
+        protected Matrix4x4 matrix;
+
+
+        // PROPERTIES
+        public Matrix4x4 Matrix { get { return matrix; } set { matrix = value; } }
+        public Vector3 Position { get { return new Vector3(matrix.m03, matrix.m13, matrix.m23); } }
+
+
+        // CONSTRUCTOR
+        public TransformMatrix(Matrix4x4 sourceMatrix)
+        {
+            matrix = sourceMatrix;
+        }
+    }
 }

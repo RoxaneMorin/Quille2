@@ -5,7 +5,7 @@ using UnityEngine;
 namespace proceduralGrid
 {
     [System.Serializable]
-    public class Grid_Item : MonoBehaviour
+    public class Grid_ItemGO : MonoBehaviour
     {
         // VARIABLES
         // Components
@@ -26,18 +26,22 @@ namespace proceduralGrid
         // References
         [Header("References")]
         [SerializeField] protected Grid_Base myParentGrid; // is this necessary?
-        [SerializeField] protected Grid_ItemManager myParentGridItems;
+        [SerializeField] protected Grid_ItemGOManager myParentGridItemManager;
         [SerializeField] protected Grid_Handle myCurrentHandle;
 
-        // Keep track of activity here?
-        // Keep track of neighbhors here?
+        // Status
+        [Header("Status")]
+        [SerializeField] protected bool amIActive = false;
+        [SerializeField] protected bool isANeighborActive = false;
 
 
 
         // PROPERTIES
         public CoordPair MyGridCoordinates { get { return myGridCoordinates; } set { myGridCoordinates = value; } }
+        public float MyRelativeSize { get { return myRelativeSize; } set { myRelativeSize = value; } }
+
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
-        public Grid_ItemManager MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
+        public Grid_ItemGOManager MyParentGridItemManager { get { return myParentGridItemManager; } set { myParentGridItemManager = value; } }
         public Grid_Handle MyCurrentHandle { get { return myCurrentHandle; } set { myCurrentHandle = value; } }
 
 
@@ -50,7 +54,7 @@ namespace proceduralGrid
             myMeshCollider = GetComponent<MeshCollider>();
             myMeshRenderer = GetComponent<MeshRenderer>();
         }
-        public void SetParameters(Grid_Base parentGrid, Grid_ItemManager parentGridItems, CoordPair gridCoordinates, Vector3 relativePosition, float tileSize = 1f, bool useVisuals = true)
+        public void SetParameters(Grid_Base parentGrid, Grid_ItemGOManager parentGridItemManager, CoordPair gridCoordinates, Vector3 relativePosition, float tileSize = 1f, bool useVisuals = true)
         {
             if (!useVisuals)
                 DeactivateVisualsAndCollider();
@@ -58,7 +62,7 @@ namespace proceduralGrid
                 ActivateVisualsAndCollider();
 
             myParentGrid = parentGrid;
-            myParentGridItems = parentGridItems;
+            myParentGridItemManager = parentGridItemManager;
 
             myGridCoordinates = gridCoordinates;
             transform.position = relativePosition;
@@ -117,7 +121,7 @@ namespace proceduralGrid
         protected void OnDrawGizmos()
         {
             Gizmos.color = itemGizmoColour;
-            Gizmos.DrawSphere(transform.position, itemGizmoRadius * myRelativeSize);
+            Gizmos.DrawSphere(transform.position, itemGizmoRadius * myRelativeSize * transform.localScale.x);
         }
 
         protected void Awake()
@@ -125,11 +129,23 @@ namespace proceduralGrid
             Init();
         }
 
+        // MOUSE CLICK
+        protected void OnMouseDown()
+        {
+            amIActive = !amIActive;
+            Debug.Log(string.Format("Mouse down on {0}.", gameObject));
+
+            if (amIActive)
+            {
+                myParentGridItemManager.CreateHandles(this, 1);
+            }
+        }
+
 
         // OVERRIDES
         public override string ToString()
         {
-            return string.Format("Grid_Item {0}", myGridCoordinates);
+            return string.Format("Grid_ItemMB {0}", myGridCoordinates);
         }
     }
 }

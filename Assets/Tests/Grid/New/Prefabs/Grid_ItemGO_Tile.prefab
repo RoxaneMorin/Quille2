@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4382165750331427420}
   - component: {fileID: 5641261668270189144}
   m_Layer: 0
-  m_Name: Grid_ItemTile
+  m_Name: Grid_ItemGO_Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

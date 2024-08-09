@@ -23,7 +23,7 @@ namespace proceduralGrid
         [Header("References")]
         [SerializeField] protected Grid_Base myParentGrid;
         [SerializeField] protected Grid_ItemManager myParentGridItems;
-        [SerializeField] [SerializeReference] protected Grid_Item myCurrentItem;
+        [SerializeField] [SerializeReference] protected Grid_ItemGO myCurrentItem; // TODO: change type.
 
 
         // Cursor State
@@ -44,7 +44,7 @@ namespace proceduralGrid
         // PROPERTIES
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
         public Grid_ItemManager MyParentGridItems { get { return myParentGridItems; } set { myParentGridItems = value; } }
-        public Grid_Item MyCurrentItem { get { return myCurrentItem; } set { myCurrentItem = value; } }
+        public Grid_ItemGO MyCurrentItem { get { return myCurrentItem; } set { myCurrentItem = value; } }
 
         public CoordPair MyItemsGridCoordinates { get { return myCurrentItem.MyGridCoordinates; } }
         public Vector3 MyItemsPosition { get { return myCurrentItem.transform.position; } }
@@ -62,7 +62,7 @@ namespace proceduralGrid
             myMeshRenderer.material.SetFloat("_CursorFadeDistance", cursorFadeDistance);
         }
 
-        public void SetReferencesAndPosition(Grid_Base parentGrid, Grid_ItemManager parentGridItems, Grid_Item gridItem)
+        public void SetReferencesAndPosition(Grid_Base parentGrid, Grid_ItemManager parentGridItems, Grid_ItemGO gridItem)
         {
             SetReferences(parentGrid, parentGridItems);
             AssignGridItem(gridItem);
@@ -72,7 +72,7 @@ namespace proceduralGrid
             myParentGrid = parentGrid;
             myParentGridItems = parentGridItems;
         }
-        public void AssignGridItem(Grid_Item gridItem)
+        public void AssignGridItem(Grid_ItemGO gridItem)
         {
             myCurrentItem = gridItem;
             transform.position = myCurrentItem.transform.position;

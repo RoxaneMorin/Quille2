@@ -9,11 +9,6 @@ namespace proceduralGrid
     {
         // VARIABLES 
 
-        // Configurations
-        [Header("Config - Source Elements")]
-        [SerializeField] protected GameObject itemPrefab;
-        //[SerializeField] protected bool useVisuals = true;
-
         [Header("Config - Handles")]
         [SerializeField] protected GameObject handlePrefab;
         [Space]
@@ -29,9 +24,8 @@ namespace proceduralGrid
         [SerializeField] protected Color boundsGizmoColour;
         [SerializeField] protected float boundsGizmoHeight = 0.5f;
 
-        //[Header("Config - Cursor")] // Not sure if useful.
-        //[SerializeField] protected float cursorMovementNoticeDistance = 1f;
-        //[SerializeField] protected float cursorFadeDistance = 100f;
+        [Header("Config - Cursor")]
+        [SerializeField] protected float cursorMovementNoticeDistance = 1f;
 
         // References
         [Header("References")]
@@ -39,92 +33,43 @@ namespace proceduralGrid
         [SerializeField] protected int myLengthX;
         [SerializeField] protected int myLengthZ;
         [SerializeField] protected float myRelativeSize;
-        [SerializeField] protected Vector3 myOffset;
+        [SerializeField] protected Vector3 myItemOffset;
         [Space]
-        [SerializeField] protected Grid_Item[,] myGridItems;
         [SerializeField] protected Grid_Handle[,] myHandles;
-        //[Space]
-        // Active item(s) info?
-
-
+         
 
 
         // METHODS
 
         // SET UP
-        public void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
+        public virtual void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
         {
+            myParentGrid = parentGrid;
+
             myLengthX = gridLengthX;
             myLengthZ = gridLengthZ;
             myRelativeSize = relativeSize;
-            myOffset = offset;
-
-            // Create internal items.
-            CreateInternalItems(parentGrid, gridLengthX, gridLengthZ, relativeSize, myOffset);
-
-            // Populate boundsGizmoPoints.
-            boundsGizmoVertexPos = new Vector3[4];
-            PopulateBoundsGizmoPoints();
+            myItemOffset = offset;
         }
 
         // Separated submethods for ease of overriding.
-        protected void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
-        {
-            myGridItems = new Grid_Item[gridLengthX + 1, gridLengthZ + 1];
-            for (int x = 0; x <= gridLengthX; x++)
-            {
-                for (int z = 0; z <= gridLengthZ; z++)
-                {
-                    Vector3 relativePosition = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
-                    relativePosition.y *= relativeSize;
-
-                    myGridItems[x, z] = Instantiate(itemPrefab, transform).GetComponent<Grid_Item>();
-                    myGridItems[x, z].SetParameters(parentGrid, this, new CoordPair(x, z), relativePosition, relativeSize);
-                }
-            }
-        }
-        protected void PopulateBoundsGizmoPoints()
-        {
-            boundsGizmoVertexPos[0] = myGridItems[0, 0].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[1] = myGridItems[myLengthX, 0].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[2] = myGridItems[myLengthX, myLengthZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[3] = myGridItems[0, myLengthZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-        }
-
-        public void CreateHandles(CoordPair centerPoint, int doBeyond)
-        {
-            int fullSpawn = doBeyond * 2 + 1;
-            myHandles = new Grid_Handle[fullSpawn, fullSpawn];
-
-            for (int x = 0; x < fullSpawn; x++)
-            {
-                for (int z = 0; z < fullSpawn; z++)
-                {
-                    //myHandles[x, z] = Instantiate(handlePrefab, transform).GetComponent<Grid_Handle>();
-                    //myHandles[x, z].SetReferencesAndPosition(myParentGrid, this, myGridItems[x, z]);
-                    //myGridItems[x, z].MyCurrentHandle = myHandles[x, z];
-                }
-            }
-        }
+        protected virtual void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset) { }
+        protected virtual void PopulateBoundsGizmoPoints() { }
 
 
         // UTILITY
 
 
         // BUILT IN
-        protected void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
-            // Draw a square to represent coverage.
-            PopulateBoundsGizmoPoints();
-            Gizmos.color = boundsGizmoColour;
-            Gizmos.DrawLineStrip(boundsGizmoVertexPos, true);
-        }
-
-        protected void FixedUpdate()
-        {
-        }
-        protected void Update()
-        {
+            if (boundsGizmoVertexPos != null)
+            {
+                // Draw a square to represent coverage.
+                PopulateBoundsGizmoPoints();
+                Gizmos.color = boundsGizmoColour;
+                Gizmos.DrawLineStrip(boundsGizmoVertexPos, true);
+            }
         }
     }
 }
