@@ -770,26 +770,26 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (this.NeedStateLeft != NeedStates.Elated & this.LevelCurrentLeftAsPercentage >= this.ThresholdElatedLeft)
-                    {
-                        this.NeedStateLeft = NeedStates.Elated;
-                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
-
-                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
-                    }
-                    else if (this.NeedStateLeft > NeedStates.Critical & this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft)
+                    if (this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft & this.NeedStateLeft > NeedStates.Critical)
                     {
                         this.NeedStateLeft = NeedStates.Critical;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
-                    else if (this.NeedStateLeft > NeedStates.Warning & this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft)
+                    else if (this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft & this.NeedStateLeft > NeedStates.Warning)
                     {
                         this.NeedStateLeft = NeedStates.Warning;
                         Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                    }
+                    else if (this.LevelCurrentLeftAsPercentage >= this.ThresholdElatedLeft & this.NeedStateLeft != NeedStates.Elated)
+                    {
+                        this.NeedStateLeft = NeedStates.Elated;
+                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+
+                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
