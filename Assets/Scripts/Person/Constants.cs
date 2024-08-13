@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Quille
 {
     public enum NeedStates
@@ -40,8 +36,8 @@ namespace Quille
         public const float DEFAULT_THRESHOLD_CRITICAL = 0.10f;
 
         // Bounds for threshold values.
-        public const float MAX_THRESHOLD = 0.75f;
-        public const float MIN_THRESHOLD = 0.05f;
+        public const float MAX_THRESHOLD_NEGATIVE = 0.75f;
+        public const float MIN_THRESHOLD_NEGATIVE = 0.05f;
 
         // Percentile thresholds at which the character AI will consider a need to require its attention.
         public const float DEFAULT_NOTICE_BASIC_NEED = 0.5f;

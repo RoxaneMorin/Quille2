@@ -27,13 +27,13 @@ namespace Quille
             get { return noticeBasicNeed; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD + 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    noticeBasicNeed = Constants.MAX_THRESHOLD + 0.05f;
+                    noticeBasicNeed = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.1f)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.1f)
                 {
-                    noticeBasicNeed = Constants.MIN_THRESHOLD + 0.1f;
+                    noticeBasicNeed = Constants.MIN_THRESHOLD_NEGATIVE + 0.1f;
                 }
                 else
                 {
@@ -46,13 +46,13 @@ namespace Quille
             get { return noticeSubjectiveNeed; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD + 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    noticeSubjectiveNeed = Constants.MAX_THRESHOLD + 0.05f;
+                    noticeSubjectiveNeed = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.1f)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.1f)
                 {
-                    noticeSubjectiveNeed = Constants.MIN_THRESHOLD + 0.1f;
+                    noticeSubjectiveNeed = Constants.MIN_THRESHOLD_NEGATIVE + 0.1f;
                 }
                 else
                 {

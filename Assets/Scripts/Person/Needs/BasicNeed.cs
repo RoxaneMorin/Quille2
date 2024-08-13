@@ -140,17 +140,17 @@ namespace Quille
             get { return thresholdElated; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD)
+                if (value > Constants.DEFAULT_LEVEL_FULL)
                 {
-                    thresholdElated = Constants.MAX_THRESHOLD;
+                    thresholdElated = Constants.DEFAULT_LEVEL_FULL;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.1f)
+                else if (value < Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    thresholdElated = Constants.MIN_THRESHOLD + 0.1f;
+                    thresholdElated = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
                     return;
                 }
-                else thresholdWarning = value;
+                else thresholdElated = value;
             }
         }
         [JsonIgnore] public float ThresholdWarning
@@ -158,14 +158,14 @@ namespace Quille
             get { return thresholdWarning; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD - 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE)
                 {
-                    thresholdWarning = Constants.MAX_THRESHOLD - 0.05f;
+                    thresholdWarning = Constants.MAX_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    thresholdWarning = Constants.MIN_THRESHOLD + 0.05f;
+                    thresholdWarning = Constants.MIN_THRESHOLD_NEGATIVE + 0.05f;
                     return;
                 }
                 else thresholdWarning = value;
@@ -176,14 +176,14 @@ namespace Quille
             get { return thresholdCritical; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD - 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE - 0.05f)
                 {
-                    thresholdCritical = Constants.MAX_THRESHOLD - 0.1f;
+                    thresholdCritical = Constants.MAX_THRESHOLD_NEGATIVE - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE)
                 {
-                    thresholdCritical = Constants.MIN_THRESHOLD;
+                    thresholdCritical = Constants.MIN_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else thresholdCritical = value;
@@ -193,7 +193,7 @@ namespace Quille
         {
             ThresholdElated = DefaultThresholdElated;
             ThresholdWarning = DefaultThresholdWarning;
-            thresholdCritical = DefaultThresholdCritical;
+            ThresholdCritical = DefaultThresholdCritical;
         }
 
         [JsonIgnore] public NeedStates NeedState { get { return needState; } private set { needState = value; } }
@@ -340,6 +340,7 @@ namespace Quille
             // Thresholds.
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedBy)
             {
+                // TODO: how to integrate ThresholdElated?
                 ThresholdWarning = modulator.Execute(sourceBasePerson, ThresholdWarning);
                 ThresholdCritical = modulator.Execute(sourceBasePerson, ThresholdCritical);
             }

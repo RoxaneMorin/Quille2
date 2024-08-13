@@ -17,6 +17,7 @@ MonoBehaviour:
   aiPriorityWeighting: 1.25
   levelFull: 1
   defaultChangeRate: -0.3
+  thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
