@@ -126,5 +126,7 @@ MonoBehaviour:
     z: 0
   myRelativeSize: 0
   myParentGrid: {fileID: 0}
-  myParentGridItems: {fileID: 0}
+  myParentGridItemManager: {fileID: 0}
   myCurrentHandle: {fileID: 0}
+  amIActive: 0
+  isANeighborActive: 0

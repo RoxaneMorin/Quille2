@@ -64,23 +64,35 @@ namespace proceduralGrid
         {
             myActiveItem = centerItem;
 
+            // TODO: better handle reshuffling.
+            // TODO: better array resizing.
+
             int fullSpawn = doBeyond * 2 + 1;
-            myHandles = new Grid_Handle[fullSpawn, fullSpawn];
+            if (myHandles == null)
+            {
+                myHandles = new Grid_Handle[fullSpawn, fullSpawn];
+            }
 
             for (int x = -doBeyond; x <= doBeyond; x++)
             {
                 for (int z = -doBeyond; z <= doBeyond; z++)
                 {
-
                     int currentXCoord = centerItem.MyGridCoordinates.x + x;
                     int currentZCoord = centerItem.MyGridCoordinates.z + z;
 
-                    //Debug.Log(string.Format("({0}, {1})", currentXCoord, currentZCoord));
+                    // Don't generate a handle if the target point is out of range.
+                    if (currentXCoord >= 0 && currentXCoord <= myLengthX && currentZCoord >= 0 && currentZCoord <= myLengthZ)
+                    {
+                        if (myHandles[x + doBeyond, z + doBeyond] == null)
+                        {
+                            myHandles[x + doBeyond, z + doBeyond] = Instantiate(handlePrefab, transform).GetComponent<Grid_Handle>();
+                        }
+                        myHandles[x + doBeyond, z + doBeyond].SetReferencesAndPosition(myParentGrid, this, myGridItems[currentXCoord, currentZCoord]);
+                        myGridItems[currentXCoord, currentZCoord].MyCurrentHandle = myHandles[x + doBeyond, z + doBeyond];
 
-                    // TODO: verify the coordinates exist in myGridItems
-                    myHandles[x + doBeyond, z + doBeyond] = Instantiate(handlePrefab, transform).GetComponent<Grid_Handle>();
-                    myHandles[x + doBeyond, z + doBeyond].SetReferencesAndPosition(myParentGrid, this, myGridItems[currentXCoord, currentZCoord]);
-                    myGridItems[currentXCoord, currentZCoord].MyCurrentHandle = myHandles[x + doBeyond, z + doBeyond];
+                        // TODO: deactivate previous item.
+                        // Create an event or something?
+                    }
                 }
             }
         }

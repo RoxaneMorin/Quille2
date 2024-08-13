@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be491abdf3745341920f7922b2fbb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useCollider: 1
+  colliderHeight: 0.05
   handlePrefab: {fileID: 6937973146386378211, guid: 684dc426d327c634cb316da7f1ddb826,
     type: 3}
   handleDefaultColour: {r: 0, g: 1, b: 0.18039216, a: 0}
@@ -61,6 +63,7 @@ MonoBehaviour:
   myLengthZ: 0
   myRelativeSize: 0
   myItemOffset: {x: 0, y: 0, z: 0}
+  myCollider: {fileID: 0}
   useVisuals: 1
   useThisMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   useThisMaterial: {fileID: 2100000, guid: 81374eca6ce849945b4d204738c40be6, type: 2}
@@ -96,3 +99,6 @@ MonoBehaviour:
     amIActive: 0
     isANeighborActive: 0
   myInstancedMeshData: []
+  myPreviousPosition: {x: 0, y: 0, z: 0}
+  myPreviousRotation: {x: 0, y: 0, z: 0, w: 0}
+  myPreviousScale: {x: 0, y: 0, z: 0}

@@ -17,6 +17,8 @@ namespace proceduralGrid
         protected MeshFilter myMeshFilter;
         protected MeshRenderer myMeshRenderer;
 
+        // TODO: add collider so we can handle mouse hovering?
+
         // Grid parameters.
         [Header("Grid Parameters - Dimensions")]
         [SerializeField] protected float tileSize = 1f;

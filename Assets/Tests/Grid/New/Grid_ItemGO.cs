@@ -10,7 +10,7 @@ namespace proceduralGrid
         // VARIABLES
         // Components
         [Header("Components")]
-        protected MeshCollider myMeshCollider;
+        protected Collider myCollider;
         protected MeshRenderer myMeshRenderer;
 
         // Configuration
@@ -51,10 +51,10 @@ namespace proceduralGrid
         // SET UP
         protected void Init()
         {
-            myMeshCollider = GetComponent<MeshCollider>();
+            myCollider = GetComponent<MeshCollider>();
             myMeshRenderer = GetComponent<MeshRenderer>();
         }
-        public void SetParameters(Grid_Base parentGrid, Grid_ItemGOManager parentGridItemManager, CoordPair gridCoordinates, Vector3 relativePosition, float tileSize = 1f, bool useVisuals = true)
+        public void SetParameters(Grid_Base parentGrid, Grid_ItemGOManager parentGridItemManager, CoordPair gridCoordinates, Vector3 relativePosition, float relativeSize = 1f, bool useVisuals = true)
         {
             if (!useVisuals)
                 DeactivateVisualsAndCollider();
@@ -65,8 +65,8 @@ namespace proceduralGrid
             myParentGridItemManager = parentGridItemManager;
 
             myGridCoordinates = gridCoordinates;
-            transform.position = relativePosition;
-            myRelativeSize = tileSize;
+            transform.localPosition = relativePosition;
+            myRelativeSize = relativeSize;
 
             gameObject.name = this.ToString();
 
@@ -92,16 +92,16 @@ namespace proceduralGrid
 
         public void ActivateCollider()
         {
-            if (myMeshCollider)
+            if (myCollider)
             {
-                myMeshCollider.enabled = true;
+                myCollider.enabled = true;
             }
         }
         public void DeactivateCollider()
         {
-            if (myMeshCollider)
+            if (myCollider)
             {
-                myMeshCollider.enabled = false;
+                myCollider.enabled = false;
             }
         }
 
@@ -132,13 +132,14 @@ namespace proceduralGrid
         // MOUSE CLICK
         protected void OnMouseDown()
         {
-            amIActive = !amIActive;
+            //amIActive = !amIActive;
             Debug.Log(string.Format("Mouse down on {0}.", gameObject));
 
-            if (amIActive)
-            {
-                myParentGridItemManager.CreateHandles(this, 1);
-            }
+            //if (amIActive)
+            //{
+            //    // TODO: better handle creation.
+            //    myParentGridItemManager.CreateHandles(this, 1);
+            //}
         }
 
 

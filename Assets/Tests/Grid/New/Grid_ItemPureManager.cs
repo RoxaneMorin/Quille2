@@ -36,6 +36,7 @@ namespace proceduralGrid
         [SerializeField] protected Vector3 myPreviousScale;
 
 
+
         // METHODS
 
         // SET UP
@@ -54,32 +55,36 @@ namespace proceduralGrid
         // Separated submethods for ease of overriding.
         protected override void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
         {
+            // Prepare arrays and rendering parameters.
             myGridItems = new Grid_ItemPure[gridLengthX + 1, gridLengthZ + 1];
-
-            // Separate into their own function?
             myInstancedRenderParams = new RenderParams(useThisMaterial);
             myInstancedMeshData = new Matrix4x4[(gridLengthX + 1) * (gridLengthZ + 1)];
             int i = 0;
+
+            // Make transform matrices from this manager and the parent grid.
+            Matrix4x4 managerTransformMatrix = Matrix4x4.TRS(transform.localPosition, transform.localRotation, transform.localScale);
+            Matrix4x4 gridTransformMatrix = Matrix4x4.TRS(parentGrid.transform.position, parentGrid.transform.rotation, parentGrid.transform.lossyScale);
 
             for (int x = 0; x <= gridLengthX; x++)
             {
                 for (int z = 0; z <= gridLengthZ; z++)
                 {
-                    // Transform matrix from parameters and parent position.
-                    Vector3 position = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
-                    position.y *= relativeSize;
-                    position += parentGrid.transform.position;
+                    // Make transform matrix from parameters.
+                    Vector3 itemPosition = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
+                    itemPosition.y *= relativeSize;
+                    Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
+                    Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, initialItemScale);
 
-                    Quaternion rotation = Quaternion.Euler(initialItemRotation) * parentGrid.transform.rotation;
-                    Vector3 scale = Vector3.Scale(initialItemScale, parentGrid.transform.localScale);
+                    // Apply ancestor matrices.
+                    itemTransformMatrix = gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
 
-                    Matrix4x4 transformMatrix = Matrix4x4.Translate(position) * Matrix4x4.Rotate(rotation) * Matrix4x4.Scale(initialItemScale);
-
-                    myGridItems[x, z] = new Grid_ItemPure(myParentGrid, this, new CoordPair(x, z), transformMatrix, relativeSize);
-                    myInstancedMeshData[i] = transformMatrix;
+                    myGridItems[x, z] = new Grid_ItemPure(myParentGrid, this, new CoordPair(x, z), itemTransformMatrix, relativeSize);
+                    myInstancedMeshData[i] = itemTransformMatrix;
                     i++;
                 }
             }
+
+            // TODO: Create collider.
         }
         protected void PopulateInstancedRenderDataFromItems()
         {
@@ -107,23 +112,27 @@ namespace proceduralGrid
 
 
         // UTILITY
-        protected Matrix4x4 GenerateGridItemMatrix(Grid_ItemPure gridItem)
+        protected Matrix4x4 GenerateGridItemMatrix(Grid_ItemPure gridItem, Matrix4x4 managerTransformMatrix, Matrix4x4 gridTransformMatrix)
         {
-            Vector3 position = new Vector3(gridItem.MyGridCoordinates.x * myRelativeSize, 0, gridItem.MyGridCoordinates.z * myRelativeSize) + myItemOffset;
-            position.y *= myRelativeSize;
-            position += transform.position;
+            // Make transform matrix from parameters.
+            Vector3 itemPosition = new Vector3(gridItem.MyGridCoordinates.x * myRelativeSize, 0, gridItem.MyGridCoordinates.z * myRelativeSize) + myItemOffset;
+            itemPosition.y *= myRelativeSize;
+            Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
+            Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, initialItemScale);
 
-            Quaternion rotation = myParentGrid.transform.rotation * Quaternion.Euler(initialItemRotation);
-            Vector3 scale = Vector3.Scale(initialItemScale, myParentGrid.transform.localScale);
-
-            return Matrix4x4.Translate(position) * Matrix4x4.Rotate(rotation) * Matrix4x4.Scale(scale);
+            // Apply ancestor matrices and return.
+            return gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
         }
         protected void RegenerateItemTransforms()
         {
+            // Make transform matrices from this manager and the parent grid.
+            Matrix4x4 managerTransformMatrix = Matrix4x4.TRS(transform.localPosition, transform.localRotation, transform.localScale);
+            Matrix4x4 gridTransformMatrix = Matrix4x4.TRS(myParentGrid.transform.position, myParentGrid.transform.rotation, myParentGrid.transform.lossyScale);
+
             int i = 0;
             foreach (Grid_ItemPure item in myGridItems)
             {
-                item.MyTransformMatrix = GenerateGridItemMatrix(item);
+                item.MyTransformMatrix = GenerateGridItemMatrix(item, managerTransformMatrix, gridTransformMatrix);
                 myInstancedMeshData[i] = item.MyTransformMatrix;
                 i++;
             }
@@ -166,6 +175,11 @@ namespace proceduralGrid
             {
                 Graphics.RenderMeshInstanced(myInstancedRenderParams, useThisMesh, 0, myInstancedMeshData);
             }
+        }
+
+        protected void OnMouseDown()
+        {
+            Debug.Log(string.Format("Mouse down on {0} at {1}.", gameObject, Input.mousePosition));
         }
     }
 

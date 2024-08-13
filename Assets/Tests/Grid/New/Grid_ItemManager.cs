@@ -8,6 +8,9 @@ namespace proceduralGrid
     public class Grid_ItemManager : MonoBehaviour
     {
         // VARIABLES 
+        [Header("Config - Collider")]
+        [SerializeField] protected bool useCollider = false;
+        [SerializeField] protected float colliderHeight = 0.1f;
 
         [Header("Config - Handles")]
         [SerializeField] protected GameObject handlePrefab;
@@ -35,8 +38,9 @@ namespace proceduralGrid
         [SerializeField] protected float myRelativeSize;
         [SerializeField] protected Vector3 myItemOffset;
         [Space]
+        [SerializeField] protected BoxCollider myCollider;
         [SerializeField] protected Grid_Handle[,] myHandles;
-         
+
 
 
         // METHODS
@@ -50,11 +54,32 @@ namespace proceduralGrid
             myLengthZ = gridLengthZ;
             myRelativeSize = relativeSize;
             myItemOffset = offset;
+
+            if (useCollider)
+            {
+                CreateCollider();
+            }
         }
 
         // Separated submethods for ease of overriding.
         protected virtual void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset) { }
         protected virtual void PopulateBoundsGizmoPoints() { }
+
+        // TODO: Mark virtual and redo in subclasses?
+        protected void CreateCollider(bool lengthPlusOne = true) 
+        {
+            myCollider = gameObject.AddComponent<BoxCollider>();
+
+            // Calculate and set collider center.
+            float centerX = (myLengthX * myRelativeSize)/2 + myItemOffset.x;
+            float centerZ = (myLengthZ * myRelativeSize)/2 + myItemOffset.z;
+            myCollider.center = new Vector3(centerX, 0, centerZ);
+
+            // Calculate and set collider size.
+            float sizeX = lengthPlusOne ? myLengthX + 1 : myLengthX;
+            float sizeZ = lengthPlusOne ? myLengthZ + 1 : myLengthZ;
+            myCollider.size = new Vector3(sizeX, colliderHeight, sizeZ);
+        }
 
 
         // UTILITY

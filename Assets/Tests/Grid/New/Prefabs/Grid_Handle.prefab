@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7872792949922599535}
   - component: {fileID: 5167143751130266877}
   - component: {fileID: 1073761223770733309}
+  - component: {fileID: 4128668982360308938}
   - component: {fileID: 3469551992591784330}
   m_Layer: 0
   m_Name: Grid_Handle
@@ -84,6 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4128668982360308938
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6937973146386378211}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7929139438592967118, guid: 5e7792851208cb74597d7ff6e1ff9a8e, type: 3}
 --- !u!114 &3469551992591784330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,13 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorMovementNoticeDistance: 1
-  cursorFadeDistance: 100
+  cursorFadeDistance: 500
   myParentGrid: {fileID: 0}
   myParentGridItems: {fileID: 0}
-  myCurrentItem:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  myCurrentItem: {fileID: 0}

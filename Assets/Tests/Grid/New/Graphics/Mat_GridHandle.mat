@@ -14,11 +14,12 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISTANCEFADE_ON
+  - _DOCURSORDISTANCEFADE_ON
   - _DODISTANCEFADE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3002
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -28,10 +29,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _CurrentDistanceFromCursor: 50
-    - _CursorFadeDistance: 250
+    - _CursorFadeDistance: 500
     - _DistanceFade: 1
     - _DistanceFromCursor: 0
-    - _DoCursorDistanceFade: 0
+    - _DoCursorDistanceFade: 1
     - _DoDistanceFade: 1
     - _EmissiveIntensity: 0.45
     - _Float0: 0.45
