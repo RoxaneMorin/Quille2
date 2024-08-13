@@ -49,11 +49,17 @@ namespace Quille
         public float DefaultChangeRateRight { get { return defaultChangeRateRight; } }
 
         [SerializeField]
+        private float thresholdElatedLeft = Constants.DEFAULT_THRESHOLD_ELATED;
+        public float ThresholdElatedLeft { get { return thresholdElatedLeft; } }
+        [SerializeField]
         private float thresholdWarningLeft = Constants.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarningLeft { get { return thresholdWarningLeft; } }
         [SerializeField]
         private float thresholdCriticalLeft = Constants.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCriticalLeft { get { return thresholdCriticalLeft; } }
+        [SerializeField]
+        private float thresholdElatedRight = Constants.DEFAULT_THRESHOLD_ELATED;
+        public float ThresholdElatedRight { get { return thresholdElatedRight; } }
         [SerializeField]
         private float thresholdWarningRight = Constants.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarningRight { get { return thresholdWarningRight; } }
@@ -82,5 +88,7 @@ namespace Quille
 
         [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] thresholdsModulatedByRight;
         public ChecksAndMods.ModulatorArithmeticFromFloat[] ThresholdsModulatedByRight { get { return thresholdsModulatedByRight; } }
+
+        // TODO: how to handle the multiple thresholds?
     }
 }

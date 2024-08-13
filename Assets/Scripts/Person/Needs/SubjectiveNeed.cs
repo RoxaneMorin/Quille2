@@ -36,7 +36,8 @@ namespace Quille
                       currentChangeRateRightScaled;
 
         [SerializeField]
-        private float thresholdWarningLeft, thresholdWarningRight,
+        private float thresholdElatedLeft, thresholdElatedRight,
+                      thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
 
         [SerializeField, InspectorReadOnly, JsonIgnore]
@@ -322,21 +323,42 @@ namespace Quille
             ResetCurrentChangeRateRight();
         }
 
+        [JsonIgnore] public float DefaultThresholdElatedLeft { get { return needSO.ThresholdElatedLeft; } }
         [JsonIgnore] public float DefaultThresholdWarningLeft { get { return needSO.ThresholdWarningLeft; } }
         [JsonIgnore] public float DefaultThresholdCriticalLeft { get { return needSO.ThresholdCriticalLeft; } }
+        [JsonIgnore] public float DefaultThresholdElatedRight { get { return needSO.ThresholdElatedRight; } }
         [JsonIgnore] public float DefaultThresholdWarningRight { get { return needSO.ThresholdWarningRight; } }
         [JsonIgnore] public float DefaultThresholdCriticalRight { get { return needSO.ThresholdCriticalRight; } }
+        [JsonIgnore]
+        public float ThresholdElatedLeft
+        {
+            get { return thresholdElatedLeft; }
+            set
+            {
+                if (value > Constants.DEFAULT_LEVEL_FULL)
+                {
+                    thresholdElatedLeft = Constants.DEFAULT_LEVEL_FULL;
+                    return;
+                }
+                else if (value < Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                {
+                    thresholdElatedLeft = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    return;
+                }
+                else thresholdElatedLeft = value;
+            }
+        }
         [JsonIgnore] public float ThresholdWarningLeft
         {
             get { return thresholdWarningLeft; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE)
                 {
-                    thresholdWarningLeft = Constants.MAX_THRESHOLD;
+                    thresholdWarningLeft = Constants.MAX_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.05f)
                 {
                     thresholdWarningLeft = 0;
                     return;
@@ -349,17 +371,36 @@ namespace Quille
             get { return thresholdCriticalLeft; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD - 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE - 0.05f)
                 {
-                    thresholdCriticalLeft = Constants.MAX_THRESHOLD - 0.05f;
+                    thresholdCriticalLeft = Constants.MAX_THRESHOLD_NEGATIVE - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE)
                 {
-                    thresholdCriticalLeft = Constants.MIN_THRESHOLD;
+                    thresholdCriticalLeft = Constants.MIN_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else thresholdCriticalLeft = value;
+            }
+        }
+        [JsonIgnore]
+        public float ThresholdElatedRight
+        {
+            get { return thresholdElatedRight; }
+            set
+            {
+                if (value > Constants.DEFAULT_LEVEL_FULL)
+                {
+                    thresholdElatedRight = Constants.DEFAULT_LEVEL_FULL;
+                    return;
+                }
+                else if (value < Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                {
+                    thresholdElatedRight = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    return;
+                }
+                else thresholdElatedRight = value;
             }
         }
         [JsonIgnore] public float ThresholdWarningRight
@@ -367,14 +408,14 @@ namespace Quille
             get { return thresholdWarningRight; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE)
                 {
-                    thresholdWarningRight = Constants.MAX_THRESHOLD;
+                    thresholdWarningRight = Constants.MAX_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD + 0.05f)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    thresholdWarningRight = Constants.MIN_THRESHOLD + 0.05f;
+                    thresholdWarningRight = Constants.MIN_THRESHOLD_NEGATIVE + 0.05f;
                     return;
                 }
                 else thresholdWarningRight = value;
@@ -385,14 +426,14 @@ namespace Quille
             get { return thresholdCriticalRight; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD - 0.05f)
+                if (value > Constants.MAX_THRESHOLD_NEGATIVE - 0.05f)
                 {
-                    thresholdCriticalRight = Constants.MAX_THRESHOLD - 0.05f;
+                    thresholdCriticalRight = Constants.MAX_THRESHOLD_NEGATIVE - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD)
+                else if (value < Constants.MIN_THRESHOLD_NEGATIVE)
                 {
-                    thresholdCriticalRight = Constants.MIN_THRESHOLD;
+                    thresholdCriticalRight = Constants.MIN_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else thresholdCriticalRight = value;
@@ -400,6 +441,8 @@ namespace Quille
         }
         public void ResetThresholds()
         {
+            ThresholdElatedLeft = DefaultThresholdElatedLeft;
+            ThresholdElatedRight = DefaultThresholdElatedRight;
             ThresholdWarningLeft = DefaultThresholdWarningLeft;
             ThresholdWarningRight = DefaultThresholdWarningRight;
             ThresholdCriticalLeft = DefaultThresholdCriticalLeft;
@@ -447,8 +490,10 @@ namespace Quille
             BaseChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
             CurrentChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
 
+            ThresholdElatedLeft = DefaultThresholdElatedLeft;
             ThresholdWarningLeft = DefaultThresholdWarningLeft;
             ThresholdCriticalLeft = DefaultThresholdCriticalLeft;
+            ThresholdElatedRight = DefaultThresholdElatedRight;
             ThresholdWarningRight = DefaultThresholdWarningRight;
             ThresholdCriticalRight = DefaultThresholdCriticalRight;
 
@@ -725,7 +770,14 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (this.NeedStateLeft > NeedStates.Critical & this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft)
+                    if (this.NeedStateLeft != NeedStates.Elated & this.LevelCurrentLeftAsPercentage >= this.ThresholdElatedLeft)
+                    {
+                        this.NeedStateLeft = NeedStates.Elated;
+                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+
+                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                    }
+                    else if (this.NeedStateLeft > NeedStates.Critical & this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft)
                     {
                         this.NeedStateLeft = NeedStates.Critical;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
@@ -754,6 +806,13 @@ namespace Quille
                             Debug.Log(string.Format("{0} is no longer low.", this.NeedNameLeft));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                        }
+                        if (this.NeedStateLeft == NeedStates.Elated & this.LevelCurrentLeft < this.ThresholdElatedLeft)
+                        {
+                            this.NeedStateLeft = NeedStates.Normal;
+                            Debug.Log(string.Format("{0} is no longer elated.", this.NeedNameLeft));
+
+                            OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
                     }
                 }
@@ -785,7 +844,14 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (this.NeedStateRight > NeedStates.Critical & this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
+                    if (this.NeedStateRight != NeedStates.Elated & this.LevelCurrentRightAsPercentage >= this.ThresholdElatedRight)
+                    {
+                        this.NeedStateRight = NeedStates.Elated;
+                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+
+                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                    }
+                    else if (this.NeedStateRight > NeedStates.Critical & this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
                     {
                         this.NeedStateRight = NeedStates.Critical;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
@@ -814,6 +880,13 @@ namespace Quille
                             Debug.Log(string.Format("{0} is no longer low.", this.NeedNameRight));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                        }
+                        if (this.NeedStateRight == NeedStates.Elated & this.LevelCurrentRight < this.ThresholdElatedRight)
+                        {
+                            this.NeedStateRight = NeedStates.Normal;
+                            Debug.Log(string.Format("{0} is no longer elated.", this.NeedNameRight));
+
+                            OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
                     }
                 }
