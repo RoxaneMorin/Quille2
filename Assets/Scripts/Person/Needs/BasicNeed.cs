@@ -26,7 +26,8 @@ namespace Quille
         private float currentChangeRateScaled;
 
         [SerializeField]
-        private float thresholdWarning,
+        private float thresholdElated,
+                      thresholdWarning,
                       thresholdCritical;
 
         [SerializeField, InspectorReadOnly, JsonIgnore]
@@ -130,16 +131,36 @@ namespace Quille
             CurrentChangeRate = baseChangeRate;
         }
 
+        [JsonIgnore] public float DefaultThresholdElated { get { return needSO.ThresholdElated; } }
         [JsonIgnore] public float DefaultThresholdWarning { get { return needSO.ThresholdWarning; } }
         [JsonIgnore] public float DefaultThresholdCritical { get { return needSO.ThresholdCritical; } }
+        [JsonIgnore]
+        public float ThresholdElated
+        {
+            get { return thresholdElated; }
+            set
+            {
+                if (value > Constants.MAX_THRESHOLD)
+                {
+                    thresholdElated = Constants.MAX_THRESHOLD;
+                    return;
+                }
+                else if (value < Constants.MIN_THRESHOLD + 0.1f)
+                {
+                    thresholdElated = Constants.MIN_THRESHOLD + 0.1f;
+                    return;
+                }
+                else thresholdWarning = value;
+            }
+        }
         [JsonIgnore] public float ThresholdWarning
         {
             get { return thresholdWarning; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD)
+                if (value > Constants.MAX_THRESHOLD - 0.05f)
                 {
-                    thresholdWarning = Constants.MAX_THRESHOLD;
+                    thresholdWarning = Constants.MAX_THRESHOLD - 0.05f;
                     return;
                 }
                 else if (value < Constants.MIN_THRESHOLD + 0.05f)
@@ -157,7 +178,7 @@ namespace Quille
             {
                 if (value > Constants.MAX_THRESHOLD - 0.05f)
                 {
-                    thresholdCritical = Constants.MAX_THRESHOLD - 0.05f;
+                    thresholdCritical = Constants.MAX_THRESHOLD - 0.1f;
                     return;
                 }
                 else if (value < Constants.MIN_THRESHOLD)
@@ -170,6 +191,7 @@ namespace Quille
         }
         public void ResetThresholds()
         {
+            ThresholdElated = DefaultThresholdElated;
             ThresholdWarning = DefaultThresholdWarning;
             thresholdCritical = DefaultThresholdCritical;
         }
@@ -213,6 +235,7 @@ namespace Quille
             BaseChangeRate = DefaultChangeRate;
             CurrentChangeRate = DefaultChangeRate;
 
+            ThresholdElated = DefaultThresholdElated;
             ThresholdWarning = DefaultThresholdWarning;
             ThresholdCritical = DefaultThresholdCritical;
         }
@@ -338,7 +361,14 @@ namespace Quille
                     // Invoke need change event?
 
                     // Threshold detection.
-                    if (this.NeedState > NeedStates.Critical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
+                    if (this.NeedState != NeedStates.Elated & this.LevelCurrentAsPercentage >= this.ThresholdElated)
+                    {
+                        this.NeedState = NeedStates.Elated;
+                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
+
+                        OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                    }
+                    else if (this.NeedState > NeedStates.Critical & this.LevelCurrentAsPercentage <= this.ThresholdCritical)
                     {
                         this.NeedState = NeedStates.Critical;
                         Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedName, 1 - GetFulfillmentDelta(true)));
@@ -352,7 +382,7 @@ namespace Quille
 
                         OnBNReachedThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
-                    else // Unset the Warning and Critical booleans as needed.
+                    else // Unset the Elated, Warning and Critical booleans as needed.
                     {
                         if (this.NeedState == NeedStates.Critical & this.LevelCurrent > this.ThresholdCritical)
                         {
@@ -368,7 +398,16 @@ namespace Quille
 
                             OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
+                        if (this.NeedState == NeedStates.Elated & this.LevelCurrent < this.ThresholdElated)
+                        {
+                            this.NeedState = NeedStates.Normal;
+                            Debug.Log(string.Format("{0} is no longer elated.", this.NeedName));
+
+                            OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                        }
                     }
+
+                    // TODO: add elated need event?
                 }
                 else // The need is currently empty.
                 {

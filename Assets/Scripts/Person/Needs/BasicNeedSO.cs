@@ -32,6 +32,9 @@ namespace Quille
         public float DefaultChangeRate { get { return defaultChangeRate; } }
 
         [SerializeField]
+        private float thresholdElated = Constants.DEFAULT_THRESHOLD_ELATED;
+        public float ThresholdElated { get { return thresholdElated; } }
+        [SerializeField]
         private float thresholdWarning = Constants.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarning { get { return thresholdWarning; } }
         [SerializeField]
@@ -49,5 +52,6 @@ namespace Quille
 
         [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] thresholdsModulatedBy;
         public ChecksAndMods.ModulatorArithmeticFromFloat[] ThresholdsModulatedBy { get { return thresholdsModulatedBy; } }
+        // TODO: how are individual thresholds modulated?
     }
 }

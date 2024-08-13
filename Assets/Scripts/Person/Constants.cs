@@ -34,7 +34,8 @@ namespace Quille
         public const float DEFAULT_LEVEL_FULL = 1;
         public const float DEFAULT_LEVEL_EMPTY = 0;
 
-        // Percentile thresholds at which needs reach the "warning" and "critical" states.
+        // Percentile thresholds at which needs reach the "elated", "warning" and "critical" states.
+        public const float DEFAULT_THRESHOLD_ELATED = 0.90f;
         public const float DEFAULT_THRESHOLD_WARNING = 0.25f;
         public const float DEFAULT_THRESHOLD_CRITICAL = 0.10f;
 
