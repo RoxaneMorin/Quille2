@@ -86,8 +86,7 @@ namespace proceduralGrid
                     i++;
                 }
             }
-
-            // TODO: Create collider.
+            // TODO: subscribe to events.
         }
         protected void PopulateInstancedRenderDataFromItems()
         {

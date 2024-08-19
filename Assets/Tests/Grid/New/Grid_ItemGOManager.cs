@@ -56,6 +56,8 @@ namespace proceduralGrid
                     myGridItems[x, z].SetParameters(parentGrid, this, new CoordPair(x, z), relativePosition, relativeSize);
                 }
             }
+
+            // TODO: subscribe to events.
         }
         protected override void PopulateBoundsGizmoPoints()
         {
@@ -96,7 +98,7 @@ namespace proceduralGrid
                         myGridItems[currentXCoord, currentZCoord].MyCurrentHandle = myHandles[x + doBeyond, z + doBeyond];
 
                         // TODO: deactivate previous item.
-                        // Create an event or something?
+                        // TODO: subscribe to events.
                     }
                 }
             }

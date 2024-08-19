@@ -160,6 +160,8 @@ namespace proceduralGrid
                 myGridTileManager.Init(this, gridLengthX - 1, gridLengthZ - 1, tileSize, new Vector3(0.5f, 0.01f, 0.5f));
                 myGridTileManager.name = "GridTiles";
             }
+
+            // TODO: subscribe to events.
         }
 
 
