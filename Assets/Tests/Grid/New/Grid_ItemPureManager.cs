@@ -142,16 +142,28 @@ namespace proceduralGrid
 
         // TODO: grid search for the closest item to the clicked location
         // TODO: ensure that it works at different scales and rotations.
+        
 
+        // Entry function searching for the closest of our grid items to the clicked location.
         protected void SearchForClickedItem(Vector3 cursorPosition)
         {
+            // TODO: work in world location instead, raycast if the cursor can't do that.
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Debug.Log(hit.point);
+            }
+
+
             // bottomLeft, bottomRight, topLeft, topRight
             (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
 
             Grid_ItemPure currentGridItem;
             float distanceFromCursor;
 
-            (float, Grid_ItemPure, Corners) minDistance = (float.PositiveInfinity, null, Corners.none);
+            (float, Corners, Grid_ItemPure) minDistance = (float.PositiveInfinity, Corners.none, null);
 
             for (int i = 0; i < 4; i++)
             {
@@ -160,17 +172,14 @@ namespace proceduralGrid
 
                 if (distanceFromCursor < minDistance.Item1)
                 {
-                    minDistance = (distanceFromCursor, currentGridItem, (Corners)i);
+                    minDistance = (distanceFromCursor, (Corners)i, currentGridItem);
                 }
             }
 
-            Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item3, minDistance.Item2.MyScreenPosition, minDistance.Item1));
+            Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item2, minDistance.Item3.MyScreenPosition, minDistance.Item1));
         }
 
-        // TODO: go down into it.
-        // TODO: limit use by view angle?
-        // TODO: try switching the cursor to world space instead? Raycast?
-
+        // TODO: the recursive search. Probably won't do actual recursion.
 
 
         // BUILT IN
