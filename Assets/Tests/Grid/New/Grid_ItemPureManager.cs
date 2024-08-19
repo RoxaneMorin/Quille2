@@ -145,34 +145,31 @@ namespace proceduralGrid
 
         protected void SearchForClickedItem(Vector3 cursorPosition)
         {
-            Vector3 screenPosBottomLeft = Camera.main.WorldToScreenPoint(myGridItems[0, 0].MyPostion);
-            Vector3 screenPosBottomRight = Camera.main.WorldToScreenPoint(myGridItems[myLengthX, 0].MyPostion);
-            Vector3 screenPosTopLeft = Camera.main.WorldToScreenPoint(myGridItems[0, myLengthZ].MyPostion);
-            Vector3 screenPosTopRight = Camera.main.WorldToScreenPoint(myGridItems[myLengthX, myLengthZ].MyPostion);
+            // bottomLeft, bottomRight, topLeft, topRight
+            (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
 
-            Debug.Log(screenPosBottomLeft);
-            Debug.Log(screenPosBottomRight);
-            Debug.Log(screenPosTopLeft);
-            Debug.Log(screenPosTopRight);
+            Grid_ItemPure currentGridItem;
+            float distanceFromCursor;
 
-            Vector3[] distances = new Vector3[4];
+            (float, Grid_ItemPure, Corners) minDistance = (float.PositiveInfinity, null, Corners.none);
 
-            float distanceFromBottomLeft = Vector2.Distance(cursorPosition, screenPosBottomLeft);
-            float distanceFromBottomRight = Vector2.Distance(cursorPosition, screenPosBottomRight);
-            float distanceFromTopLeft = Vector2.Distance(cursorPosition, screenPosTopLeft);
-            float distanceFromTopRight = Vector2.Distance(cursorPosition, screenPosTopRight);
+            for (int i = 0; i < 4; i++)
+            {
+                currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
+                distanceFromCursor = Vector2.Distance(cursorPosition, currentGridItem.MyScreenPosition);
 
-            Debug.Log(distanceFromBottomLeft);
-            Debug.Log(distanceFromBottomRight);
-            Debug.Log(distanceFromTopLeft);
-            Debug.Log(distanceFromTopRight);
+                if (distanceFromCursor < minDistance.Item1)
+                {
+                    minDistance = (distanceFromCursor, currentGridItem, (Corners)i);
+                }
+            }
 
-            //float distanceTopLeft
-            //float distanceTopRight
-            //float distanceBottomleft
-            //float distanceBottomRight
+            Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item3, minDistance.Item2.MyScreenPosition, minDistance.Item1));
         }
 
+        // TODO: go down into it.
+        // TODO: limit use by view angle?
+        // TODO: try switching the cursor to world space instead? Raycast?
 
 
 

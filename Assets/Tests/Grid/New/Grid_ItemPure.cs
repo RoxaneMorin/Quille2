@@ -32,6 +32,7 @@ namespace proceduralGrid
         public CoordPair MyGridCoordinates { get { return myGridCoordinates; } set { myGridCoordinates = value; } }
         public Matrix4x4 MyTransformMatrix { get { return myTransformMatrix; } set { myTransformMatrix = value; } }
         public Vector3 MyPostion { get { return myTransformMatrix.GetPosition(); } }
+        public Vector3 MyScreenPosition { get { return  Camera.main.WorldToScreenPoint(MyPostion); } }
         public Quaternion MyRotation { get { return myTransformMatrix.rotation; } }
         public Vector3 MyLossyScale { get { return myTransformMatrix.lossyScale; } }
         public float MyRelativeSize { get { return myRelativeSize; } set { myRelativeSize = value; } }
