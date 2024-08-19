@@ -53,6 +53,9 @@ namespace proceduralGrid
             // Populate boundsGizmoPoints.
             boundsGizmoVertexPos = new Vector3[4];
             PopulateBoundsGizmoPoints();
+
+            // Register to own event(s).
+            this.OnItemClicked += OnMyItemClicked;
         }
 
         // Separated submethods for ease of overriding.
@@ -82,6 +85,8 @@ namespace proceduralGrid
                     itemTransformMatrix = gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
 
                     myGridItems[x, z] = new Grid_ItemPure(myParentGrid, this, new CoordPair(x, z), itemTransformMatrix, relativeSize);
+                    myGridItems[x, z].OnItemClicked += OnMyItemClicked;
+
                     myInstancedMeshData[i] = itemTransformMatrix;
                     i++;
                 }
@@ -269,6 +274,18 @@ namespace proceduralGrid
 
             Debug.Log(string.Format("Depth {0}. Closest point: {1} at {2}, {3} of the current search points, distance of {4}.", searchDepth, minDistance.Item3, minDistance.Item3.MyPostion, minDistance.Item2, minDistance.Item1));
             return minDistance;
+        }
+
+
+        // EVENTS
+        protected void OnMyItemClicked(Grid_ItemPure clickedItem)
+        {
+            Debug.Log(string.Format("{0} aknowledges that its item {1} was clicked.", gameObject.name, clickedItem));
+        }
+
+        protected void OnMyHandleClicked(Grid_Handle clickedHandle)
+        {
+            Debug.Log(string.Format("{0} aknowledges that its handle {1}, curently attached to {2}, was clicked.", gameObject.name, clickedHandle.name, clickedHandle.MyCurrentItem.name));
         }
 
 

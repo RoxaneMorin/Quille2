@@ -140,12 +140,6 @@ namespace proceduralGrid
             //amIActive = !amIActive;
             Debug.Log(string.Format("Mouse down on {0}.", gameObject));
 
-            //if (amIActive)
-            //{
-            //    // TODO: better handle creation.
-            //    myParentGridItemManager.CreateHandles(this, 1);
-            //}
-
             // Do Event.
             OnItemClicked?.Invoke(this);
         }

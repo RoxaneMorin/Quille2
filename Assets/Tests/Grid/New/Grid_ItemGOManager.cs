@@ -22,7 +22,7 @@ namespace proceduralGrid
 
 
         // EVENTS
-        public event GridItemGOClicked OnItemClicked;
+        public event GridItemGOClicked OnItemClicked; // necessary?
 
 
 
@@ -39,6 +39,9 @@ namespace proceduralGrid
             // Populate boundsGizmoPoints.
             boundsGizmoVertexPos = new Vector3[4];
             PopulateBoundsGizmoPoints();
+
+            // Register to own event(s).
+            this.OnItemClicked += OnMyItemClicked; // Necessary?
         }
 
         // Separated submethods for ease of overriding.
@@ -54,10 +57,9 @@ namespace proceduralGrid
 
                     myGridItems[x, z] = Instantiate(itemPrefab, transform).GetComponent<Grid_ItemGO>();
                     myGridItems[x, z].SetParameters(parentGrid, this, new CoordPair(x, z), relativePosition, relativeSize);
+                    myGridItems[x, z].OnItemClicked += OnMyItemClicked;
                 }
             }
-
-            // TODO: subscribe to events.
         }
         protected override void PopulateBoundsGizmoPoints()
         {
@@ -93,15 +95,29 @@ namespace proceduralGrid
                         if (myHandles[x + doBeyond, z + doBeyond] == null)
                         {
                             myHandles[x + doBeyond, z + doBeyond] = Instantiate(handlePrefab, transform).GetComponent<Grid_Handle>();
+                            myHandles[x + doBeyond, z + doBeyond].OnHandleClicked += OnMyHandleClicked;
                         }
                         myHandles[x + doBeyond, z + doBeyond].SetReferencesAndPosition(myParentGrid, this, myGridItems[currentXCoord, currentZCoord]);
                         myGridItems[currentXCoord, currentZCoord].MyCurrentHandle = myHandles[x + doBeyond, z + doBeyond];
 
                         // TODO: deactivate previous item.
-                        // TODO: subscribe to events.
                     }
                 }
             }
+        }
+
+
+        // EVENTS
+        protected void OnMyItemClicked(Grid_ItemGO clickedItem)
+        {
+            Debug.Log(string.Format("{0} aknowledges that its item {1} was clicked.", gameObject.name, clickedItem.name));
+
+            //CreateHandles(clickedItem, 1);
+        }
+
+        protected void OnMyHandleClicked(Grid_Handle clickedHandle)
+        {
+            Debug.Log(string.Format("{0} aknowledges that its handle {1}, curently attached to {2}, was clicked.", gameObject.name, clickedHandle.name, clickedHandle.MyCurrentItem.name));
         }
 
 
