@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace proceduralGrid
@@ -139,47 +137,46 @@ namespace proceduralGrid
         }
 
 
-
         // TODO: grid search for the closest item to the clicked location
         // TODO: ensure that it works at different scales and rotations.
-        
 
         // Entry function searching for the closest of our grid items to the clicked location.
-        protected void SearchForClickedItem(Vector3 cursorPosition)
+        protected void SearchForClickedItem(Vector3 mousePosition)
         {
-            // TODO: work in world location instead, raycast if the cursor can't do that.
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit cursorHit;
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
+            // Raycast so we can work with world positions.
+            if (Physics.Raycast(ray, out cursorHit))
             {
-                Debug.Log(hit.point);
-            }
+                // bottomLeft, bottomRight, topLeft, topRight
+                (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
 
+                Grid_ItemPure currentGridItem;
+                float distanceFromCursor;
 
-            // bottomLeft, bottomRight, topLeft, topRight
-            (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
+                (float, Corners, Grid_ItemPure) minDistance = (float.PositiveInfinity, Corners.none, null);
 
-            Grid_ItemPure currentGridItem;
-            float distanceFromCursor;
-
-            (float, Corners, Grid_ItemPure) minDistance = (float.PositiveInfinity, Corners.none, null);
-
-            for (int i = 0; i < 4; i++)
-            {
-                currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
-                distanceFromCursor = Vector2.Distance(cursorPosition, currentGridItem.MyScreenPosition);
-
-                if (distanceFromCursor < minDistance.Item1)
+                for (int i = 0; i < 4; i++)
                 {
-                    minDistance = (distanceFromCursor, (Corners)i, currentGridItem);
+                    currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
+                    distanceFromCursor = Vector3.Distance(cursorHit.point, currentGridItem.MyPostion);
+
+                    if (distanceFromCursor < minDistance.Item1)
+                    {
+                        minDistance = (distanceFromCursor, (Corners)i, currentGridItem);
+                    }
                 }
+
+                Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item2, minDistance.Item3.MyPostion, minDistance.Item1));
+
+                // TODO: the recursive search. Probably won't do actual recursion.
             }
-
-            Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item2, minDistance.Item3.MyScreenPosition, minDistance.Item1));
+            else
+            {
+                Debug.LogWarning(string.Format("The ItemPureManager {0} was clicked, but the raycast did not hit anything.", gameObject.name));
+            }
         }
-
-        // TODO: the recursive search. Probably won't do actual recursion.
 
 
         // BUILT IN
