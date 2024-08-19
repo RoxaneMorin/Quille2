@@ -40,7 +40,11 @@ namespace proceduralGrid
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }
         public Grid_ItemManager MyParentGridItemManager { get { return myParentGridManager; } set { myParentGridManager = value; } }
         public Grid_Handle MyCurrentHandle { get { return myCurrentHandle; } set { myCurrentHandle = value; } }
-        
+
+
+
+        // EVENTS
+        public event GridItemPureClicked OnItemClicked;
 
 
 

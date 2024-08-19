@@ -46,6 +46,11 @@ namespace proceduralGrid
 
 
 
+        // EVENTS
+        public event GridItemGOClicked OnItemClicked;
+
+
+
         // METHODS
 
         // SET UP
@@ -140,6 +145,9 @@ namespace proceduralGrid
             //    // TODO: better handle creation.
             //    myParentGridItemManager.CreateHandles(this, 1);
             //}
+
+            // Do Event.
+            OnItemClicked?.Invoke(this);
         }
 
 

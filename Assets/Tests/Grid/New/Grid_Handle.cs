@@ -48,7 +48,12 @@ namespace proceduralGrid
 
         public CoordPair MyItemsGridCoordinates { get { return myCurrentItem.MyGridCoordinates; } }
         public Vector3 MyItemsPosition { get { return myCurrentItem.transform.position; } }
-        
+
+
+
+        // EVENTS
+        public event HandleClicked OnHandleClicked;
+
 
 
         // METHODS
@@ -173,6 +178,9 @@ namespace proceduralGrid
         {
             mouseClickingOnMe = true;
             Debug.Log(string.Format("Mouse down on {0}.", gameObject));
+
+            // Do Event.
+            OnHandleClicked?.Invoke(this);
         }
         protected void OnMouseUp()
         {

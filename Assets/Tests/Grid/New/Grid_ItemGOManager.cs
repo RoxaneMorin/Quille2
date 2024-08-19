@@ -21,6 +21,11 @@ namespace proceduralGrid
 
 
 
+        // EVENTS
+        public event GridItemGOClicked OnItemClicked;
+
+
+
         // METHODS
 
         // SET UP
