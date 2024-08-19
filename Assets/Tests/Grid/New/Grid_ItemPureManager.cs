@@ -152,8 +152,8 @@ namespace proceduralGrid
                 // bottomLeft, bottomRight, topLeft, topRight
                 (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
 
-                Grid_ItemPure currentGridItem;
-                float distanceFromCursor;
+                Grid_ItemPure currentGridItem = null;
+                float distanceFromCursor = float.PositiveInfinity;
 
                 (float, Corners, Grid_ItemPure) minDistance = (float.PositiveInfinity, Corners.none, null);
 
@@ -168,14 +168,105 @@ namespace proceduralGrid
                     }
                 }
 
-                Debug.Log(string.Format("Closest point: {0} {1}, distance of {2}.", minDistance.Item2, minDistance.Item3.MyPostion, minDistance.Item1));
+                Debug.Log(string.Format("Closest point: {0} {1} at {2}, distance of {3}.", minDistance.Item2, minDistance.Item3.MyGridCoordinates, minDistance.Item3.MyPostion, minDistance.Item1));
 
-                // TODO: the recursive search. Probably won't do actual recursion.
+                // Return this closest point if it's less than half a tile away.
+                float halfTileLength = myRelativeSize / 2 + 0.05f;
+
+                if (minDistance.Item1 < halfTileLength)
+                {
+                    return;
+                }
+                else
+                {
+                    // TODO: the recursive search. Probably won't do actual recursion.
+
+                    int halfLengthX = myLengthX / 2;
+                    int halfLengthZ = myLengthZ / 2;
+
+                    switch (minDistance.Item2)
+                    {
+                        case Corners.bottomLeft:
+                            {
+                                // bottom left: we want { (0, 0), (myLengthX/2, 0), (0, myLengthZ/2), (myLengthX/2, myLengthZ/2) };
+                                itemsIndices[0] = minDistance.Item3.MyGridCoordinates.AsTuple;
+                                itemsIndices[1] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, 0));
+                                itemsIndices[2] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((0, halfLengthZ));
+                                itemsIndices[3] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, halfLengthZ));
+                                break;
+                            }
+
+                        case Corners.bottomRight:
+                            {
+                                // bottom right: we want { (myLengthX/2, 0), (myLengthX, 0), (myLengthX/2, myLengthZ/2), (myLengthX, myLengthZ/2) };
+                                itemsIndices[0] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, 0));
+                                itemsIndices[1] = minDistance.Item3.MyGridCoordinates.AsTuple;
+                                itemsIndices[2] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, halfLengthZ));
+                                itemsIndices[3] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((0, halfLengthZ));
+                                break;
+                            }
+                        case Corners.topLeft:
+                            {
+                                // top left: we want { (0, myLengthZ/2), (myLengthX/2, myLengthZ/2), (0, myLengthZ), (myLengthX/2, myLengthZ) };
+                                itemsIndices[0] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -halfLengthZ));
+                                itemsIndices[1] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, -halfLengthZ));
+                                itemsIndices[2] = minDistance.Item3.MyGridCoordinates.AsTuple;
+                                itemsIndices[3] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, 0));
+                                break;
+                            }
+                        case Corners.topRight:
+                            {
+                                // top right: we want { (myLengthX/2, myLengthZ/2), (myLengthX, myLengthZ/2), (myLengthX/2, myLengthZ), (myLengthX, myLengthZ) };
+                                itemsIndices[0] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, -halfLengthZ));
+                                itemsIndices[1] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -halfLengthZ));
+                                itemsIndices[2] = minDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, 0));
+                                itemsIndices[3] = minDistance.Item3.MyGridCoordinates.AsTuple;
+                                break;
+                            }
+                        default:
+                            {
+                                Debug.LogWarning(string.Format("The ItemPureManager {0} was clicked, but the search for the closest point failed.", gameObject.name));
+                                return;
+                            }
+                    }
+
+                    SearchedForClickedItemSub(cursorHit.point, itemsIndices, ref minDistance, ref currentGridItem, ref distanceFromCursor);
+
+                    // TODO: return closest point if less than a half tile's distance already.
+                }
             }
             else
             {
                 Debug.LogWarning(string.Format("The ItemPureManager {0} was clicked, but the raycast did not hit anything.", gameObject.name));
+                return;
             }
+        }
+        protected (float, Corners, Grid_ItemPure) SearchedForClickedItemSub(Vector3 cursorPosition, (int, int)[] itemsIndices, ref (float, Corners, Grid_ItemPure) previousMinDistance, ref Grid_ItemPure currentGridItem, ref float distanceFromCursor)
+        {
+            (float, Corners, Grid_ItemPure) minDistance = (float.PositiveInfinity, Corners.none, null);
+
+            for (int i = 0; i < 4; i++)
+            {
+                if ((Corners)i == previousMinDistance.Item2)
+                {
+                    currentGridItem = previousMinDistance.Item3;
+                    distanceFromCursor = previousMinDistance.Item1;
+                }
+                else
+                {
+                    currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
+                    distanceFromCursor = Vector3.Distance(cursorPosition, currentGridItem.MyPostion);
+                }
+
+                if (distanceFromCursor < minDistance.Item1)
+                {
+                    minDistance = (distanceFromCursor, (Corners)i, currentGridItem);
+                }
+            }
+
+            Debug.Log(string.Format("Closest point: {0} {1} at {2}, distance of {3}.", minDistance.Item2, minDistance.Item3.MyGridCoordinates, minDistance.Item3.MyPostion, minDistance.Item1));
+
+            return minDistance;
         }
 
 

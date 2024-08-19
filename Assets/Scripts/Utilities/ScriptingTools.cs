@@ -24,4 +24,12 @@ public static class ExtensionMethods
 
         return highestVal;
     }
+
+
+    // TUPLES
+    // (INT, INT)
+    public static (int, int) Add(this (int, int) tupleA, (int, int) tupleB)
+    {
+        return (tupleA.Item1 + tupleB.Item1, tupleA.Item2 + tupleB.Item2);
+    }
 }

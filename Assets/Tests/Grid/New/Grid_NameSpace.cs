@@ -23,6 +23,9 @@ namespace proceduralGrid
         public int x;
         public int z;
 
+        // PROPERTIES
+        public (int, int) AsTuple { get { return (x, z); } }
+
         // CONSTRUCTOR
         public CoordPair(int x, int z)
         {
