@@ -5,6 +5,7 @@ using UnityEngine;
 namespace proceduralGrid
 {
     // ENUMS
+    public enum Corners { bottomLeft, bottomRight, topLeft, topRight };
     public enum Adjacencies { bl, br, tl, tr, b, t, l, r }; // Useless?
 
 

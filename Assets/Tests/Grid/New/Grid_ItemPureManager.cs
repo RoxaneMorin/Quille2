@@ -30,10 +30,10 @@ namespace proceduralGrid
         [SerializeField] protected RenderParams myInstancedRenderParams;
         [SerializeField] [SerializeReference] protected Matrix4x4[] myInstancedMeshData; // Is SerializeReference actually working?
 
-        [Header("State")]
-        [SerializeField] protected Vector3 myPreviousPosition;
-        [SerializeField] protected Quaternion myPreviousRotation;
-        [SerializeField] protected Vector3 myPreviousScale;
+        //[Header("State")]
+        //[SerializeField] protected Vector3 myPreviousPosition;
+        //[SerializeField] protected Quaternion myPreviousRotation;
+        //[SerializeField] protected Vector3 myPreviousScale;
 
 
 
@@ -139,6 +139,43 @@ namespace proceduralGrid
         }
 
 
+
+        // TODO: grid search for the closest item to the clicked location
+        // TODO: ensure that it works at different scales and rotations.
+
+        protected void SearchForClickedItem(Vector3 cursorPosition)
+        {
+            Vector3 screenPosBottomLeft = Camera.main.WorldToScreenPoint(myGridItems[0, 0].MyPostion);
+            Vector3 screenPosBottomRight = Camera.main.WorldToScreenPoint(myGridItems[myLengthX, 0].MyPostion);
+            Vector3 screenPosTopLeft = Camera.main.WorldToScreenPoint(myGridItems[0, myLengthZ].MyPostion);
+            Vector3 screenPosTopRight = Camera.main.WorldToScreenPoint(myGridItems[myLengthX, myLengthZ].MyPostion);
+
+            Debug.Log(screenPosBottomLeft);
+            Debug.Log(screenPosBottomRight);
+            Debug.Log(screenPosTopLeft);
+            Debug.Log(screenPosTopRight);
+
+            Vector3[] distances = new Vector3[4];
+
+            float distanceFromBottomLeft = Vector2.Distance(cursorPosition, screenPosBottomLeft);
+            float distanceFromBottomRight = Vector2.Distance(cursorPosition, screenPosBottomRight);
+            float distanceFromTopLeft = Vector2.Distance(cursorPosition, screenPosTopLeft);
+            float distanceFromTopRight = Vector2.Distance(cursorPosition, screenPosTopRight);
+
+            Debug.Log(distanceFromBottomLeft);
+            Debug.Log(distanceFromBottomRight);
+            Debug.Log(distanceFromTopLeft);
+            Debug.Log(distanceFromTopRight);
+
+            //float distanceTopLeft
+            //float distanceTopRight
+            //float distanceBottomleft
+            //float distanceBottomRight
+        }
+
+
+
+
         // BUILT IN
         protected override void OnDrawGizmos()
         {
@@ -157,18 +194,20 @@ namespace proceduralGrid
 
         protected void FixedUpdate()
         {
-            myPreviousPosition = transform.position;
-            myPreviousRotation = transform.rotation;
-            myPreviousScale = transform.lossyScale;
+            //myPreviousPosition = transform.position;
+            //myPreviousRotation = transform.rotation;
+            //myPreviousScale = transform.lossyScale;
         }
 
         protected void Update()
         {
             // Have we moved?
-            if (transform.position != myPreviousPosition || transform.rotation != myPreviousRotation || transform.lossyScale != myPreviousScale)
+            if (transform.hasChanged)
             {
                 RegenerateItemTransforms();
                 PopulateBoundsGizmoPoints();
+
+                transform.hasChanged = false;
             }
 
             if (useVisuals && useThisMesh != null)
@@ -180,6 +219,8 @@ namespace proceduralGrid
         protected void OnMouseDown()
         {
             Debug.Log(string.Format("Mouse down on {0} at {1}.", gameObject, Input.mousePosition));
+
+            SearchForClickedItem(Input.mousePosition);
         }
     }
 

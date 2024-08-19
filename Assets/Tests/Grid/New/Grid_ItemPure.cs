@@ -31,7 +31,9 @@ namespace proceduralGrid
         // PROPERTIES
         public CoordPair MyGridCoordinates { get { return myGridCoordinates; } set { myGridCoordinates = value; } }
         public Matrix4x4 MyTransformMatrix { get { return myTransformMatrix; } set { myTransformMatrix = value; } }
-        public Vector3 MyPostion { get { return new Vector3(myTransformMatrix.m03, myTransformMatrix.m13, myTransformMatrix.m23); } }
+        public Vector3 MyPostion { get { return myTransformMatrix.GetPosition(); } }
+        public Quaternion MyRotation { get { return myTransformMatrix.rotation; } }
+        public Vector3 MyLossyScale { get { return myTransformMatrix.lossyScale; } }
         public float MyRelativeSize { get { return myRelativeSize; } set { myRelativeSize = value; } }
 
         public Grid_Base MyParentGrid { get { return myParentGrid; } set { myParentGrid = value; } }

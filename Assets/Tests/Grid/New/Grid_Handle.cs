@@ -99,9 +99,8 @@ namespace proceduralGrid
         {
             // Update my material's cursor distance param.
             myScreenPos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-            myScreenPos.z = 0;
 
-            myCurrentDistanceFromCursor = Vector3.Distance(Input.mousePosition, myScreenPos);
+            myCurrentDistanceFromCursor = Vector2.Distance(Input.mousePosition, myScreenPos);
             myMeshRenderer.material.SetFloat("_CurrentDistanceFromCursor", myCurrentDistanceFromCursor);
         }
 
