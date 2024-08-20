@@ -43,20 +43,21 @@ namespace Quille
         public const float DEFAULT_NOTICE_BASIC_NEED = 0.5f;
         public const float DEFAULT_NOTICE_SUBJECTIVE_NEED = 0.5f;
 
-        // Bounds for need notice values. 
-        //public const float MAX_NOTICE_NEED = 0.8f; // Should be 0.05f higher than the MAX_THRESHOLD;
-        //public const float MIN_NOTICE_NEED = 0.15f; // Should be 0.1f higher than the MIN_THREDHOLD;
-        // Calculated from the MAX and MIN TRESHOLDS.
-
-        // Interval (in seconds) at which the PersonAI will check the current state of needs.
-        public const float NEED_CHECK_INTERVAL = 5f;
-
         // Do we need mins and maxes for needs' base change rates?
         public const float MIN_BASE_CHANGE_RATE = 0.0001f;
         public const float MAX_BASE_CHANGE_RATE = 0.5f;
         // Tweak these on a per-need basis?
         // Only apply to basic needs, as subjective needs could plausibly static for certain extreme personalities?
 
+        // The change rates set by interactions, modifiers, etc, are divided by this value.
         public const float NEED_CHANGE_RATE_DIVIDER = 100f;
+
+        // NEEDS AI
+        // Interval (in seconds) at which needs will change.
+        public const float NEED_DECAY_INTERVAL = 1f;
+
+        // Interval (in seconds) at which the PersonAI will check the current state of needs.
+        public const float NEED_CHECK_INTERVAL = 5f;
+
     }
 }

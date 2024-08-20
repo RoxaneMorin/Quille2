@@ -23,9 +23,11 @@ namespace Quille
         // For use by external functions that only know of a BasicNeedSO.
         [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")]
         private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
-        //[SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")]
-        private Dictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
+        [SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")]
+        private SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
 
+        // TODO: make sure the dicts use references rather than values.
+        // TODO: ensure this whole class can (de)serialize properly.
 
         // General need-related parameters.
 
@@ -120,14 +122,14 @@ namespace Quille
                 StopBasicNeedDecay(myNeed);
             }
         }
-        private void StartSubjectiveNeedDecay(SubjectiveNeed[] myBasicNeeds)
+        private void StartSubjectiveNeedDecay(SubjectiveNeed[] mySubjectiveNeeds)
         {
             foreach (SubjectiveNeed myNeed in mySubjectiveNeeds)
             {
                 StartSubjectiveNeedDecay(myNeed);
             }
         }
-        private void StopSubjectiveNeedDecay(BasicNeed[] SubjectiveNeed)
+        private void StopSubjectiveNeedDecay(SubjectiveNeed[] mySubjectiveNeeds)
         {
             foreach (SubjectiveNeed myNeed in mySubjectiveNeeds)
             {
@@ -139,6 +141,8 @@ namespace Quille
         // Init.
         private void Init()
         {
+            // TODO: load the need SOs here instead of having premade arrays.
+
             InitBasicNeeds();
             InitSubjectiveNeeds();
 
@@ -147,8 +151,8 @@ namespace Quille
         private void InitBasicNeeds()
         {
             myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
-
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
+
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
@@ -168,15 +172,15 @@ namespace Quille
         }
         private void InitSubjectiveNeeds()
         {
-            mySubjectiveNeedsMapped = new Dictionary<SubjectiveNeedSO, SubjectiveNeed>();
-            
+            mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
             mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
+
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
                 mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
                 mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
 
-                mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedWarning;
+                mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
                 mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
                 mySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
 
@@ -195,20 +199,10 @@ namespace Quille
         // Basic needs.
         private void OnBasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState)
         {
-            if (needState == NeedStates.Warning)
-            {
-                Debug.Log(string.Format("{0} threw a Warning event.", needIdentity.NeedName));
+            Debug.Log(string.Format("{0} threw a ReachedThreshold event ({1}).", needIdentity.NeedName, needState));
 
-                // Throw the event upwards.
-                OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Warning);
-            }
-            else if (needState == NeedStates.Critical)
-            {
-                Debug.Log(string.Format("{0} threw a Critical event.", needIdentity.NeedName));
-
-                // Throw the event upwards.
-                OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Critical);
-            }
+            // Throw the event upwards.
+            OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, needState);
         }
         private void OnBasicNeedFailure(BasicNeedSO needIdentity)
         {
@@ -223,22 +217,12 @@ namespace Quille
         }
 
 
-        private void OnSubjectiveNeedWarning(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
+        private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
-            if (needState == NeedStates.Warning)
-            {
-                Debug.Log(string.Format("{0} threw a Warning event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+            Debug.Log(string.Format("{0} threw a ReachedThreshold event ({1}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needState));
 
-                // Throw the event upwards.
-                OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Warning);
-            }
-            else if (needState == NeedStates.Critical)
-            {
-                Debug.Log(string.Format("{0} threw a Critical event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
-
-                // Throw the event upwards.
-                OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, NeedStates.Critical);
-            }
+            // Throw the event upwards.
+            OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, needState);
         }
         private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
         {
@@ -333,28 +317,11 @@ namespace Quille
 
             Init();
 
-            //foreach (BasicNeed need in myBasicNeeds)
-            //{
-            //    string jsonString = JsonConvert.SerializeObject(need, Formatting.Indented);
-            //    Debug.Log(jsonString);
-            //}
-
-            //foreach (SubjectiveNeed need in mySubjectiveNeeds)
-            //{
-            //    string jsonString = JsonConvert.SerializeObject(need, Formatting.Indented);
-            //    Debug.Log(jsonString);
-            //}
-
-            string jsonStringBN = JsonConvert.SerializeObject(myBasicNeedsMapped, Formatting.Indented);
-            Debug.Log(jsonStringBN);
+            //string jsonStringBN = JsonConvert.SerializeObject(myBasicNeedsMapped, Formatting.Indented);
+            //Debug.Log(jsonStringBN);
 
             //string jsonStringSD = JsonConvert.SerializeObject(mySubjectiveNeedsMapped, Formatting.Indented);
             //Debug.Log(jsonStringSD);
-
-
-            myBasicNeedsMapped = JsonConvert.DeserializeObject<SerializedDictionary<BasicNeedSO, BasicNeed>>(jsonStringBN);
-
-
         }
 
         // Update is called once per frame

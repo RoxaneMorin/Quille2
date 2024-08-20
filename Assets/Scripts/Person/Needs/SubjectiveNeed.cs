@@ -738,6 +738,27 @@ namespace Quille
                 BaseChangeRateRight = modulator.Execute(sourceBasePerson, BaseChangeRateRight);
             }
 
+            // TODO: clean this up
+            // The BaseChangeRates cannot be higher than 0.5f
+            if (BaseChangeRateLeft > Constants.MAX_BASE_CHANGE_RATE)
+            {
+                BaseChangeRateLeft = Constants.MAX_BASE_CHANGE_RATE;
+            }
+            if (BaseChangeRateRight > Constants.MAX_BASE_CHANGE_RATE)
+            {
+                BaseChangeRateRight = Constants.MAX_BASE_CHANGE_RATE;
+            }
+
+            // The BaseChangeRates cannot be lower than -0.5f
+            if (BaseChangeRateLeft < -Constants.MAX_BASE_CHANGE_RATE)
+            {
+                BaseChangeRateLeft = -Constants.MAX_BASE_CHANGE_RATE;
+            }
+            if (BaseChangeRateRight < -Constants.MAX_BASE_CHANGE_RATE)
+            {
+                BaseChangeRateRight = -Constants.MAX_BASE_CHANGE_RATE;
+            }
+
             CurrentChangeRate = (BaseChangeRateLeft, BaseChangeRateRight);
 
             // Thresholds.
@@ -911,9 +932,7 @@ namespace Quille
                     }
                 }
 
-                yield return new WaitForSeconds(1);
-
-                // TODO: WaitForSeconds' parameter defined in Quille.Constants?
+                yield return new WaitForSeconds(Constants.NEED_DECAY_INTERVAL);
             }
         }
     }

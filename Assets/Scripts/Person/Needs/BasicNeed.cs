@@ -329,10 +329,21 @@ namespace Quille
             }
 
             // Base change rates.
-            // TO DO: disallow static base change rates?
             foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedBy)
             {
                 BaseChangeRate = modulator.Execute(sourceBasePerson, BaseChangeRate);
+            }
+
+            // TODO: clean this up
+            // The BaseChangeRate cannot be higher than -0.0001f
+            if (BaseChangeRate > -Constants.MIN_BASE_CHANGE_RATE)
+            {
+                BaseChangeRate = -Constants.MIN_BASE_CHANGE_RATE;
+            }
+            // The BaseChangeRate cannot be lower than -0.5f
+            if (BaseChangeRate < - Constants.MAX_BASE_CHANGE_RATE)
+            {
+                BaseChangeRate = -Constants.MAX_BASE_CHANGE_RATE;
             }
 
             CurrentChangeRate = BaseChangeRate;
@@ -428,9 +439,7 @@ namespace Quille
                         OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
                 }
-                yield return new WaitForSeconds(1);
-
-                // TODO: WaitForSeconds' parameter defined in Quille.Constants?
+                yield return new WaitForSeconds(Constants.NEED_DECAY_INTERVAL);
             }
         }
     }
