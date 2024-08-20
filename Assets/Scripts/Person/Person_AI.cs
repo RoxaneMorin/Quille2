@@ -86,7 +86,7 @@ namespace Quille
             (SubjectiveNeedSO, bool, float) neediestSubjectiveNeed = myBasePerson.MyNeedController.PerformSubjectiveNeedCheck();
             if (neediestSubjectiveNeed.Item3 <+ noticeSubjectiveNeed)
             {
-                Debug.Log(string.Format("Something must be done about our {0} need.", (neediestSubjectiveNeed.Item2 ? neediestSubjectiveNeed.Item1.NeedNameRight : neediestSubjectiveNeed.Item1.NeedNameLeft)));
+                Debug.Log(string.Format("Something must be done about our {0} ({1}) need.", (neediestSubjectiveNeed.Item2 ? neediestSubjectiveNeed.Item1.NeedNameRight : neediestSubjectiveNeed.Item1.NeedNameLeft), neediestSubjectiveNeed.Item1.NeedName));
 
                 // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }

@@ -81,6 +81,7 @@ namespace QuilleUI
         {
             if (init)
             {
+                // TODO: do this via event instead?
                 UpdateNeedBarFill();
             }
         }

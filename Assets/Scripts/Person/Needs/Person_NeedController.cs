@@ -8,23 +8,14 @@ namespace Quille
     [System.Serializable]
     public class Person_NeedController : MonoBehaviour
     {
-        // TEMP
-        // TODO: Have these be loaded automatically from the resource folder instead?
-        // Will have to edit the init functions.
-        public BasicNeedSO[] basicNeedSOs;
-        public SubjectiveNeedSO[] subjectiveNeedSOs;
-
-
-
         // VARIABLES
         [SerializeField] private BasicNeed[] myBasicNeeds;
         [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
 
-        // For use by external functions that only know of a BasicNeedSO.
-        [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")]
-        private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
-        [SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")]
-        private SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
+        // For use by external functions that only know of a NeedSO.
+        [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")] private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
+        [SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")] private SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
+        
 
         // TODO: make sure the dicts use references rather than values.
         // TODO: ensure this whole class can (de)serialize properly.
@@ -36,22 +27,22 @@ namespace Quille
         // PROPERTIES & GETTERS/SETTERS
         public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)
         {
-            try // including this just to be safe.
+            if (myBasicNeedsMapped.ContainsKey(basicNeedSO))
             {
                 return myBasicNeedsMapped[basicNeedSO];
             }
-            catch
+            else
             {
                 return null;
             }
         }
         public SubjectiveNeed GetSubjectiveNeed(SubjectiveNeedSO subjectiveNeedSO)
         {
-            try // including this just to be safe.
+            if (mySubjectiveNeedsMapped.ContainsKey(subjectiveNeedSO))
             {
                 return mySubjectiveNeedsMapped[subjectiveNeedSO];
             }
-            catch
+            else
             {
                 return null;
             }
@@ -137,18 +128,35 @@ namespace Quille
             }
         }
 
+        // All needs in controller.
+        private void StartNeedDecay()
+        {
+            StartBasicNeedDecay(myBasicNeeds);
+            StartSubjectiveNeedDecay(mySubjectiveNeeds);
+        }
+        private void StopNeedDecay()
+        {
+            StopBasicNeedDecay(myBasicNeeds);
+            StopSubjectiveNeedDecay(mySubjectiveNeeds);
+        }
+
 
         // Init.
         private void Init()
         {
-            // TODO: load the need SOs here instead of having premade arrays.
+            // TODO: provide these from a constructor instead.
+            BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>("ScriptableObjects/Needs/Basic");
+            SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>("ScriptableObjects/Needs/Subjective");
 
-            InitBasicNeeds();
-            InitSubjectiveNeeds();
+            InitBasicNeeds(basicNeedSOs);
+            InitSubjectiveNeeds(subjectiveNeedSOs);
 
             // TODO: Hook up the modulations here?
+
+            // Start need decay.
+            StartNeedDecay();
         }
-        private void InitBasicNeeds()
+        private void InitBasicNeeds(BasicNeedSO[] basicNeedSOs)
         {
             myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
             myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
@@ -167,10 +175,8 @@ namespace Quille
 
                 Debug.Log(myBasicNeeds[i].ToString());
             }
-
-            StartBasicNeedDecay(myBasicNeeds);
         }
-        private void InitSubjectiveNeeds()
+        private void InitSubjectiveNeeds(SubjectiveNeedSO[] subjectiveNeedSOs)
         {
             mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
             mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
@@ -189,9 +195,9 @@ namespace Quille
 
                 Debug.Log(mySubjectiveNeeds[i].ToString());
             }
-
-            StartSubjectiveNeedDecay(mySubjectiveNeeds);
         }
+
+        
 
 
 
@@ -219,21 +225,21 @@ namespace Quille
 
         private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
-            Debug.Log(string.Format("{0} threw a ReachedThreshold event ({1}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needState));
+            Debug.Log(string.Format("{0} ({1}) threw a ReachedThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, needState));
 
             // Throw the event upwards.
             OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, needState);
         }
         private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
         {
-            Debug.Log(string.Format("{0} threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft)));
+            Debug.Log(string.Format("{0} ({1}) threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName));
 
             // Throw the event upwards.
             OnSNFailure?.Invoke(needIdentity, subNeed);
         }
         private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
         {
-            Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), previousNeedState));
+            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, previousNeedState));
         }
 
 

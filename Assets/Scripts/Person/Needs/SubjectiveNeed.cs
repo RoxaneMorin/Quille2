@@ -46,6 +46,8 @@ namespace Quille
         private NeedStates needStateRight = NeedStates.Normal;
 
         [InspectorReadOnly, JsonIgnore]
+        public string needNameForUI;
+        [InspectorReadOnly, JsonIgnore]
         public string needNameLeftForUI;
         [InspectorReadOnly, JsonIgnore]
         public string needNameRightForUI;
@@ -498,6 +500,7 @@ namespace Quille
             ThresholdCriticalRight = DefaultThresholdCriticalRight;
 
             // Hacky UI shit.
+            needNameForUI = needSO.NeedName;
             needNameLeftForUI = needSO.NeedNameLeft;
             needNameRightForUI = needSO.NeedNameRight;
         }
@@ -794,21 +797,21 @@ namespace Quille
                     if (this.LevelCurrentLeftAsPercentage <= this.ThresholdCriticalLeft & this.NeedStateLeft > NeedStates.Critical)
                     {
                         this.NeedStateLeft = NeedStates.Critical;
-                        Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is critically low ({1:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft & this.NeedStateLeft > NeedStates.Warning)
                     {
                         this.NeedStateLeft = NeedStates.Warning;
-                        Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is a little low ({2:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else if (this.LevelCurrentLeftAsPercentage >= this.ThresholdElatedLeft & this.NeedStateLeft != NeedStates.Elated)
                     {
                         this.NeedStateLeft = NeedStates.Elated;
-                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameLeft, 1 - GetLeftFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is elated ({2:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                     }
@@ -817,21 +820,21 @@ namespace Quille
                         if (this.NeedStateLeft == NeedStates.Critical & this.LevelCurrentLeft > this.ThresholdCriticalLeft)
                         {
                             this.NeedStateLeft = NeedStates.Warning;
-                            Debug.Log(string.Format("{0} is no longer critically low.", this.NeedNameLeft));
+                            Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameLeft, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
                         if (this.NeedStateLeft == NeedStates.Warning & this.LevelCurrentLeft > this.ThresholdWarningLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
-                            Debug.Log(string.Format("{0} is no longer low.", this.NeedNameLeft));
+                            Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameLeft, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
                         if (this.NeedStateLeft == NeedStates.Elated & this.LevelCurrentLeft < this.ThresholdElatedLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
-                            Debug.Log(string.Format("{0} is no longer elated.", this.NeedNameLeft));
+                            Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameLeft, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
@@ -842,7 +845,7 @@ namespace Quille
                     if (this.NeedStateLeft != NeedStates.Failure) // First detection of the need failure.
                     {
                         this.NeedStateLeft = NeedStates.Failure;
-                        Debug.Log(string.Format("{0} is now empty.", this.NeedNameLeft));
+                        Debug.Log(string.Format("{0} ({1}) is now empty.", this.NeedNameLeft, this.NeedName));
 
                         OnSNFailure?.Invoke(NeedSO, false);
                     }
@@ -852,7 +855,7 @@ namespace Quille
                         this.LevelCurrentLeft += this.CurrentChangeRateLeftScaled;
 
                         this.NeedStateLeft = NeedStates.Critical; // Undo the need failure.
-                        Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameLeft));
+                        Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameLeft, this.NeedName));
 
                         OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
@@ -868,21 +871,21 @@ namespace Quille
                     if (this.NeedStateRight != NeedStates.Elated & this.LevelCurrentRightAsPercentage >= this.ThresholdElatedRight)
                     {
                         this.NeedStateRight = NeedStates.Elated;
-                        Debug.Log(string.Format("{0} is elated ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is elated ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                     }
                     else if (this.NeedStateRight > NeedStates.Critical & this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
                     {
                         this.NeedStateRight = NeedStates.Critical;
-                        Debug.Log(string.Format("{0} is critically low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is critically low ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (this.NeedStateRight > NeedStates.Warning & this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
                     {
                         this.NeedStateRight = NeedStates.Warning;
-                        Debug.Log(string.Format("{0} is a little low ({1:P2})...", this.NeedNameRight, 1 - GetRightFulfillmentDelta(true)));
+                        Debug.Log(string.Format("{0} ({1}) is a little low ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
                         ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
@@ -891,21 +894,21 @@ namespace Quille
                         if (this.NeedStateRight == NeedStates.Critical & this.LevelCurrentRight > this.ThresholdCriticalRight)
                         {
                             this.NeedStateRight = NeedStates.Warning;
-                            Debug.Log(string.Format("{0} is no longer critically low.", this.NeedNameRight));
+                            Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameRight, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
                         if (this.NeedStateRight == NeedStates.Warning & this.LevelCurrentRight > this.ThresholdWarningRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
-                            Debug.Log(string.Format("{0} is no longer low.", this.NeedNameRight));
+                            Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameRight, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
                         if (this.NeedStateRight == NeedStates.Elated & this.LevelCurrentRight < this.ThresholdElatedRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
-                            Debug.Log(string.Format("{0} is no longer elated.", this.NeedNameRight));
+                            Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameRight, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
@@ -916,7 +919,7 @@ namespace Quille
                     if (this.NeedStateRight != NeedStates.Failure) // First detection of the need failure.
                     {
                         this.NeedStateRight = NeedStates.Failure;
-                        Debug.Log(string.Format("{0} is now empty.", this.NeedNameRight));
+                        Debug.Log(string.Format("{0} ({1}) is now empty.", this.NeedNameRight, this.NeedName));
 
                         OnSNFailure?.Invoke(NeedSO, true);
                     }
@@ -926,7 +929,7 @@ namespace Quille
                         this.LevelCurrentRight += this.CurrentChangeRateRightScaled;
 
                         this.NeedStateRight = NeedStates.Critical; // Undo the need failure.
-                        Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedNameRight));
+                        Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameRight, this.NeedName));
 
                         OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }

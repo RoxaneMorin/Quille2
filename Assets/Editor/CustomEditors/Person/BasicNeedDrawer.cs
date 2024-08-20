@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(Quille.SubjectiveNeed))]
-public class SubjectiveNeedDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(Quille.BasicNeed))]
+public class BasicNeedDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Get the subneed's name.
+        // Get the need's name.
         // TODO: Find a cleaner way to do this.
         string needName = property.FindPropertyRelative("needNameForUI").stringValue;
-        string subneedNameLeft = property.FindPropertyRelative("needNameLeftForUI").stringValue;
-        string subneedNameRight = property.FindPropertyRelative("needNameRightForUI").stringValue;
 
-        label.text += string.Format(" ({0}: {1} & {2})", needName, subneedNameLeft, subneedNameRight);
+        label.text += string.Format(" ({0})", needName);
         EditorGUI.BeginProperty(position, label, property);
 
         // Draw the foldout header
@@ -30,8 +28,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
             EditorGUI.PropertyField(newPosition, property.FindPropertyRelative("needSO"), true);
 
             // Draw the sided variables.
-            newPosition = DrawVariablesBlock(newPosition, property, "Left", subneedNameLeft);
-            DrawVariablesBlock(newPosition, property, "Right", subneedNameRight);
+            DrawVariablesBlock(newPosition, property, needName);
 
             EditorGUI.indentLevel--;
         }
@@ -40,24 +37,24 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 
-    private Rect DrawVariablesBlock(Rect position, SerializedProperty property, string direction, string subneedName)
+    private Rect DrawVariablesBlock(Rect position, SerializedProperty property, string needName)
     {
         // Draw title.
         Rect newPosition = new Rect(position.x, position.y + 1.2f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-        EditorGUI.LabelField(newPosition, string.Format("{0} Need ({1}) Variables", direction, subneedName), EditorStyles.boldLabel);
+        EditorGUI.LabelField(newPosition, string.Format("Need ({0}) Variables", needName), EditorStyles.boldLabel);
         EditorGUI.indentLevel++;
 
         // Collect properties.
-        SerializedProperty localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting" + direction);
-        SerializedProperty levelFull = property.FindPropertyRelative("levelFull" + direction);
-        SerializedProperty levelCurrent = property.FindPropertyRelative("levelCurrent" + direction);
-        SerializedProperty baseChangeRate = property.FindPropertyRelative("baseChangeRate" + direction);
-        SerializedProperty currentChangeRate = property.FindPropertyRelative("currentChangeRate" + direction);
-        SerializedProperty currentChangeRateScaled = property.FindPropertyRelative("currentChangeRate" + direction + "Scaled");
-        SerializedProperty thresholdElated = property.FindPropertyRelative("thresholdElated" + direction);
-        SerializedProperty thresholdWarning = property.FindPropertyRelative("thresholdWarning" + direction);
-        SerializedProperty thresholdCritical = property.FindPropertyRelative("thresholdCritical" + direction);
-        SerializedProperty needState = property.FindPropertyRelative("needState" + direction);
+        SerializedProperty localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
+        SerializedProperty levelFull = property.FindPropertyRelative("levelFull");
+        SerializedProperty levelCurrent = property.FindPropertyRelative("levelCurrent");
+        SerializedProperty baseChangeRate = property.FindPropertyRelative("baseChangeRate");
+        SerializedProperty currentChangeRate = property.FindPropertyRelative("currentChangeRate");
+        SerializedProperty currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
+        SerializedProperty thresholdElated = property.FindPropertyRelative("thresholdElated");
+        SerializedProperty thresholdWarning = property.FindPropertyRelative("thresholdWarning");
+        SerializedProperty thresholdCritical = property.FindPropertyRelative("thresholdCritical");
+        SerializedProperty needState = property.FindPropertyRelative("needState");
 
         // Draw properties.
         newPosition.y += EditorGUIUtility.singleLineHeight;
@@ -91,7 +88,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight*3;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

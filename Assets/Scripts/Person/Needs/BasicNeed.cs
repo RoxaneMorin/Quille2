@@ -33,6 +33,9 @@ namespace Quille
         [SerializeField, InspectorReadOnly, JsonIgnore]
         private NeedStates needState = NeedStates.Normal;
 
+        [InspectorReadOnly, JsonIgnore]
+        public string needNameForUI;
+
 
 
         // PROPERTIES
@@ -238,6 +241,9 @@ namespace Quille
             ThresholdElated = DefaultThresholdElated;
             ThresholdWarning = DefaultThresholdWarning;
             ThresholdCritical = DefaultThresholdCritical;
+
+            // Hacky UI shit.
+            needNameForUI = needSO.NeedName;
         }
 
         // Modulate default values.
