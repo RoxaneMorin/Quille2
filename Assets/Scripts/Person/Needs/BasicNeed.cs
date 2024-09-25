@@ -22,7 +22,7 @@ namespace Quille
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
 
-        [SerializeField] //, InspectorReadOnly]
+        [JsonIgnore, SerializeField] //, InspectorReadOnly]
         private float currentChangeRateScaled;
 
         [SerializeField]
@@ -30,7 +30,7 @@ namespace Quille
                       thresholdWarning,
                       thresholdCritical;
 
-        [SerializeField, InspectorReadOnly, JsonIgnore]
+        [SerializeField, InspectorReadOnly]
         private NeedStates needState = NeedStates.Normal;
 
         [InspectorReadOnly, JsonIgnore]
@@ -221,13 +221,11 @@ namespace Quille
 
 
         // CONSTRUCTORS
-
-        public BasicNeed(BasicNeedSO needSO) 
+        public BasicNeed(BasicNeedSO needSO)
         {
             this.needSO = needSO;
             SetParametersFromSO();
         }
-
         private void SetParametersFromSO()
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
@@ -243,8 +241,34 @@ namespace Quille
             ThresholdCritical = DefaultThresholdCritical;
 
             // Hacky UI shit.
-            needNameForUI = needSO.NeedName;
+            needNameForUI = NeedSO.NeedName;
         }
+
+        [JsonConstructor]
+        public BasicNeed(BasicNeedSO needSO, float localAiPriorityWeighting, float levelFull, float levelCurrent, float baseChangeRate, float currentChangeRate, float currentChangeRateScaled, float thresholdElated, float thresholdWarning, float thresholdCritical, NeedStates needState)
+        {
+            this.needSO = needSO;
+
+            LocalAiPriorityWeighting = localAiPriorityWeighting;
+
+            LevelFull = levelFull;
+            LevelCurrent = levelCurrent;
+
+            BaseChangeRate = baseChangeRate;
+            CurrentChangeRate = currentChangeRate;
+            //this.currentChangeRateScaled = currentChangeRateScaled;
+
+            ThresholdElated = thresholdElated;
+            ThresholdWarning = thresholdWarning;
+            ThresholdCritical = thresholdCritical;
+
+            NeedState = needState;
+
+            // Hacky UI shit.
+            needNameForUI = NeedSO.NeedName;
+        }
+
+        
 
         // Modulate default values.
         // Clamp the result
@@ -321,7 +345,7 @@ namespace Quille
 
 
         // Init.
-        public void Init(Person sourceBasePerson)
+        public void ModulateNeed(Person sourceBasePerson)
         {
             // Run the modulators.
 

@@ -26,6 +26,7 @@ public class SerializationTest : MonoBehaviour
         //[SerializeField] private Quille.Person_Character personality;
 
         [SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.BasicNeedSO, Quille.BasicNeed> testDictSO;
+        [SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.SubjectiveNeedSO, Quille.SubjectiveNeed> testDictSO2;
 
         //[SerializeField, SerializedDictionary("1", "2")] private SerializedDictionary<int, Quille.BasicNeedSO> testDictSO;
 
@@ -46,6 +47,7 @@ public class SerializationTest : MonoBehaviour
     [SerializeField] private SerializationTester tester;
 
     [SerializeField] private SerializationTester tester2;
+
 
     // Start is called before the first frame update
     void Start()

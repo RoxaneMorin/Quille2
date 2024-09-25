@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -167,9 +167,11 @@ MonoBehaviour:
           baseChangeRate: 3
           currentChangeRate: 3
           currentChangeRateScaled: 3
+          thresholdElated: 0
           thresholdWarning: 344
           thresholdCritical: 3
           needState: 0
+          needNameForUI: 
       - Key: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
         Value:
           needSO: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
@@ -179,11 +181,44 @@ MonoBehaviour:
           baseChangeRate: 0
           currentChangeRate: 3
           currentChangeRateScaled: 33
+          thresholdElated: 0
           thresholdWarning: 3
           thresholdCritical: 3
           needState: 0
+          needNameForUI: 
+    testDictSO2:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+        Value:
+          needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+          localAiPriorityWeighting: 0
+          localAiPriorityWeightingLeft: 43
+          localAiPriorityWeightingRight: 45
+          levelFullLeft: 4545
+          levelCurrentLeft: 4
+          levelFullRight: 1
+          levelCurrentRight: 23
+          baseChangeRateLeft: 2
+          currentChangeRateLeft: 45
+          baseChangeRateRight: 2
+          currentChangeRateRight: 4
+          currentChangeRateLeftScaled: 2
+          currentChangeRateRightScaled: 5
+          thresholdElatedLeft: 5
+          thresholdElatedRight: 3
+          thresholdWarningLeft: 45
+          thresholdWarningRight: 45
+          thresholdCriticalLeft: 1
+          thresholdCriticalRight: 4
+          needStateLeft: 0
+          needStateRight: 0
+          needNameForUI: 
+          needNameLeftForUI: 
+          needNameRightForUI: 
   tester2:
     testDictSO:
+      _serializedList: []
+    testDictSO2:
       _serializedList: []
 --- !u!65 &14641133
 BoxCollider:
@@ -193,9 +228,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14641131}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &14641134
@@ -255,13 +298,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14641131}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.4738108, y: 0.61607456, z: 1.1522139}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1446744169
 GameObject:
@@ -349,13 +392,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1446744169}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2103055136
 GameObject:
@@ -397,9 +440,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -433,11 +484,18 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103055136}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 2103055139}
+  - {fileID: 1446744171}
+  - {fileID: 14641136}

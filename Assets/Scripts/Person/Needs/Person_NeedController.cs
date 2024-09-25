@@ -1,30 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using Newtonsoft.Json;
+
 
 namespace Quille
 {
     [System.Serializable]
-    public class Person_NeedController : MonoBehaviour
+    public partial class Person_NeedController : MonoBehaviour
     {
         // VARIABLES
-        [SerializeField] private BasicNeed[] myBasicNeeds;
-        [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
+        [SerializeField] NeedController_Data myNeedData;
 
         // For use by external functions that only know of a NeedSO.
         [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")] private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
         [SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")] private SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
-        
-
-        // TODO: make sure the dicts use references rather than values.
-        // TODO: ensure this whole class can (de)serialize properly.
 
         // General need-related parameters.
 
 
 
         // PROPERTIES & GETTERS/SETTERS
+        public BasicNeed[] MyBasicNeeds
+        {
+            get { return myNeedData.MyBasicNeeds; }
+        }
+        public SubjectiveNeed[] MySubjectiveNeeds
+        {
+            get { return myNeedData.MySubjectiveNeeds; }
+        }
+
         public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)
         {
             if (myBasicNeedsMapped.ContainsKey(basicNeedSO))
@@ -48,299 +55,205 @@ namespace Quille
             }
         }
 
-        public BasicNeed[] MyBasicNeeds
+        // TODO: test these.
+        public void AddBasicNeed(BasicNeedSO basicNeedSO)
         {
-            get { return myBasicNeeds; }
+            if (myBasicNeedsMapped.ContainsKey(basicNeedSO))
+            {
+                Debug.Log(string.Format("{0}'s NeedController already contains a basic need {1}. It will not be added.", gameObject.name, basicNeedSO.NeedName));
+            }
+            else
+            {
+                BasicNeed tempNeed = new BasicNeed(basicNeedSO);
+                tempNeed.OnBNReachedThreshold += OnBasicNeedReachedThreshold;
+                tempNeed.OnBNFailure += OnBasicNeedFailure;
+                tempNeed.OnBNLeftThreshold += OnBasicNeedLeftThreshold;
+
+                myBasicNeedsMapped.Add(basicNeedSO, tempNeed);
+                myNeedData.MyBasicNeeds = myBasicNeedsMapped.Values.ToArray();
+
+                // TODO: modulate here?
+            }
         }
-        public SubjectiveNeed[] MySubjectiveNeeds
+        public void AddSubjectiveNeed(SubjectiveNeedSO subjectiveNeedSO)
         {
-            get { return mySubjectiveNeeds; }
+            if (mySubjectiveNeedsMapped.ContainsKey(subjectiveNeedSO))
+            {
+                Debug.Log(string.Format("{0}'s NeedController already contains a subjective need {1}. It will not be added.", gameObject.name, subjectiveNeedSO.NeedName));
+            }
+            else
+            {
+                SubjectiveNeed tempNeed = new SubjectiveNeed(subjectiveNeedSO);
+                tempNeed.ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
+                tempNeed.OnSNFailure += OnSubjectiveNeedFailure;
+                tempNeed.OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
+
+                mySubjectiveNeedsMapped.Add(subjectiveNeedSO, tempNeed);
+                myNeedData.MySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
+
+                // TODO: modulate here?
+            }
         }
 
-        // Option to add or remove a need?;
+        // TODO: test these.
+        public void RemoveBasicNeed(BasicNeedSO basicNeedSO)
+        {
+            if (myBasicNeedsMapped.ContainsKey(basicNeedSO))
+            {
+                // Not sure if this is necessary.
+                myBasicNeedsMapped[basicNeedSO].OnBNReachedThreshold -= OnBasicNeedReachedThreshold;
+                myBasicNeedsMapped[basicNeedSO].OnBNFailure -= OnBasicNeedFailure;
+                myBasicNeedsMapped[basicNeedSO].OnBNLeftThreshold -= OnBasicNeedLeftThreshold;
 
+                myBasicNeedsMapped.Remove(basicNeedSO);
+                myNeedData.MyBasicNeeds = myBasicNeedsMapped.Values.ToArray();
+            }
+            else
+            {
+                Debug.Log(string.Format("{0}'s NeedController did not contain the basic need {1}. Nothing to remove.", gameObject.name, basicNeedSO.NeedName));
+            }
+        }
+        public void RemoveSubjectiveNeed(SubjectiveNeedSO subjectiveNeedSO)
+        {
+            if (mySubjectiveNeedsMapped.ContainsKey(subjectiveNeedSO))
+            {
+                // Not sure if this is necessary.
+                mySubjectiveNeedsMapped[subjectiveNeedSO].ONSNReachedThreshold -= OnSubjectiveNeedReachThreshold;
+                mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNFailure -= OnSubjectiveNeedFailure;
+                mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNLeftThreshold -= OnSubjectiveNeedLeftThreshold;
 
-
-        // EVENTS
-        // Basic needs.
-        public event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
-        public event BasicNeedReachedThreshold OnBNReachedThreshold;
-        public event BasicNeedFailure OnBNFailure;
-
-        // Subjective needs.
-        public event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
-        public event SubjectiveNeedReachedThreshold OnSNReachedThreshold;
-        public event SubjectiveNeedFailure OnSNFailure;
+                mySubjectiveNeedsMapped.Remove(subjectiveNeedSO);
+                myNeedData.MySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
+            }
+            else
+            {
+                Debug.Log(string.Format("{0}'s NeedController did not contain the basic need {1}. Nothing to remove.", gameObject.name, subjectiveNeedSO.NeedName));
+            }
+        }
 
 
 
         // METHODS
 
-        // Coroutine management.
+        // INIT
 
-        // Individual needs.
-        private void StartBasicNeedDecay(BasicNeed myNeed)
+        public void Init() // For use during testing.
         {
-            //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
-            StartCoroutine(myNeed.AlterLevelByChangeRate());
-        }
-        private void StopBasicNeedDecay(BasicNeed myNeed)
-        {
-            StopCoroutine(myNeed.AlterLevelByChangeRate());
-        }
-        private void StartSubjectiveNeedDecay(SubjectiveNeed myNeed)
-        {
-            //myNeed.CurrentChangeRate = myNeed.BaseChangeRate; // is this safeguard needed?
-            StartCoroutine(myNeed.AlterLevelByChangeRate());
-        }
-        private void StopSubjectiveNeedDecay(SubjectiveNeed myNeed)
-        {
-            StopCoroutine(myNeed.AlterLevelByChangeRate());
-        }
-
-        // Array of needs.
-        private void StartBasicNeedDecay(BasicNeed[] myBasicNeeds)
-        {
-            foreach (BasicNeed myNeed in myBasicNeeds)
-            {
-                StartBasicNeedDecay(myNeed);
-            }
-        }
-        private void StopBasicNeedDecay(BasicNeed[] myBasicNeeds) 
-        {
-            foreach (BasicNeed myNeed in myBasicNeeds)
-            {
-                StopBasicNeedDecay(myNeed);
-            }
-        }
-        private void StartSubjectiveNeedDecay(SubjectiveNeed[] mySubjectiveNeeds)
-        {
-            foreach (SubjectiveNeed myNeed in mySubjectiveNeeds)
-            {
-                StartSubjectiveNeedDecay(myNeed);
-            }
-        }
-        private void StopSubjectiveNeedDecay(SubjectiveNeed[] mySubjectiveNeeds)
-        {
-            foreach (SubjectiveNeed myNeed in mySubjectiveNeeds)
-            {
-                StopSubjectiveNeedDecay(myNeed);
-            }
-        }
-
-        // All needs in controller.
-        private void StartNeedDecay()
-        {
-            StartBasicNeedDecay(myBasicNeeds);
-            StartSubjectiveNeedDecay(mySubjectiveNeeds);
-        }
-        private void StopNeedDecay()
-        {
-            StopBasicNeedDecay(myBasicNeeds);
-            StopSubjectiveNeedDecay(mySubjectiveNeeds);
-        }
-
-
-        // Init.
-        private void Init()
-        {
-            // TODO: provide these from a constructor instead.
             BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>("ScriptableObjects/Needs/Basic");
             SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>("ScriptableObjects/Needs/Subjective");
 
-            InitBasicNeeds(basicNeedSOs);
-            InitSubjectiveNeeds(subjectiveNeedSOs);
+            Init(basicNeedSOs, subjectiveNeedSOs);
+        }
+
+        public void Init(BasicNeedSO[] basicNeedSOs, SubjectiveNeedSO[] subjectiveNeedSOs)
+        {
+            myNeedData = new NeedController_Data();
+
+            CreateBasicNeeds(basicNeedSOs);
+            CreateSubjectiveNeeds(subjectiveNeedSOs);
 
             // TODO: Hook up the modulations here?
 
             // Start need decay.
-            StartNeedDecay();
+            //StartNeedDecay();
         }
-        private void InitBasicNeeds(BasicNeedSO[] basicNeedSOs)
+
+
+        // SET UP
+
+        // Create need arrays and dictionaries from arrays of SOs.
+        private void CreateBasicNeeds(BasicNeedSO[] basicNeedSOs)
         {
+            myNeedData.MyBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
-            myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
 
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
-                myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
-                myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
+                myNeedData.MyBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
+                myBasicNeedsMapped.Add(basicNeedSOs[i], myNeedData.MyBasicNeeds[i]);
 
-                myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
-                myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
-                myBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
+                myNeedData.MyBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
+                myNeedData.MyBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
+                myNeedData.MyBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
 
                 //myBasicNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(myBasicNeeds[i].ToString());
+                Debug.Log(myNeedData.MyBasicNeeds[i].ToString());
             }
         }
-        private void InitSubjectiveNeeds(SubjectiveNeedSO[] subjectiveNeedSOs)
+        private void CreateSubjectiveNeeds(SubjectiveNeedSO[] subjectiveNeedSOs)
         {
+            myNeedData.MySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
             mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
-            mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
 
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
-                mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
-                mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
+                myNeedData.MySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
+                mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], myNeedData.MySubjectiveNeeds[i]);
 
-                mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
-                mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
-                mySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
+                myNeedData.MySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
+                myNeedData.MySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
+                myNeedData.MySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
 
                 //mySubjectiveNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(mySubjectiveNeeds[i].ToString());
+                Debug.Log(myNeedData.MySubjectiveNeeds[i].ToString());
             }
         }
 
         
 
-
-
-        // Event handlers.
-        // Basic needs.
-        private void OnBasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState)
+        // Modulation
+        public void ModulateBasicNeeds(Person sourceBasePerson)
         {
-            Debug.Log(string.Format("{0} threw a ReachedThreshold event ({1}).", needIdentity.NeedName, needState));
-
-            // Throw the event upwards.
-            OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, needState);
-        }
-        private void OnBasicNeedFailure(BasicNeedSO needIdentity)
-        {
-            Debug.Log(string.Format("{0} threw a Failure event.", needIdentity.NeedName));
-
-            // Throw the event upwards.
-            OnBNFailure?.Invoke(needIdentity);
-        }
-        private void OnBasicNeedLeftThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates previousNeedState)
-        {
-            Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", needIdentity.NeedName, previousNeedState));
-        }
-
-
-        private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
-        {
-            Debug.Log(string.Format("{0} ({1}) threw a ReachedThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, needState));
-
-            // Throw the event upwards.
-            OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, needState);
-        }
-        private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
-        {
-            Debug.Log(string.Format("{0} ({1}) threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName));
-
-            // Throw the event upwards.
-            OnSNFailure?.Invoke(needIdentity, subNeed);
-        }
-        private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
-        {
-            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, previousNeedState));
-        }
-
-
-
-
-        // For use by personAI.
-
-        // Return the neediest need of each type as well as its level.
-        public (BasicNeedSO, float) PerformBasicNeedCheck() 
-        {
-            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(myBasicNeeds);
-            float neediestNeedLevel = neediestNeed.LevelCurrentAsPercentage;
-
-            return (neediestNeed.NeedSO, neediestNeedLevel);
-        }
-        // The returned bool indicates which side is neediest, where Left = 0, Right = 1.
-        public (SubjectiveNeedSO, bool, float) PerformSubjectiveNeedCheck()
-        {
-            (SubjectiveNeed, bool) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(mySubjectiveNeeds);
-            float neediestNeedLevel = neediestNeed.Item2 ? neediestNeed.Item1.LevelCurrentRightAsPercentage : neediestNeed.Item1.LevelCurrentLeftAsPercentage;
-
-            return (neediestNeed.Item1.NeedSO, neediestNeed.Item2, neediestNeedLevel);
-        }
-
-
-        // Testing.
-        private void RandomizeNeedChangeRates(float min, float max)
-        {
-            foreach (BasicNeed need in myBasicNeeds)
+            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
             {
-                float randomRate = Random.Range(min, max);
-                need.CurrentChangeRate = randomRate;
-            }
-
-            foreach (SubjectiveNeed need in mySubjectiveNeeds)
-            {
-                float randomRateLeft = Random.Range(min, max);
-                float randomRateRight = Random.Range(min, max);
-                need.CurrentChangeRate = (randomRateLeft, randomRateRight);
-
-                need.AverageLocalAiPriorityWeighting();
-            }
-        }
-        private void SortAndPrintNeedInfo()
-        {
-            BasicNeed.SortByFulfillmentDelta(myBasicNeeds, true, true);
-            SubjectiveNeed.SortByFulfillmentDeltaofNeediest(mySubjectiveNeeds, true, true);
-
-            foreach (BasicNeed need in myBasicNeeds)
-            {
-                Debug.Log(need.ToString());
-            }
-
-            foreach (SubjectiveNeed need in mySubjectiveNeeds)
-            {
-                Debug.Log(need.ToString());
+                need.ModulateNeed(sourceBasePerson);
             }
         }
         public void ModulateSubjectiveNeeds(Person sourceBasePerson)
         {
-            foreach (SubjectiveNeed need in mySubjectiveNeeds)
+            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
             {
-                need.Init(sourceBasePerson);
+                need.ModulateNeed(sourceBasePerson);
             }
         }
-        public void ModulateBasicNeeds(Person sourceBasePerson)
+        public void ModulateAllNeeds(Person sourceBasePerson)
         {
-            foreach (BasicNeed need in myBasicNeeds)
-            {
-                need.Init(sourceBasePerson);
-            }
+            ModulateBasicNeeds(sourceBasePerson);
+            ModulateSubjectiveNeeds(sourceBasePerson);
         }
 
 
-        // Built in.
 
-        // Start is called before the first frame update
-        void Start()
+        // LOAD
+        private void LoadFromJSON(string jsonString)
         {
-            //myBasePerson = gameObject.GetComponent<BasePerson>();
+            myNeedData = JsonConvert.DeserializeObject<NeedController_Data>(jsonString);
 
-            Init();
-
-            //string jsonStringBN = JsonConvert.SerializeObject(myBasicNeedsMapped, Formatting.Indented);
-            //Debug.Log(jsonStringBN);
-
-            //string jsonStringSD = JsonConvert.SerializeObject(mySubjectiveNeedsMapped, Formatting.Indented);
-            //Debug.Log(jsonStringSD);
+            CreateAndPopulateBasicNeedsMapped();
+            CreateAndPopulateSubjectiveNeedsMapped();
         }
 
-        // Update is called once per frame
-        void Update()
+        // Create need dictionaries from existing need arrays;
+        private void CreateAndPopulateBasicNeedsMapped()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RandomizeNeedChangeRates(-0.3f, 0.1f);
-            }
+            myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
 
-            if (Input.GetKeyDown(KeyCode.M))
+            foreach (BasicNeed basicNeed in myNeedData.MyBasicNeeds)
             {
-                SortAndPrintNeedInfo();
+                myBasicNeedsMapped.Add(basicNeed.NeedSO, basicNeed);
+            }
+        }
+        private void CreateAndPopulateSubjectiveNeedsMapped()
+        {
+            mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
+
+            foreach (SubjectiveNeed subjectiveNeed in myNeedData.MySubjectiveNeeds)
+            {
+                mySubjectiveNeedsMapped.Add(subjectiveNeed.NeedSO, subjectiveNeed);
             }
         }
     }

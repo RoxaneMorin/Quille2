@@ -40,9 +40,9 @@ namespace Quille
                       thresholdWarningLeft, thresholdWarningRight,
                       thresholdCriticalLeft, thresholdCriticalRight;
 
-        [SerializeField, InspectorReadOnly, JsonIgnore]
+        [SerializeField, InspectorReadOnly]
         private NeedStates needStateLeft = NeedStates.Normal;
-        [SerializeField, InspectorReadOnly, JsonIgnore]
+        [SerializeField, InspectorReadOnly]
         private NeedStates needStateRight = NeedStates.Normal;
 
         [InspectorReadOnly, JsonIgnore]
@@ -255,11 +255,11 @@ namespace Quille
 
         public void ResetBaseChangeRateLeft()
         {
-            baseChangeRateLeft = needSO.DefaultChangeRateLeft;
+            BaseChangeRateLeft = NeedSO.DefaultChangeRateLeft;
         }
         public void ResetBaseChangeRateRight()
         {
-            baseChangeRateRight = needSO.DefaultChangeRateRight;
+            BaseChangeRateRight = NeedSO.DefaultChangeRateRight;
         }
         public void ResetBaseChangeRate()
         {
@@ -331,8 +331,8 @@ namespace Quille
         [JsonIgnore] public float DefaultThresholdElatedRight { get { return needSO.ThresholdElatedRight; } }
         [JsonIgnore] public float DefaultThresholdWarningRight { get { return needSO.ThresholdWarningRight; } }
         [JsonIgnore] public float DefaultThresholdCriticalRight { get { return needSO.ThresholdCriticalRight; } }
-        [JsonIgnore]
-        public float ThresholdElatedLeft
+
+        [JsonIgnore] public float ThresholdElatedLeft
         {
             get { return thresholdElatedLeft; }
             set
@@ -386,8 +386,7 @@ namespace Quille
                 else thresholdCriticalLeft = value;
             }
         }
-        [JsonIgnore]
-        public float ThresholdElatedRight
+        [JsonIgnore] public float ThresholdElatedRight
         {
             get { return thresholdElatedRight; }
             set
@@ -441,6 +440,33 @@ namespace Quille
                 else thresholdCriticalRight = value;
             }
         }
+        [JsonIgnore] public (float, float) ThresholdElated
+        {
+            get { return (ThresholdElatedLeft, ThresholdElatedRight); }
+            set
+            {
+                ThresholdElatedLeft = value.Item1;
+                ThresholdElatedRight = value.Item2;
+            }
+        }
+        [JsonIgnore] public (float, float) ThresholdWarning
+        {
+            get { return (ThresholdWarningLeft, ThresholdWarningRight); }
+            set
+            {
+                ThresholdWarningLeft = value.Item1;
+                ThresholdWarningRight = value.Item2;
+            }
+        }
+        [JsonIgnore] public (float, float) ThresholdCritical
+        {
+            get { return (ThresholdCriticalLeft, ThresholdCriticalRight); }
+            set
+            {
+                ThresholdCriticalLeft = value.Item1;
+                ThresholdCriticalRight = value.Item2;
+            }
+        }
         public void ResetThresholds()
         {
             ThresholdElatedLeft = DefaultThresholdElatedLeft;
@@ -448,7 +474,7 @@ namespace Quille
             ThresholdWarningLeft = DefaultThresholdWarningLeft;
             ThresholdWarningRight = DefaultThresholdWarningRight;
             ThresholdCriticalLeft = DefaultThresholdCriticalLeft;
-            thresholdCriticalRight = DefaultThresholdCriticalRight;
+            ThresholdCriticalRight = DefaultThresholdCriticalRight;
         }
 
         [JsonIgnore] public NeedStates NeedStateLeft { get { return needStateLeft; } private set { needStateLeft = value; } }
@@ -479,7 +505,6 @@ namespace Quille
             this.needSO = needSO;
             SetParametersFromSO();
         }
-
         private void SetParametersFromSO()
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
@@ -500,10 +525,39 @@ namespace Quille
             ThresholdCriticalRight = DefaultThresholdCriticalRight;
 
             // Hacky UI shit.
-            needNameForUI = needSO.NeedName;
-            needNameLeftForUI = needSO.NeedNameLeft;
-            needNameRightForUI = needSO.NeedNameRight;
+            needNameForUI = NeedSO.NeedName;
+            needNameLeftForUI = NeedSO.NeedNameLeft;
+            needNameRightForUI = NeedSO.NeedNameRight;
         }
+
+
+        [JsonConstructor]
+        public SubjectiveNeed(SubjectiveNeedSO needSO, float localAiPriorityWeighting, float levelFullLeft, float levelFullRight, float levelCurrentLeft, float levelCurrentRight, float baseChangeRateLeft, float baseChangeRateRight, float currentChangeRateLeft, float currentChangeRateRight, float currentChangeRateLeftScaled, float currentChangeRateRightScaled, float thresholdElatedLeft, float thresholdElatedRight, float thresholdWarningLeft, float thresholdWarningRight, float thresholdCriticalLeft, float thresholdCriticalRight, NeedStates needStateLeft, NeedStates needStateRight)
+        {
+            this.needSO = needSO;
+
+            LocalAiPriorityWeighting = localAiPriorityWeighting;
+
+            LevelFull = (levelFullLeft, levelFullRight);
+            LevelCurrent = (levelCurrentLeft, levelCurrentRight);
+
+            BaseChangeRate = (baseChangeRateLeft, baseChangeRateRight);
+            CurrentChangeRate = (currentChangeRateLeft, currentChangeRateRight);
+            //this.currentChangeRateScaled = currentChangeRateScaled;
+
+            ThresholdElated = (thresholdElatedLeft, thresholdElatedRight);
+            ThresholdWarning = (thresholdWarningLeft, thresholdWarningRight);
+            ThresholdCritical = (thresholdCriticalLeft, thresholdCriticalRight);
+
+            NeedStateLeft = needStateLeft;
+            NeedStateRight = needStateRight;
+
+            // Hacky UI shit.
+            needNameForUI = NeedSO.NeedName;
+            needNameLeftForUI = NeedSO.NeedNameLeft;
+            needNameRightForUI = NeedSO.NeedNameRight;
+        }
+
 
         // Modulate default values.
         // Should include averaging the left and right AI weighting.
@@ -713,7 +767,7 @@ namespace Quille
 
 
         // Init.
-        public void Init(Person sourceBasePerson)
+        public void ModulateNeed(Person sourceBasePerson)
         {
             // Run the modulators.
 

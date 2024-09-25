@@ -79,10 +79,9 @@ public class SubjectiveNeedDrawer : PropertyDrawer
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, thresholdCritical);
 
-        GUI.enabled = false;
         newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, needState);
-        GUI.enabled = true;
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUI.PropertyField(newPosition, needState);
 
         EditorGUI.indentLevel--;
 
@@ -91,7 +90,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight*3;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight*4;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

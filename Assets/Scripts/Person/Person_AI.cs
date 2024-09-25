@@ -10,6 +10,7 @@ namespace Quille
 
         // References
         [SerializeField, InspectorReadOnly] private Person myBasePerson;
+        [SerializeField, InspectorReadOnly] private Person_NeedController myNeedController;
         // Do we need additional controller references here?
 
         // Values.
@@ -104,6 +105,7 @@ namespace Quille
         {
             // Fetch our various components.
             myBasePerson = GetComponent<Person>();
+            myNeedController = GetComponent<Person_NeedController>();
         }
 
 
@@ -115,6 +117,7 @@ namespace Quille
             Init();
 
             InvokeRepeating("NeedMonitorLoop", 5f, 5f);
+            // TODO: do as a coroutine instead?
         }
 
         // Update is called once per frame

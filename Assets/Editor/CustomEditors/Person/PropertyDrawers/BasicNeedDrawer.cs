@@ -6,6 +6,17 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(Quille.BasicNeed))]
 public class BasicNeedDrawer : PropertyDrawer
 {
+    SerializedProperty localAiPriorityWeighting;
+    SerializedProperty levelFull;
+    SerializedProperty levelCurrent;
+    SerializedProperty baseChangeRate;
+    SerializedProperty currentChangeRate;
+    SerializedProperty currentChangeRateScaled;
+    SerializedProperty thresholdElated;
+    SerializedProperty thresholdWarning;
+    SerializedProperty thresholdCritical;
+    SerializedProperty needState;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Get the need's name.
@@ -28,7 +39,7 @@ public class BasicNeedDrawer : PropertyDrawer
             EditorGUI.PropertyField(newPosition, property.FindPropertyRelative("needSO"), true);
 
             // Draw the sided variables.
-            DrawVariablesBlock(newPosition, property, needName);
+            newPosition = DrawVariablesBlock(newPosition, property, needName);
 
             EditorGUI.indentLevel--;
         }
@@ -45,16 +56,16 @@ public class BasicNeedDrawer : PropertyDrawer
         EditorGUI.indentLevel++;
 
         // Collect properties.
-        SerializedProperty localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
-        SerializedProperty levelFull = property.FindPropertyRelative("levelFull");
-        SerializedProperty levelCurrent = property.FindPropertyRelative("levelCurrent");
-        SerializedProperty baseChangeRate = property.FindPropertyRelative("baseChangeRate");
-        SerializedProperty currentChangeRate = property.FindPropertyRelative("currentChangeRate");
-        SerializedProperty currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
-        SerializedProperty thresholdElated = property.FindPropertyRelative("thresholdElated");
-        SerializedProperty thresholdWarning = property.FindPropertyRelative("thresholdWarning");
-        SerializedProperty thresholdCritical = property.FindPropertyRelative("thresholdCritical");
-        SerializedProperty needState = property.FindPropertyRelative("needState");
+        localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
+        levelFull = property.FindPropertyRelative("levelFull");
+        levelCurrent = property.FindPropertyRelative("levelCurrent");
+        baseChangeRate = property.FindPropertyRelative("baseChangeRate");
+        currentChangeRate = property.FindPropertyRelative("currentChangeRate");
+        currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
+        thresholdElated = property.FindPropertyRelative("thresholdElated");
+        thresholdWarning = property.FindPropertyRelative("thresholdWarning");
+        thresholdCritical = property.FindPropertyRelative("thresholdCritical");
+        needState = property.FindPropertyRelative("needState");
 
         // Draw properties.
         newPosition.y += EditorGUIUtility.singleLineHeight;
@@ -76,10 +87,9 @@ public class BasicNeedDrawer : PropertyDrawer
         newPosition.y += EditorGUIUtility.singleLineHeight;
         EditorGUI.PropertyField(newPosition, thresholdCritical);
 
-        GUI.enabled = false;
         newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, needState);
-        GUI.enabled = true;
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUI.PropertyField(newPosition, needState);
 
         EditorGUI.indentLevel--;
 

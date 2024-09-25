@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -209,13 +209,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245582501}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!224 &886029134 stripped
 RectTransform:
@@ -263,9 +263,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -299,19 +307,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340810219}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.17, z: -1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1470149522
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2372acfe819d69047a01b55db05841d0,
@@ -375,6 +384,21 @@ PrefabInstance:
       value: SM_Quille_WiP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1635557744}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1635557742}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1635557743}
   m_SourcePrefab: {fileID: 100100000, guid: 2372acfe819d69047a01b55db05841d0, type: 3}
 --- !u!1 &1568759637
 GameObject:
@@ -455,6 +479,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -472,7 +497,6 @@ RectTransform:
   m_Children:
   - {fileID: 886029134}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -529,16 +553,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da5c30a8a0c35c449567caf9bc38862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicNeedSOs:
-  - {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
-  - {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
-  - {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
-  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
-  subjectiveNeedSOs:
-  - {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
   myBasicNeeds: []
   mySubjectiveNeeds: []
   myBasicNeedsMapped:
+    _serializedList: []
+  mySubjectiveNeedsMapped:
     _serializedList: []
 --- !u!114 &1635557744
 MonoBehaviour:
@@ -631,19 +650,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691983026}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4881047868874646638
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1568759641}
     m_Modifications:
     - target: {fileID: 4881047869735100192, guid: 719d7ebe42aed22488d7c2f4bd057d56,
@@ -762,4 +782,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1691983029}
+  - {fileID: 1568759641}
+  - {fileID: 1340810222}
+  - {fileID: 245582503}
+  - {fileID: 1470149522}
