@@ -12,6 +12,27 @@ namespace Quille
     {
         // PROPERTIES & THEIR HELPER METHODS
 
+        // IDENTITY
+        public int CharID { get { return charID; } }
+
+        // NAMES
+        public string FirstName { get { return firstName; } set { firstName = value; } }
+        public string LastName { get { return lastName; } set { lastName = value; } }
+        public string NickName { get { return nickName; } set { nickName = value; } }
+        public List<string> SecondaryNames { get { return secondaryNames; } set { secondaryNames = value; } }
+        // TODO: review how this should be handled. We likely won't be manipulating the full set at once.
+        // Check the existance of a secondary name.
+        // Add secondary name.
+        // Remove secondary name.
+        // TODO: same thing for the following.
+        public string FirstAndLastName { get { return string.Format("{0} {1}", firstName, lastName); } } // Name order?
+        public string FirstNickAndLastName { get { return string.Format("{0} '{1}' {2}", firstName, nickName, lastName); } }
+        public string FullName { get { return string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName); } }
+
+        // Age, gender, etc.
+
+
+        // PERSONALITY
 
         // PERSONALITY AXES
         private float capPersonalityAxeScore(float value)
@@ -23,6 +44,7 @@ namespace Quille
             
             return value;
         }
+
         // Single scores.
         public void SetAxeScore(PersonalityAxeSO targetPersonalityAxe, float value)
         {
@@ -40,12 +62,12 @@ namespace Quille
                 return null;
             }
         }
+
         // The full dict.
         internal void SetAxeScoreDict(SerializedDictionary<PersonalityAxeSO, float> personalityAxeDict, bool capScores = true)
         {
             if (capScores)
             {
-                
                 foreach (PersonalityAxeSO key in personalityAxeDict.Keys)
                 {
                     personalityAxeDict[key] = capPersonalityAxeScore(personalityAxeDict[key]);
@@ -74,6 +96,7 @@ namespace Quille
             }
             return Constants.PERSONALITY_HALF_SPAN;
         }
+
         // Single scores.
         public void SetTraitScore(PersonalityTraitSO targetPersonalityTrait, float value)
         {
@@ -94,6 +117,7 @@ namespace Quille
                 return null;
             }
         }
+
         // The full dict.
         internal void SetTraitScoreDict(SerializedDictionary<PersonalityTraitSO, float> personalityTraitDict, bool capScores = true)
         {
@@ -124,6 +148,7 @@ namespace Quille
 
             return value;
         }
+
         // Single scores.
         public void SetInterestScore(InterestSO targetInterestSO, float value)
         {
@@ -140,6 +165,7 @@ namespace Quille
                 return null;
             }
         }
+        
         // The full dict.
         internal void SetInterestScoreDict(SerializedDictionary<InterestSO, float> interestDict, bool capScores = true)
         {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChecksAndMods
@@ -9,13 +7,13 @@ namespace ChecksAndMods
         // Fetch a specific personality axe score.
         public static float? FetchPersonalityAxeScore(System.Object sourceObj, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
-            Quille.Person_Character sourcePersonalityController;
+            Quille.Person_Character sourcePersonCharacter;
 
             if (sourceObj is Quille.Person)
             {
                 Quille.Person sourceQuille = (Quille.Person)sourceObj;
-                sourcePersonalityController = sourceQuille.MyPersonalityController;
-                return FetchAxeScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityAxe);
+                sourcePersonCharacter = sourceQuille.MyPersonCharacter;
+                return FetchAxeScoreFromPersonalityController(sourcePersonCharacter, relevantPersonalityAxe);
             }
             else if (sourceObj is Quille.Person_Character)
             {
@@ -41,7 +39,7 @@ namespace ChecksAndMods
             if (sourceObj is Quille.Person)
             {
                 Quille.Person sourceQuille = (Quille.Person)sourceObj;
-                sourcePersonalityController = sourceQuille.MyPersonalityController;
+                sourcePersonalityController = sourceQuille.MyPersonCharacter;
                 return FetchTraitScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityTrait);
             }
             else if (sourceObj is Quille.Person_Character)

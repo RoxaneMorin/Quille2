@@ -6,43 +6,29 @@ using Newtonsoft.Json;
 
 namespace Quille
 {
+    // The root monoBehaviour for human characters.
+    // Not JSON serialized.
+
     [System.Serializable]
-    [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
+    //[RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
 
-        // Generic information.
-        [SerializeField] private int charID;
-        [SerializeField] private string firstName, lastName, nickName;
-        [SerializeField] private List<string> secondaryNames; // In case of multiple middle names :p not sure it'll actually be useful.
+        // Data holders.
+        [SerializeField] private Person_Character myPersonCharacter;
 
-        // Age and gender?
-
-        // Controllers and other compotents.
-        [SerializeField] private Person_Character myPersonalityController;
+        // Controllers.
         [SerializeField] private Person_NeedController myNeedController;
         [SerializeField] private Person_AI myPersonAI;
 
 
-
         // PROPERTIES & GETTERS/SETTERS
-        public int CharID { get { return charID; } }
 
-        public string FirstName { get { return firstName; } set { firstName = value; } }
-        public string LastName { get { return lastName; } set { lastName = value; } }
-        public string NickName { get { return nickName; } set { nickName = value; } }
-        public List<string> SecondaryNames { get { return secondaryNames; } set { secondaryNames = value; } } // Not sure about the best way to handle this one :/
-        // Check the existance of a secondary name.
-        // Add secondary name.
-        // Remove secondary name.
-        public string FirstAndLastName { get { return string.Format("{0} {1}", firstName, lastName); } } // Name order?
-        public string FirstNickAndLastName { get { return string.Format("{0} '{1}' {2}", firstName, nickName, lastName); } }
-        public string FullName { get { return string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName); } }
+        // Data holders.
+        public Person_Character MyPersonCharacter { get { return myPersonCharacter; } }
 
-
-        // Controllers.
-        public Person_Character MyPersonalityController { get { return myPersonalityController; } }
+         // Controllers.
         public Person_NeedController MyNeedController { get { return myNeedController; } }
         // Should we be able to return the AI one?
 
@@ -53,12 +39,6 @@ namespace Quille
         //{
 
         //}
-
-
-        private void PersonPopulator(Person_Character personalityController)
-        {
-            myPersonalityController = personalityController;
-        }
 
 
 
@@ -100,11 +80,11 @@ namespace Quille
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                myNeedController.ModulateBasicNeeds(this);
-                myNeedController.ModulateSubjectiveNeeds(this);
-            }
+            //if (Input.GetKeyDown(KeyCode.B))
+            //{
+            //    myNeedController.ModulateBasicNeeds(this);
+            //    myNeedController.ModulateSubjectiveNeeds(this);
+            //}
         }
     }
 }
