@@ -538,6 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myBasePerson: {fileID: 0}
+  myNeedController: {fileID: 0}
   noticeBasicNeed: 0.5
   noticeSubjectiveNeed: 0.5
   inAction: 0
@@ -553,12 +554,273 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da5c30a8a0c35c449567caf9bc38862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myBasicNeeds: []
-  mySubjectiveNeeds: []
+  myNeedData:
+    myBasicNeeds:
+    - needSO: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+      localAiPriorityWeighting: 1.25
+      levelFull: 1
+      levelCurrent: 1
+      baseChangeRate: -0.3
+      currentChangeRate: -0.3
+      currentChangeRateScaled: -0.003
+      thresholdElated: 0.9
+      thresholdWarning: 0.25
+      thresholdCritical: 0.1
+      needState: 3
+      needNameForUI: Nourishment
+    - needSO: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+      localAiPriorityWeighting: 1
+      levelFull: 1
+      levelCurrent: 1
+      baseChangeRate: -0.05
+      currentChangeRate: -0.05
+      currentChangeRateScaled: -0.0005
+      thresholdElated: 0.9
+      thresholdWarning: 0.25
+      thresholdCritical: 0.1
+      needState: 3
+      needNameForUI: Rest
+    - needSO: {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
+      localAiPriorityWeighting: 0.75
+      levelFull: 1
+      levelCurrent: 1
+      baseChangeRate: -0.1
+      currentChangeRate: -0.1
+      currentChangeRateScaled: -0.001
+      thresholdElated: 0.9
+      thresholdWarning: 0.25
+      thresholdCritical: 0.1
+      needState: 3
+      needNameForUI: Sanitation
+    - needSO: {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
+      localAiPriorityWeighting: 0.9
+      levelFull: 1
+      levelCurrent: 1
+      baseChangeRate: -0.15
+      currentChangeRate: -0.15
+      currentChangeRateScaled: -0.0015
+      thresholdElated: 0.9
+      thresholdWarning: 0.25
+      thresholdCritical: 0.1
+      needState: 3
+      needNameForUI: Stress Relief
+    mySubjectiveNeeds:
+    - needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+      localAiPriorityWeighting: 0.5
+      localAiPriorityWeightingLeft: 0.5
+      localAiPriorityWeightingRight: 0.5
+      levelFullLeft: 1
+      levelCurrentLeft: 1
+      levelFullRight: 1
+      levelCurrentRight: 1
+      baseChangeRateLeft: -0.05
+      currentChangeRateLeft: -0.05
+      baseChangeRateRight: -0.05
+      currentChangeRateRight: -0.05
+      currentChangeRateLeftScaled: -0.0005
+      currentChangeRateRightScaled: -0.0005
+      thresholdElatedLeft: 0.9
+      thresholdElatedRight: 0.9
+      thresholdWarningLeft: 0.25
+      thresholdWarningRight: 0.25
+      thresholdCriticalLeft: 0.1
+      thresholdCriticalRight: 0.1
+      needStateLeft: 3
+      needStateRight: 3
+      needNameForUI: Experience
+      needNameLeftForUI: Challenge
+      needNameRightForUI: Indulgence
+    - needSO: {fileID: 11400000, guid: 638cf27089e350f4688e2933e9b75b61, type: 2}
+      localAiPriorityWeighting: 1
+      localAiPriorityWeightingLeft: 1
+      localAiPriorityWeightingRight: 1
+      levelFullLeft: 1
+      levelCurrentLeft: 1
+      levelFullRight: 1
+      levelCurrentRight: 1
+      baseChangeRateLeft: -0.05
+      currentChangeRateLeft: -0.05
+      baseChangeRateRight: -0.05
+      currentChangeRateRight: -0.05
+      currentChangeRateLeftScaled: -0.0005
+      currentChangeRateRightScaled: -0.0005
+      thresholdElatedLeft: 0.9
+      thresholdElatedRight: 0.9
+      thresholdWarningLeft: 0.25
+      thresholdWarningRight: 0.25
+      thresholdCriticalLeft: 0.1
+      thresholdCriticalRight: 0.1
+      needStateLeft: 3
+      needStateRight: 3
+      needNameForUI: Stimulation
+      needNameLeftForUI: Sensory
+      needNameRightForUI: Cognitive
+    - needSO: {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
+      localAiPriorityWeighting: 1
+      localAiPriorityWeightingLeft: 1
+      localAiPriorityWeightingRight: 1
+      levelFullLeft: 1
+      levelCurrentLeft: 1
+      levelFullRight: 1
+      levelCurrentRight: 1
+      baseChangeRateLeft: -0.05
+      currentChangeRateLeft: -0.05
+      baseChangeRateRight: -0.05
+      currentChangeRateRight: -0.05
+      currentChangeRateLeftScaled: -0.0005
+      currentChangeRateRightScaled: -0.0005
+      thresholdElatedLeft: 0.9
+      thresholdElatedRight: 0.9
+      thresholdWarningLeft: 0.25
+      thresholdWarningRight: 0.25
+      thresholdCriticalLeft: 0.1
+      thresholdCriticalRight: 0.1
+      needStateLeft: 3
+      needStateRight: 3
+      needNameForUI: Socialization vs Time Alone
+      needNameLeftForUI: Socialization
+      needNameRightForUI: Time Alone
   myBasicNeedsMapped:
-    _serializedList: []
+    _serializedList:
+    - Key: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+        localAiPriorityWeighting: 1.25
+        levelFull: 1
+        levelCurrent: 1
+        baseChangeRate: -0.3
+        currentChangeRate: -0.3
+        currentChangeRateScaled: -0.003
+        thresholdElated: 0.9
+        thresholdWarning: 0.25
+        thresholdCritical: 0.1
+        needState: 3
+        needNameForUI: Nourishment
+    - Key: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
+        localAiPriorityWeighting: 1
+        levelFull: 1
+        levelCurrent: 1
+        baseChangeRate: -0.05
+        currentChangeRate: -0.05
+        currentChangeRateScaled: -0.0005
+        thresholdElated: 0.9
+        thresholdWarning: 0.25
+        thresholdCritical: 0.1
+        needState: 3
+        needNameForUI: Rest
+    - Key: {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: 4f2ebf614be649d4182635d7e1baca8c, type: 2}
+        localAiPriorityWeighting: 0.75
+        levelFull: 1
+        levelCurrent: 1
+        baseChangeRate: -0.1
+        currentChangeRate: -0.1
+        currentChangeRateScaled: -0.001
+        thresholdElated: 0.9
+        thresholdWarning: 0.25
+        thresholdCritical: 0.1
+        needState: 3
+        needNameForUI: Sanitation
+    - Key: {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: 6097bf12bd88b9c418204b2a56588b6a, type: 2}
+        localAiPriorityWeighting: 0.9
+        levelFull: 1
+        levelCurrent: 1
+        baseChangeRate: -0.15
+        currentChangeRate: -0.15
+        currentChangeRateScaled: -0.0015
+        thresholdElated: 0.9
+        thresholdWarning: 0.25
+        thresholdCritical: 0.1
+        needState: 3
+        needNameForUI: Stress Relief
   mySubjectiveNeedsMapped:
-    _serializedList: []
+    _serializedList:
+    - Key: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
+        localAiPriorityWeighting: 0.5
+        localAiPriorityWeightingLeft: 0.5
+        localAiPriorityWeightingRight: 0.5
+        levelFullLeft: 1
+        levelCurrentLeft: 1
+        levelFullRight: 1
+        levelCurrentRight: 1
+        baseChangeRateLeft: -0.05
+        currentChangeRateLeft: -0.05
+        baseChangeRateRight: -0.05
+        currentChangeRateRight: -0.05
+        currentChangeRateLeftScaled: -0.0005
+        currentChangeRateRightScaled: -0.0005
+        thresholdElatedLeft: 0.9
+        thresholdElatedRight: 0.9
+        thresholdWarningLeft: 0.25
+        thresholdWarningRight: 0.25
+        thresholdCriticalLeft: 0.1
+        thresholdCriticalRight: 0.1
+        needStateLeft: 3
+        needStateRight: 3
+        needNameForUI: Experience
+        needNameLeftForUI: Challenge
+        needNameRightForUI: Indulgence
+    - Key: {fileID: 11400000, guid: 638cf27089e350f4688e2933e9b75b61, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: 638cf27089e350f4688e2933e9b75b61, type: 2}
+        localAiPriorityWeighting: 1
+        localAiPriorityWeightingLeft: 1
+        localAiPriorityWeightingRight: 1
+        levelFullLeft: 1
+        levelCurrentLeft: 1
+        levelFullRight: 1
+        levelCurrentRight: 1
+        baseChangeRateLeft: -0.05
+        currentChangeRateLeft: -0.05
+        baseChangeRateRight: -0.05
+        currentChangeRateRight: -0.05
+        currentChangeRateLeftScaled: -0.0005
+        currentChangeRateRightScaled: -0.0005
+        thresholdElatedLeft: 0.9
+        thresholdElatedRight: 0.9
+        thresholdWarningLeft: 0.25
+        thresholdWarningRight: 0.25
+        thresholdCriticalLeft: 0.1
+        thresholdCriticalRight: 0.1
+        needStateLeft: 3
+        needStateRight: 3
+        needNameForUI: Stimulation
+        needNameLeftForUI: Sensory
+        needNameRightForUI: Cognitive
+    - Key: {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
+      Value:
+        needSO: {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
+        localAiPriorityWeighting: 1
+        localAiPriorityWeightingLeft: 1
+        localAiPriorityWeightingRight: 1
+        levelFullLeft: 1
+        levelCurrentLeft: 1
+        levelFullRight: 1
+        levelCurrentRight: 1
+        baseChangeRateLeft: -0.05
+        currentChangeRateLeft: -0.05
+        baseChangeRateRight: -0.05
+        currentChangeRateRight: -0.05
+        currentChangeRateLeftScaled: -0.0005
+        currentChangeRateRightScaled: -0.0005
+        thresholdElatedLeft: 0.9
+        thresholdElatedRight: 0.9
+        thresholdWarningLeft: 0.25
+        thresholdWarningRight: 0.25
+        thresholdCriticalLeft: 0.1
+        thresholdCriticalRight: 0.1
+        needStateLeft: 3
+        needStateRight: 3
+        needNameForUI: Socialization vs Time Alone
+        needNameLeftForUI: Socialization
+        needNameRightForUI: Time Alone
 --- !u!114 &1635557744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,21 +833,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charID: 0
-  firstName: Pseudoquille
-  lastName: McQuillington
-  nickName: Pseud
-  secondaryNames:
-  - Quillebert
-  myPersonalityController:
+  myPersonCharacter:
+    charID: 0
+    firstName: 
+    lastName: 
+    nickName: 
+    secondaryNames: []
     myPersonalityAxes:
-      _serializedList:
-      - Key: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
-        Value: 0.5
+      _serializedList: []
     myPersonalityTraits:
-      _serializedList:
-      - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
-        Value: 1
+      _serializedList: []
     myInterests:
       _serializedList: []
   myNeedController: {fileID: 1635557743}
