@@ -43,7 +43,7 @@ public class SubjectiveNeedDrawer : PropertyDrawer
     private Rect DrawVariablesBlock(Rect position, SerializedProperty property, string direction, string subneedName)
     {
         // Draw title.
-        Rect newPosition = new Rect(position.x, position.y + 1.2f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
+        Rect newPosition = new Rect(position.x, position.y + 1.25f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
         EditorGUI.LabelField(newPosition, string.Format("{0} Need ({1}) Variables", direction, subneedName), EditorStyles.boldLabel);
         EditorGUI.indentLevel++;
 

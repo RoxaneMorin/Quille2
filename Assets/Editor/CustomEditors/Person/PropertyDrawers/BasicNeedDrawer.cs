@@ -38,62 +38,54 @@ public class BasicNeedDrawer : PropertyDrawer
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.PropertyField(newPosition, property.FindPropertyRelative("needSO"), true);
 
-            // Draw the sided variables.
-            newPosition = DrawVariablesBlock(newPosition, property, needName);
+            // Draw title.
+            newPosition = new Rect(position.x, position.y + 2.25f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(newPosition, string.Format("Need ({0}) Variables", needName), EditorStyles.boldLabel);
+            EditorGUI.indentLevel++;
+
+            // Collect properties.
+            localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
+            levelFull = property.FindPropertyRelative("levelFull");
+            levelCurrent = property.FindPropertyRelative("levelCurrent");
+            baseChangeRate = property.FindPropertyRelative("baseChangeRate");
+            currentChangeRate = property.FindPropertyRelative("currentChangeRate");
+            currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
+            thresholdElated = property.FindPropertyRelative("thresholdElated");
+            thresholdWarning = property.FindPropertyRelative("thresholdWarning");
+            thresholdCritical = property.FindPropertyRelative("thresholdCritical");
+            needState = property.FindPropertyRelative("needState");
+
+            // Draw properties.
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, localAiPriorityWeighting);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, levelFull);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, levelCurrent);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, baseChangeRate);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, currentChangeRate);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, currentChangeRateScaled);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, thresholdElated);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, thresholdWarning);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, thresholdCritical);
+
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            using (new EditorGUI.DisabledScope(true))
+                EditorGUI.PropertyField(newPosition, needState);
+
+            EditorGUI.indentLevel--;
 
             EditorGUI.indentLevel--;
         }
 
         EditorGUI.EndFoldoutHeaderGroup();
         EditorGUI.EndProperty();
-    }
-
-    private Rect DrawVariablesBlock(Rect position, SerializedProperty property, string needName)
-    {
-        // Draw title.
-        Rect newPosition = new Rect(position.x, position.y + 1.2f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-        EditorGUI.LabelField(newPosition, string.Format("Need ({0}) Variables", needName), EditorStyles.boldLabel);
-        EditorGUI.indentLevel++;
-
-        // Collect properties.
-        localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
-        levelFull = property.FindPropertyRelative("levelFull");
-        levelCurrent = property.FindPropertyRelative("levelCurrent");
-        baseChangeRate = property.FindPropertyRelative("baseChangeRate");
-        currentChangeRate = property.FindPropertyRelative("currentChangeRate");
-        currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
-        thresholdElated = property.FindPropertyRelative("thresholdElated");
-        thresholdWarning = property.FindPropertyRelative("thresholdWarning");
-        thresholdCritical = property.FindPropertyRelative("thresholdCritical");
-        needState = property.FindPropertyRelative("needState");
-
-        // Draw properties.
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, localAiPriorityWeighting);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, levelFull);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, levelCurrent);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, baseChangeRate);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, currentChangeRate);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, currentChangeRateScaled);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, thresholdElated);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, thresholdWarning);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, thresholdCritical);
-
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        using (new EditorGUI.DisabledScope(true))
-            EditorGUI.PropertyField(newPosition, needState);
-
-        EditorGUI.indentLevel--;
-
-        return newPosition;
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
