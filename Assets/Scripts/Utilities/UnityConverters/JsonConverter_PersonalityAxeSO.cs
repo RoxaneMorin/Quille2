@@ -5,6 +5,9 @@ using Quille;
 
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
+    // JsonConverters for instances of PersonalityAxeSO to be serialized as and deserialized from their ressource names, including as part of dictionaries of PersonalityAxe scores.
+
+
     public class JsonConverter_PersonalityAxeSO : JsonConverter<PersonalityAxeSO>
     {
         public override PersonalityAxeSO ReadJson(JsonReader reader, Type objectType, PersonalityAxeSO existingValue, bool hasExistingValue, JsonSerializer serializer)

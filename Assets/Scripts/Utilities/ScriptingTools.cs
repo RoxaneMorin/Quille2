@@ -5,6 +5,9 @@ using UnityEngine;
 
 public static class ExtensionMethods
 {
+    // Various extension methods.
+
+
     // ARRAY
     public static void InvertedSort(this Array array)
     {

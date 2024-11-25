@@ -5,6 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class floatPair
 {
+    // C# object grouping two float values as would a tupple, likely for ease of serialization.
+
+
     // VARIABLES
     public float Item1;
     public float Item2;

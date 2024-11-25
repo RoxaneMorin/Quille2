@@ -6,6 +6,10 @@ using AYellowpaper.SerializedCollections;
 using Quille;
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
+    // JsonConverters for instances of SubjectiveNeedSO to be serialized as and deserialized from their ressource names, including as part of dictionaries of SubjectiveNeedSO and corresponding SubjectiveNeed C# objects.
+    // Dictionaries are serialized as lists, then rebuilt upon deserialization. Discordant key/value pairs will result in data loss.
+
+
     public class JsonConverter_SubjectiveNeedSO : JsonConverter<SubjectiveNeedSO>
     {
         public override SubjectiveNeedSO ReadJson(JsonReader reader, Type objectType, SubjectiveNeedSO existingValue, bool hasExistingValue, JsonSerializer serializer)

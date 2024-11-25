@@ -8,6 +8,10 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 {
     public static class ConstantsAndHelpers
     {
+        // Constant and helper methods used by the custon JsonConverters of Quille classes.
+        // Many are fragile as they rely on hardcoded path and resource names.
+        
+        
         // CONSTANTS
 
         // Resource folder paths.

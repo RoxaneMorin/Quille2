@@ -7,6 +7,10 @@ using Quille;
 
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
+    // JsonConverters for instances of BasicNeedSO to be serialized as and deserialized from their ressource names, including as part of dictionaries of BasicNeedSO and corresponding BasicNeed C# objects.
+    // Dictionaries are serialized as lists, then rebuilt upon deserialization. Discordant key/value pairs will result in data loss.
+
+
     public class JsonConverter_BasicNeedSO : JsonConverter<BasicNeedSO>
     {
         public override BasicNeedSO ReadJson(JsonReader reader, Type objectType, BasicNeedSO existingValue, bool hasExistingValue, JsonSerializer serializer)

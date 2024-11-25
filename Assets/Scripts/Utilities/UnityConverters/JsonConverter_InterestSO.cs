@@ -5,6 +5,9 @@ using Quille;
 
 namespace Newtonsoft.Json.UnityConverters.Quille
 {
+    // JsonConverters for instances of InterestSO to be serialized as and deserialized from their ressource names, including as part of dictionaries of Interest scores.
+
+
     public class JsonConverter_InterestSO : JsonConverter<InterestSO>
     {
         public override InterestSO ReadJson(JsonReader reader, Type objectType, InterestSO existingValue, bool hasExistingValue, JsonSerializer serializer)
