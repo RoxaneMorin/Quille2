@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Quille
 {
@@ -10,10 +11,12 @@ namespace Quille
     // Not JSON serialized.
 
     [System.Serializable]
-    //[RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
+    [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
+
+        // Should the charID be here?
 
         // Data holders.
         [SerializeField] private Person_Character myPersonCharacter;
@@ -53,38 +56,65 @@ namespace Quille
         }
 
 
-        private void SerializeToJSON(string filePath)
-        {
-            string json = JsonUtility.ToJson(this, true);
-
-            File.WriteAllText(filePath, json);
-
-            Debug.Log(string.Format("Serialized at path {0}.", filePath));
-        }
-
-
-
-        // Built in.
+        // BUILT IN.
 
         // Start is called before the first frame update
         void Start()
         {
             Init();
 
-            //SerializeToJSON(Application.dataPath + "/personality_data.json");
-
-            //string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
-            //System.IO.File.WriteAllText(Application.dataPath + "/test_quille.json", jsonString);
+            //SaveToJSON();
         }
 
         // Update is called once per frame
         void Update()
         {
-            //if (Input.GetKeyDown(KeyCode.B))
-            //{
-            //    myNeedController.ModulateBasicNeeds(this);
-            //    myNeedController.ModulateSubjectiveNeeds(this);
-            //}
+        }
+
+
+
+        // SAVE & LOAD
+        private string SaveToJSON()
+        {
+            string jsonPersonCharacter = myPersonCharacter.SaveToJSON();
+            string jsonNeedController = myNeedController.SaveToJSON();
+
+            JObject jsonPerson = new JObject();
+
+            jsonPerson.Add("PersonCharacter", JObject.Parse(jsonPersonCharacter));
+            jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
+
+            string formatedJSON = jsonPerson.ToString(Formatting.Indented);
+            //Debug.Log(formatedJSON);
+
+            // TODO: set proper save location
+            string fileName = myPersonCharacter.CreateJSONFileName();
+
+            // TODO: add a try block just to be safe.
+            // TODO: make a backup of the previous save file if one exists.
+            // TODO: handle what happens when a character is renamed.
+            var file = File.CreateText(fileName) ;
+            file.Write(formatedJSON);
+            file.Close();
+
+            return formatedJSON;
+        }
+
+        private void LoadFromJSON(string sourceJSON)
+        {
+            // TODO: chose what file to load.
+
+            JObject jsonPerson = JObject.Parse(sourceJSON);
+            
+            string jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
+            string jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
+
+            //Debug.Log(jsonPersonCharacter);
+            //Debug.Log(jsonNeedController);
+
+            // TODO: test what happens if myPersonCharacter doesn't already exist.
+            myPersonCharacter.LoadFromJSON(jsonPersonCharacter);
+            myNeedController.LoadFromJSON(jsonNeedController);
         }
     }
 }

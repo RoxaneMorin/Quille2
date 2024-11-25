@@ -27,7 +27,12 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
             if (theScore > 0) // Precaution against invalid (negative or zero) trait scores.
             {
-                value.Add(theSO, theScore);
+                // TODO: make sure this works on an empty dict.
+                value[theSO] = theScore;
+            }
+            else if (value.ContainsKey(theSO))
+            {
+                value.Remove(theSO);
             }
         }
         protected override void WriteJsonProperties(JsonWriter writer, SerializedDictionary<PersonalityTraitSO, float> value, JsonSerializer serializer)

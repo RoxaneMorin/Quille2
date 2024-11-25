@@ -35,6 +35,10 @@ public class SerializationTest : MonoBehaviour
 
     [SerializeField] private Quille.Person_NeedController personNeedController2;
 
+    [SerializeField] private Quille.Person_Character personCharacter1;
+
+    [SerializeField] private Quille.Person_Character personCharacter2;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,13 +47,19 @@ public class SerializationTest : MonoBehaviour
         Debug.Log(jsonStringTester);
 
         tester2 = JsonConvert.DeserializeObject<SerializationTester>(jsonStringTester);
-
+        
 
         string jsonStringNeedController = personNeedController1.SaveToJSON();
         Debug.Log(jsonStringNeedController);
 
         personNeedController2 = gameObject.AddComponent(typeof(Quille.Person_NeedController)) as Quille.Person_NeedController;
         personNeedController2.LoadFromJSON(jsonStringNeedController);
+
+
+        string jsonStringPersonCharacter = personCharacter1.SaveToJSON();
+        Debug.Log(jsonStringPersonCharacter);
+
+        personCharacter2.LoadFromJSON(jsonStringPersonCharacter);
     }
 
     // Update is called once per frame

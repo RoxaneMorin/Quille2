@@ -25,7 +25,8 @@ namespace Newtonsoft.Json.UnityConverters.Quille
             PersonalityAxeSO theSO = ConstantsAndHelpers.loadPersonalityAxeSO(name);
             float theScore = reader.ReadAsFloat() ?? 0f;
 
-            value.Add(theSO, theScore);
+            // TODO: make sure this works on an empty dict.
+            value[theSO] = theScore;
         }
         protected override void WriteJsonProperties(JsonWriter writer, SerializedDictionary<PersonalityAxeSO, float> value, JsonSerializer serializer)
         {

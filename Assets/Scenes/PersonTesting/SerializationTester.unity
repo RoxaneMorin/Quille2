@@ -190,6 +190,33 @@ MonoBehaviour:
         _serializedList: []
   personNeedController1: {fileID: 14641137}
   personNeedController2: {fileID: 0}
+  personCharacter1:
+    charID: 0
+    firstName: Testurian
+    lastName: Jones
+    nickName: Tess
+    secondaryNames:
+    - Alfred
+    myPersonalityAxes:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
+        Value: 1
+    myPersonalityTraits:
+      _serializedList: []
+    myInterests:
+      _serializedList: []
+  personCharacter2:
+    charID: 0
+    firstName: Teste
+    lastName: er
+    nickName: sdfdf
+    secondaryNames: []
+    myPersonalityAxes:
+      _serializedList: []
+    myPersonalityTraits:
+      _serializedList: []
+    myInterests:
+      _serializedList: []
 --- !u!65 &14641133
 BoxCollider:
   m_ObjectHideFlags: 0

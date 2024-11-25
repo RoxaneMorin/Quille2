@@ -12,6 +12,8 @@ namespace Quille
         [System.Serializable]
         public class NeedController_Data
         {
+            // TODO: check if I can nix this subclass and just serialzie the two arrays by hand.
+
             // VARIABLES
             [SerializeField] private BasicNeed[] myBasicNeeds;
             [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
@@ -19,12 +21,12 @@ namespace Quille
 
 
             // PROPERTIES & GETTERS/SETTERS
-            public BasicNeed[] MyBasicNeeds
+            [JsonIgnore] public BasicNeed[] MyBasicNeeds
             {
                 get { return myBasicNeeds; }
                 set { myBasicNeeds = value; }
             }
-            public SubjectiveNeed[] MySubjectiveNeeds
+            [JsonIgnore] public SubjectiveNeed[] MySubjectiveNeeds
             {
                 get { return mySubjectiveNeeds; }
                 set { mySubjectiveNeeds = value; }
@@ -47,21 +49,20 @@ namespace Quille
         internal string SaveToJSON()
         {
             return JsonConvert.SerializeObject(myNeedData, Formatting.Indented);
-
-            // TODO: where to actually write this to a file?
         }
 
         // LOAD
         internal void LoadFromJSON(string jsonString)
         {
-            myNeedData = JsonConvert.DeserializeObject<NeedController_Data>(jsonString);
+            // TODO: test what happens if myNeedData doesn't already exist.
+            JsonConvert.PopulateObject(jsonString, myNeedData);
 
             CreateAndPopulateBasicNeedsMapped();
             CreateAndPopulateSubjectiveNeedsMapped();
         }
 
         // UTILITY
-        // Create need dictionaries from existing need arrays;
+        // Create need dictionaries from existing need arrays, as used by the JSON loader;
         private void CreateAndPopulateBasicNeedsMapped()
         {
             myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
