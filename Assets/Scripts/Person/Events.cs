@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The delegates used by events through the Quille namespace.
+    // They are regrouped here for ease of editability.
+
+
     // BASIC NEED EVENTS
     // A basic need's level has been updated.
     public delegate void BasicNeedLevelCurrentUpdate(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage);

@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The ScriptableObject template of SubjectiveNeeds, used for the creation of specific needs as assets.
+    // These needs represent higher level psychological drives such as the desires for social interactions, comfort or novelty in one's life.
+    // Two (somewhat) opposing drives are contained within the same SubjectiveNeed.
+
+
     [CreateAssetMenu(fileName = "SubjectiveNeed", menuName = "Quille/Needs/Subjective Need", order = 1)]
     public class SubjectiveNeedSO : ScriptableObject
     {

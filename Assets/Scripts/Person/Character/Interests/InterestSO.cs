@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The ScriptableObject template of Interests, used for the creation of specific interests as assets.
+    // These interests represent topics a character may drawn to (or repulsed by), such as art, science or the economy.
+
+
     [CreateAssetMenu(fileName = "Interest_", menuName = "Quille/Interests/Field of Interest", order = 1)]
     public class InterestSO : ScriptableObject
     {

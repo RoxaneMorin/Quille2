@@ -10,7 +10,8 @@ namespace Quille
 {
     // The C# object class containing a person's identity and personality. 
     // This data is editable, but needs not be updated or accessed at every tick.
-    // JSON serialized.
+    // The instance data in this part of the class is JSON serialized.
+
 
     [System.Serializable]
     public partial class Person_Character
@@ -19,6 +20,7 @@ namespace Quille
 
         [SerializeField] private int charID;
         // TODO: determine whether and how to use this unique numerical ID.
+        // TODO: decide whether it should reside in the base Person class instead.
 
         [Space]
 

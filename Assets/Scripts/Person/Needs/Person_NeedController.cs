@@ -8,6 +8,11 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The monoBehaviour containing and controlling a person's needs.
+    // Need changes are handled via coroutines. Other behaviours may take place on Update.
+    // Only the lists of needs are JSON serialized, but that is handled in another part of the class.
+
+
     [System.Serializable]
     public partial class Person_NeedController : MonoBehaviour
     {

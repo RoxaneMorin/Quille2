@@ -11,7 +11,7 @@ namespace Quille
     // The C# object class containing a person's identity and personality. 
     // This data is editable, but needs not be updated or accessed at every tick.
     // Properties and helper methods only.
-    // Not JSON serialized.
+    // This part of the class is not JSON serialized.
 
     public partial class Person_Character
     {

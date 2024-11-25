@@ -6,6 +6,12 @@ using Newtonsoft.Json;
 
 namespace Quille
 {
+    // The C# object component of a SubjectiveNeed. Instances derive their specificities from their associated SubjectiveNeedSO.
+    // These needs represent higher level psychological drives such as the desires for social interactions, comfort or novelty in one's life.
+    // Two (somewhat) opposing drives are contained within the same SubjectiveNeed.
+    // JSON serializable, though instance serialization is handled by the NeedController containing them.
+
+
     [System.Serializable]
     public class SubjectiveNeed
     {

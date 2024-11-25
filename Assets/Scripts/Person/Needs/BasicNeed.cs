@@ -5,6 +5,11 @@ using Newtonsoft.Json;
 
 namespace Quille
 {
+    // The C# object component of a BasicNeed. Instances derive their specificities from their associated BasicNeedSO.
+    // These needs represent basic physiological and psychological drives such as hunger and stress.
+    // JSON serializable, though instance serialization is handled by the NeedController containing them.
+
+
     [System.Serializable]
     public class BasicNeed
     {

@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The ScriptableObject template of PersonalityAxes, used for the creation of specific axes as assets.
+    // These axes represent personality spectrums upon which everyone will fall, such as intro vs extraversion.
+
+
     [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Personality/Personality Axe", order = 0)]
     public class PersonalityAxeSO : ScriptableObject
     {

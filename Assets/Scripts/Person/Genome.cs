@@ -6,6 +6,11 @@ using UnityEngine.UIElements;
 
 namespace Quille
 {
+    // Container and controller for characters' genetic information.
+    // It is quite old and should be rewritten as a basic C# object.
+    // Its instanced data should be JSON serializable.
+
+
     [System.Serializable]
     public class Genome : MonoBehaviour
     {

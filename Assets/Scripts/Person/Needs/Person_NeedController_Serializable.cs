@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The monoBehaviour containing and controlling a person's needs.
+    // Its lists of needs are JSON serialized using the methods in this file.
+
+
     public partial class Person_NeedController : MonoBehaviour
     {
         // METHODS

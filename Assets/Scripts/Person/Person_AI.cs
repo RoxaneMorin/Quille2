@@ -4,6 +4,12 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The monoBehaviour driving characters' actual behaviours.
+    // At the moment, need monitoring is handled by repeated method invokation. This may change in the future.
+    // So far, JSON serialization has not been implemented, though it should be once basic interactions are implemented.
+    // (I'm unsure whether systems for characters remembering past actions should be implemented here or elsewhere.)
+
+
     public class Person_AI : MonoBehaviour
     {
         // VARIABLES

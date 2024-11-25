@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Quille
 {
+    // The ScriptableObject template of BasicNeeds, used for the creation of specific needs as assets.
+    // These needs represent basic physiological and psychological drives such as hunger and stress.
+
+
     [CreateAssetMenu(fileName = "BasicNeed", menuName = "Quille/Needs/Basic Need", order = 0)]
     public class BasicNeedSO : ScriptableObject
     {

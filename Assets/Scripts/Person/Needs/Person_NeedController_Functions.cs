@@ -5,6 +5,12 @@ using Newtonsoft.Json;
 
 namespace Quille
 {
+    // The monoBehaviour containing and controlling a person's needs.
+    // Need changes are handled via coroutines. Other behaviours may take place on Update.
+    // This part of the class hosts events, as well as management and utility methods.
+    // Not JSON serialized.
+
+
     public partial class Person_NeedController : MonoBehaviour
     {
         // EVENTS
