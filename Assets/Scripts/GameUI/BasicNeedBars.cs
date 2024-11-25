@@ -64,6 +64,8 @@ namespace QuilleUI
             {
                 need.Key.fillAmount = need.Value.LevelCurrentAsPercentage;
                 need.Key.color = colourByFill.Evaluate(need.Key.fillAmount);
+
+                // Manage colour gradient per need per character?
             }
         }
 
