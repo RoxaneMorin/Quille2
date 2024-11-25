@@ -12,6 +12,7 @@ So far, I've mostly worked on:
 - The implementation of a system of “checks and modulators”, small objects meant to fetch specific bits of character information, and alter or evaluate it. They’re meant to be the building blocks of the character AI.
 - The creation of custom editors and property drawers for most of the above.
 - A first sketch of the characters’ need management loop.
+- An incomplete genetics system, partially ported from an older project.
 - Miscellaneous fancies such as procedural grid generation and some post processing shaders.
 
 My next steps will likely be:
