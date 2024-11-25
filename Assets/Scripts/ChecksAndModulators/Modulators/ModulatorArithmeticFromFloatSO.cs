@@ -6,6 +6,11 @@ namespace ChecksAndMods
 {
     public abstract class ModulatorArithmeticFromFloatSO : ScriptableObject
     {
+        // Parent class for specificed ModulatorArithmeticFromFloatSO to inherit from.
+        // This type of modulator runs an arithmetic operation on the target value using the fetched value and given parameters, and returns the result.
+        // The specific value to fetch and modulate is elaborated upon by child classes and their instances.
+
+
         // VARIABLES/PARAM
         protected float? param;
 

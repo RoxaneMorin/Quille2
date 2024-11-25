@@ -8,6 +8,11 @@ namespace QuilleUI
 {
     public class PersonalityAxesMenu : MonoBehaviour
     {
+        // Test setup for a character creator's personality axe UI.
+        // Procedurally populated from existing PersonalyAxeSOs.
+        // Handles the local saving and loading of an incomplete character using Person's Json serialization system.
+
+
         // VARIABLES
 
         [SerializeField] private Transform prefab;

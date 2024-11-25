@@ -8,6 +8,10 @@ namespace QuilleUI
 {
     public class PersonalityAxeSlider : MonoBehaviour
     {
+        // Test setup for a character creator's individual personality axe UI.
+        // Includes little cosmetic effects ~~
+
+
         // VARIABLES
         [SerializeField] Quille.PersonalityAxeSO myPersonalityAxeSO;
 

@@ -6,6 +6,11 @@ namespace ChecksAndMods
 {
     public abstract class CheckArithmeticSO : ScriptableObject
     {
+        // Parent class for specificed CheckArithmeticSOs to inherit from.
+        // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
+        // The specific value to fetch and check is elaborated upon by child classes and their instances.
+
+
         // VARIABLES/PARAM
         protected float? param;
 

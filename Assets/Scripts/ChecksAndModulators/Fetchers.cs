@@ -4,6 +4,10 @@ namespace ChecksAndMods
 {
     public static class Fetchers
     {
+        // Static methods which acquire specific data from a given object or character.
+        // The desired value is usually represented by its template or key scriptableObject.
+
+
         // Fetch a specific personality axe score.
         public static float? FetchPersonalityAxeScore(System.Object sourceObj, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
@@ -13,11 +17,11 @@ namespace ChecksAndMods
             {
                 Quille.Person sourceQuille = (Quille.Person)sourceObj;
                 sourcePersonCharacter = sourceQuille.MyPersonCharacter;
-                return FetchAxeScoreFromPersonalityController(sourcePersonCharacter, relevantPersonalityAxe);
+                return FetchAxeScoreFromPersonCharacter(sourcePersonCharacter, relevantPersonalityAxe);
             }
             else if (sourceObj is Quille.Person_Character)
             {
-                return FetchAxeScoreFromPersonalityController((Quille.Person_Character)sourceObj, relevantPersonalityAxe);
+                return FetchAxeScoreFromPersonCharacter((Quille.Person_Character)sourceObj, relevantPersonalityAxe);
             }
             else
             {
@@ -25,26 +29,26 @@ namespace ChecksAndMods
                 return null;
             }
         }
-        public static float? FetchAxeScoreFromPersonalityController(Quille.Person_Character sourcePersonalityController, Quille.PersonalityAxeSO relevantPersonalityAxe)
+        public static float? FetchAxeScoreFromPersonCharacter(Quille.Person_Character sourcePersonCharacter, Quille.PersonalityAxeSO relevantPersonalityAxe)
         {
-            return sourcePersonalityController.GetAxeScore(relevantPersonalityAxe);
+            return sourcePersonCharacter.GetAxeScore(relevantPersonalityAxe);
         }
 
 
         // Fetch a specific personality trait score.
         public static float? FetchPersonalityTraitScore(System.Object sourceObj, Quille.PersonalityTraitSO relevantPersonalityTrait)
         {
-            Quille.Person_Character sourcePersonalityController;
+            Quille.Person_Character sourcePersonCharacter;
 
             if (sourceObj is Quille.Person)
             {
                 Quille.Person sourceQuille = (Quille.Person)sourceObj;
-                sourcePersonalityController = sourceQuille.MyPersonCharacter;
-                return FetchTraitScoreFromPersonalityController(sourcePersonalityController, relevantPersonalityTrait);
+                sourcePersonCharacter = sourceQuille.MyPersonCharacter;
+                return FetchTraitScoreFromPersonCharacter(sourcePersonCharacter, relevantPersonalityTrait);
             }
             else if (sourceObj is Quille.Person_Character)
             {
-                return FetchTraitScoreFromPersonalityController((Quille.Person_Character)sourceObj, relevantPersonalityTrait);
+                return FetchTraitScoreFromPersonCharacter((Quille.Person_Character)sourceObj, relevantPersonalityTrait);
             }
             else
             {
@@ -52,7 +56,7 @@ namespace ChecksAndMods
                 return null;
             }
         }
-        public static float? FetchTraitScoreFromPersonalityController(Quille.Person_Character sourcePersonalityController, Quille.PersonalityTraitSO relevantPersonalityTrait)
+        public static float? FetchTraitScoreFromPersonCharacter(Quille.Person_Character sourcePersonalityController, Quille.PersonalityTraitSO relevantPersonalityTrait)
         {
             return sourcePersonalityController.GetTraitScore(relevantPersonalityTrait);
         }

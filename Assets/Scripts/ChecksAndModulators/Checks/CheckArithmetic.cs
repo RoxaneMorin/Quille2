@@ -4,10 +4,14 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    // Wrapper / instantiable class for use with modulator checks.
     [System.Serializable]
     public class CheckArithmetic
     {
+        // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of CheckArithmeticSO.
+        // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
+        // The specific value to fetch and check is handled by the CheckArithmeticSO object.
+
+
         // VARIABLES/PARAM
         // sourceObj, target given by the handler.
         [SerializeField]

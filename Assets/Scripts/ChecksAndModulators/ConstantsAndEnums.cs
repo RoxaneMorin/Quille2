@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
+    // Constants, enums and delegates used by the system of checks and modulators.
+    // Order is important! Enums and Funcs reflect each others' indices.
+
+
     static class Constants
     {
         public const float THRESHOLD_ROUGHLY_EQUAL = 0.5f;
@@ -82,7 +86,7 @@ namespace ChecksAndMods
 
     public enum ChecksBoolean
     {
-        Value,
+        Exists,
         Equal,
         NotEqual
     }

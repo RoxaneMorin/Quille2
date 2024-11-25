@@ -7,6 +7,9 @@ namespace QuilleUI
 {
     public class BasicNeedBars : MonoBehaviour
     {
+        // Test setup for the creation and display of basic need bars.
+
+
         // VARIABLES
         
         [SerializeField] private Transform prefab;

@@ -7,6 +7,11 @@ namespace ChecksAndMods
     [CreateAssetMenu(fileName = "Check_PersonalityTrait_", menuName = "Checks&dModulators/Check/Personality Trait", order = 10)]
     public class CheckPersonalityTraitScore : CheckArithmeticSO
     {
+        // ScriptableObject template for the instantiation of PersonalityTrait arithmetic checks.
+        // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
+        // The specific PersonalityTrait value to fetch and check is set in instance assets.
+
+
         // VARIABLES/PARAM
         [SerializeField]
         private Quille.PersonalityTraitSO relevantPersonalityTrait;

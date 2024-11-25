@@ -6,6 +6,12 @@ namespace ChecksAndMods
 {
     public abstract class ModulatorArithmeticFromBoolSO : ScriptableObject
     {
+        // Parent class for specificed ModulatorArithmeticFromBoolSO to inherit from.
+        // This type of modulator runs a boolean comparison on the fetched value. ("expectedParam" is only used in the Equal/Not Equal comparisons.)
+        // If true, it runs an arithmetic operation on the target value using the given parameters, and returns the result. Else, the target is returned unaltered.
+        // The specific value to fetch and modulate is elaborated upon by child classes and their instances.
+
+
         // VARIABLES/PARAM
         protected bool? param;
 

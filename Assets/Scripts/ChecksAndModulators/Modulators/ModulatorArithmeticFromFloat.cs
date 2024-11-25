@@ -4,10 +4,14 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    // Wrapper / instantiable class for use with modulator SOs.
     [System.Serializable]
     public class ModulatorArithmeticFromFloat
     {
+        // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of ModulatorArithmeticFromFloatSO.
+        // This type of modulator runs an arithmetic operation on the target value using the fetched value and given parameters, and returns the result.
+        // The specific value to fetch and modulate is handled by the ModulatorArithmeticFromFloatSO object.
+
+
         // VARIABLES/PARAM
         // sourceObj, target given by the handler.
         [SerializeField]

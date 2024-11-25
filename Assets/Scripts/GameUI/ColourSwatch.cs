@@ -7,6 +7,9 @@ using Quille;
 //[ExecuteAlways]
 public class ColourSwatch : MonoBehaviour
 {
+    // Old script to colour an image from the given gene scriptableObject.
+
+
     // STATIC VARIABLES
 
     // INSTANTIATED VARIABLES
