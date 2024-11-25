@@ -202,58 +202,33 @@ namespace Quille
                 Debug.Log(myNeedData.MySubjectiveNeeds[i].ToString());
             }
         }
+         
 
-        
+        // BUILT IN
 
-        // Modulation
-        public void ModulateBasicNeeds(Person sourceBasePerson)
+        // Start is called before the first frame update
+        void Start()
         {
-            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            // TODO: clear out when testing is done.
+
+            if (Input.GetKeyDown(KeyCode.V))
             {
-                need.ModulateNeed(sourceBasePerson);
+                StartNeedDecay();
             }
-        }
-        public void ModulateSubjectiveNeeds(Person sourceBasePerson)
-        {
-            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
+
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                need.ModulateNeed(sourceBasePerson);
+                RandomizeNeedChangeRates(-0.3f, 0.1f);
             }
-        }
-        public void ModulateAllNeeds(Person sourceBasePerson)
-        {
-            ModulateBasicNeeds(sourceBasePerson);
-            ModulateSubjectiveNeeds(sourceBasePerson);
-        }
 
-
-
-        // LOAD
-        private void LoadFromJSON(string jsonString)
-        {
-            myNeedData = JsonConvert.DeserializeObject<NeedController_Data>(jsonString);
-
-            CreateAndPopulateBasicNeedsMapped();
-            CreateAndPopulateSubjectiveNeedsMapped();
-        }
-
-        // Create need dictionaries from existing need arrays;
-        private void CreateAndPopulateBasicNeedsMapped()
-        {
-            myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
-
-            foreach (BasicNeed basicNeed in myNeedData.MyBasicNeeds)
+            if (Input.GetKeyDown(KeyCode.M))
             {
-                myBasicNeedsMapped.Add(basicNeed.NeedSO, basicNeed);
-            }
-        }
-        private void CreateAndPopulateSubjectiveNeedsMapped()
-        {
-            mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
-
-            foreach (SubjectiveNeed subjectiveNeed in myNeedData.MySubjectiveNeeds)
-            {
-                mySubjectiveNeedsMapped.Add(subjectiveNeed.NeedSO, subjectiveNeed);
+                SortAndPrintNeedInfo();
             }
         }
     }

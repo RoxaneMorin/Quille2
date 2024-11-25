@@ -148,36 +148,28 @@ namespace Quille
         }
 
 
+        // UTILITY
 
-        // BUILT IN
-
-        // Start is called before the first frame update
-        void Start()
+        // Modulation
+        public void ModulateBasicNeeds(Person sourceBasePerson)
         {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            // TODO: clear out when testing is done.
-
-            if (Input.GetKeyDown(KeyCode.V))
+            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
             {
-                StartNeedDecay();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RandomizeNeedChangeRates(-0.3f, 0.1f);
-            }
-
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                SortAndPrintNeedInfo();
+                need.ModulateNeed(sourceBasePerson);
             }
         }
-
-
+        public void ModulateSubjectiveNeeds(Person sourceBasePerson)
+        {
+            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
+            {
+                need.ModulateNeed(sourceBasePerson);
+            }
+        }
+        public void ModulateAllNeeds(Person sourceBasePerson)
+        {
+            ModulateBasicNeeds(sourceBasePerson);
+            ModulateSubjectiveNeeds(sourceBasePerson);
+        }
 
 
         // TESTING
