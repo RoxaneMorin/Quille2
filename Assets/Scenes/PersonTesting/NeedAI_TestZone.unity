@@ -511,20 +511,20 @@ MonoBehaviour:
   prefab: {fileID: 4881047869735100192, guid: 719d7ebe42aed22488d7c2f4bd057d56, type: 3}
   colourByFill:
     serializedVersion: 2
-    key0: {r: 0.6132076, g: 0.0173031, b: 0, a: 1}
-    key1: {r: 1, g: 0.03529358, b: 0, a: 1}
-    key2: {r: 1, g: 1, b: 0, a: 0}
-    key3: {r: 0, g: 1, b: 0.060203552, a: 0}
-    key4: {r: 0, g: 0.9813695, b: 1, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 0.49056602, g: 0, b: 0.100378856, a: 1}
+    key1: {r: 1, g: 0.19129385, b: 0, a: 1}
+    key2: {r: 1, g: 0.5168742, b: 0, a: 0}
+    key3: {r: 1, g: 1, b: 0, a: 0}
+    key4: {r: 0, g: 1, b: 0.060203552, a: 0}
+    key5: {r: 0, g: 0.9813695, b: 1, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 9830
-    ctime2: 36044
-    ctime3: 55705
-    ctime4: 65535
-    ctime5: 0
+    ctime1: 6361
+    ctime2: 16384
+    ctime3: 32768
+    ctime4: 58982
+    ctime5: 65535
     ctime6: 0
     ctime7: 0
     atime0: 0
@@ -537,7 +537,7 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: -1
-    m_NumColorKeys: 5
+    m_NumColorKeys: 6
     m_NumAlphaKeys: 2
   ownerCanvas: {fileID: 1568759640}
   targetNeedController: {fileID: 1635557743}

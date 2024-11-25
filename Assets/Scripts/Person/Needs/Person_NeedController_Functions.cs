@@ -154,17 +154,13 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            // TODO: clear out when testing is done.
-            //Init();
-
-            // Testing serialization.
-            //string jsonStringSD = JsonConvert.SerializeObject(myNeedData, Formatting.Indented);
-            //Debug.Log(jsonStringSD);
         }
 
         // Update is called once per frame
         void Update()
         {
+            // TODO: clear out when testing is done.
+
             if (Input.GetKeyDown(KeyCode.V))
             {
                 StartNeedDecay();
