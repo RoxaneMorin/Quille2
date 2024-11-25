@@ -8,26 +8,31 @@ using System.IO;
 
 namespace Quille
 {
+    // The C# object class containing a person's identity and personality. 
+    // This data is editable, but needs not be updated or accessed at every tick.
+    // Properties and helper methods only.
+    // Not JSON serialized.
+
     public partial class Person_Character
     {
         // PROPERTIES & THEIR HELPER METHODS
 
         // IDENTITY
-        public int CharID { get { return charID; } }
+        [JsonIgnore] public int CharID { get { return charID; } }
 
         // NAMES
-        public string FirstName { get { return firstName; } set { firstName = value; } }
-        public string LastName { get { return lastName; } set { lastName = value; } }
-        public string NickName { get { return nickName; } set { nickName = value; } }
-        public List<string> SecondaryNames { get { return secondaryNames; } set { secondaryNames = value; } }
+        [JsonIgnore] public string FirstName { get { return firstName; } set { firstName = value; } }
+        [JsonIgnore] public string LastName { get { return lastName; } set { lastName = value; } }
+        [JsonIgnore] public string NickName { get { return nickName; } set { nickName = value; } }
+        [JsonIgnore] public List<string> SecondaryNames { get { return secondaryNames; } set { secondaryNames = value; } }
         // TODO: review how this should be handled. We likely won't be manipulating the full set at once.
         // Check the existance of a secondary name.
         // Add secondary name.
         // Remove secondary name.
         // TODO: same thing for the following.
-        public string FirstAndLastName { get { return string.Format("{0} {1}", firstName, lastName); } } // Name order?
-        public string FirstNickAndLastName { get { return string.Format("{0} '{1}' {2}", firstName, nickName, lastName); } }
-        public string FullName { get { return string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName); } }
+        [JsonIgnore] public string FirstAndLastName { get { return string.Format("{0} {1}", firstName, lastName); } } // Name order?
+        [JsonIgnore] public string FirstNickAndLastName { get { return string.Format("{0} '{1}' {2}", firstName, nickName, lastName); } }
+        [JsonIgnore] public string FullName { get { return string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName); } }
 
         // Age, gender, etc.
 
@@ -68,13 +73,19 @@ namespace Quille
         {
             if (capScores)
             {
+                SerializedDictionary<PersonalityAxeSO, float> newPersonalityAxeDict = new SerializedDictionary<PersonalityAxeSO, float>();
+
                 foreach (PersonalityAxeSO key in personalityAxeDict.Keys)
                 {
-                    personalityAxeDict[key] = capPersonalityAxeScore(personalityAxeDict[key]);
+                    newPersonalityAxeDict[key] = capPersonalityAxeScore(personalityAxeDict[key]);
                 }
-            }
 
-            this.myPersonalityAxes = personalityAxeDict;
+                this.myPersonalityAxes = newPersonalityAxeDict;
+            }
+            else
+            {
+                this.myPersonalityAxes = personalityAxeDict;
+            }
         }
         internal SerializedDictionary<PersonalityAxeSO, float> GetAxeScoreDict()
         {
@@ -123,14 +134,19 @@ namespace Quille
         {
             if (capScores)
             {
+                SerializedDictionary<PersonalityTraitSO, float> newPersonalityTraitDict = new SerializedDictionary<PersonalityTraitSO, float>();
 
                 foreach (PersonalityTraitSO key in personalityTraitDict.Keys)
                 {
-                    personalityTraitDict[key] = capPersonalityTraitScore(personalityTraitDict[key]);
+                    newPersonalityTraitDict[key] = capPersonalityAxeScore(personalityTraitDict[key]);
                 }
-            }
 
-            this.myPersonalityTraits = personalityTraitDict;
+                this.myPersonalityTraits = newPersonalityTraitDict;
+            }
+            else
+            {
+                this.myPersonalityTraits = personalityTraitDict;
+            }
         }
         internal SerializedDictionary<PersonalityTraitSO, float> GetTraitScoreDict()
         {
@@ -171,14 +187,19 @@ namespace Quille
         {
             if (capScores)
             {
+                SerializedDictionary<InterestSO, float> newInterestDict = new SerializedDictionary<InterestSO, float>();
 
                 foreach (InterestSO key in interestDict.Keys)
                 {
-                    interestDict[key] = capInterestScore(interestDict[key]);
+                    newInterestDict[key] = capPersonalityAxeScore(interestDict[key]);
                 }
-            }
 
-            this.myInterests = interestDict;
+                this.myInterests = newInterestDict;
+            }
+            else
+            {
+                this.myInterests = interestDict;
+            }
         }
         internal SerializedDictionary<InterestSO, float> GetInterestScoreDict()
         {

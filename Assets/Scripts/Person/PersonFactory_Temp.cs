@@ -17,7 +17,7 @@ namespace Quille
         [SerializeField] private QuilleUI.PersonalityAxesMenu sourcePersonalityAxesMenu;
 
         // Quille parts
-        [SerializeField] private Person_Character personalityController;
+        [SerializeField] private Person_Character personCharacter;
 
         [SerializeField, TextAreaAttribute(1, 100)] private string jsonString;
 
@@ -29,14 +29,14 @@ namespace Quille
         {
             SerializedDictionary<Quille.PersonalityAxeSO, float> axeScoresFromMenu = sourcePersonalityAxesMenu.ReturnAxeSOValueDict();
 
-            personalityController = new Person_Character(axeScoresFromMenu);
+            personCharacter = new Person_Character(myPersonalityAxes: axeScoresFromMenu);
         }
 
         public void SaveCharacter()
         {
             CreateCharacter();
 
-            jsonString = JsonConvert.SerializeObject(personalityController, Formatting.Indented);
+            jsonString = JsonConvert.SerializeObject(personCharacter, Formatting.Indented);
             Debug.Log(jsonString);
 
             // TODO: actually write to file.
@@ -50,8 +50,8 @@ namespace Quille
             {
                 try
                 {
-                    personalityController = JsonConvert.DeserializeObject<Person_Character>(jsonString);
-                    sourcePersonalityAxesMenu.SetAxeSOValuePairs(personalityController.GetAxeScoreDict());
+                    personCharacter = JsonConvert.DeserializeObject<Person_Character>(jsonString);
+                    sourcePersonalityAxesMenu.SetAxeSOValuePairs(personCharacter.GetAxeScoreDict());
                 }
                 catch (Exception error)
                 {

@@ -66,14 +66,16 @@ namespace Quille
         public Person_Character(string myFirstName = null, string myLastName = null, string myNickName = null, List<string> mySecondaryNames = null,
                                 SerializedDictionary<PersonalityAxeSO, float> myPersonalityAxes = null, SerializedDictionary<PersonalityTraitSO, float> myPersonalityTraits = null, SerializedDictionary<InterestSO, float> myInterests = null)
         {
+            // TODO: handle charID.
+            
             this.FirstName = myFirstName;
             this.LastName = myLastName;
             this.NickName = myNickName;
             this.SecondaryNames = mySecondaryNames;
 
-            this.SetAxeScoreDict(myPersonalityAxes != null ? myPersonalityAxes: new SerializedDictionary<PersonalityAxeSO, float>());
-            this.SetTraitScoreDict(myPersonalityTraits != null ? myPersonalityTraits : new SerializedDictionary<PersonalityTraitSO, float>());
-            this.SetInterestScoreDict(myInterests != null ? myInterests : new SerializedDictionary<InterestSO, float>());
+            this.SetAxeScoreDict(myPersonalityAxes != null ? myPersonalityAxes: new SerializedDictionary<PersonalityAxeSO, float>(), false);
+            this.SetTraitScoreDict(myPersonalityTraits != null ? myPersonalityTraits : new SerializedDictionary<PersonalityTraitSO, float>(), false);
+            this.SetInterestScoreDict(myInterests != null ? myInterests : new SerializedDictionary<InterestSO, float>(), false);
         }
 
 

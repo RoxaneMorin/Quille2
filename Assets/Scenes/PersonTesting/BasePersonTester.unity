@@ -215,29 +215,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPersonCharacter:
     charID: 0
-    firstName: ads
-    lastName: 
-    nickName: 
-    secondaryNames: []
+    firstName: Testux
+    lastName: Testington
+    nickName: '"Test"'
+    secondaryNames:
+    - Testineus
     myPersonalityAxes:
       _serializedList: []
     myPersonalityTraits:
       _serializedList: []
     myInterests:
       _serializedList: []
-  test:
-    needSO: {fileID: 0}
-    localAiPriorityWeighting: 0
-    levelFull: 0
-    levelCurrent: 0
-    baseChangeRate: 0
-    currentChangeRate: 0
-    currentChangeRateScaled: 0
-    thresholdElated: 0
-    thresholdWarning: 0
-    thresholdCritical: 0
-    needState: 0
-    needNameForUI: 
   myNeedController: {fileID: 0}
   myPersonAI: {fileID: 0}
 --- !u!1 &1448198730
