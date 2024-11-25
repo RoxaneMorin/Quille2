@@ -25,11 +25,34 @@ My next steps will likely be:
 "Quille" is French for a bowling pin. The project has this name because my little base character is similar in shape.
 
 
+
+---
+
+
+
+
 The project uses the following third party assets:
-- [Amplify Shader Editor] (https://amplify.pt/unity/amplify-shader-editor) (excluded from this repo)
-- [Newtonsoft Json.NET Converters for Unity] (https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters)
-- [Serialized Dictionaries by AYellowpaper] (https://github.com/ayellowpaper/SerializedDictionary)
-- [Sprites from various FlatIcon.com creators] (https://www.flaticon.com/)
-  -> [Flat Icons] (https://www.flaticon.com/authors/flat-icons)
-  -> [Freepik] (https://www.flaticon.com/authors/freepik)
-  -> [Parzival' 1997] (https://www.flaticon.com/authors/parzival-1997)
+- [Amplify Shader Editor](https://amplify.pt/unity/amplify-shader-editor) (excluded from the repo)
+- [Newtonsoft Json.NET Converters for Unity](https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters)
+- [Serialized Dictionaries by AYellowpaper](https://github.com/ayellowpaper/SerializedDictionary)
+- Sprites from various creators, mostly downloaded from [flaticon](https://www.flaticon.com/) and [freekpik](https://www.freepik.com/):
+
+  -> [Flat Icons](https://www.flaticon.com/authors/flat-icons)
+
+  -> [Freepik](https://www.flaticon.com/authors/freepik)
+
+  -> [Parzival' 1997](https://www.flaticon.com/authors/parzival-1997)
+
+  -> [KosonIcon](https://www.flaticon.com/authors/kosonicon)
+  
+  -> [SmashIcons](https://www.flaticon.com/authors/smashicons)
+
+  -> [Juicy-Fish](https://www.flaticon.com/authors/juicy-fish)
+
+  -> [MythArt](https://www.freepik.com/author/user24791284/icons)
+
+  -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
+  
+  -> [DonieIndo](https://www.shutterstock.com/g/donieindo)
+
+  -> [Cutey and Kdawg on CleanPNG](https://www.cleanpng.com/)
