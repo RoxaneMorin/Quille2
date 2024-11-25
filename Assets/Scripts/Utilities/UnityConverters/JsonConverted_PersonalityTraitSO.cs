@@ -25,9 +25,9 @@ namespace Newtonsoft.Json.UnityConverters.Quille
             PersonalityTraitSO theSO = ConstantsAndHelpers.loadPersonalityTraitSO(name);
             float theScore = reader.ReadAsFloat() ?? 0f;
 
-            if (theScore > 0) // Precaution against invalid negative trait scores.
+            if (theScore > 0) // Precaution against invalid (negative or zero) trait scores.
             {
-                value.Add(theSO, (float)reader.ReadAsDouble());
+                value.Add(theSO, theScore);
             }
         }
         protected override void WriteJsonProperties(JsonWriter writer, SerializedDictionary<PersonalityTraitSO, float> value, JsonSerializer serializer)

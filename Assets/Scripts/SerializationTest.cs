@@ -21,12 +21,16 @@ public class SerializationTest : MonoBehaviour
 
         //[SerializeField] private Quille.BasicNeedSO testSOBN;
 
-        //[SerializeField, SerializedDictionary("Axe", "Score")] private SerializedDictionary<Quille.PersonalityAxeSO, float> testDict2;
+        [SerializeField, SerializedDictionary("Axe", "Score")] private SerializedDictionary<Quille.PersonalityAxeSO, float> personalityAxeDict;
+
+        [SerializeField, SerializedDictionary("Trait", "Score")] private SerializedDictionary<Quille.PersonalityTraitSO, float> personalityTraitDict;
+
+        [SerializeField, SerializedDictionary("Interest", "Score")] private SerializedDictionary<Quille.InterestSO, float> interestDict;
 
         //[SerializeField] private Quille.Person_Character personality;
 
-        [SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.BasicNeedSO, Quille.BasicNeed> testDictSO;
-        [SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.SubjectiveNeedSO, Quille.SubjectiveNeed> testDictSO2;
+        //[SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.BasicNeedSO, Quille.BasicNeed> testDictSO;
+        //[SerializeField, SerializedDictionary("SO", "Need")] private SerializedDictionary<Quille.SubjectiveNeedSO, Quille.SubjectiveNeed> testDictSO2;
 
         //[SerializeField, SerializedDictionary("1", "2")] private SerializedDictionary<int, Quille.BasicNeedSO> testDictSO;
 
@@ -44,7 +48,7 @@ public class SerializationTest : MonoBehaviour
     }
 
 
-    [SerializeField] private SerializationTester tester;
+    [SerializeField] private SerializationTester tester1;
 
     [SerializeField] private SerializationTester tester2;
 
@@ -63,7 +67,7 @@ public class SerializationTest : MonoBehaviour
         //    }
         //};
 
-        string jsonString = JsonConvert.SerializeObject(tester, Formatting.Indented);
+        string jsonString = JsonConvert.SerializeObject(tester1, Formatting.Indented);
         Debug.Log(jsonString);
 
         tester2 = JsonConvert.DeserializeObject<SerializationTester>(jsonString);

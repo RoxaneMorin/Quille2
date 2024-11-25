@@ -155,70 +155,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f5457f24cc105409a47569cd654e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tester:
-    testDictSO:
+  tester1:
+    personalityAxeDict:
       _serializedList:
-      - Key: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
-        Value:
-          needSO: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
-          localAiPriorityWeighting: 3
-          levelFull: 2
-          levelCurrent: 34
-          baseChangeRate: 3
-          currentChangeRate: 3
-          currentChangeRateScaled: 3
-          thresholdElated: 0
-          thresholdWarning: 344
-          thresholdCritical: 3
-          needState: 0
-          needNameForUI: 
-      - Key: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
-        Value:
-          needSO: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
-          localAiPriorityWeighting: 3
-          levelFull: 33
-          levelCurrent: 3
-          baseChangeRate: 0
-          currentChangeRate: 3
-          currentChangeRateScaled: 33
-          thresholdElated: 0
-          thresholdWarning: 3
-          thresholdCritical: 3
-          needState: 0
-          needNameForUI: 
-    testDictSO2:
+      - Key: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}
+        Value: 0.25
+      - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
+        Value: 1
+      - Key: {fileID: 11400000, guid: e0642ea1362d360489bf32fa1e7056a6, type: 2}
+        Value: -0.85
+    personalityTraitDict:
       _serializedList:
-      - Key: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
-        Value:
-          needSO: {fileID: 11400000, guid: b77b48bbd1e0b9b4ab33998a412ad703, type: 2}
-          localAiPriorityWeighting: 0
-          localAiPriorityWeightingLeft: 43
-          localAiPriorityWeightingRight: 45
-          levelFullLeft: 4545
-          levelCurrentLeft: 4
-          levelFullRight: 1
-          levelCurrentRight: 23
-          baseChangeRateLeft: 2
-          currentChangeRateLeft: 45
-          baseChangeRateRight: 2
-          currentChangeRateRight: 4
-          currentChangeRateLeftScaled: 2
-          currentChangeRateRightScaled: 5
-          thresholdElatedLeft: 5
-          thresholdElatedRight: 3
-          thresholdWarningLeft: 45
-          thresholdWarningRight: 45
-          thresholdCriticalLeft: 1
-          thresholdCriticalRight: 4
-          needStateLeft: 0
-          needStateRight: 0
-          needNameForUI: 
-          needNameLeftForUI: 
-          needNameRightForUI: 
+      - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
+        Value: 1
+    interestDict:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}
+        Value: 0.75
+      - Key: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
+        Value: -0.5
   tester2:
-    testDictSO:
+    personalityAxeDict:
       _serializedList: []
-    testDictSO2:
+    personalityTraitDict:
+      _serializedList: []
+    interestDict:
       _serializedList: []
 --- !u!65 &14641133
 BoxCollider:
