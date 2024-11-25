@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AYellowpaper.SerializedCollections;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Quille
@@ -88,9 +89,9 @@ namespace Quille
         }
 
         // LOAD
-        internal void LoadFromJSON(string jsonString)
+        internal void LoadFromJSON(string sourceJson)
         {
-            JsonConvert.PopulateObject(jsonString, this);
+            JsonConvert.PopulateObject(sourceJson, this);
         }
 
         // UTILITY

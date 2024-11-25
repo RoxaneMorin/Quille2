@@ -12,7 +12,8 @@ namespace Quille
     public partial class Person_NeedController : MonoBehaviour
     {
         // VARIABLES
-        [SerializeField] NeedController_Data myNeedData;
+        [SerializeField] private BasicNeed[] myBasicNeeds;
+        [SerializeField] private SubjectiveNeed[] mySubjectiveNeeds;
 
         // For use by external functions that only know of a NeedSO.
         [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")] private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
@@ -25,11 +26,11 @@ namespace Quille
         // PROPERTIES & GETTERS/SETTERS
         public BasicNeed[] MyBasicNeeds
         {
-            get { return myNeedData.MyBasicNeeds; }
+            get { return myBasicNeeds; }
         }
         public SubjectiveNeed[] MySubjectiveNeeds
         {
-            get { return myNeedData.MySubjectiveNeeds; }
+            get { return mySubjectiveNeeds; }
         }
 
         public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)
@@ -70,7 +71,7 @@ namespace Quille
                 tempNeed.OnBNLeftThreshold += OnBasicNeedLeftThreshold;
 
                 myBasicNeedsMapped.Add(basicNeedSO, tempNeed);
-                myNeedData.MyBasicNeeds = myBasicNeedsMapped.Values.ToArray();
+                myBasicNeeds = myBasicNeedsMapped.Values.ToArray();
 
                 // TODO: modulate here?
             }
@@ -89,7 +90,7 @@ namespace Quille
                 tempNeed.OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
 
                 mySubjectiveNeedsMapped.Add(subjectiveNeedSO, tempNeed);
-                myNeedData.MySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
+                mySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
 
                 // TODO: modulate here?
             }
@@ -106,7 +107,7 @@ namespace Quille
                 myBasicNeedsMapped[basicNeedSO].OnBNLeftThreshold -= OnBasicNeedLeftThreshold;
 
                 myBasicNeedsMapped.Remove(basicNeedSO);
-                myNeedData.MyBasicNeeds = myBasicNeedsMapped.Values.ToArray();
+                myBasicNeeds = myBasicNeedsMapped.Values.ToArray();
             }
             else
             {
@@ -123,7 +124,7 @@ namespace Quille
                 mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNLeftThreshold -= OnSubjectiveNeedLeftThreshold;
 
                 mySubjectiveNeedsMapped.Remove(subjectiveNeedSO);
-                myNeedData.MySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
+                mySubjectiveNeeds = mySubjectiveNeedsMapped.Values.ToArray();
             }
             else
             {
@@ -147,8 +148,6 @@ namespace Quille
 
         public void Init(BasicNeedSO[] basicNeedSOs, SubjectiveNeedSO[] subjectiveNeedSOs)
         {
-            myNeedData = new NeedController_Data();
-
             CreateBasicNeeds(basicNeedSOs);
             CreateSubjectiveNeeds(subjectiveNeedSOs);
 
@@ -158,48 +157,57 @@ namespace Quille
             //StartNeedDecay();
         }
 
+        public void ClearArraysAndDicts() // For use during testing;
+        {
+            myBasicNeeds = null;
+            myBasicNeedsMapped = null;
+
+            mySubjectiveNeeds = null;
+            mySubjectiveNeedsMapped = null;
+        }
+
 
         // SET UP
 
         // Create need arrays and dictionaries from arrays of SOs.
         private void CreateBasicNeeds(BasicNeedSO[] basicNeedSOs)
         {
-            myNeedData.MyBasicNeeds = new BasicNeed[basicNeedSOs.Length];
+            myBasicNeeds = new BasicNeed[basicNeedSOs.Length];
             myBasicNeedsMapped = new SerializedDictionary<BasicNeedSO, BasicNeed>();
 
             for (int i = 0; i < basicNeedSOs.Length; i++)
             {
-                myNeedData.MyBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
-                myBasicNeedsMapped.Add(basicNeedSOs[i], myNeedData.MyBasicNeeds[i]);
+                myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
+                myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
 
-                myNeedData.MyBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
-                myNeedData.MyBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
-                myNeedData.MyBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
+                myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
+                myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
+                myBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
 
                 //myBasicNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(myNeedData.MyBasicNeeds[i].ToString());
+                Debug.Log(myBasicNeeds[i].ToString());
             }
         }
         private void CreateSubjectiveNeeds(SubjectiveNeedSO[] subjectiveNeedSOs)
         {
-            myNeedData.MySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
+            mySubjectiveNeeds = new SubjectiveNeed[subjectiveNeedSOs.Length];
             mySubjectiveNeedsMapped = new SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed>();
 
             for (int i = 0; i < subjectiveNeedSOs.Length; i++)
             {
-                myNeedData.MySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
-                mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], myNeedData.MySubjectiveNeeds[i]);
+                mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
+                mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
 
-                myNeedData.MySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
-                myNeedData.MySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
-                myNeedData.MySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
+                mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
+                mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
+                mySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
 
                 //mySubjectiveNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(myNeedData.MySubjectiveNeeds[i].ToString());
+                Debug.Log(mySubjectiveNeeds[i].ToString());
             }
         }
          

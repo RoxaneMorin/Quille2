@@ -63,7 +63,7 @@ namespace Quille
         {
             Init();
 
-            //SaveToJSON();
+            SaveToJSON();
         }
 
         // Update is called once per frame
@@ -109,8 +109,6 @@ namespace Quille
             string jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
             string jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
 
-            //Debug.Log(jsonPersonCharacter);
-            //Debug.Log(jsonNeedController);
 
             // TODO: test what happens if myPersonCharacter doesn't already exist.
             myPersonCharacter.LoadFromJSON(jsonPersonCharacter);

@@ -244,7 +244,6 @@ MonoBehaviour:
         Value: 0.6
   myNeedController: {fileID: 0}
   myPersonAI: {fileID: 0}
-  testJSON: 
 --- !u!114 &819216675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,7 +374,7 @@ MonoBehaviour:
       needNameForUI: Stimulation
       needNameLeftForUI: Sensory
       needNameRightForUI: Cognitive
-    - needSO: {fileID: 11400000, guid: 638cf27089e350f4688e2933e9b75b61, type: 2}
+    - needSO: {fileID: 11400000, guid: 544652b67e5091946b4a3159ae1f0de4, type: 2}
       localAiPriorityWeighting: 1
       localAiPriorityWeightingLeft: 1
       localAiPriorityWeightingRight: 1
@@ -397,9 +396,9 @@ MonoBehaviour:
       thresholdCriticalRight: 0.1
       needStateLeft: 3
       needStateRight: 3
-      needNameForUI: Stimulation
-      needNameLeftForUI: Sensory
-      needNameRightForUI: Cognitive
+      needNameForUI: Socialization vs Time Alone
+      needNameLeftForUI: Socialization
+      needNameRightForUI: Time Alone
   myBasicNeedsMapped:
     _serializedList:
     - Key: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}

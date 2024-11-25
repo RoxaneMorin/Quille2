@@ -118,13 +118,13 @@ namespace Quille
         // All needs in controller.
         private void StartNeedDecay()
         {
-            StartBasicNeedDecay(myNeedData.MyBasicNeeds);
-            StartSubjectiveNeedDecay(myNeedData.MySubjectiveNeeds);
+            StartBasicNeedDecay(MyBasicNeeds);
+            StartSubjectiveNeedDecay(MySubjectiveNeeds);
         }
         private void StopNeedDecay()
         {
-            StopBasicNeedDecay(myNeedData.MyBasicNeeds);
-            StopSubjectiveNeedDecay(myNeedData.MySubjectiveNeeds);
+            StopBasicNeedDecay(MyBasicNeeds);
+            StopSubjectiveNeedDecay(MySubjectiveNeeds);
         }
 
 
@@ -133,14 +133,14 @@ namespace Quille
         // Return the neediest need of each type as well as its level.
         public (BasicNeedSO, float) PerformBasicNeedCheck()
         {
-            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(myNeedData.MyBasicNeeds);
+            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(MyBasicNeeds);
             float neediestNeedLevel = neediestNeed.LevelCurrentAsPercentage;
 
             return (neediestNeed.NeedSO, neediestNeedLevel);
         }
         public (SubjectiveNeedSO, bool, float) PerformSubjectiveNeedCheck()
         {
-            (SubjectiveNeed, bool) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(myNeedData.MySubjectiveNeeds);
+            (SubjectiveNeed, bool) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds);
             float neediestNeedLevel = neediestNeed.Item2 ? neediestNeed.Item1.LevelCurrentRightAsPercentage : neediestNeed.Item1.LevelCurrentLeftAsPercentage;
 
             // The returned bool indicates which side is neediest, where Left = 0, Right = 1.
@@ -153,14 +153,14 @@ namespace Quille
         // Modulation
         public void ModulateBasicNeeds(Person sourceBasePerson)
         {
-            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
+            foreach (BasicNeed need in MyBasicNeeds)
             {
                 need.ModulateNeed(sourceBasePerson);
             }
         }
         public void ModulateSubjectiveNeeds(Person sourceBasePerson)
         {
-            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
+            foreach (SubjectiveNeed need in MySubjectiveNeeds)
             {
                 need.ModulateNeed(sourceBasePerson);
             }
@@ -175,13 +175,13 @@ namespace Quille
         // TESTING
         private void RandomizeNeedChangeRates(float min, float max)
         {
-            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
+            foreach (BasicNeed need in MyBasicNeeds)
             {
                 float randomRate = Random.Range(min, max);
                 need.CurrentChangeRate = randomRate;
             }
 
-            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
+            foreach (SubjectiveNeed need in MySubjectiveNeeds)
             {
                 float randomRateLeft = Random.Range(min, max);
                 float randomRateRight = Random.Range(min, max);
@@ -192,15 +192,15 @@ namespace Quille
         }
         private void SortAndPrintNeedInfo()
         {
-            BasicNeed.SortByFulfillmentDelta(myNeedData.MyBasicNeeds, true, true);
-            SubjectiveNeed.SortByFulfillmentDeltaofNeediest(myNeedData.MySubjectiveNeeds, true, true);
+            BasicNeed.SortByFulfillmentDelta(MyBasicNeeds, true, true);
+            SubjectiveNeed.SortByFulfillmentDeltaofNeediest(MySubjectiveNeeds, true, true);
 
-            foreach (BasicNeed need in myNeedData.MyBasicNeeds)
+            foreach (BasicNeed need in MyBasicNeeds)
             {
                 Debug.Log(need.ToString());
             }
 
-            foreach (SubjectiveNeed need in myNeedData.MySubjectiveNeeds)
+            foreach (SubjectiveNeed need in MySubjectiveNeeds)
             {
                 Debug.Log(need.ToString());
             }

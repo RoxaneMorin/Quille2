@@ -8,7 +8,8 @@ public class NeedControllerEditor : Editor
 {
     private SerializedProperty scriptProperty;
 
-    private SerializedProperty myNeedData;
+    private SerializedProperty myBasicNeeds;
+    private SerializedProperty mySubjectiveNeeds;
     private SerializedProperty myBasicNeedsMapped;
     private SerializedProperty mySubjectiveNeedsMapped;
 
@@ -18,7 +19,8 @@ public class NeedControllerEditor : Editor
     {
         scriptProperty = serializedObject.FindProperty("m_Script");
 
-        myNeedData = serializedObject.FindProperty("myNeedData");
+        myBasicNeeds = serializedObject.FindProperty("myBasicNeeds");
+        mySubjectiveNeeds = serializedObject.FindProperty("mySubjectiveNeeds");
         myBasicNeedsMapped = serializedObject.FindProperty("myBasicNeedsMapped");
         mySubjectiveNeedsMapped = serializedObject.FindProperty("mySubjectiveNeedsMapped");
     }
@@ -33,9 +35,10 @@ public class NeedControllerEditor : Editor
 
         EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 
-        // Draw properties.
+        // Draw need array properties.
         EditorGUILayout.LabelField("Need Arrays", style: "ProfilerRightPane");
-        EditorGUILayout.PropertyField(myNeedData);
+        EditorGUILayout.PropertyField(myBasicNeeds);
+        EditorGUILayout.PropertyField(mySubjectiveNeeds);
 
         // Option to populate in Editor.
         if (GUILayout.Button("Populate and Init Needs"))
@@ -43,9 +46,12 @@ public class NeedControllerEditor : Editor
             Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
             needController.Init();
         }
-        // TODO: option to clear all in Editor.
-
-
+        // Option to clear all in Editor.
+        if (GUILayout.Button("Clear All Existing Needs"))
+        {
+            Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
+            needController.ClearArraysAndDicts();
+        }
 
         EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 
