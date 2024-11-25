@@ -41,6 +41,7 @@ public class BasicNeedDrawer : PropertyDrawer
             // Draw title.
             newPosition = new Rect(position.x, position.y + 2.25f * EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(newPosition, string.Format("Need ({0}) Variables", needName), EditorStyles.boldLabel);
+
             EditorGUI.indentLevel++;
 
             // Collect properties.

@@ -32,7 +32,7 @@ namespace Quille
         public Person_NeedController MyNeedController { get { return myNeedController; } }
         // Should we be able to return the AI one?
 
-
+        
 
         // CONSTRUCTORS
         //public Person()
