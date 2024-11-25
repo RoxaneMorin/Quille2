@@ -26,8 +26,10 @@ My next steps will likely be:
 
 
 The project uses the following third party assets:
-- Amplify Shader Editor
-- Newtonsoft Json.NET Framework
-- Newtonsoft Json.NET Converters for Unity
-- Serialized Dictionaries by AYellowpaper
-- Sprites from various FlatIcon.com creators
+- [Amplify Shader Editor] (https://amplify.pt/unity/amplify-shader-editor) (excluded from this repo)
+- [Newtonsoft Json.NET Converters for Unity] (https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters)
+- [Serialized Dictionaries by AYellowpaper] (https://github.com/ayellowpaper/SerializedDictionary)
+- [Sprites from various FlatIcon.com creators] (https://www.flaticon.com/)
+  -> [Flat Icons] (https://www.flaticon.com/authors/flat-icons)
+  -> [Freepik] (https://www.flaticon.com/authors/freepik)
+  -> [Parzival' 1997] (https://www.flaticon.com/authors/parzival-1997)
