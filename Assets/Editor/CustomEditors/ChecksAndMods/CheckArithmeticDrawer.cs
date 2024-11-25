@@ -28,15 +28,15 @@ public class CheckArithmeticDrawer : PropertyDrawer
             var targetObject = property.serializedObject.targetObject as Object;
             if (targetObject != null)
             {
-                var modulator = property.serializedObject.FindProperty(property.propertyPath);
-                if (modulator != null)
+                var check = property.serializedObject.FindProperty(property.propertyPath);
+                if (check != null)
                 {
                     // Build the string.
-                    int opIdx = modulator.FindPropertyRelative("opIdx").enumValueIndex;
+                    int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
                     string labelText = string.Format("Is Parameter {0} {1} ?",
                         checkSymbolsArithmetic[opIdx],
-                        modulator.FindPropertyRelative("compareTo").floatValue);
+                        check.FindPropertyRelative("compareTo").floatValue);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

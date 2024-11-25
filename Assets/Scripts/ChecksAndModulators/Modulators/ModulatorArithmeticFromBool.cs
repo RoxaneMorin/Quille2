@@ -20,12 +20,12 @@ namespace ChecksAndMods
         ModulatorArithmeticFromBoolSO modulator;
 
         [SerializeField]
-        public ChecksBoolean checkOpIdx;
+        public ComparisonsBoolean checkOpIdx;
         [SerializeField]
         public OperationsArithmetic modOpIdx;
 
-        //[SerializeField]
-        [Tooltip("Comparative value used in the Equal/Not Equal operations.")] public bool expectedParam;
+        [SerializeField]
+        [Tooltip("Comparative value used in the Equal/Not Equal operations.")] public bool compareTo;
         [SerializeField]
         public float modifier;
 
@@ -33,7 +33,7 @@ namespace ChecksAndMods
         // Execute.
         public float Execute(System.Object sourceObj, float target)
         {
-            return modulator.Modulate(sourceObj, target, expectedParam, modifier, ((int)checkOpIdx), (int)modOpIdx);
+            return modulator.Modulate(sourceObj, target, compareTo, modifier, ((int)checkOpIdx), (int)modOpIdx);
         }
     }
 }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ChecksAndMods.ModulatorArithmeticFromBool))]
-public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(ChecksAndMods.CheckBoolean))]
+public class CheckBooleanDrawer : PropertyDrawer
 {
-    private static readonly string[] operationSymbolsArithmetic = { "", "+", "-", "*", "/", "%", "^" };
     private static readonly string[] checkSymbolsBoolean = { "", "==", "!=" };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -23,30 +22,25 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
             // Draw the default property field
             EditorGUI.PropertyField(position, property, GUIContent.none, true);
 
-            position.y += 6.8f * EditorGUIUtility.singleLineHeight;
+            position.y += 4.5f * EditorGUIUtility.singleLineHeight;
 
             // Get the target object
             var targetObject = property.serializedObject.targetObject as Object;
             if (targetObject != null)
             {
-                var modulator = property.serializedObject.FindProperty(property.propertyPath);
-                if (modulator != null)
+                var check = property.serializedObject.FindProperty(property.propertyPath);
+                if (check != null)
                 {
                     // Build the string.
-                    int mainOpIdx = modulator.FindPropertyRelative("checkOpIdx").enumValueIndex;
-                    int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
+                    int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
-                    string labelText = string.Format("Result = (Modulator {0} {1}) ? (Target {2} {3}) : Target",
-                        checkSymbolsBoolean[mainOpIdx],
-                        modulator.FindPropertyRelative("compareTo").boolValue,
-                        operationSymbolsArithmetic[modOpIdx],
-                        modulator.FindPropertyRelative("modifier").floatValue);
+                    string labelText = string.Format("Is Parameter {0} {1} ?",
+                        checkSymbolsBoolean[opIdx],
+                        check.FindPropertyRelative("compareTo").boolValue);
 
                     // Handle special cases as needed.
-                    if (modOpIdx == 0) // Are we keeping the numerical value as is?
-                        labelText = "Result = Target";
-                    else if (mainOpIdx == 0) // Are we checking the value of the modulator itself?
-                        labelText = string.Format("Result = Modulator ? (Target {0} {1}) : Target", operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
+                    if (opIdx == 0) // Are we keeping the numerical value as is?
+                        labelText = "Is Parameter True?";
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

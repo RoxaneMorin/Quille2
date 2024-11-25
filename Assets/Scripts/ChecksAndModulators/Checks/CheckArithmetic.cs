@@ -18,7 +18,7 @@ namespace ChecksAndMods
         CheckArithmeticSO check;
 
         [SerializeField]
-        public ChecksArithmetic opIdx;
+        public ComparisonsArithmetic opIdx;
         [SerializeField]
         public float compareTo;
 

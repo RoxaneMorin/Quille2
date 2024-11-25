@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace ChecksAndMods
 {
-    public abstract class CheckArithmeticSO : ScriptableObject
+    public abstract class CheckBooleanSO : ScriptableObject
     {
-        // Parent class for specificed CheckArithmeticSOs to inherit from.
-        // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
+        // Parent class for specificed CheckBooleanSOs to inherit from.
+        // This type of check runs an boolean comparison on the fetched value, and returns true or false depending on the result.
         // The specific value to fetch and check is elaborated upon by child classes and their instances.
 
 
         // VARIABLES/PARAM
-        protected float? param;
+        protected bool? param;
 
 
         // METHODS
         protected abstract void FetchParam(System.Object sourceObj);
 
         // returns param ? compareTo
-        public bool Check(System.Object sourceObj, float compareTo, int opIdx)
+        public bool Check(System.Object sourceObj, bool compareTo, int opIdx)
         {
             // Will need to be cleaned up/refined to ensure safety and efficiency.
             try
@@ -31,7 +31,7 @@ namespace ChecksAndMods
                     return false;
                 }
 
-                return Operators.comparisonsArithmetic[opIdx]((float)param, compareTo);
+                return Operators.comparisonsBoolean[opIdx]((bool)param, compareTo);
             }
             catch
             {

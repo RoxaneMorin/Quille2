@@ -11,10 +11,10 @@ namespace ChecksAndMods
 
         // VARIABLES/PARAM
         [SerializeField] private CheckArithmetic testCheckArithmetic;
+        [SerializeField] private CheckBoolean testCheckBoolean;
 
         [SerializeField] private ModulatorArithmeticFromFloat testModArithmeticFromFloat;
         [SerializeField] private ModulatorArithmeticFromBool testModArithmeticFromBool;
-
 
 
         // METHODS

@@ -34,7 +34,7 @@ namespace ChecksAndMods
             ((a, b) => a = !a)
         };
 
-        public static Func<float, float, bool>[] checksArithmetic =
+        public static Func<float, float, bool>[] comparisonsArithmetic =
         {
             ((a, b) => a == b),
             ((a, b) => a != b),
@@ -45,7 +45,7 @@ namespace ChecksAndMods
             ((a, b) => a <= b)
         };
 
-        public static Func<bool, bool, bool>[] checksBoolean =
+        public static Func<bool, bool, bool>[] comparisonsBoolean =
         {
             ((a, b) => a),
             ((a, b) => a == b),
@@ -73,7 +73,7 @@ namespace ChecksAndMods
     }
 
     // The mapping of Checks' potential operations. Both names and indices will be used.
-    public enum ChecksArithmetic
+    public enum ComparisonsArithmetic
     {
         Equal,
         NotEqual,
@@ -84,9 +84,9 @@ namespace ChecksAndMods
         SmallerOrEqualThan
     }
 
-    public enum ChecksBoolean
+    public enum ComparisonsBoolean
     {
-        Exists,
+        IsTrue,
         Equal,
         NotEqual
     }

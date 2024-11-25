@@ -29,7 +29,7 @@ namespace ChecksAndMods
 
                 // Make sure that the param is not null.
                 // Compare the fetched param to the expectedParam. Execute the following operation if this one returns true.
-                if (param != null && Operators.checksBoolean[checkOpIdx]((bool)param, expectedParam))
+                if (param != null && Operators.comparisonsBoolean[checkOpIdx]((bool)param, expectedParam))
                 {
                     float result = Operators.operationsArithmetic[modOpIdx](target, modifier);
                     return result;
