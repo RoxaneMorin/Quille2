@@ -12,11 +12,13 @@ So far, I've mostly worked on:
 - The implementation of a system of “checks and modulators”, small objects meant to fetch specific bits of character information, and alter or evaluate it. They’re meant to be the building blocks of the character AI.
 - The creation of custom editors and property drawers for most of the above.
 - A first sketch of the characters’ need management loop.
+- An incomplete genetics system, partially ported from an older project.
 - Miscellaneous fancies such as procedural grid generation and some post processing shaders.
 
 My next steps will likely be:
-- Further testing of everything’s Json serialization.
-- Further modularizing character needs. (At the moment, a personality element’s impact on a need is set in the need’s scriptableObject instance.)
+- Implementing a few more character data structures, such as long term needs and drives/aspirations.
+- Sketching out more of the personality creation UI for ease of testing.
+- Further modularizing character needs? (At the moment, personality elements' impact on a need are set in the need’s scriptableObject instance. This could be decoupled.)
 - Sketching out a basic data model for interactions, and logic for characters’ to choose the best fit for satisfying a specific need. Stress testing once that is done.
 - More testing and tinkering with my grids. Possibly the creation of wall and room tools using their framework. 
 
@@ -24,9 +26,34 @@ My next steps will likely be:
 "Quille" is French for a bowling pin. The project has this name because my little base character is similar in shape.
 
 
+
+---
+
+
+
+
 The project uses the following third party assets:
-- Amplify Shader Editor
-- Newtonsoft Json.NET Framework
-- Newtonsoft Json.NET Converters for Unity
-- Serialized Dictionaries by AYellowpaper
-- Sprites from various FlatIcon.com creators
+- [Amplify Shader Editor](https://amplify.pt/unity/amplify-shader-editor) (excluded from the repo)
+- [Newtonsoft Json.NET Converters for Unity](https://github.com/applejag/Newtonsoft.Json-for-Unity.Converters)
+- [Serialized Dictionaries by AYellowpaper](https://github.com/ayellowpaper/SerializedDictionary)
+- Sprites from various creators, mostly downloaded from [flaticon](https://www.flaticon.com/) and [freekpik](https://www.freepik.com/):
+
+  -> [Flat Icons](https://www.flaticon.com/authors/flat-icons)
+
+  -> [Freepik](https://www.flaticon.com/authors/freepik)
+
+  -> [Parzival' 1997](https://www.flaticon.com/authors/parzival-1997)
+
+  -> [KosonIcon](https://www.flaticon.com/authors/kosonicon)
+  
+  -> [SmashIcons](https://www.flaticon.com/authors/smashicons)
+
+  -> [Juicy-Fish](https://www.flaticon.com/authors/juicy-fish)
+
+  -> [MythArt](https://www.freepik.com/author/user24791284/icons)
+
+  -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
+  
+  -> [DonieIndo](https://www.shutterstock.com/g/donieindo)
+
+  -> [Cutey and Kdawg on CleanPNG](https://www.cleanpng.com/)
