@@ -7,8 +7,6 @@ using UnityEngine;
 [CustomEditor(typeof(Quille.InterestSO))]
 public class InterestSOEditor : Editor
 {
-    private List<Quille.InterestSO> previousRelatedInterests;
-    
     private SerializedProperty scriptProperty;
 
     private SerializedProperty interestName;
@@ -55,9 +53,13 @@ public class InterestSOEditor : Editor
         EditorGUILayout.PropertyField(relatedInterests);
 
         // Draw clean up button.
-        if (GUILayout.Button("Clean Up References"))
+        if (GUILayout.Button("Clean Up & Fix Dangling References"))
         {
-            CleanUpInterestReferences();
+            FixInterestReferences();
+        }
+        if (GUILayout.Button("Clean Up & Delete Dangling References"))
+        {
+            DeleteInterestReferences();
         }
 
         // Apply modified properties; modified linked objects as needed.
@@ -93,67 +95,29 @@ public class InterestSOEditor : Editor
         }
     }
 
-    private void CleanUpInterestReferences()
+    private void FixInterestReferences()
     {
-        // Clean up InterestSOs.
-        Quille.InterestSO[] interests = Resources.LoadAll<Quille.InterestSO>("ScriptableObjects/Interests/Fields");
-        foreach (Quille.InterestSO interest in interests)
-        {
-            // Remove self references.
-            if (interest.RelatedInterests.Contains(interest))
-                interest.RelatedInterests.Remove(interest);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>("ScriptableObjects/Interests/Fields");
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>("ScriptableObjects/Interests/Domains");
 
-            // Remove duplicates.
-            interest.RelatedInterests = interest.RelatedInterests.Distinct().ToList();
-            interest.InDomains = interest.InDomains.Distinct().ToList();
+        InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
+        InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);
 
-            // Remove one-sided InterestSO references.
-            List<Quille.InterestSO> referencesToRemove = new List<Quille.InterestSO>();
-            foreach (Quille.InterestSO otherInterest in interest.RelatedInterests)
-            {
-                if (!otherInterest.RelatedInterests.Contains(interest))
-                    referencesToRemove.Add(otherInterest);
-            }
-            foreach (Quille.InterestSO toRemove in referencesToRemove)
-            {
-                interest.RelatedInterests.Remove(toRemove);
-            }
+        InterestsMenuUtilities.RegisterDomainsInInterests(interestDomainSOs);
+        InterestsMenuUtilities.RegisterDomainsFromInterests(interestSOs);
+        InterestsMenuUtilities.RegisterRelatedInterests(interestSOs);
+    }
 
-            // Remvoe one-sided InterestDomainSO references.
-            List<Quille.InterestDomainSO> domainsToRemove = new List<Quille.InterestDomainSO>();
-            foreach (Quille.InterestDomainSO domain in interest.InDomains)
-            {
-                if (!domain.InterestInThisDomain.Contains(interest))
-                    domainsToRemove.Add(domain);
-            }
-            foreach (Quille.InterestDomainSO toRemove in domainsToRemove)
-            {
-                interest.InDomains.Remove(toRemove);
-            }
+    private void DeleteInterestReferences()
+    {
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>("ScriptableObjects/Interests/Fields");
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>("ScriptableObjects/Interests/Domains");
 
-            EditorUtility.SetDirty(interest);
-        }
+        InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
+        InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);
 
-        // Clean up InterestDomainSOs.
-        Quille.InterestDomainSO[] domains = Resources.LoadAll<Quille.InterestDomainSO>("ScriptableObjects/Interests/Domains");
-        foreach (Quille.InterestDomainSO domain in domains)
-        {
-            // Remove duplicates.
-            domain.InterestInThisDomain = domain.InterestInThisDomain.Distinct().ToList();
-
-            // Remove one-sided InterestSO references.
-            List<Quille.InterestSO> referencesToRemove = new List<Quille.InterestSO>();
-            foreach (Quille.InterestSO interest in domain.InterestInThisDomain)
-            {
-                if (!interest.InDomains.Contains(domain))
-                    referencesToRemove.Add(interest);
-            }
-            foreach (Quille.InterestSO toRemove in referencesToRemove)
-            {
-                domain.InterestInThisDomain.Remove(toRemove);
-            }
-
-            EditorUtility.SetDirty(domain);
-        }
+        InterestsMenuUtilities.ClearInterestsNotInDomains(interestDomainSOs);
+        InterestsMenuUtilities.ClearDomainsNotInInterests(interestSOs);
+        InterestsMenuUtilities.DeleteRelatedInterests(interestSOs);
     }
 }
