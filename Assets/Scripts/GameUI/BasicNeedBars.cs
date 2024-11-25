@@ -10,6 +10,7 @@ namespace QuilleUI
         // VARIABLES
         
         [SerializeField] private Transform prefab;
+        [SerializeField] private Gradient colourByFill;
 
         [SerializeField] private Canvas ownerCanvas;
         [SerializeField] private Quille.Person_NeedController targetNeedController;
@@ -41,7 +42,7 @@ namespace QuilleUI
 
                 // Change its position.
                 RectTransform myRectTransform = needbarTransforms[i].GetComponent<RectTransform>();
-                myRectTransform.position = new Vector3(myRectTransform.position.x, myRectTransform.position.y - 60f * i, myRectTransform.position.z);
+                myRectTransform.position = new Vector3(myRectTransform.position.x, -60f + myRectTransform.position.y - 60f * i, myRectTransform.position.z);
 
                 // Change the display text.
                 TMPro.TextMeshProUGUI title = needbarTransforms[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
@@ -62,6 +63,7 @@ namespace QuilleUI
             foreach (KeyValuePair<Image, Quille.BasicNeed> need in needbarFillTargets)
             {
                 need.Key.fillAmount = need.Value.LevelCurrentAsPercentage;
+                need.Key.color = colourByFill.Evaluate(need.Key.fillAmount);
             }
         }
 

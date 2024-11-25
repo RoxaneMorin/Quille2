@@ -165,6 +165,11 @@ namespace Quille
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                StartNeedDecay();
+            }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 RandomizeNeedChangeRates(-0.3f, 0.1f);
