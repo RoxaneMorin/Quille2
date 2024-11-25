@@ -1,5 +1,8 @@
 namespace Quille
 {
+    // The enums and constants used through the Quille namespace.
+    // They are regrouped here for ease of editability.
+
     public enum NeedStates
     {
         Failure,
@@ -59,5 +62,12 @@ namespace Quille
         // Interval (in seconds) at which the PersonAI will check the current state of needs.
         public const float NEED_CHECK_INTERVAL = 5f;
 
+
+
+        // SERIALIZATION
+        // TODO: determine proper save folder structure, such as each save getting its own subfolder.
+        // TODO: determine root save location outside of the Unity project folder.
+
+        public const string DEFAULT_CHARACTER_SAVE_LOCATION = "SavedGameData/Characters/";
     }
 }

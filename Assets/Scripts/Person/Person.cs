@@ -8,7 +8,8 @@ using Newtonsoft.Json.Linq;
 namespace Quille
 {
     // The root monoBehaviour for human characters.
-    // Not JSON serialized.
+    // Not JSON serialized in itself, but handles the serialization of its data holders and controllers.
+
 
     [System.Serializable]
     [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
@@ -63,7 +64,7 @@ namespace Quille
         {
             Init();
 
-            SaveToJSON();
+            //SaveToJSON();
         }
 
         // Update is called once per frame
@@ -87,8 +88,9 @@ namespace Quille
             string formatedJSON = jsonPerson.ToString(Formatting.Indented);
             //Debug.Log(formatedJSON);
 
-            // TODO: set proper save location
-            string fileName = myPersonCharacter.CreateJSONFileName();
+            // TODO: set proper, potentially customisable save location
+            // TODO: create and rely on a ressource that track world info, character IDs, etc.
+            string fileName = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + myPersonCharacter.CreateJSONFileName();
 
             // TODO: add a try block just to be safe.
             // TODO: make a backup of the previous save file if one exists.
