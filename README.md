@@ -54,6 +54,10 @@ The project uses the following third party assets:
 
   -> [Jagat Icon](https://www.flaticon.com/authors/jagat-icon)
 
+  -> [Moudesain](https://www.flaticon.com/authors/moudesain)
+
+  -> [Nuricon](https://www.flaticon.com/authors/nuricon)
+
   -> [MythArt](https://www.freepik.com/author/user24791284/icons)
 
   -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
