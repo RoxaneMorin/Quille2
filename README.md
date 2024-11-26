@@ -50,6 +50,10 @@ The project uses the following third party assets:
 
   -> [Juicy-Fish](https://www.flaticon.com/authors/juicy-fish)
 
+  -> [SmashingStocks](https://www.flaticon.com/authors/smashingstocks)
+
+  -> [Jagat Icon](https://www.flaticon.com/authors/jagat-icon)
+
   -> [MythArt](https://www.freepik.com/author/user24791284/icons)
 
   -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
