@@ -33,6 +33,8 @@ namespace Quille
         [SerializeField]
         private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
         // Remove the separate incompatible traits category as we can now check for a full or half trait.
+
+        // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
     }
 }
 

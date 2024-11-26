@@ -20,6 +20,9 @@ namespace Quille
         // Traits have PERSONALITY_HALF_SPAN/2 as their middle step value.
         public const float PERSONALITY_HALF_SPAN = 1;
 
+        // Maximum value of drives, with DRIVE_SPAN/2 as their middle step value.
+        public const float DRIVE_SPAN = 1;
+
         // Maximum value of interests. Their minimum value is the negative equivalent.
         public const float INTEREST_HALF_SPAN = 1;
 
