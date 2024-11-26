@@ -15,6 +15,7 @@ namespace ChecksAndMods
         // VARIABLES/PARAM
         [SerializeField]
         private Quille.PersonalityTraitSO relevantPersonalityTrait;
+        public Quille.PersonalityTraitSO RelevantPersonalityTrait { get { return relevantPersonalityTrait; } set { relevantPersonalityTrait = value; } }
 
 
         // METHODS

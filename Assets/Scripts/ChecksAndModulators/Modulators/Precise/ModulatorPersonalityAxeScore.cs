@@ -15,14 +15,7 @@ namespace ChecksAndMods
         // VARIABLES/PARAM
         [SerializeField]
         private Quille.PersonalityAxeSO relevantPersonalityAxe;
-        public Quille.PersonalityAxeSO RelevantPersonalityAxe { get; }
-
-
-        // CONSTURCTOR
-        public ModulatorPersonalityAxeScore(Quille.PersonalityAxeSO personalityAxe)
-        {
-            relevantPersonalityAxe = personalityAxe;
-        }
+        public Quille.PersonalityAxeSO RelevantPersonalityAxe { get { return relevantPersonalityAxe; } set { relevantPersonalityAxe = value; } }
 
 
         // METHODS
