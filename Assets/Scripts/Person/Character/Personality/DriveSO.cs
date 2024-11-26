@@ -8,7 +8,7 @@ namespace Quille
     // These drives represent a character's aspirations, desires and values, such as
 
 
-    [CreateAssetMenu(fileName = "Drive", menuName = "Quille/Personality/Drive", order = 5)]
+    [CreateAssetMenu(fileName = "Drive", menuName = "Quille/Character/Drive", order = 5)]
     public class DriveSO : ScriptableObject
     {
         // VARIABLES/PARAMS 

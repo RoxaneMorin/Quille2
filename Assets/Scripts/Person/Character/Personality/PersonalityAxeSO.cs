@@ -8,7 +8,7 @@ namespace Quille
     // These axes represent personality spectrums upon which everyone will fall, such as intro vs extraversion.
 
 
-    [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Personality/Personality Axe", order = 0)]
+    [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Character/Personality Axe", order = 0)]
     public class PersonalityAxeSO : ScriptableObject
     {
         // VARIABLES/PARAMS 

@@ -8,7 +8,7 @@ namespace Quille
     // These interests represent topics a character may drawn to (or repulsed by), such as art, science or the economy.
 
 
-    [CreateAssetMenu(fileName = "Interest_", menuName = "Quille/Interests/Field of Interest", order = 1)]
+    [CreateAssetMenu(fileName = "Interest_", menuName = "Quille/Character/Interests/Interest", order = 1)]
     public class InterestSO : ScriptableObject
     {
         // VARIABLES/PARAMS

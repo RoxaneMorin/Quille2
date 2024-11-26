@@ -18,5 +18,5 @@ MonoBehaviour:
   trainMidpoint: 0.5
   incompatiblePersonalityScores:
   - check: {fileID: 11400000, guid: a83b25aa3b2750448a6b1446c9132544, type: 2}
-    opIdx: 4
-    compareTo: 0.5
+    opIdx: 6
+    compareTo: -0.5

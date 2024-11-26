@@ -16,7 +16,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
     static void CreatePersonalityAxeModulators()
     {
         // Load relevant resources.
-        ChecksAndMods.ModulatorPersonalityAxeScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorPersonalityAxeScore>(PathConstants.SO_PATH_MODULATORS);
+        ChecksAndMods.ModulatorPersonalityAxeScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorPersonalityAxeScore>(PathConstants.SO_PATH_MODULATORS_PERSONALITYAXES);
 
         List<Quille.PersonalityAxeSO> allPersonalityAxeSOs = Resources.LoadAll<Quille.PersonalityAxeSO>(PathConstants.SO_PATH_PERSONALITYAXES).ToList();
         List<Quille.PersonalityAxeSO> coveredPersonalityAxeSOs = new List<Quille.PersonalityAxeSO>();
@@ -36,7 +36,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityAxeScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityAxeScore>();
             newModulatorSO.RelevantPersonalityAxe = personalityAxe;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityAxe.AxeName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_MODULATORS_PERSONALITYAXES, personalityAxe.AxeName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
@@ -50,7 +50,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
     static void CreatePersonalityTraitModulators()
     {
         // Load relevant resources.
-        ChecksAndMods.ModulatorPersonalityTraitScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorPersonalityTraitScore>(PathConstants.SO_PATH_MODULATORS);
+        ChecksAndMods.ModulatorPersonalityTraitScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorPersonalityTraitScore>(PathConstants.SO_PATH_MODULATORS_PERSONALITYTRAITS);
 
         List<Quille.PersonalityTraitSO> allPersonalityTraitSOs = Resources.LoadAll<Quille.PersonalityTraitSO>(PathConstants.SO_PATH_PERSONALITYTRAITS).ToList();
         List<Quille.PersonalityTraitSO> coveredPersonalityTraitSOs = new List<Quille.PersonalityTraitSO>();
@@ -70,7 +70,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityTraitScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityTraitScore>();
             newModulatorSO.RelevantPersonalityTrait = personalityTrait;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityTrait.TraitName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_MODULATORS_PERSONALITYTRAITS, personalityTrait.TraitName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
@@ -84,7 +84,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
     static void CreateInterestModulators()
     {
         // Load relevant resources.
-        ChecksAndMods.ModulatorInterestScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorInterestScore>(PathConstants.SO_PATH_MODULATORS);
+        ChecksAndMods.ModulatorInterestScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorInterestScore>(PathConstants.SO_PATH_MODULATORS_INTERESTS);
 
         List<Quille.InterestSO> allInterestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS).ToList();
         List<Quille.InterestSO> coveredInterestSOs = new List<Quille.InterestSO>();
@@ -104,7 +104,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorInterestScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorInterestScore>();
             newModulatorSO.RelevantInterest = Interest;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Interest_{1}.asset", PathConstants.SO_PATH_MODULATORS, Interest.InterestName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Interest_{1}.asset", PathConstants.SO_PATH_MODULATORS_INTERESTS, Interest.InterestName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();

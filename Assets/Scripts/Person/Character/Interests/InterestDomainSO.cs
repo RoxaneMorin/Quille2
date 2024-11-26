@@ -9,7 +9,7 @@ namespace Quille
     // These are used to group Interests into wider categories, such as technical or creative fields/topics.
 
 
-    [CreateAssetMenu(fileName = "DoI_", menuName = "Quille/Interests/Domain of Interest", order = 10)]
+    [CreateAssetMenu(fileName = "DoI_", menuName = "Quille/Character/Interests/Domain of Interest", order = 10)]
     public class InterestDomainSO : ScriptableObject
     {
         // VARIABLES/PARAMS

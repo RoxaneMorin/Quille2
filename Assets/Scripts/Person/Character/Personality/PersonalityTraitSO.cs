@@ -8,7 +8,7 @@ namespace Quille
     // These traits represent personality elements a character may or may not possess, such as being anxious or loyal.
 
 
-    [CreateAssetMenu(fileName = "PersonalityTrait", menuName = "Quille/Personality/Personality Trait", order = 1)]
+    [CreateAssetMenu(fileName = "PersonalityTrait", menuName = "Quille/Character/Personality Trait", order = 1)]
     public class PersonalityTraitSO : ScriptableObject
     {
         // VARIABLES/PARAMS 
