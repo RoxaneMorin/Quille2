@@ -96,7 +96,26 @@ namespace Quille
         // LOAD
         internal void LoadFromJSON(string sourceJson)
         {
+            // Empty the existing lists and dictionaries.
+            // TODO: is there a better way to manage this?
+            if (secondaryNames != null)
+                secondaryNames.Clear();
+
+            if (myPersonalityAxes != null)
+                myPersonalityAxes.Clear();
+            if (myPersonalityTraits != null)
+                myPersonalityTraits.Clear();
+            if (myDrives != null) 
+                myDrives.Clear();
+            if (myInterests != null)
+                myInterests.Clear();
+
             JsonConvert.PopulateObject(sourceJson, this);
+        }
+
+        internal static Person_Character CreateFromJSON(string sourceJson)
+        {
+            return JsonConvert.DeserializeObject<Person_Character>(sourceJson);
         }
 
         // UTILITY

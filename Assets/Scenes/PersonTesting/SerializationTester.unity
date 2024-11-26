@@ -171,6 +171,8 @@ MonoBehaviour:
         _serializedList:
         - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
           Value: 1
+      myDrives:
+        _serializedList: []
       myInterests:
         _serializedList:
         - Key: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
@@ -185,6 +187,8 @@ MonoBehaviour:
       myPersonalityAxes:
         _serializedList: []
       myPersonalityTraits:
+        _serializedList: []
+      myDrives:
         _serializedList: []
       myInterests:
         _serializedList: []
@@ -201,10 +205,16 @@ MonoBehaviour:
       _serializedList:
       - Key: {fileID: 11400000, guid: 8ad7744b5ef929548b45118aacb3dccf, type: 2}
         Value: 1
+      - Key: {fileID: 11400000, guid: e0642ea1362d360489bf32fa1e7056a6, type: 2}
+        Value: -0.5
     myPersonalityTraits:
       _serializedList:
       - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
-        Value: 0
+        Value: 0.5
+    myDrives:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 5df8f791394c4554c8b3d9b7be498649, type: 2}
+        Value: 1
     myInterests:
       _serializedList:
       - Key: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
@@ -214,13 +224,24 @@ MonoBehaviour:
     firstName: Teste
     lastName: er
     nickName: sdfdf
-    secondaryNames: []
+    secondaryNames:
+    - Jones
     myPersonalityAxes:
-      _serializedList: []
+      _serializedList:
+      - Key: {fileID: 11400000, guid: e771b483ef734df4091f97e046289c92, type: 2}
+        Value: -1
     myPersonalityTraits:
-      _serializedList: []
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 6392ad27cdfd3934ba2f7971a0330110, type: 2}
+        Value: 0
+    myDrives:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 5df8f791394c4554c8b3d9b7be498649, type: 2}
+        Value: 0
     myInterests:
-      _serializedList: []
+      _serializedList:
+      - Key: {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}
+        Value: 0
 --- !u!65 &14641133
 BoxCollider:
   m_ObjectHideFlags: 0

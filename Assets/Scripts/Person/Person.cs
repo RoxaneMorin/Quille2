@@ -27,6 +27,9 @@ namespace Quille
         [SerializeField] private Person_AI myPersonAI;
 
 
+        public string TempJsonString;
+
+
         // PROPERTIES & GETTERS/SETTERS
 
         // Data holders.
@@ -64,12 +67,22 @@ namespace Quille
         {
             Init();
 
-            //SaveToJSON();
+            
         }
 
         // Update is called once per frame
         void Update()
         {
+            // Test stuff.
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                TempJsonString = SaveToJSON();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                LoadFromJSON(TempJsonString);
+            }
         }
 
 
@@ -77,6 +90,7 @@ namespace Quille
         // SAVE & LOAD
         private string SaveToJSON()
         {
+            // TODO: what happens when bits of the character are missing?
             string jsonPersonCharacter = myPersonCharacter.SaveToJSON();
             string jsonNeedController = myNeedController.SaveToJSON();
 
@@ -111,10 +125,27 @@ namespace Quille
             string jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
             string jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
 
+            // Person_Character.
+            if (myPersonCharacter != null)
+            {
+                myPersonCharacter.LoadFromJSON(jsonPersonCharacter);
+            }
+            else
+            {
+                myPersonCharacter = Person_Character.CreateFromJSON(jsonPersonCharacter);
+            }
 
-            // TODO: test what happens if myPersonCharacter doesn't already exist.
-            myPersonCharacter.LoadFromJSON(jsonPersonCharacter);
-            myNeedController.LoadFromJSON(jsonNeedController);
+            // Need_Controller
+            if (myNeedController != null)
+            {
+                myNeedController.LoadFromJSON(jsonNeedController);
+            }
+            else
+            {
+                myNeedController = Person_NeedController.CreateFromJSON(jsonNeedController, gameObject);
+            }
+
+            Debug.Log("Sucessfully loaded from JSON.");
         }
     }
 }

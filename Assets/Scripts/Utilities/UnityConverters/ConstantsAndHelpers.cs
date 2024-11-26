@@ -68,6 +68,22 @@ namespace Newtonsoft.Json.UnityConverters.Quille
             }
         }
 
+        public static DriveSO loadDriveSO(string nameString)
+        {
+            string path = PathConstants.SO_PATH_DRIVES + nameString;
+
+            try
+            {
+                DriveSO theSO = Resources.Load<DriveSO>(path);
+                return theSO;
+            }
+            catch
+            {
+                Debug.LogError(string.Format("Tried and failed to load a DriveSO with the name {0}.", nameString));
+                return null;
+            }
+        }
+
         public static InterestSO loadInterestSO(string nameString)
         {
             string path = PathConstants.SO_PATH_INTERESTS + nameString;

@@ -238,6 +238,10 @@ MonoBehaviour:
       _serializedList:
       - Key: {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
         Value: 0.5
+    myDrives:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 5df8f791394c4554c8b3d9b7be498649, type: 2}
+        Value: 1
     myInterests:
       _serializedList:
       - Key: {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}

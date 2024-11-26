@@ -32,10 +32,12 @@ namespace Quille
         public BasicNeed[] MyBasicNeeds
         {
             get { return myBasicNeeds; }
+            private set { myBasicNeeds = value; }
         }
         public SubjectiveNeed[] MySubjectiveNeeds
         {
             get { return mySubjectiveNeeds; }
+            private set { mySubjectiveNeeds = value; }
         }
 
         public BasicNeed GetBasicNeed(BasicNeedSO basicNeedSO)

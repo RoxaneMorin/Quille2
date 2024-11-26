@@ -16,6 +16,7 @@ public class Person_CharacterDrawer : PropertyDrawer
 
     SerializedProperty myPersonalityAxes;
     SerializedProperty myPersonalityTraits;
+    SerializedProperty myDrives;
     SerializedProperty myInterests;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -37,6 +38,7 @@ public class Person_CharacterDrawer : PropertyDrawer
             // Collect properties.
             myPersonalityAxes = property.FindPropertyRelative("myPersonalityAxes");
             myPersonalityTraits = property.FindPropertyRelative("myPersonalityTraits");
+            myDrives = property.FindPropertyRelative("myDrives");
             myInterests = property.FindPropertyRelative("myInterests");
 
 
@@ -84,6 +86,8 @@ public class Person_CharacterDrawer : PropertyDrawer
             newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityAxes) + EditorGUIUtility.singleLineHeight * 0.25f;
             EditorGUI.PropertyField(newPosition, myPersonalityTraits);
             newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityTraits) + EditorGUIUtility.singleLineHeight * 0.25f;
+            EditorGUI.PropertyField(newPosition, myDrives);
+            newPosition.y += EditorGUI.GetPropertyHeight(myDrives) + EditorGUIUtility.singleLineHeight * 0.25f;
             EditorGUI.PropertyField(newPosition, myInterests);
             newPosition.y += EditorGUI.GetPropertyHeight(myInterests);
             EditorGUI.indentLevel--;
@@ -116,6 +120,10 @@ public class Person_CharacterDrawer : PropertyDrawer
 
             if (myPersonalityTraits != null)
                 openPropertyHeight += EditorGUI.GetPropertyHeight(myPersonalityTraits);
+            else openPropertyHeight += EditorGUIUtility.singleLineHeight;
+
+            if (myDrives != null)
+                openPropertyHeight += EditorGUI.GetPropertyHeight(myDrives);
             else openPropertyHeight += EditorGUIUtility.singleLineHeight;
 
             if (myInterests != null)

@@ -44,6 +44,24 @@ namespace Quille
             CreateAndPopulateSubjectiveNeedsMapped();
         }
 
+        internal static Person_NeedController CreateFromJSON(string sourceJSON, GameObject targetOwner)
+        {
+            JObject sourceJSONObject = JObject.Parse(sourceJSON);
+
+            string jsonBasicNeeds = sourceJSONObject.GetValue("myBasicNeeds").ToString(Formatting.Indented);
+            string jsonSubjectiveNeeds = sourceJSONObject.GetValue("mySubjectiveNeeds").ToString(Formatting.Indented);
+
+            Person_NeedController newNeedController = targetOwner.AddComponent(typeof(Person_NeedController)) as Person_NeedController;
+
+            newNeedController.MyBasicNeeds = JsonConvert.DeserializeObject<BasicNeed[]>(jsonBasicNeeds);
+            newNeedController.MySubjectiveNeeds = JsonConvert.DeserializeObject<SubjectiveNeed[]>(jsonSubjectiveNeeds);
+
+            newNeedController.CreateAndPopulateBasicNeedsMapped();
+            newNeedController.CreateAndPopulateSubjectiveNeedsMapped();
+
+            return newNeedController;
+        }
+
         // UTILITY
         // Create need dictionaries from existing need arrays, as used by the JSON loader;
         private void CreateAndPopulateBasicNeedsMapped()
