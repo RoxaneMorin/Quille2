@@ -10,12 +10,6 @@ public class InterestsMenuUtilities : MonoBehaviour
     // Some of this logic is also handled by the InterestSOEditor.
 
 
-    // CONSTANTS
-    public const string InterestSOPath = "ScriptableObjects/Interests/Fields"; 
-    public const string InterestDomainSOPath = "ScriptableObjects/Interests/Domains";
-
-
-
     // METHODS
 
     // Base methods.
@@ -187,56 +181,54 @@ public class InterestsMenuUtilities : MonoBehaviour
     }
 
 
-
-
-        // Menu methods.
-        [MenuItem("Quille/Person/Interests/Fix InterestDomains' one-sided references to child Interests.")]
+     // Menu methods.
+    [MenuItem("Quille/Person/Interests/Fix InterestDomains' one-sided references to child Interests.")]
     static void RegisterDomainsInInterests()
     {
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(InterestDomainSOPath);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(PathConstants.SO_PATH_INTERESTDOMAINS);
         RegisterDomainsInInterests(interestDomainSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Fix Interests' one-sided references to parent InterestDomains.")]
     static void RegisterDomainsFromInterests()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(InterestSOPath);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
         RegisterDomainsFromInterests(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Delete InterestDomains' one-sided references to child Interests.")]
     static void ClearInterestsNotInDomains()
     {
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(InterestDomainSOPath);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(PathConstants.SO_PATH_INTERESTDOMAINS);
         ClearInterestsNotInDomains(interestDomainSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Delete Interests' one-sided references to parent InterestDomains.")]
     static void ClearDomainsNotInInterests()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(InterestSOPath);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
         ClearDomainsNotInInterests(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Fix Interests' one-sided references to RelatedInterests.")]
     static void RegisterRelatedInterests()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(InterestSOPath);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
         RegisterRelatedInterests(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Delete Interests' one-sided references to RelatedInterests.")]
     static void DeleteRelatedInterests()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(InterestSOPath);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
         DeleteRelatedInterests(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Clear other bad references in Interests and InterestsDomains.")]
     static void DeleteBadReferences()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(InterestSOPath);
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(InterestDomainSOPath);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(PathConstants.SO_PATH_INTERESTDOMAINS);
 
         DeleteBadInterestReferences(interestSOs);
         DeleteBadInterestDomainReferences(interestDomainSOs);

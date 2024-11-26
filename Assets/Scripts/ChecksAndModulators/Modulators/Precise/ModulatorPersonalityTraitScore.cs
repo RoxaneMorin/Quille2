@@ -15,6 +15,14 @@ namespace ChecksAndMods
         // VARIABLES/PARAM
         [SerializeField]
         private Quille.PersonalityTraitSO relevantPersonalityTrait;
+        public Quille.PersonalityTraitSO RelevantPersonalityTrait { get; }
+
+
+        // CONSTURCTOR
+        public ModulatorPersonalityTraitScore(Quille.PersonalityTraitSO personalityTrait)
+        {
+            relevantPersonalityTrait = personalityTrait;
+        }
 
 
         // METHODS

@@ -40,7 +40,7 @@ public class CompareColour : MonoBehaviour
 
     void populateEyeColourHSVArray()
     {
-        Quille.GeneEyeColour[] eyeColours = Resources.LoadAll<Quille.GeneEyeColour>("ScriptableObjects/Genes/EyeColours");
+        Quille.GeneEyeColour[] eyeColours = Resources.LoadAll<Quille.GeneEyeColour>(PathConstants.SO_PATH_EYECOLOURS);
         int currentIndex = 0;
 
         foreach (Quille.GeneEyeColour eyeColour in eyeColours)

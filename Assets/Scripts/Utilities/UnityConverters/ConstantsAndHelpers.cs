@@ -10,17 +10,6 @@ namespace Newtonsoft.Json.UnityConverters.Quille
     {
         // Constant and helper methods used by the custon JsonConverters of Quille classes.
         // Many are fragile as they rely on hardcoded path and resource names.
-        
-        
-        // CONSTANTS
-
-        // Resource folder paths.
-        public const string PATH_PERSONALITYAXES = "ScriptableObjects/Personality/Axes/";
-        public const string PATH_PERSONALITYTRAITS = "ScriptableObjects/Personality/Traits/";
-        public const string PATH_INTERESTS = "ScriptableObjects/Interests/Fields/";
-        public const string PATH_BASICNEEDS = "ScriptableObjects/Needs/Basic/";
-        public const string PATH_SUBJECTIVENEEDS = "ScriptableObjects/Needs/Subjective/";
-
 
 
         // METHODS
@@ -50,7 +39,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         // Load scriptable objects from name string.
         public static PersonalityAxeSO loadPersonalityAxeSO(string nameString)
         {
-            string path = ConstantsAndHelpers.PATH_PERSONALITYAXES + nameString;
+            string path = PathConstants.SO_PATH_PERSONALITYAXES + nameString;
 
             try
             {
@@ -65,7 +54,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         }
         public static PersonalityTraitSO loadPersonalityTraitSO(string nameString)
         {
-            string path = ConstantsAndHelpers.PATH_PERSONALITYTRAITS + nameString;
+            string path = PathConstants.SO_PATH_PERSONALITYTRAITS + nameString;
 
             try
             {
@@ -81,7 +70,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
         public static InterestSO loadInterestSO(string nameString)
         {
-            string path = ConstantsAndHelpers.PATH_INTERESTS + nameString;
+            string path = PathConstants.SO_PATH_INTERESTS + nameString;
 
             try
             {
@@ -97,7 +86,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
         public static BasicNeedSO loadBasicNeedSO(string nameString)
         {
-            string path = ConstantsAndHelpers.PATH_BASICNEEDS + nameString;
+            string path = PathConstants.SO_PATH_NEEDSBASIC + nameString;
 
             try
             {
@@ -112,7 +101,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         }
         public static SubjectiveNeedSO loadSubjectiveNeedSO(string nameString)
         {
-            string path = ConstantsAndHelpers.PATH_SUBJECTIVENEEDS + nameString;
+            string path = PathConstants.SO_PATH_NEEDSSUBJECTIVE + nameString;
 
             try
             {

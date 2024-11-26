@@ -145,8 +145,8 @@ namespace Quille
 
         public void Init() // For use during testing.
         {
-            BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>("ScriptableObjects/Needs/Basic");
-            SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>("ScriptableObjects/Needs/Subjective");
+            BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>(PathConstants.SO_PATH_NEEDSBASIC);
+            SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>(PathConstants.SO_PATH_NEEDSSUBJECTIVE);
 
             Init(basicNeedSOs, subjectiveNeedSOs);
         }

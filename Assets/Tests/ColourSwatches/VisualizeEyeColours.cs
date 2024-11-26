@@ -12,7 +12,7 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            eyeColours = Resources.LoadAll<GeneEyeColour>("ScriptableObjects/Genes/EyeColours");
+            eyeColours = Resources.LoadAll<GeneEyeColour>(PathConstants.SO_PATH_EYECOLOURS);
         }
 
 
