@@ -62,7 +62,37 @@ namespace ChecksAndMods
         }
 
 
-        // TODO: fetch a specific interest score.
+        // Fetch a specific interest score.
+        public static float? FetchInterestScore(System.Object sourceObj, Quille.InterestSO relevantInterest)
+        {
+            Quille.Person_Character sourcePersonCharacter;
+
+            if (sourceObj is Quille.Person)
+            {
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
+                sourcePersonCharacter = sourceQuille.MyPersonCharacter;
+                return FetchInterestScoreFromPersonCharacter(sourcePersonCharacter, relevantInterest);
+            }
+            else if (sourceObj is Quille.Person_Character)
+            {
+                return FetchInterestScoreFromPersonCharacter((Quille.Person_Character)sourceObj, relevantInterest);
+            }
+            else
+            {
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in an Interest modulator.\nThis modulator or check will return null.", sourceObj.ToString()));
+                return null;
+            }
+        }
+        public static float? FetchInterestScoreFromPersonCharacter(Quille.Person_Character sourcePersonalityController, Quille.InterestSO relevantInterest)
+        {
+            return sourcePersonalityController.GetInterestScore(relevantInterest);
+        }
+
+
+        // TODO: fetch drive scores and the like
+
+
+        // TODO: fetch need levels and the like.
     }
 }
 

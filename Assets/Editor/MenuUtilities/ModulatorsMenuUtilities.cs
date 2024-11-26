@@ -36,7 +36,7 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityAxeScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityAxeScore>();
             newModulatorSO.RelevantPersonalityAxe = personalityAxe;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityAxe.AxeName));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityAxe.AxeName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
@@ -70,12 +70,46 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityTraitScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityTraitScore>();
             newModulatorSO.RelevantPersonalityTrait = personalityTrait;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityTrait.TraitName));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_MODULATORS, personalityTrait.TraitName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
 
             Debug.Log(string.Format("A new instance of ModulatorPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.TraitName));
+        }
+    }
+
+
+    [MenuItem("Quille/Person/ChecksAndMods/Create missing Interest modulators.")]
+    static void CreateInterestModulators()
+    {
+        // Load relevant resources.
+        ChecksAndMods.ModulatorInterestScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorInterestScore>(PathConstants.SO_PATH_MODULATORS);
+
+        List<Quille.InterestSO> allInterestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS).ToList();
+        List<Quille.InterestSO> coveredInterestSOs = new List<Quille.InterestSO>();
+
+        // Populate the list of InterestSOs for which modulators already exist.
+        foreach (ChecksAndMods.ModulatorInterestScore modulator in relevantModulatorSOs)
+        {
+            coveredInterestSOs.Add(modulator.RelevantInterest);
+        }
+
+        // Find the difference between the two lists.
+        List<Quille.InterestSO> newInterestSOs = allInterestSOs.Except(coveredInterestSOs).ToList();
+
+        //Create new modSOs for the remaining Interests.
+        foreach (Quille.InterestSO Interest in newInterestSOs)
+        {
+            ChecksAndMods.ModulatorInterestScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorInterestScore>();
+            newModulatorSO.RelevantInterest = Interest;
+
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Interest_{1}.asset", PathConstants.SO_PATH_MODULATORS, Interest.InterestName.StripComplexChars()));
+
+            AssetDatabase.CreateAsset(newModulatorSO, savePath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log(string.Format("A new instance of ModulatorInterestScore was created for the '{0}' Interest.", Interest.InterestName));
         }
     }
 }

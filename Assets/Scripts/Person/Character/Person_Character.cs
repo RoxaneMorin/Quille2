@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using AYellowpaper.SerializedCollections;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Quille
@@ -100,10 +98,7 @@ namespace Quille
         internal string CreateJSONFileName()
         {
             // TODO: handle what happens when a character is renamed.
-            string strippedFirstName = Regex.Replace(firstName, "[^\\w\\._]", "");
-            string strippedLastName = Regex.Replace(lastName, "[^\\w\\._]", "");
-
-            return string.Format("{0}_{1}_{2}.json", charID, strippedFirstName, strippedLastName);
+            return string.Format("{0}_{1}_{2}.json", charID, firstName.StripComplexChars(), lastName.StripComplexChars());
         }
     }
 }

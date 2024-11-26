@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -36,7 +35,7 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckPersonalityAxeScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckPersonalityAxeScore>();
             newCheckSO.RelevantPersonalityAxe = personalityAxe;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_CHECKS, personalityAxe.AxeName));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityAxe_{1}.asset", PathConstants.SO_PATH_CHECKS, personalityAxe.AxeName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
@@ -70,12 +69,46 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckPersonalityTraitScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckPersonalityTraitScore>();
             newCheckSO.RelevantPersonalityTrait = personalityTrait;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_CHECKS, personalityTrait.TraitName));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityTrait_{1}.asset", PathConstants.SO_PATH_CHECKS, personalityTrait.TraitName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
 
             Debug.Log(string.Format("A new instance of CheckPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.TraitName));
+        }
+    }
+
+
+    [MenuItem("Quille/Person/ChecksAndMods/Create missing Interest checks.")]
+    static void CreateInterestChecks()
+    {
+        // Load relevant resources.
+        ChecksAndMods.CheckInterestScore[] relevantChecksSOs = Resources.LoadAll<ChecksAndMods.CheckInterestScore>(PathConstants.SO_PATH_CHECKS);
+
+        List<Quille.InterestSO> allInterestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS).ToList();
+        List<Quille.InterestSO> coveredInterestSOs = new List<Quille.InterestSO>();
+
+        // Populate the list of InterestSOs for which checks already exist.
+        foreach (ChecksAndMods.CheckInterestScore check in relevantChecksSOs)
+        {
+            coveredInterestSOs.Add(check.RelevantInterest);
+        }
+
+        // Find the difference between the two lists.
+        List<Quille.InterestSO> newInterestSOs = allInterestSOs.Except(coveredInterestSOs).ToList();
+
+        //Create new checkSOs for the remaining Interests.
+        foreach (Quille.InterestSO interest in newInterestSOs)
+        {
+            ChecksAndMods.CheckInterestScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckInterestScore>();
+            newCheckSO.RelevantInterest = interest;
+
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Interest_{1}.asset", PathConstants.SO_PATH_CHECKS, interest.InterestName.StripComplexChars()));
+
+            AssetDatabase.CreateAsset(newCheckSO, savePath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log(string.Format("A new instance of CheckInterestScore was created for the '{0}' Interest.", interest.InterestName));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class ExtensionMethods
@@ -26,6 +27,13 @@ public static class ExtensionMethods
         }
 
         return highestVal;
+    }
+
+
+    // STRING
+    public static string StripComplexChars(this String theString)
+    {
+        return Regex.Replace(theString, "[^\\w\\._]", "");
     }
 
 

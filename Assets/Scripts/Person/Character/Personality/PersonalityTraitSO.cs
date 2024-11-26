@@ -23,19 +23,13 @@ namespace Quille
 
         // OTHER VALUES
         // The intensity of traits is either 0.5 or 1.
-        [BeginInspectorReadOnlyGroup]
-        [SerializeField]
-        private float traitSpan = Constants.PERSONALITY_HALF_SPAN;
+        [SerializeField] [InspectorReadOnly] private float traitSpan = Constants.PERSONALITY_HALF_SPAN;
         public float TraitSpan { get { return traitSpan; } }
 
-        [BeginInspectorReadOnlyGroup]
-        [SerializeField]
-        private float trainMidpoint = Constants.PERSONALITY_HALF_SPAN / 2;
+        [SerializeField] [InspectorReadOnly] private float trainMidpoint = Constants.PERSONALITY_HALF_SPAN / 2;
         public float TrainMidpoint { get { return trainMidpoint; } }
 
-        [EndInspectorReadOnlyGroup]
-
-        // INCOMPATIBILITIES]
+        // INCOMPATIBILITIES
         [SerializeField]
         private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
         // Remove the separate incompatible traits category as we can now check for a full or half trait.
