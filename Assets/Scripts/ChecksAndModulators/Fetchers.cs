@@ -7,6 +7,9 @@ namespace ChecksAndMods
         // Static methods which acquire specific data from a given object or character.
         // The desired value is usually represented by its template or key scriptableObject.
 
+        // TODO: split into partial classes eventually.
+
+        // PERSON
 
         // Fetch a specific personality axe score.
         public static float? FetchPersonalityAxeScore(System.Object sourceObj, Quille.PersonalityAxeSO relevantPersonalityAxe)
@@ -62,6 +65,33 @@ namespace ChecksAndMods
         }
 
 
+        // Fetch a specific drive score.
+        public static float? FetchDriveScore(System.Object sourceObj, Quille.DriveSO relevantDrive)
+        {
+            Quille.Person_Character sourcePersonCharacter;
+
+            if (sourceObj is Quille.Person)
+            {
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
+                sourcePersonCharacter = sourceQuille.MyPersonCharacter;
+                return FetchDriveScoreFromPersonCharacter(sourcePersonCharacter, relevantDrive);
+            }
+            else if (sourceObj is Quille.Person_Character)
+            {
+                return FetchDriveScoreFromPersonCharacter((Quille.Person_Character)sourceObj, relevantDrive);
+            }
+            else
+            {
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a Drive modulator.\nThis modulator or check will return null.", sourceObj.ToString()));
+                return null;
+            }
+        }
+        public static float? FetchDriveScoreFromPersonCharacter(Quille.Person_Character sourcePersonalityController, Quille.DriveSO relevantDrive)
+        {
+            return sourcePersonalityController.GetDriveScore(relevantDrive);
+        }
+
+
         // Fetch a specific interest score.
         public static float? FetchInterestScore(System.Object sourceObj, Quille.InterestSO relevantInterest)
         {
@@ -87,9 +117,6 @@ namespace ChecksAndMods
         {
             return sourcePersonalityController.GetInterestScore(relevantInterest);
         }
-
-
-        // TODO: fetch drive scores and the like
 
 
         // TODO: fetch need levels and the like.

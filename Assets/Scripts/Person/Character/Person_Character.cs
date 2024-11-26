@@ -40,14 +40,18 @@ namespace Quille
         // Scores should be limited to 0.5 or 1.
         // A trait with a score of zero should be pruned away.
 
+        // Drives
+        [SerializeField, SerializedDictionary("Drives", "Score")]
+        private SerializedDictionary<DriveSO, float> myDrives;
+        // Scores should be limited to 0.5 or 1.
+        // A drive with a score of zero should be pruned away.
+
         // Interests and preferences.
         [SerializeField, SerializedDictionary("Interest", "Score")]
         private SerializedDictionary<InterestSO, float> myInterests;
         //Scores range between 1 (loved) and -1 (hated).
         // A score of zero means the character know of this interest but is indifferent to it.
         // Interests that do not appear in the dictionary are unknown.
-
-        // Ambitions and drives.
 
         // Misc personality stuff
         // Quirks, demeanor, etc.
@@ -64,7 +68,7 @@ namespace Quille
         // CONSTRUCTORS
         // TODO: better constructors.
         public Person_Character(string myFirstName = null, string myLastName = null, string myNickName = null, List<string> mySecondaryNames = null,
-                                SerializedDictionary<PersonalityAxeSO, float> myPersonalityAxes = null, SerializedDictionary<PersonalityTraitSO, float> myPersonalityTraits = null, SerializedDictionary<InterestSO, float> myInterests = null)
+                                SerializedDictionary<PersonalityAxeSO, float> myPersonalityAxes = null, SerializedDictionary<PersonalityTraitSO, float> myPersonalityTraits = null, SerializedDictionary<DriveSO, float> myDrives = null, SerializedDictionary<InterestSO, float> myInterests = null)
         {
             // TODO: handle charID.
             
@@ -75,6 +79,7 @@ namespace Quille
 
             this.SetAxeScoreDict(myPersonalityAxes != null ? myPersonalityAxes: new SerializedDictionary<PersonalityAxeSO, float>(), false);
             this.SetTraitScoreDict(myPersonalityTraits != null ? myPersonalityTraits : new SerializedDictionary<PersonalityTraitSO, float>(), false);
+            this.SetDriveScoreDict(myDrives != null ? myDrives : new SerializedDictionary<DriveSO, float>(), false);
             this.SetInterestScoreDict(myInterests != null ? myInterests : new SerializedDictionary<InterestSO, float>(), false);
         }
 

@@ -18,13 +18,6 @@ namespace ChecksAndMods
         public Quille.PersonalityTraitSO RelevantPersonalityTrait { get { return relevantPersonalityTrait; } set { relevantPersonalityTrait = value; } }
 
 
-        // CONSTURCTOR
-        public ModulatorPersonalityTraitScore(Quille.PersonalityTraitSO personalityTrait)
-        {
-            relevantPersonalityTrait = personalityTrait;
-        }
-
-
         // METHODS
         // Fetch the value of the revelant personality trait.
         protected override void FetchParam(System.Object sourceObj)

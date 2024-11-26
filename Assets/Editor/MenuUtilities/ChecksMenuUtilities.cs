@@ -79,6 +79,40 @@ public class ChecksMenuUtilities : MonoBehaviour
     }
 
 
+    [MenuItem("Quille/Person/ChecksAndMods/Create missing Drive checks.")]
+    static void CreateDriveChecks()
+    {
+        // Load relevant resources.
+        ChecksAndMods.CheckDriveScore[] relevantChecksSOs = Resources.LoadAll<ChecksAndMods.CheckDriveScore>(PathConstants.SO_PATH_CHECKS_DRIVES);
+
+        List<Quille.DriveSO> allDriveSOs = Resources.LoadAll<Quille.DriveSO>(PathConstants.SO_PATH_DRIVES).ToList();
+        List<Quille.DriveSO> coveredDriveSOs = new List<Quille.DriveSO>();
+
+        // Populate the list of DriveSOs for which checks already exist.
+        foreach (ChecksAndMods.CheckDriveScore check in relevantChecksSOs)
+        {
+            coveredDriveSOs.Add(check.RelevantDrive);
+        }
+
+        // Find the difference between the two lists.
+        List<Quille.DriveSO> newDriveSOs = allDriveSOs.Except(coveredDriveSOs).ToList();
+
+        //Create new checkSOs for the remaining Drives.
+        foreach (Quille.DriveSO Drive in newDriveSOs)
+        {
+            ChecksAndMods.CheckDriveScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckDriveScore>();
+            newCheckSO.RelevantDrive = Drive;
+
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Drive_{1}.asset", PathConstants.SO_PATH_CHECKS_DRIVES, Drive.DriveName.StripComplexChars()));
+
+            AssetDatabase.CreateAsset(newCheckSO, savePath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log(string.Format("A new instance of CheckDriveScore was created for the '{0}' Drive.", Drive.DriveName));
+        }
+    }
+
+
     [MenuItem("Quille/Person/ChecksAndMods/Create missing Interest checks.")]
     static void CreateInterestChecks()
     {

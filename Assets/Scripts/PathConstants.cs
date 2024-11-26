@@ -15,10 +15,12 @@ public static class PathConstants
     // Character
     public const string SO_PATH_CHECKS_PERSONALITYAXES = "ScriptableObjects/ChecksAndMods/Checks/PersonalityAxes/";
     public const string SO_PATH_CHECKS_PERSONALITYTRAITS = "ScriptableObjects/ChecksAndMods/Checks/PersonalityTraits/";
+    public const string SO_PATH_CHECKS_DRIVES= "ScriptableObjects/ChecksAndMods/Checks/Drives/";
     public const string SO_PATH_CHECKS_INTERESTS = "ScriptableObjects/ChecksAndMods/Checks/Interests/";
 
     public const string SO_PATH_MODULATORS_PERSONALITYAXES = "ScriptableObjects/ChecksAndMods/Modulators/PersonalityAxes/";
     public const string SO_PATH_MODULATORS_PERSONALITYTRAITS = "ScriptableObjects/ChecksAndMods/Modulators/PersonalityTraits/";
+    public const string SO_PATH_MODULATORS_DRIVES = "ScriptableObjects/ChecksAndMods/Modulators/Drives/";
     public const string SO_PATH_MODULATORS_INTERESTS = "ScriptableObjects/ChecksAndMods/Modulators/Interests/";
 
 

@@ -80,6 +80,40 @@ public class ModulatorsMenuUtilities : MonoBehaviour
     }
 
 
+    [MenuItem("Quille/Person/ChecksAndMods/Create missing Drive modulators.")]
+    static void CreateDriveModulators()
+    {
+        // Load relevant resources.
+        ChecksAndMods.ModulatorDriveScore[] relevantModulatorSOs = Resources.LoadAll<ChecksAndMods.ModulatorDriveScore>(PathConstants.SO_PATH_MODULATORS_DRIVES);
+
+        List<Quille.DriveSO> allDriveSOs = Resources.LoadAll<Quille.DriveSO>(PathConstants.SO_PATH_DRIVES).ToList();
+        List<Quille.DriveSO> coveredDriveSOs = new List<Quille.DriveSO>();
+
+        // Populate the list of DriveSOs for which modulators already exist.
+        foreach (ChecksAndMods.ModulatorDriveScore modulator in relevantModulatorSOs)
+        {
+            coveredDriveSOs.Add(modulator.RelevantDrive);
+        }
+
+        // Find the difference between the two lists.
+        List<Quille.DriveSO> newDriveSOs = allDriveSOs.Except(coveredDriveSOs).ToList();
+
+        //Create new modSOs for the remaining Drives.
+        foreach (Quille.DriveSO Drive in newDriveSOs)
+        {
+            ChecksAndMods.ModulatorDriveScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorDriveScore>();
+            newModulatorSO.RelevantDrive = Drive;
+
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Drive_{1}.asset", PathConstants.SO_PATH_MODULATORS_DRIVES, Drive.DriveName.StripComplexChars()));
+
+            AssetDatabase.CreateAsset(newModulatorSO, savePath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log(string.Format("A new instance of ModulatorDriveScore was created for the '{0}' Drive.", Drive.DriveName));
+        }
+    }
+
+
     [MenuItem("Quille/Person/ChecksAndMods/Create missing Interest modulators.")]
     static void CreateInterestModulators()
     {

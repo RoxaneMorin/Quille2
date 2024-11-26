@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Quille
 {
     // The ScriptableObject template of Drives, used for the creation of specific drives as assets.
-    // These drives represent a character's aspirations, desires and values, such as
+    // These drives represent a character's aspirations, desires and values, such as kinship or material wealth.
 
 
     [CreateAssetMenu(fileName = "Drive", menuName = "Quille/Character/Drive", order = 5)]
@@ -34,5 +34,7 @@ namespace Quille
         private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
 
         // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
+
+        // CATEGORIES?s
     }
 }

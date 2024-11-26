@@ -154,6 +154,67 @@ namespace Quille
         }
 
 
+        // DRIVES
+        private float capDriveScore(float value)
+        {
+            // Drives can only have a value of 0.5 or 1.
+            if (value <= 0) // Discard zero and negative values;
+            {
+                return 0;
+            }
+            else if (value < Constants.DRIVE_SPAN / 2)
+            {
+                return Constants.DRIVE_SPAN / 2;
+            }
+            return Constants.DRIVE_SPAN;
+        }
+
+        // Single scores.
+        public void SetDriveScore(DriveSO targetDrive, float value)
+        {
+            value = capDriveScore(value);
+            if (value != 0) // Discard zero and negative values;
+            {
+                myDrives[targetDrive] = value;
+            }
+        }
+        public float? GetDriveScore(DriveSO targetDrive)
+        {
+            if (myDrives.ContainsKey(targetDrive))
+            {
+                return myDrives[targetDrive];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // The full dict.
+        internal void SetDriveScoreDict(SerializedDictionary<DriveSO, float> driveDict, bool capScores = true)
+        {
+            if (capScores)
+            {
+                SerializedDictionary<DriveSO, float> newDriveDict = new SerializedDictionary<DriveSO, float>();
+
+                foreach (DriveSO key in driveDict.Keys)
+                {
+                    newDriveDict[key] = capDriveScore(driveDict[key]);
+                }
+
+                this.myDrives = newDriveDict;
+            }
+            else
+            {
+                this.myDrives = driveDict;
+            }
+        }
+        internal SerializedDictionary<DriveSO, float> GetDriveScoreDict()
+        {
+            return myDrives;
+        }
+
+
         // INTERESTS
         private float capInterestScore(float value)
         {
