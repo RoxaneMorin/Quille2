@@ -34,7 +34,7 @@ public class CheckArithmeticDrawer : PropertyDrawer
                     // Build the string.
                     int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
-                    string labelText = string.Format("Is Parameter {0} {1} ?",
+                    string labelText = string.Format("Is Fetched Value {0} {1} ?",
                         checkSymbolsArithmetic[opIdx],
                         check.FindPropertyRelative("compareTo").floatValue);
 

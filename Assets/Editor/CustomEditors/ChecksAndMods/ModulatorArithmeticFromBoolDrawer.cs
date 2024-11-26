@@ -36,7 +36,7 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
                     int mainOpIdx = modulator.FindPropertyRelative("checkOpIdx").enumValueIndex;
                     int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
 
-                    string labelText = string.Format("Result = (Modulator {0} {1}) ? (Target {2} {3}) : Target",
+                    string labelText = string.Format("Result = (Fetched Value {0} {1}) ? (Target {2} {3}) : Target",
                         checkSymbolsBoolean[mainOpIdx],
                         modulator.FindPropertyRelative("compareTo").boolValue,
                         operationSymbolsArithmetic[modOpIdx],
@@ -46,7 +46,7 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
                     if (modOpIdx == 0) // Are we keeping the numerical value as is?
                         labelText = "Result = Target";
                     else if (mainOpIdx == 0) // Are we checking the value of the modulator itself?
-                        labelText = string.Format("Result = Modulator ? (Target {0} {1}) : Target", operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
+                        labelText = string.Format("Result = Fetched Value ? (Target {0} {1}) : Target", operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

@@ -34,13 +34,13 @@ public class CheckBooleanDrawer : PropertyDrawer
                     // Build the string.
                     int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
-                    string labelText = string.Format("Is Parameter {0} {1} ?",
+                    string labelText = string.Format("Is Fetched Value {0} {1} ?",
                         checkSymbolsBoolean[opIdx],
                         check.FindPropertyRelative("compareTo").boolValue);
 
                     // Handle special cases as needed.
                     if (opIdx == 0) // Are we keeping the numerical value as is?
-                        labelText = "Is Parameter True?";
+                        labelText = "Is Fetched Value True?";
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

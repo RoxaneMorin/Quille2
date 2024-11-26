@@ -35,7 +35,7 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
                     int mainOpIdx = modulator.FindPropertyRelative("mainOpIdx").enumValueIndex;
                     int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
 
-                    string labelText = string.Format("Result = Target {0} (Modulator {1} {2})",
+                    string labelText = string.Format("Result = Target {0} (Fetched Value {1} {2})",
                         operationSymbols[mainOpIdx],
                         operationSymbols[modOpIdx],
                         modulator.FindPropertyRelative("modifier").floatValue);
@@ -44,7 +44,7 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
                     if (mainOpIdx == 0)
                         labelText = "Result = Target";
                     else if (modOpIdx == 0)
-                        labelText = string.Format("Result = Target {0} Modulator", operationSymbols[mainOpIdx], operationSymbols[modOpIdx]);
+                        labelText = string.Format("Result = Target {0} Fetched Value", operationSymbols[mainOpIdx], operationSymbols[modOpIdx]);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

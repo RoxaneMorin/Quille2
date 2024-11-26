@@ -31,9 +31,7 @@ namespace Quille
         public Sprite axeIconRight;
 
         // OTHER VALUES
-        [BeginInspectorReadOnlyGroup]
-        [SerializeField]
-        private floatPair axeSpan = (-Constants.PERSONALITY_HALF_SPAN, Constants.PERSONALITY_HALF_SPAN);
+        [SerializeField] [BeginInspectorReadOnlyGroup] private floatPair axeSpan = (-Constants.PERSONALITY_HALF_SPAN, Constants.PERSONALITY_HALF_SPAN);
         //[EndInspectorReadOnlyGroup]
         public floatPair AxeSpan { get { return axeSpan; } }
     }
