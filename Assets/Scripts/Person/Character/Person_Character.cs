@@ -16,12 +16,6 @@ namespace Quille
     {
         // VARIABLES/PARAMS
 
-        [SerializeField] private int charID;
-        // TODO: determine whether and how to use this unique numerical ID.
-        // TODO: decide whether it should reside in the base Person class instead.
-
-        [Space]
-
         // IDENTITY
         // Names
         [SerializeField] private string firstName, lastName, nickName;
@@ -119,10 +113,5 @@ namespace Quille
         }
 
         // UTILITY
-        internal string CreateJSONFileName()
-        {
-            // TODO: handle what happens when a character is renamed.
-            return string.Format("{0}_{1}_{2}.json", charID, firstName.StripComplexChars(), lastName.StripComplexChars());
-        }
     }
 }

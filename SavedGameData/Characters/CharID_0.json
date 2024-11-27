@@ -1,6 +1,6 @@
 {
+  "charID": 0,
   "PersonCharacter": {
-    "charID": 0,
     "firstName": "Testis",
     "lastName": "Testington",
     "nickName": "Spud",
@@ -18,7 +18,8 @@
       "Drive_Family": 1.0
     },
     "myInterests": {
-      "Interest_Art": 0.6
+      "Interest_Art": 0.6,
+      "Interest_Design": -0.2
     }
   },
   "NeedController": {

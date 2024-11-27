@@ -18,7 +18,6 @@ namespace Quille
         // PROPERTIES & THEIR HELPER METHODS
 
         // IDENTITY
-        [JsonIgnore] public int CharID { get { return charID; } }
 
         // NAMES
         [JsonIgnore] public string FirstName { get { return firstName; } set { firstName = value; } }

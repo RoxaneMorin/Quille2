@@ -16,8 +16,8 @@ namespace Quille
     public class Person : MonoBehaviour
     {
         // VARIABLES
-
-        // Should the charID be here?
+        [SerializeField] private int charID;
+        // TODO: determine whether and how to use this unique numerical ID.
 
         // Data holders.
         [SerializeField] private Person_Character myPersonCharacter;
@@ -31,6 +31,7 @@ namespace Quille
 
 
         // PROPERTIES & GETTERS/SETTERS
+       public int CharID { get { return charID; } }
 
         // Data holders.
         public Person_Character MyPersonCharacter { get { return myPersonCharacter; } }
@@ -88,6 +89,11 @@ namespace Quille
 
 
         // SAVE & LOAD
+        private string CreateJSONFileName()
+        {
+            return string.Format("CharID_{0}.json", charID);
+        }
+
         private string SaveToJSON()
         {
             // TODO: what happens when bits of the character are missing?
@@ -96,6 +102,7 @@ namespace Quille
 
             JObject jsonPerson = new JObject();
 
+            jsonPerson.Add("charID", charID);
             jsonPerson.Add("PersonCharacter", JObject.Parse(jsonPersonCharacter));
             jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
 
@@ -104,7 +111,7 @@ namespace Quille
 
             // TODO: set proper, potentially customisable save location
             // TODO: create and rely on a ressource that track world info, character IDs, etc.
-            string fileName = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + myPersonCharacter.CreateJSONFileName();
+            string fileName = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + CreateJSONFileName();
 
             // TODO: add a try block just to be safe.
             // TODO: make a backup of the previous save file if one exists.
@@ -112,6 +119,8 @@ namespace Quille
             var file = File.CreateText(fileName) ;
             file.Write(formatedJSON);
             file.Close();
+
+            Debug.Log("Sucessfully saved to JSON.");
 
             return formatedJSON;
         }
@@ -121,9 +130,14 @@ namespace Quille
             // TODO: chose what file to load.
 
             JObject jsonPerson = JObject.Parse(sourceJSON);
-            
+
+            string jsonCharID = jsonPerson.GetValue("charID").ToString();
             string jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
             string jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
+
+
+            // charID.
+            charID = int.Parse(jsonCharID);
 
             // Person_Character.
             if (myPersonCharacter != null)

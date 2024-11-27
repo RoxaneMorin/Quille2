@@ -8,7 +8,6 @@ public class Person_CharacterDrawer : PropertyDrawer
 {
     bool _foldoutOpen;
 
-    SerializedProperty charID;
     SerializedProperty firstName;
     SerializedProperty lastName;
     SerializedProperty nickName;
@@ -29,7 +28,6 @@ public class Person_CharacterDrawer : PropertyDrawer
         if (_foldoutOpen)
         {
             // Collect properties.
-            charID = property.FindPropertyRelative("charID");
             firstName = property.FindPropertyRelative("firstName");
             lastName = property.FindPropertyRelative("lastName");
             nickName = property.FindPropertyRelative("nickName");
@@ -43,17 +41,12 @@ public class Person_CharacterDrawer : PropertyDrawer
 
 
             // Make and draw label field.
-            GUIContent headerLabel = new GUIContent(string.Format("{1} {2} (#{0})'s Person_Character", charID.intValue, firstName.stringValue, lastName.stringValue));
+            GUIContent headerLabel = new GUIContent(string.Format("{0} {1}'s Person_Character", firstName.stringValue, lastName.stringValue));
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(newPosition, headerLabel, style: "ProfilerRightPane");
 
 
             // IDENTITY
-
-            // charID.
-            
-            newPosition.y += 1.5f * EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(newPosition, charID, true);
 
             // NAMES
             newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
@@ -61,7 +54,7 @@ public class Person_CharacterDrawer : PropertyDrawer
 
             // Draw properties.
             EditorGUI.indentLevel++;
-            newPosition.y += EditorGUIUtility.singleLineHeight / 2f;
+            newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, firstName, true);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, lastName, true);
@@ -108,7 +101,7 @@ public class Person_CharacterDrawer : PropertyDrawer
     {
         if (_foldoutOpen)
         {
-            float openPropertyHeight = EditorGUIUtility.singleLineHeight * 10.5f;
+            float openPropertyHeight = EditorGUIUtility.singleLineHeight * 9.5f;
 
             if (secondaryNames != null)
                 openPropertyHeight += EditorGUI.GetPropertyHeight(secondaryNames);
