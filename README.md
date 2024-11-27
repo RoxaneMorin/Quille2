@@ -16,7 +16,7 @@ So far, I've mostly worked on:
 - Miscellaneous fancies such as procedural grid generation and some post processing shaders.
 
 My next steps will likely be:
-- Implementing a few more character data structures, such as long term needs and drives/aspirations.
+- Implementing a few more character data structures, such as long term needs and a final catch-all structure for miscellaneous personality stuff.
 - Sketching out more of the personality creation UI for ease of testing.
 - Further modularizing character needs? (At the moment, personality elements' impact on a need are set in the need’s scriptableObject instance. This could be decoupled.)
 - Sketching out a basic data model for interactions, and logic for characters’ to choose the best fit for satisfying a specific need. Stress testing once that is done.
