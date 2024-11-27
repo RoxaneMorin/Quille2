@@ -1,0 +1,155 @@
+{
+  "charID": 0,
+  "PersonCharacter": {
+    "firstName": "Testis",
+    "lastName": "Testington",
+    "nickName": "Spud",
+    "secondaryNames": [
+      "Testineus"
+    ],
+    "myPersonalityAxes": {
+      "PA_CarelessvsConscientious": 1.0,
+      "PA_ChillvsRestless": -0.45
+    },
+    "myPersonalityTraits": {
+      "PT_Neurotic": 0.5
+    },
+    "myDrives": {
+      "Drive_Family": 1.0
+    },
+    "myInterests": {
+      "Interest_Art": 0.6,
+      "Interest_Design": -0.2
+    }
+  },
+  "NeedController": {
+    "myBasicNeeds": [
+      {
+        "needSO": "BN_Nourishment",
+        "localAiPriorityWeighting": 1.25,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.3,
+        "currentChangeRate": -0.3,
+        "currentChangeRateScaled": -0.003,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_Rest",
+        "localAiPriorityWeighting": 1.0,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.05,
+        "currentChangeRate": -0.05,
+        "currentChangeRateScaled": -0.0005,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_Sanitation",
+        "localAiPriorityWeighting": 0.75,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.1,
+        "currentChangeRate": -0.1,
+        "currentChangeRateScaled": -0.001,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_StressRelief",
+        "localAiPriorityWeighting": 0.9,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.15,
+        "currentChangeRate": -0.15,
+        "currentChangeRateScaled": -0.0015,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      }
+    ],
+    "mySubjectiveNeeds": [
+      {
+        "needSO": "SN_ChallengevsIndulgence",
+        "localAiPriorityWeighting": 0.5,
+        "localAiPriorityWeightingLeft": 0.5,
+        "localAiPriorityWeightingRight": 0.5,
+        "levelFullLeft": 1.0,
+        "levelCurrentLeft": 1.0,
+        "levelFullRight": 1.0,
+        "levelCurrentRight": 1.0,
+        "baseChangeRateLeft": -0.05,
+        "currentChangeRateLeft": -0.05,
+        "baseChangeRateRight": -0.05,
+        "currentChangeRateRight": -0.05,
+        "currentChangeRateLeftScaled": -0.0005,
+        "currentChangeRateRightScaled": -0.0005,
+        "thresholdElatedLeft": 0.9,
+        "thresholdElatedRight": 0.9,
+        "thresholdWarningLeft": 0.25,
+        "thresholdWarningRight": 0.25,
+        "thresholdCriticalLeft": 0.1,
+        "thresholdCriticalRight": 0.1,
+        "needStateLeft": "Normal",
+        "needStateRight": "Normal"
+      },
+      {
+        "needSO": "SN_SensoryvsCognitive",
+        "localAiPriorityWeighting": 1.0,
+        "localAiPriorityWeightingLeft": 1.0,
+        "localAiPriorityWeightingRight": 1.0,
+        "levelFullLeft": 1.0,
+        "levelCurrentLeft": 1.0,
+        "levelFullRight": 1.0,
+        "levelCurrentRight": 1.0,
+        "baseChangeRateLeft": -0.05,
+        "currentChangeRateLeft": -0.05,
+        "baseChangeRateRight": -0.05,
+        "currentChangeRateRight": -0.05,
+        "currentChangeRateLeftScaled": -0.0005,
+        "currentChangeRateRightScaled": -0.0005,
+        "thresholdElatedLeft": 0.9,
+        "thresholdElatedRight": 0.9,
+        "thresholdWarningLeft": 0.25,
+        "thresholdWarningRight": 0.25,
+        "thresholdCriticalLeft": 0.1,
+        "thresholdCriticalRight": 0.1,
+        "needStateLeft": "Normal",
+        "needStateRight": "Normal"
+      },
+      {
+        "needSO": "SN_SocializationvsTimeAlone",
+        "localAiPriorityWeighting": 1.0,
+        "localAiPriorityWeightingLeft": 1.0,
+        "localAiPriorityWeightingRight": 1.0,
+        "levelFullLeft": 1.0,
+        "levelCurrentLeft": 1.0,
+        "levelFullRight": 1.0,
+        "levelCurrentRight": 1.0,
+        "baseChangeRateLeft": -0.05,
+        "currentChangeRateLeft": -0.05,
+        "baseChangeRateRight": -0.05,
+        "currentChangeRateRight": -0.05,
+        "currentChangeRateLeftScaled": -0.0005,
+        "currentChangeRateRightScaled": -0.0005,
+        "thresholdElatedLeft": 0.9,
+        "thresholdElatedRight": 0.9,
+        "thresholdWarningLeft": 0.25,
+        "thresholdWarningRight": 0.25,
+        "thresholdCriticalLeft": 0.1,
+        "thresholdCriticalRight": 0.1,
+        "needStateLeft": "Normal",
+        "needStateRight": "Normal"
+      }
+    ]
+  }
+}

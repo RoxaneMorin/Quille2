@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Quille
 
 
     [System.Serializable]
-    [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
+    //[RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
@@ -89,77 +90,146 @@ namespace Quille
 
 
         // SAVE & LOAD
-        private string CreateJSONFileName()
-        {
-            return string.Format("CharID_{0}.json", charID);
-        }
-
         private string SaveToJSON()
         {
             // TODO: what happens when bits of the character are missing?
-            string jsonPersonCharacter = myPersonCharacter.SaveToJSON();
-            string jsonNeedController = myNeedController.SaveToJSON();
 
-            JObject jsonPerson = new JObject();
+            // Init variables.
+            JObject jsonPerson;
+            string jsonPersonCharacter;
+            string jsonNeedController;
 
-            jsonPerson.Add("charID", charID);
-            jsonPerson.Add("PersonCharacter", JObject.Parse(jsonPersonCharacter));
-            jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
+            // Try to collect and convert this person's various components to JSON.
+            try
+            {
+                jsonPersonCharacter = myPersonCharacter.SaveToJSON();
+                jsonNeedController = myNeedController.SaveToJSON();
 
+                jsonPerson = new JObject();
+
+                jsonPerson.Add("charID", charID);
+                jsonPerson.Add("PersonCharacter", JObject.Parse(jsonPersonCharacter));
+                jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
+            }
+            catch (Exception theError)
+            {
+                Debug.LogError(string.Format("Failed to convert the game data of {0}, to JSON. This character will not be saved.\n\nException text:\n{1}", GetCharacterNameAndCharID(), theError.ToString()));
+                return null;
+            }
+
+            // Testing: save the sting to a variable.
             string formatedJSON = jsonPerson.ToString(Formatting.Indented);
-            //Debug.Log(formatedJSON);
 
-            // TODO: set proper, potentially customisable save location
-            // TODO: create and rely on a ressource that track world info, character IDs, etc.
-            string fileName = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + CreateJSONFileName();
+            // Create and write the save file.
+            try 
+            {
+                // TODO: set proper, potentially customisable save location
+                // TODO: create and rely on a ressource that track world info, character IDs, etc.
+                string fileName = CreateJSONFileName();
+                string filePath = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + fileName;
 
-            // TODO: add a try block just to be safe.
-            // TODO: make a backup of the previous save file if one exists.
-            // TODO: handle what happens when a character is renamed.
-            var file = File.CreateText(fileName) ;
-            file.Write(formatedJSON);
-            file.Close();
+                // Create the save directory if it doesn't already exist.
+                if (!System.IO.Directory.Exists(Constants.DEFAULT_CHARACTER_SAVE_LOCATION))
+                {
+                    System.IO.Directory.CreateDirectory(Constants.DEFAULT_CHARACTER_SAVE_LOCATION);
+                }
 
-            Debug.Log("Sucessfully saved to JSON.");
+                // If a previous save file exists, turn it into a back up.
+                if (File.Exists(filePath))
+                {
+                    string backupFilePath = string.Format("{0}.bak", filePath);
 
-            return formatedJSON;
+                    System.IO.File.Delete(backupFilePath);
+                    System.IO.File.Move(filePath, backupFilePath);
+                }
+
+                // Save the new data proper.
+                var file = File.CreateText(filePath);
+                file.Write(formatedJSON);
+                file.Close();
+
+                Debug.Log(string.Format("Successfully saved {0}, to {1}.", GetCharacterNameAndCharID(), fileName));
+
+                return formatedJSON;
+            }
+            catch (Exception theError)
+            {
+                Debug.LogError(string.Format("Failed to write JSON data for {0}, to file. This character will not be saved.\n\nException text:\n{1}", GetCharacterNameAndCharID(), theError.ToString()));
+                return null;
+            }
         }
 
         private void LoadFromJSON(string sourceJSON)
         {
             // TODO: chose what file to load.
+            string fileName = "placeholderFileName.json";
 
-            JObject jsonPerson = JObject.Parse(sourceJSON);
+            // TODO: on exception, check if a backup exists and try to load that instead.
 
-            string jsonCharID = jsonPerson.GetValue("charID").ToString();
-            string jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
-            string jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
+            // Init variables.
+            JObject jsonPerson;
+            string jsonCharID;
+            string jsonPersonCharacter;
+            string jsonNeedController;
 
-
-            // charID.
-            charID = int.Parse(jsonCharID);
-
-            // Person_Character.
-            if (myPersonCharacter != null)
+            // Try to parse the JSON string.
+            try
             {
-                myPersonCharacter.LoadFromJSON(jsonPersonCharacter);
+                jsonPerson = JObject.Parse(sourceJSON);
+
+                jsonCharID = jsonPerson.GetValue("charID").ToString();
+                jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
+                jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
             }
-            else
+            catch(JsonException theError)
             {
-                myPersonCharacter = Person_Character.CreateFromJSON(jsonPersonCharacter);
-            }
-
-            // Need_Controller
-            if (myNeedController != null)
-            {
-                myNeedController.LoadFromJSON(jsonNeedController);
-            }
-            else
-            {
-                myNeedController = Person_NeedController.CreateFromJSON(jsonNeedController, gameObject);
+                Debug.LogError(string.Format("Failed to parse JSON data from {0}. This character will not be loaded.\n\nException text:\n{1}", fileName, theError.ToString()));
+                return;
             }
 
-            Debug.Log("Sucessfully loaded from JSON.");
+            // Try to reconstruct the character.
+            try
+            {
+                // charID.
+                charID = int.Parse(jsonCharID);
+
+                // Person_Character.
+                if (myPersonCharacter != null)
+                {
+                    myPersonCharacter.LoadFromJSON(jsonPersonCharacter);
+                }
+                else
+                {
+                    myPersonCharacter = Person_Character.CreateFromJSON(jsonPersonCharacter);
+                }
+
+                // Need_Controller
+                if (myNeedController != null)
+                {
+                    myNeedController.LoadFromJSON(jsonNeedController);
+                }
+                else
+                {
+                    myNeedController = Person_NeedController.CreateFromJSON(jsonNeedController, gameObject);
+                }
+            }
+            catch (Exception theError)
+            {
+                Debug.LogError(string.Format("Failed to rebuild game data from the JSON data of {0}. This character will not be loaded.\n\nException text:\n{1}", fileName, theError.ToString()));
+                return;
+            }
+
+            Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", GetCharacterNameAndCharID(), fileName));
+        }
+
+        private string CreateJSONFileName()
+        {
+            return string.Format("CharID_{0}.json", charID);
+        }
+
+        private string GetCharacterNameAndCharID()
+        {
+            return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName);
         }
     }
 }

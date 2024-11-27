@@ -221,8 +221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charID: 0
   myPersonCharacter:
-    charID: 0
     firstName: Testis
     lastName: Testington
     nickName: Spud
@@ -246,9 +246,11 @@ MonoBehaviour:
       _serializedList:
       - Key: {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}
         Value: 0.6
+      - Key: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
+        Value: -0.2
   myNeedController: {fileID: 0}
   myPersonAI: {fileID: 0}
-  tempJSOn: 
+  TempJsonString: 
 --- !u!114 &819216675
 MonoBehaviour:
   m_ObjectHideFlags: 0
