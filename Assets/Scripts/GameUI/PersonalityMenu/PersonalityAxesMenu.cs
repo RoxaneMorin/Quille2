@@ -20,8 +20,8 @@ namespace QuilleUI
         [SerializeField] private float shiftDown = 80f;
 
         [SerializeField] private Canvas ownerCanvas;
-        [SerializeField] private Transform initialTransform;
-        [SerializeField] private RectTransform initialRectTransform;
+        [SerializeField] private Transform baseSliderTransform;
+        [SerializeField] private RectTransform baseSliderRectTransform;
 
         [SerializeField] private PersonalityAxeSlider[] theSliders;
         private SerializedDictionary<Quille.PersonalityAxeSO, PersonalityAxeSlider> theSlidersDict; // Should these two be combined into one?
@@ -78,8 +78,8 @@ namespace QuilleUI
         private void FetchComponents()
         {
             ownerCanvas = GetComponentInParent<Canvas>();
-            initialTransform = gameObject.transform;
-            initialRectTransform = (RectTransform)initialTransform;
+            baseSliderTransform = gameObject.transform;
+            baseSliderRectTransform = (RectTransform)baseSliderTransform;
         }
         private void Init()
         {
@@ -90,11 +90,11 @@ namespace QuilleUI
 
             theSliders = new QuilleUI.PersonalityAxeSlider[nofOfAxes];
             theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, PersonalityAxeSlider>();
-            theSlidersTransforms = new Transform[nofOfAxes];
+            theSlidersTransforms = new RectTransform[nofOfAxes];
 
             for (int i = 0; i < nofOfAxes; i++)
             {
-                theSlidersTransforms[i] = Instantiate<Transform>(prefab, ownerCanvas.transform);
+                theSlidersTransforms[i] = Instantiate<Transform>(prefab, baseSliderRectTransform);
                 theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.PersonalityAxeSlider>();
                 theSlidersDict.Add(personalityAxes[i], theSliders[i]);
 
@@ -107,9 +107,8 @@ namespace QuilleUI
                 theSlidersTransforms[i].name = string.Format("PersonalityAxe_{0}", axeName);
 
                 // Change its parent & position.
-                theSlidersTransforms[i].SetParent(this.transform);
-                RectTransform myRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
-                myRectTransform.anchoredPosition = new Vector2(initialRectTransform.anchoredPosition.x, i * shiftDown);
+                RectTransform thisSlidersRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
+                thisSlidersRectTransform.anchoredPosition = new Vector2(baseSliderRectTransform.anchoredPosition.x, i * shiftDown);
             }
         }
 

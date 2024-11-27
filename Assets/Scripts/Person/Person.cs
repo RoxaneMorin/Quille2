@@ -168,6 +168,7 @@ namespace Quille
             //{
             //    Debug.Log(fileFound);
             //}
+            // Directory.EnumerateFiles instead?
 
             // TODO: on exception, check if a backup exists and try to load that instead.
             //string backupFilePath = string.Format("{0}{1}.bak", Constants.DEFAULT_CHARACTER_SAVE_LOCATION, fileName);
