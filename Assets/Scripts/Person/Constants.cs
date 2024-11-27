@@ -70,7 +70,9 @@ namespace Quille
         // SERIALIZATION
         // TODO: determine proper save folder structure, such as each save getting its own subfolder.
         // TODO: determine root save location outside of the Unity project folder.
+        // TODO: likely store this elsewhere.
 
+        public const string DEFAULT_GAME_SAVE_LOCATION = "SavedGameData/";
         public const string DEFAULT_CHARACTER_SAVE_LOCATION = "SavedGameData/Characters/";
     }
 }

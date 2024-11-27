@@ -92,8 +92,6 @@ namespace Quille
         // SAVE & LOAD
         private string SaveToJSON()
         {
-            // TODO: what happens when bits of the character are missing?
-
             // Init variables.
             JObject jsonPerson;
             string jsonPersonCharacter;
@@ -137,7 +135,7 @@ namespace Quille
                 // If a previous save file exists, turn it into a back up.
                 if (File.Exists(filePath))
                 {
-                    string backupFilePath = string.Format("{0}.bak", filePath);
+                    string backupFilePath = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + CreateJSONBakFileName();
 
                     System.IO.File.Delete(backupFilePath);
                     System.IO.File.Move(filePath, backupFilePath);
@@ -161,10 +159,23 @@ namespace Quille
 
         private void LoadFromJSON(string sourceJSON)
         {
-            // TODO: chose what file to load.
-            string fileName = "placeholderFileName.json";
+            // TODO: chose what file to load. Likely will be done elsewhere/by the general save game loader.
+            //string fileName = "placeholderFileName.json";
+            string fileName = "CharID_0.json";
+
+            //string[] allCharacterJSONs = Directory.GetFiles(Constants.DEFAULT_CHARACTER_SAVE_LOCATION);
+            //foreach (string fileFound in allCharacterJSONs)
+            //{
+            //    Debug.Log(fileFound);
+            //}
 
             // TODO: on exception, check if a backup exists and try to load that instead.
+            //string backupFilePath = string.Format("{0}{1}.bak", Constants.DEFAULT_CHARACTER_SAVE_LOCATION, fileName);
+            //if (File.Exists(backupFilePath))
+            //{
+            //    Debug.Log(string.Format("A backup exists for the file {0}. It could be (re)loaded instead. ", fileName));
+            //    // TODO: give the player a pop up option whether to do so.
+            //}
 
             // Init variables.
             JObject jsonPerson;
@@ -227,6 +238,12 @@ namespace Quille
             return string.Format("CharID_{0}.json", charID);
         }
 
+        private string CreateJSONBakFileName()
+        {
+            return string.Format("CharID_{0}.json.bak", charID);
+        }
+
+        // TODO: make this into a true getter? Reformat/reword if necessary.
         private string GetCharacterNameAndCharID()
         {
             return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName);
