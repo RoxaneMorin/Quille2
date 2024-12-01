@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QuilleUI
 {
-    public class PersonalityAxesMenu : MonoBehaviour
+    public class CCUI_PersonalityAxesMenu : MonoBehaviour
     {
         // Test setup for a character creator's personality axe UI.
         // Procedurally populated from existing PersonalyAxeSOs.
@@ -23,8 +23,8 @@ namespace QuilleUI
         [SerializeField] private Transform baseSliderTransform;
         [SerializeField] private RectTransform baseSliderRectTransform;
 
-        [SerializeField] private PersonalityAxeSlider[] theSliders;
-        private SerializedDictionary<Quille.PersonalityAxeSO, PersonalityAxeSlider> theSlidersDict; // Should these two be combined into one?
+        [SerializeField] private CCUI_PersonalityAxe[] theSliders;
+        private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> theSlidersDict; // Should these two be combined into one?
         [SerializeField] private Transform[] theSlidersTransforms;
 
 
@@ -41,7 +41,7 @@ namespace QuilleUI
         public SerializedDictionary<Quille.PersonalityAxeSO, float> ReturnAxeSOValueDict()
         {
             SerializedDictionary<Quille.PersonalityAxeSO, float> AxeSoValueDict = new SerializedDictionary<Quille.PersonalityAxeSO, float>();
-            foreach (PersonalityAxeSlider slider in theSliders)
+            foreach (CCUI_PersonalityAxe slider in theSliders)
             {
                 AxeSoValueDict.Add(slider.MyPersonalityAxeSO, slider.MySliderValue);
             }
@@ -67,7 +67,7 @@ namespace QuilleUI
         // Randomize
         public void RandomizeValues()
         {
-            foreach (PersonalityAxeSlider slider in theSliders)
+            foreach (CCUI_PersonalityAxe slider in theSliders)
             {
                 slider.MySliderValue = Random.Range(-1f, 1f);
             }
@@ -88,14 +88,14 @@ namespace QuilleUI
             Quille.PersonalityAxeSO[] personalityAxes = Resources.LoadAll<Quille.PersonalityAxeSO>(PathConstants.SO_PATH_PERSONALITYAXES);
             int nofOfAxes = personalityAxes.Length;
 
-            theSliders = new QuilleUI.PersonalityAxeSlider[nofOfAxes];
-            theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, PersonalityAxeSlider>();
+            theSliders = new QuilleUI.CCUI_PersonalityAxe[nofOfAxes];
+            theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe>();
             theSlidersTransforms = new RectTransform[nofOfAxes];
 
             for (int i = 0; i < nofOfAxes; i++)
             {
                 theSlidersTransforms[i] = Instantiate<Transform>(prefab, baseSliderRectTransform);
-                theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.PersonalityAxeSlider>();
+                theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.CCUI_PersonalityAxe>();
                 theSlidersDict.Add(personalityAxes[i], theSliders[i]);
 
                 // Set the slider's personalityAxe GO.

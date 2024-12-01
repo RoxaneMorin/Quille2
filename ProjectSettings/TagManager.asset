@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - UI_Container
+  - UI_Tab
+  - UI_TabButton
+  - UI_Section
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace QuilleUI 
 {
-    public class PersonalityAxeSlider : MonoBehaviour
+    public class CCUI_PersonalityAxe : MonoBehaviour
     {
         // Test setup for a character creator's individual personality axe UI.
         // Includes little cosmetic effects ~~
@@ -23,9 +23,10 @@ namespace QuilleUI
         [SerializeField] Image myIconRight;
         [SerializeField] TMPro.TextMeshProUGUI myCaptionLeft;
         [SerializeField] TMPro.TextMeshProUGUI myCaptionRight;
-        [SerializeField] Color myColourLeft;
-        [SerializeField] Color myColourCenter;
-        [SerializeField] Color myColourRight;
+        //[SerializeField] Color myColourLeft;
+        //[SerializeField] Color myColourCenter;
+        //[SerializeField] Color myColourRight;
+        [SerializeField] Gradient myColourGradient;
 
         // Snapping
         [Header("Snapping")]
@@ -47,7 +48,7 @@ namespace QuilleUI
 
 
         // CONSTRUCTOR
-        public PersonalityAxeSlider(Quille.PersonalityAxeSO correspondingPersonalityAxe)
+        public CCUI_PersonalityAxe(Quille.PersonalityAxeSO correspondingPersonalityAxe)
         {
             myPersonalityAxeSO = correspondingPersonalityAxe;
             Init();
@@ -75,12 +76,14 @@ namespace QuilleUI
         }
         public void SetColourByValue()
         {
-            if (mySlider.value < 0)
-            {
-                myHandle.color = Color.Lerp(myColourCenter, myColourLeft, Mathf.Abs(mySlider.value));
-            }
-            else
-                myHandle.color = Color.Lerp(myColourCenter, myColourRight, mySlider.value);
+            //if (mySlider.value < 0)
+            //{
+            //    myHandle.color = Color.Lerp(myColourCenter, myColourLeft, Mathf.Abs(mySlider.value));
+            //}
+            //else
+            //    myHandle.color = Color.Lerp(myColourCenter, myColourRight, mySlider.value);
+
+            myHandle.color = myColourGradient.Evaluate((mySlider.value + 1)/2);
         }
 
 
