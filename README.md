@@ -58,6 +58,10 @@ The project uses the following third party assets:
 
   -> [Nuricon](https://www.flaticon.com/authors/nuricon)
 
+  -> [UniconLabs](https://www.flaticon.com/authors/uniconlabs)
+
+  -> [kmg design](https://www.flaticon.com/authors/kmg-design)
+
   -> [MythArt](https://www.freepik.com/author/user24791284/icons)
 
   -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
