@@ -62,6 +62,8 @@ The project uses the following third party assets:
 
   -> [kmg design](https://www.flaticon.com/authors/kmg-design)
 
+  -> [VectorsLab](https://www.flaticon.com/authors/vectorslab)
+
   -> [MythArt](https://www.freepik.com/author/user24791284/icons)
 
   -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
