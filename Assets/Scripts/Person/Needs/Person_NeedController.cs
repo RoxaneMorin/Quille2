@@ -143,8 +143,10 @@ namespace Quille
 
         // METHODS
 
-        // INIT
+        // UTILITY
 
+
+        // INIT
         public void Init() // For use during testing.
         {
             BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>(PathConstants.SO_PATH_NEEDSBASIC);
@@ -194,7 +196,7 @@ namespace Quille
                 //myBasicNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(myBasicNeeds[i].ToString());
+                //Debug.Log(myBasicNeeds[i].ToString());
             }
         }
         private void CreateSubjectiveNeeds(SubjectiveNeedSO[] subjectiveNeedSOs)
@@ -214,7 +216,7 @@ namespace Quille
                 //mySubjectiveNeeds[i].Init(myBasePerson);
                 // TODO: Init modulators here?
 
-                Debug.Log(mySubjectiveNeeds[i].ToString());
+                //Debug.Log(mySubjectiveNeeds[i].ToString());
             }
         }
          
@@ -224,6 +226,7 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
+            Init();
         }
 
         // Update is called once per frame
@@ -231,20 +234,20 @@ namespace Quille
         {
             // TODO: clear out when testing is done.
 
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                StartNeedDecay();
-            }
+            //if (Input.GetKeyDown(KeyCode.V))
+            //{
+            //    StartNeedDecay();
+            //}
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RandomizeNeedChangeRates(-0.3f, 0.1f);
-            }
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    RandomizeNeedChangeRates(-0.3f, 0.1f);
+            //}
 
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                SortAndPrintNeedInfo();
-            }
+            //if (Input.GetKeyDown(KeyCode.M))
+            //{
+            //    SortAndPrintNeedInfo();
+            //}
         }
     }
 }

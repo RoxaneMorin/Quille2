@@ -105,9 +105,8 @@ namespace Quille
         }
 
 
-
-        // Init.
-        void Init()
+        // INIT
+        public void Init()
         {
             // Fetch our various components.
             myBasePerson = GetComponent<Person>();
@@ -115,9 +114,7 @@ namespace Quille
         }
 
 
-        // Built in.
-
-        // Start is called before the first frame update
+        // BUILT IN
         void Start()
         {
             Init();
@@ -126,7 +123,6 @@ namespace Quille
             // TODO: do as a coroutine instead?
         }
 
-        // Update is called once per frame
         void Update()
         {
 

@@ -11,6 +11,8 @@ namespace Quille
         Normal,
         Elated
     }
+
+    // TODO: move gene colour familes enum heres.
     
     public static class Constants
     {
@@ -25,6 +27,16 @@ namespace Quille
 
         // Maximum value of interests. Their minimum value is the negative equivalent.
         public const float INTEREST_HALF_SPAN = 1;
+
+        // Maximum expected/initial number of personality traits. Used as a refence rather than a hard limit.
+        public const int DEFAULT_PERSONALITY_TRAIT_COUNT = 5;
+
+        // Manimum expected/initial number of drives. Used as a refence rather than a hard limit.
+        public const int DEFAULT_DRIVES_COUNT = 3;
+
+        // Manimum expected/initial number of active interests. Used as a refence rather than a hard limit.
+        public const int DEFAULT_INTEREST_COUNT = 5;
+
 
 
         // NEEDS
