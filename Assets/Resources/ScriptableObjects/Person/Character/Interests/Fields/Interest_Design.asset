@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Interest_Design
   m_EditorClassIdentifier: 
   interestName: Design
-  interestIcon: {fileID: 0}
+  interestIcon: {fileID: 21300000, guid: 65ad78cb1b2e9e141b313485cf3e4f6c, type: 3}
   interestSpan:
     Item1: -1
     Item2: 1

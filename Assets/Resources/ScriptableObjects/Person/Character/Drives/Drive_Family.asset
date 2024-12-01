@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Drive_Family
   m_EditorClassIdentifier: 
   driveName: Family
-  driveIcon: {fileID: 0}
+  driveIcon: {fileID: 21300000, guid: 070be3df29db4be4693f07baf7bea941, type: 3}
   driveSpan: 1
   driveMidpoint: 0.5
   incompatiblePersonalityScores: []
