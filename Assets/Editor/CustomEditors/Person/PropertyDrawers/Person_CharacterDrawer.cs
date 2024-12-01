@@ -6,7 +6,7 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(Quille.Person_Character))]
 public class Person_CharacterDrawer : PropertyDrawer
 {
-    bool _foldoutOpen;
+    bool _foldoutOpen = true; // Open by default.
 
     SerializedProperty firstName;
     SerializedProperty lastName;
@@ -42,6 +42,18 @@ public class Person_CharacterDrawer : PropertyDrawer
 
             // Make and draw label field.
             GUIContent headerLabel = new GUIContent(string.Format("{0} {1}'s Person_Character", firstName.stringValue, lastName.stringValue));
+            if (lastName.stringValue == "")
+            {
+                // Handle special cases.
+                if (firstName.stringValue == "")
+                {
+                    headerLabel.text = "Unnamed Person_Character";
+                }
+                else
+                {
+                    headerLabel.text = string.Format("{0}'s Person_Character", firstName.stringValue);
+                }
+            }
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(newPosition, headerLabel, style: "ProfilerRightPane");
 
@@ -72,16 +84,102 @@ public class Person_CharacterDrawer : PropertyDrawer
             newPosition.y += EditorGUIUtility.singleLineHeight * 0.25f;
             EditorGUI.LabelField(newPosition, "Personality", EditorStyles.boldLabel);
 
-            // Draw properties.
+            // Draw properties and relevant controls.
             EditorGUI.indentLevel++;
+
+            // Personality Axes.
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
+            // Options to populate and clear the personality axe dict in editor.
+            Rect buttonPosition = new Rect(newPosition.x, newPosition.y, position.width / 2, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(buttonPosition, "Populate Personality Axes (Zeroes)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.PopulatePersonalityAxesDict(false);
+            }
+            buttonPosition.x += position.width / 2;
+            if (GUI.Button(buttonPosition, "Populate Personality Axes (Randomized)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.PopulatePersonalityAxesDict(true);
+            }
             newPosition.y += EditorGUIUtility.singleLineHeight;
+            if (GUI.Button(newPosition, "Clear All Personality Axes"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.ClearPersonalityAxesDict();
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
             EditorGUI.PropertyField(newPosition, myPersonalityAxes);
-            newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityAxes) + EditorGUIUtility.singleLineHeight * 0.25f;
+
+            // Personality Traits.
+            newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityAxes) + EditorGUIUtility.singleLineHeight * 0.75f;
+            buttonPosition = new Rect(newPosition.x, newPosition.y, position.width / 2, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(buttonPosition, "Random Populate Personality Traits (Ones)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulatePersonalityTraitsDict(false);
+            }
+            buttonPosition.x += position.width / 2;
+            if (GUI.Button(buttonPosition, "Random Populate Personality Taits (Randomized)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulatePersonalityTraitsDict(true);
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            if (GUI.Button(newPosition, "Clear All Personality Traits"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.ClearPersonalityTraitsDict();
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
             EditorGUI.PropertyField(newPosition, myPersonalityTraits);
-            newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityTraits) + EditorGUIUtility.singleLineHeight * 0.25f;
+
+            // Drives.
+            newPosition.y += EditorGUI.GetPropertyHeight(myPersonalityTraits) + EditorGUIUtility.singleLineHeight * 0.75f;
+            buttonPosition = new Rect(newPosition.x, newPosition.y, position.width / 2, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(buttonPosition, "Random Populate Drives (Ones)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulateDrivesDict(false);
+            }
+            buttonPosition.x += position.width / 2;
+            if (GUI.Button(buttonPosition, "Random Populate Drives (Randomized)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulateDrivesDict(true);
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            if (GUI.Button(newPosition, "Clear All Drives"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.ClearDrivesDict();
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
             EditorGUI.PropertyField(newPosition, myDrives);
-            newPosition.y += EditorGUI.GetPropertyHeight(myDrives) + EditorGUIUtility.singleLineHeight * 0.25f;
+
+            // Interests.
+            newPosition.y += EditorGUI.GetPropertyHeight(myDrives) + EditorGUIUtility.singleLineHeight * 0.75f;
+            buttonPosition = new Rect(newPosition.x, newPosition.y, position.width / 2, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(buttonPosition, "Random Populate Interests (Zeroes)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulateInterestsDict(false);
+            }
+            buttonPosition.x += position.width / 2;
+            if (GUI.Button(buttonPosition, "Random Populate Drives (Randomized)"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.RandomPopulateInterestsDict(true);
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            if (GUI.Button(newPosition, "Clear All Interests"))
+            {
+                Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
+                personCharacter.ClearInterestDict();
+            }
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.25f;
             EditorGUI.PropertyField(newPosition, myInterests);
+
             newPosition.y += EditorGUI.GetPropertyHeight(myInterests);
             EditorGUI.indentLevel--;
 
@@ -89,7 +187,7 @@ public class Person_CharacterDrawer : PropertyDrawer
 
 
             // Draw separator.
-            newPosition.y -= EditorGUIUtility.singleLineHeight * 0.5f;
+            newPosition.y -= EditorGUIUtility.singleLineHeight * 0.25f;
             EditorGUI.LabelField(newPosition, "", style: "ProfilerRightPane");
         }
 
@@ -101,7 +199,7 @@ public class Person_CharacterDrawer : PropertyDrawer
     {
         if (_foldoutOpen)
         {
-            float openPropertyHeight = EditorGUIUtility.singleLineHeight * 9.5f;
+            float openPropertyHeight = EditorGUIUtility.singleLineHeight * 21f;
 
             if (secondaryNames != null)
                 openPropertyHeight += EditorGUI.GetPropertyHeight(secondaryNames);
