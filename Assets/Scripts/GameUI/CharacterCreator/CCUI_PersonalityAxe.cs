@@ -27,12 +27,8 @@ namespace QuilleUI
 
         // Snapping
         [Header("Snapping")]
-        [SerializeField] bool stepped = true;
+        [SerializeField] bool stepValues = true;
         [SerializeField, Tooltip("Rounds to 100/this value.")] int roundingValue = 8;
-        [SerializeField] bool snapToSpecificValues = false;
-        [SerializeField] float[] specificValues = { -0.75f, -0.25f, 0.25f, 0.75f };
-        [SerializeField, Tooltip("Rounds to 100/this value.")] int specificRoundingValue = 20;
-
 
 
         // PARAMETERS
@@ -41,6 +37,9 @@ namespace QuilleUI
         internal Slider MySlider { get { return mySlider; } }
 
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
+        internal float MySliderValueWithoutNotify { set { mySlider.SetValueWithoutNotify(value);
+                                                          SetColourByValue();
+                                                  } }
 
         internal KeyValuePair<Quille.PersonalityAxeSO, float> MyAxeSOAndValue { get { return new KeyValuePair<Quille.PersonalityAxeSO, float>(MyPersonalityAxeSO, MySliderValue); } }
 
@@ -55,46 +54,37 @@ namespace QuilleUI
         // EVENT LISTENERS
         public void OnSliderValueUpdated()
         {
-            RoundValue();
+            StepValue();
             SetColourByValue();
 
             PersonalityAxeSliderUpdated?.Invoke(myPersonalityAxeSO);
         }
 
+
         // UTILITY
-        public void ResetValue()
+        private void StepValue()
         {
-            mySlider.SetValueWithoutNotify(0);
-
-            SetColourByValue();
-        }
-        public void RandomizeValue()
-        {
-            mySlider.SetValueWithoutNotify(Random.Range(-1f, 1f));
-
-            RoundValue();
-            SetColourByValue();
-        }
-        private void RoundValue()
-        {
-            if (stepped)
+            if (stepValues)
             {
-                if (snapToSpecificValues)
-                {
-                    float temp = Mathf.Round(mySlider.value * specificRoundingValue) / specificRoundingValue;
-                    mySlider.SetValueWithoutNotify(specificValues.Contains(temp) ? temp : Mathf.Round(mySlider.value * roundingValue) / roundingValue);
-                }
-                else
-                {
-                    mySlider.SetValueWithoutNotify(Mathf.Round(mySlider.value * roundingValue) / roundingValue);
-                }
+                mySlider.SetValueWithoutNotify(Mathf.Round(mySlider.value * roundingValue) / roundingValue);
             }
         }
         private void SetColourByValue()
         {
-            myHandle.color = myColourGradient.Evaluate((mySlider.value + 1)/2);
+            myHandle.color = myColourGradient.Evaluate((mySlider.value + 1) / 2);
         }
 
+        public void ResetValue()
+        {
+            MySliderValueWithoutNotify = 0;
+            SetColourByValue();
+        }
+        public void RandomizeValue()
+        {
+            MySliderValueWithoutNotify = RandomExtended.RangeStepped(-1f, 1f, 0.125f);
+            SetColourByValue();
+        }
+        
 
         // INIT
         void FetchComponents()

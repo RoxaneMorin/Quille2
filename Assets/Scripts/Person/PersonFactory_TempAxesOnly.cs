@@ -27,7 +27,7 @@ namespace Quille
         // CHARACTER HANDLING
         public void CreateCharacter()
         {
-            SerializedDictionary<Quille.PersonalityAxeSO, float> axeScoresFromMenu = sourcePersonalityAxesMenu.ReturnAxeSOValueDict();
+            SerializedDictionary<Quille.PersonalityAxeSO, float> axeScoresFromMenu = sourcePersonalityAxesMenu.SetSlidersSOsAndValues();
 
             personCharacter = new Person_Character(myPersonalityAxes: axeScoresFromMenu);
         }
@@ -51,7 +51,7 @@ namespace Quille
                 try
                 {
                     personCharacter = JsonConvert.DeserializeObject<Person_Character>(jsonString);
-                    sourcePersonalityAxesMenu.SetAxeSOValuePairs(personCharacter.GetAxeScoreDict());
+                    sourcePersonalityAxesMenu.SetSliderValuesFromSOFloatDict(personCharacter.GetAxeScoreDict());
                 }
                 catch (Exception error)
                 {

@@ -106,7 +106,23 @@ public static class ExtensionMethods
     }
 
 
+    // OTHER LINQ STUFF
+    public static void ForEach<T>(this IEnumerable<T> sourceEnumerable, Action<T> action)
+    {
+        if (sourceEnumerable == null)
+        {
+            throw new ArgumentNullException(nameof(sourceEnumerable));
+        }
+        if (action == null)
+        {
+            throw new ArgumentNullException(nameof(action));
+        }
 
+        foreach (T item in sourceEnumerable)
+        {
+            action(item);
+        }
+    }
 }
 
 

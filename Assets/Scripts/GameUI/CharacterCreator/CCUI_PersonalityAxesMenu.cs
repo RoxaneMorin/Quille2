@@ -22,38 +22,32 @@ namespace QuilleUI
         [SerializeField] private Transform baseSliderTransform;
 
         [SerializeField] private CCUI_PersonalityAxe[] theSliders;
-        private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> theSlidersDict; // Should these two be combined into one?
+        private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> theSlidersDict;
         [SerializeField] private Transform[] theSlidersTransforms;
 
 
         // PROPERTIES
-        public float ReturnSliderValueFromPASO(Quille.PersonalityAxeSO thePASO)
+        public float GetSliderValueFor(Quille.PersonalityAxeSO thePASO)
         {
             return theSlidersDict[thePASO].MySliderValue;
         }
 
-        public SerializedDictionary<Quille.PersonalityAxeSO, float> ReturnAxeSOValueDict()
+        public SerializedDictionary<Quille.PersonalityAxeSO, float> SetSlidersSOsAndValues()
         {
-            SerializedDictionary<Quille.PersonalityAxeSO, float> AxeSoValueDict = new SerializedDictionary<Quille.PersonalityAxeSO, float>();
-            foreach (CCUI_PersonalityAxe slider in theSliders)
-            {
-                AxeSoValueDict.Add(slider.MyPersonalityAxeSO, slider.MySliderValue);
-            }
-            return AxeSoValueDict;
+            return theSliders.ToSerializedDictionary(slider => slider.MyPersonalityAxeSO, slider => slider.MySliderValue);
         }
 
-        public void SetAxeSOValuePairs(SerializedDictionary<Quille.PersonalityAxeSO, float> sourceDict)
+        public void SetSliderValuesFromSOFloatDict(SerializedDictionary<Quille.PersonalityAxeSO, float> sourceDict)
         {
-
-            foreach (KeyValuePair<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> keyValuePair in theSlidersDict)
+            foreach (CCUI_PersonalityAxe slider in theSliders)
             {
-                if (sourceDict.ContainsKey(keyValuePair.Key))
+                if (sourceDict.ContainsKey(slider.MyPersonalityAxeSO))
                 {
-                    theSlidersDict[keyValuePair.Key].MySlider.SetValueWithoutNotify(sourceDict[keyValuePair.Key]);
+                    slider.MySliderValueWithoutNotify = sourceDict[slider.MyPersonalityAxeSO];
                 }
                 else
                 {
-                    theSlidersDict[keyValuePair.Key].MySlider.SetValueWithoutNotify(0);
+                    slider.MySliderValueWithoutNotify = 0f;
                 }
             }
         }

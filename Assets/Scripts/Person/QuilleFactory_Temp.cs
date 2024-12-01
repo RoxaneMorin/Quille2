@@ -18,7 +18,7 @@ namespace Quille
 
 
         [Header("Misc")]
-        [SerializeField] private string tempJSON;
+        [SerializeField, TextAreaAttribute(1, 100)] private string tempJSON;
 
 
 
@@ -38,12 +38,12 @@ namespace Quille
         }
         public void UpdatePersonPersonalityAxeFromUI(Quille.PersonalityAxeSO thePASO)
         {
-            float sliderValue = sourcePersonalityAxesMenu.ReturnSliderValueFromPASO(thePASO);
+            float sliderValue = sourcePersonalityAxesMenu.GetSliderValueFor(thePASO);
             currentPerson.MyPersonCharacter.SetAxeScore(thePASO, sliderValue);
         }
         public void UpdatePersonPersonalityAxesFromUI()
         {
-            currentPerson.MyPersonCharacter.SetAxeScoreDict(sourcePersonalityAxesMenu.ReturnAxeSOValueDict());
+            currentPerson.MyPersonCharacter.SetAxeScoreDict(sourcePersonalityAxesMenu.SetSlidersSOsAndValues());
         }
 
 
@@ -63,7 +63,7 @@ namespace Quille
 
         private void UpdateUIPersonalityAxesFromPerson()
         {
-            sourcePersonalityAxesMenu.SetAxeSOValuePairs(currentPerson.MyPersonCharacter.GetAxeScoreDict());
+            sourcePersonalityAxesMenu.SetSliderValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetAxeScoreDict());
         }
 
 
