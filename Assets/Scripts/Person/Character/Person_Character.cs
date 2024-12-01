@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AYellowpaper.SerializedCollections;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -64,14 +65,21 @@ namespace Quille
         public Person_Character(string myFirstName = null, string myLastName = null, string myNickName = null, List<string> mySecondaryNames = null,
                                 SerializedDictionary<PersonalityAxeSO, float> myPersonalityAxes = null, SerializedDictionary<PersonalityTraitSO, float> myPersonalityTraits = null, SerializedDictionary<DriveSO, float> myDrives = null, SerializedDictionary<InterestSO, float> myInterests = null)
         {
-            // TODO: handle charID.
-            
             this.FirstName = myFirstName;
             this.LastName = myLastName;
             this.NickName = myNickName;
             this.SecondaryNames = mySecondaryNames;
 
-            this.SetAxeScoreDict(myPersonalityAxes != null ? myPersonalityAxes: new SerializedDictionary<PersonalityAxeSO, float>(), false);
+            // PersonalityAxes are a special case. Everyone has them, even if their values are zero.
+            if (myPersonalityAxes == null || myPersonalityAxes.Count == 0)
+            {
+                PopulatePersonalityAxesDict();
+            }
+            else
+            {
+                this.SetAxeScoreDict(myPersonalityAxes);
+            }
+
             this.SetTraitScoreDict(myPersonalityTraits != null ? myPersonalityTraits : new SerializedDictionary<PersonalityTraitSO, float>(), false);
             this.SetDriveScoreDict(myDrives != null ? myDrives : new SerializedDictionary<DriveSO, float>(), false);
             this.SetInterestScoreDict(myInterests != null ? myInterests : new SerializedDictionary<InterestSO, float>(), false);
@@ -81,13 +89,12 @@ namespace Quille
 
         // METHODS
 
-        // SAVE
+        // JSON SAVE & LOAD
         internal string SaveToJSON()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
-        // LOAD
         internal void LoadFromJSON(string sourceJson)
         {
             // Empty the existing lists and dictionaries.
@@ -112,6 +119,69 @@ namespace Quille
             return JsonConvert.DeserializeObject<Person_Character>(sourceJson);
         }
 
+
         // UTILITY
+        public void PopulatePersonalityAxesDict(bool randomize = false)
+        {
+            PersonalityAxeSO[] personalityAxeSOs = Resources.LoadAll<PersonalityAxeSO>(PathConstants.SO_PATH_PERSONALITYAXES);
+            this.myPersonalityAxes =personalityAxeSOs.ToSerializedDictionary(personalityAxeSO => personalityAxeSO, personalityAxeSO => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
+        }
+        public void ClearPersonalityAxesDict()
+        {
+            this.myPersonalityAxes = new SerializedDictionary<PersonalityAxeSO, float>();
+        }
+
+        public void RandomPopulatePersonalityTraitsDict(bool randomize = false)
+        {
+            // TODO: avoid incompatible traits.
+
+            PersonalityTraitSO[] personalityTraitSOs = Resources.LoadAll<PersonalityTraitSO>(PathConstants.SO_PATH_PERSONALITYTRAITS);
+            int SOCount = personalityTraitSOs.Length;
+
+            // Make sure we're not trying to get more than the existing number of traits.
+            int targetCount = Mathf.Min(Constants.DEFAULT_PERSONALITY_TRAIT_COUNT, SOCount);
+            List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
+
+            this.myPersonalityTraits = targetIDs.ToSerializedDictionary(ID => personalityTraitSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
+        }
+        public void ClearPersonalityTraitsDict()
+        {
+            this.myPersonalityTraits = new SerializedDictionary<PersonalityTraitSO, float>();
+        }
+
+        public void RandomPopulateDrivesDict(bool randomize = false)
+        {
+            // TODO: avoid incompatible drives.
+
+            DriveSO[] driveSOs = Resources.LoadAll<DriveSO>(PathConstants.SO_PATH_DRIVES);
+            int SOCount = driveSOs.Length;
+
+            // Make sure we're not trying to get more than the existing number of drives.
+            int targetCount = Mathf.Min(Constants.DEFAULT_DRIVES_COUNT, SOCount);
+            List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
+
+            this.myDrives = targetIDs.ToSerializedDictionary(ID => driveSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
+        }
+        public void ClearDrivesDict()
+        {
+            this.myDrives = new SerializedDictionary<DriveSO, float>();
+        }
+
+        public void RandomPopulateInterestsDict(bool randomize = false)
+        {
+            InterestSO[] interestSOs = Resources.LoadAll<InterestSO>(PathConstants.SO_PATH_INTERESTS);
+            int SOCount = interestSOs.Length;
+
+            // Make sure we're not trying to get more than the existing number of drives.
+            int targetCount = Mathf.Min(Constants.DEFAULT_INTEREST_COUNT, SOCount);
+            List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
+
+            this.myInterests = targetIDs.ToSerializedDictionary(ID => interestSOs[ID], ID => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
+        }
+        public void ClearInterestDict()
+        {
+            this.myInterests = new SerializedDictionary<InterestSO, float>();
+        }
+
     }
 }
