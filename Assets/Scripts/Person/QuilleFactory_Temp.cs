@@ -18,7 +18,7 @@ namespace Quille
 
 
         [Header("Misc")]
-        [SerializeField, TextAreaAttribute(1, 100)] private string tempJSON;
+        [SerializeField, TextAreaAttribute(50, 100)] private string tempJSON;
 
 
 

@@ -21,6 +21,7 @@ namespace QuilleUI
         [SerializeField] Color myColourDefault;
         [SerializeField] Color myColourSelected;
         [SerializeField] Color myColourForbidden;
+        [SerializeField] Color myColourSelectedeButForbidden;
 
 
 
