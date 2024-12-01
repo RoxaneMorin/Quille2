@@ -1,7 +1,6 @@
-using System.Collections;
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 namespace QuilleUI
@@ -10,34 +9,29 @@ namespace QuilleUI
     {
         // Test setup for a character creator's personality axe UI.
         // Procedurally populated from existing PersonalyAxeSOs.
-        // Handles the local saving and loading of an incomplete character using Person's Json serialization system.
+        // Handles the local saving and loading of an incomplete character using Person's JSON serialization system.
 
 
         // VARIABLES
 
-        [SerializeField] private Transform prefab;
-
+        [SerializeField] private Transform sliderPrefab;
         [SerializeField] private float shiftDown = 80f;
 
+        [Header("References")]
         [SerializeField] private Canvas ownerCanvas;
         [SerializeField] private Transform baseSliderTransform;
-        [SerializeField] private RectTransform baseSliderRectTransform;
 
         [SerializeField] private CCUI_PersonalityAxe[] theSliders;
         private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> theSlidersDict; // Should these two be combined into one?
         [SerializeField] private Transform[] theSlidersTransforms;
 
 
-
-        // METHODS
-
-        // UTILITY
-
-        // Get
-        public KeyValuePair<Quille.PersonalityAxeSO, float>[] ReturnAxeSOValuePairs()
+        // PROPERTIES
+        public float ReturnSliderValueFromPASO(Quille.PersonalityAxeSO thePASO)
         {
-            return theSliders.Select(slider => slider.MyAxeSOAndValue).ToArray();
+            return theSlidersDict[thePASO].MySliderValue;
         }
+
         public SerializedDictionary<Quille.PersonalityAxeSO, float> ReturnAxeSOValueDict()
         {
             SerializedDictionary<Quille.PersonalityAxeSO, float> AxeSoValueDict = new SerializedDictionary<Quille.PersonalityAxeSO, float>();
@@ -48,29 +42,57 @@ namespace QuilleUI
             return AxeSoValueDict;
         }
 
-        // Set
-        public void SetAxeSOValuePairs(KeyValuePair<Quille.PersonalityAxeSO, float>[] keyValuePairs)
-        {
-            foreach (KeyValuePair<Quille.PersonalityAxeSO, float> keyValuePair in keyValuePairs)
-            {
-                theSlidersDict[keyValuePair.Key].MySliderValue = keyValuePair.Value;
-            }
-        }
         public void SetAxeSOValuePairs(SerializedDictionary<Quille.PersonalityAxeSO, float> sourceDict)
         {
-            foreach (KeyValuePair<Quille.PersonalityAxeSO, float> keyValuePair in sourceDict)
+
+            foreach (KeyValuePair<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> keyValuePair in theSlidersDict)
             {
-                theSlidersDict[keyValuePair.Key].MySliderValue = keyValuePair.Value;
+                if (sourceDict.ContainsKey(keyValuePair.Key))
+                {
+                    theSlidersDict[keyValuePair.Key].MySlider.SetValueWithoutNotify(sourceDict[keyValuePair.Key]);
+                }
+                else
+                {
+                    theSlidersDict[keyValuePair.Key].MySlider.SetValueWithoutNotify(0);
+                }
             }
         }
 
-        // Randomize
+
+        // EVENTS
+        public event PersonalityAxeSliderUpdate PersonalityAxeSliderUpdated;
+        public event PersonalityAxesMenuUpdate PersonalityAxesMenuUpdated;
+
+
+
+        // METHODS
+
+        // EVENT LISTENERS
+        public void OnPersonalityAxeSliderUpdated(Quille.PersonalityAxeSO slidersPersonalityAxeSO)
+        {
+            PersonalityAxeSliderUpdated?.Invoke(slidersPersonalityAxeSO);
+        }
+
+
+        // UTILITY
         public void RandomizeValues()
         {
             foreach (CCUI_PersonalityAxe slider in theSliders)
             {
-                slider.MySliderValue = Random.Range(-1f, 1f);
+                slider.RandomizeValue();
             }
+
+            PersonalityAxesMenuUpdated?.Invoke();
+        }
+
+        public void ResetValues()
+        {
+            foreach (CCUI_PersonalityAxe slider in theSliders)
+            {
+                slider.ResetValue();
+            }
+
+            PersonalityAxesMenuUpdated?.Invoke();
         }
 
 
@@ -78,8 +100,12 @@ namespace QuilleUI
         private void FetchComponents()
         {
             ownerCanvas = GetComponentInParent<Canvas>();
-            baseSliderTransform = gameObject.transform;
-            baseSliderRectTransform = (RectTransform)baseSliderTransform;
+
+            if (!baseSliderTransform)
+            {
+                baseSliderTransform = gameObject.transform;
+            }
+            
         }
         private void Init()
         {
@@ -94,7 +120,7 @@ namespace QuilleUI
 
             for (int i = 0; i < nofOfAxes; i++)
             {
-                theSlidersTransforms[i] = Instantiate<Transform>(prefab, baseSliderRectTransform);
+                theSlidersTransforms[i] = Instantiate<Transform>(sliderPrefab, baseSliderTransform);
                 theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.CCUI_PersonalityAxe>();
                 theSlidersDict.Add(personalityAxes[i], theSliders[i]);
 
@@ -108,7 +134,10 @@ namespace QuilleUI
 
                 // Change its parent & position.
                 RectTransform thisSlidersRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
-                thisSlidersRectTransform.anchoredPosition = new Vector2(baseSliderRectTransform.anchoredPosition.x, i * shiftDown);
+                thisSlidersRectTransform.anchoredPosition = new Vector2(((RectTransform)baseSliderTransform).anchoredPosition.x, i * shiftDown);
+
+                // Subscribe to slider event.
+                theSliders[i].PersonalityAxeSliderUpdated += OnPersonalityAxeSliderUpdated;
             }
         }
 

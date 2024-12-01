@@ -13,7 +13,7 @@ namespace Quille
 
 
     [System.Serializable]
-    //[RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
+    [RequireComponent(typeof(Person_NeedController)), RequireComponent(typeof(Person_AI))] // Add more as they are needed.
     public class Person : MonoBehaviour
     {
         // VARIABLES
@@ -41,56 +41,30 @@ namespace Quille
         public Person_NeedController MyNeedController { get { return myNeedController; } }
         // Should we be able to return the AI one?
 
-        
-
-        // CONSTRUCTORS
-        //public Person()
-        //{
-
-        //}
-
 
 
         // METHODS
 
-        // Init.
-        private void Init()
+        // UTILITY
+        internal void ResetMe()
         {
-            // Fetch our various components.
-            myNeedController = GetComponent<Person_NeedController>();
-            myPersonAI = GetComponent<Person_AI>();
+            //TODO: move this somewhere safer?
+
+            charID = 0; // TODO: better ID management.
+
+            myPersonCharacter = new Person_Character();
+
+            FetchComponents();
+            myNeedController.Init();
+            myNeedController.enabled = false;
+            myPersonAI.Init();
+            myPersonAI.enabled = false;
         }
-
-
-        // BUILT IN.
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            Init();
-
-            
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            // Test stuff.
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                TempJsonString = SaveToJSON();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                LoadFromJSON(TempJsonString);
-            }
-        }
-
 
 
         // SAVE & LOAD
-        private string SaveToJSON()
+        // TODO: move this to its on partial segment?
+        public string SaveToJSON()
         {
             // Init variables.
             JObject jsonPerson;
@@ -157,7 +131,7 @@ namespace Quille
             }
         }
 
-        private void LoadFromJSON(string sourceJSON)
+        public void LoadFromJSON(string sourceJSON)
         {
             // TODO: chose what file to load. Likely will be done elsewhere/by the general save game loader.
             //string fileName = "placeholderFileName.json";
@@ -249,5 +223,47 @@ namespace Quille
         {
             return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName);
         }
+
+
+        // INIT
+        private void Init()
+        {
+            // Create a new Person_Character.
+            // myPersonCharacter = new Person_Character();
+
+            // Fetch our various components.
+            FetchComponents();
+        }
+
+        private void FetchComponents()
+        {
+            myNeedController = GetComponent<Person_NeedController>();
+            myPersonAI = GetComponent<Person_AI>();
+        }
+
+
+        // BUILT IN
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            Init();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            // Test stuff.
+            //if (Input.GetKeyDown(KeyCode.A))
+            //{
+            //    TempJsonString = SaveToJSON();
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.Z))
+            //{
+            //    LoadFromJSON(TempJsonString);
+            //}
+        }
+
     }
 }

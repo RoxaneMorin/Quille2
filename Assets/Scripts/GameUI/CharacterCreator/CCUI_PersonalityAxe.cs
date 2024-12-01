@@ -23,9 +23,6 @@ namespace QuilleUI
         [SerializeField] Image myIconRight;
         [SerializeField] TMPro.TextMeshProUGUI myCaptionLeft;
         [SerializeField] TMPro.TextMeshProUGUI myCaptionRight;
-        //[SerializeField] Color myColourLeft;
-        //[SerializeField] Color myColourCenter;
-        //[SerializeField] Color myColourRight;
         [SerializeField] Gradient myColourGradient;
 
         // Snapping
@@ -41,48 +38,60 @@ namespace QuilleUI
         // PARAMETERS
         internal Quille.PersonalityAxeSO MyPersonalityAxeSO { get { return myPersonalityAxeSO; } set { myPersonalityAxeSO = value; } }
 
+        internal Slider MySlider { get { return mySlider; } }
+
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
 
         internal KeyValuePair<Quille.PersonalityAxeSO, float> MyAxeSOAndValue { get { return new KeyValuePair<Quille.PersonalityAxeSO, float>(MyPersonalityAxeSO, MySliderValue); } }
 
 
-
-        // CONSTRUCTOR
-        public CCUI_PersonalityAxe(Quille.PersonalityAxeSO correspondingPersonalityAxe)
-        {
-            myPersonalityAxeSO = correspondingPersonalityAxe;
-            Init();
-        }
+        // EVENTS
+        public event PersonalityAxeSliderUpdate PersonalityAxeSliderUpdated;
 
 
 
         // METHODS
 
+        // EVENT LISTENERS
+        public void OnSliderValueUpdated()
+        {
+            RoundValue();
+            SetColourByValue();
+
+            PersonalityAxeSliderUpdated?.Invoke(myPersonalityAxeSO);
+        }
+
         // UTILITY
-        public void RoundValue()
+        public void ResetValue()
+        {
+            mySlider.SetValueWithoutNotify(0);
+
+            SetColourByValue();
+        }
+        public void RandomizeValue()
+        {
+            mySlider.SetValueWithoutNotify(Random.Range(-1f, 1f));
+
+            RoundValue();
+            SetColourByValue();
+        }
+        private void RoundValue()
         {
             if (stepped)
             {
                 if (snapToSpecificValues)
                 {
                     float temp = Mathf.Round(mySlider.value * specificRoundingValue) / specificRoundingValue;
-                    mySlider.value = specificValues.Contains(temp) ? temp : Mathf.Round(mySlider.value * roundingValue) / roundingValue;
+                    mySlider.SetValueWithoutNotify(specificValues.Contains(temp) ? temp : Mathf.Round(mySlider.value * roundingValue) / roundingValue);
                 }
                 else
                 {
-                    mySlider.value = Mathf.Round(mySlider.value * roundingValue) / roundingValue;
+                    mySlider.SetValueWithoutNotify(Mathf.Round(mySlider.value * roundingValue) / roundingValue);
                 }
             }
         }
-        public void SetColourByValue()
+        private void SetColourByValue()
         {
-            //if (mySlider.value < 0)
-            //{
-            //    myHandle.color = Color.Lerp(myColourCenter, myColourLeft, Mathf.Abs(mySlider.value));
-            //}
-            //else
-            //    myHandle.color = Color.Lerp(myColourCenter, myColourRight, mySlider.value);
-
             myHandle.color = myColourGradient.Evaluate((mySlider.value + 1)/2);
         }
 

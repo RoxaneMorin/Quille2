@@ -298,7 +298,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5074149}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 897786193}
+        m_TargetAssemblyTypeName: Quille.QuilleFactory_Temp, Assembly-CSharp
+        m_MethodName: SaveCharacter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5074149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,7 +430,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 10310919}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 897786193}
+        m_TargetAssemblyTypeName: Quille.QuilleFactory_Temp, Assembly-CSharp
+        m_MethodName: CreateNewCharacter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &10310919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,7 +581,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1700573431}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_NamesMenu, Assembly-CSharp
+        m_MethodName: OnNameMenuUpdated
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1233,7 +1269,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1700573431}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_NamesMenu, Assembly-CSharp
+        m_MethodName: OnNameMenuUpdated
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1972,6 +2020,7 @@ GameObject:
   - component: {fileID: 668329982}
   - component: {fileID: 668329981}
   - component: {fileID: 668329983}
+  - component: {fileID: 668329984}
   m_Layer: 5
   m_Name: Panel_PersonalityAxes
   m_TagString: UI_Tab
@@ -2055,6 +2104,25 @@ MonoBehaviour:
   tabName: PersonalityAxes
   buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
   buttonColourActive: {r: 0.3019608, g: 0.28235295, b: 0.43529412, a: 1}
+--- !u!114 &668329984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668329979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfc2e17cd21b1449bebb84698811837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliderPrefab: {fileID: 1414731332235455244, guid: 04ac65960bd73e047b81376b0f5265c8,
+    type: 3}
+  shiftDown: -100
+  ownerCanvas: {fileID: 0}
+  baseSliderTransform: {fileID: 2052788697}
+  theSliders: []
+  theSlidersTransforms: []
 --- !u!1 &669317799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2627,6 +2695,7 @@ GameObject:
   - component: {fileID: 897786191}
   - component: {fileID: 897786190}
   - component: {fileID: 897786189}
+  - component: {fileID: 897786193}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2719,6 +2788,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &897786193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897786188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61874b4928dfcb24ca56ee2f8b723d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPerson: {fileID: 1849462652}
+  sourceNamesMenu: {fileID: 1700573431}
+  sourcePersonalityAxesMenu: {fileID: 668329984}
+  tempJSON: 
 --- !u!1 &931030845
 GameObject:
   m_ObjectHideFlags: 0
@@ -2922,8 +3007,26 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1849462652}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1849462654}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1849462653}
   m_SourcePrefab: {fileID: 100100000, guid: 2372acfe819d69047a01b55db05841d0, type: 3}
+--- !u!1 &1034822716 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2372acfe819d69047a01b55db05841d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1034822715}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1051427459
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,7 +3611,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 100, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1105439643
 MonoBehaviour:
@@ -3553,7 +3656,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105439644}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 897786193}
+        m_TargetAssemblyTypeName: Quille.QuilleFactory_Temp, Assembly-CSharp
+        m_MethodName: LoadCharacter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1105439644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3574,7 +3689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 13d568ebe3f6f394f91779e585948f03, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f325f537c0751974c9dfbceca09185a5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4254,7 +4369,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052788700}
+      - m_Target: {fileID: 668329984}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_PersonalityAxesMenu, Assembly-CSharp
         m_MethodName: RandomizeValues
         m_Mode: 1
@@ -5062,6 +5177,7 @@ GameObject:
   - component: {fileID: 1700573428}
   - component: {fileID: 1700573430}
   - component: {fileID: 1700573429}
+  - component: {fileID: 1700573431}
   m_Layer: 5
   m_Name: Section_Names
   m_TagString: Untagged
@@ -5127,6 +5243,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700573427}
   m_CullTransparentMesh: 1
+--- !u!114 &1700573431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700573427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d9df35cc6495941a6a359404ab0582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputFieldFirstName: {fileID: 122055808}
+  inputFieldLastName: {fileID: 2082903083}
+  inputFieldNickname: {fileID: 319185537}
 --- !u!1 &1700781981
 GameObject:
   m_ObjectHideFlags: 0
@@ -5369,6 +5500,70 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1034822715}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1849462652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034822716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  charID: 0
+  myPersonCharacter:
+    firstName: 
+    lastName: D
+    nickName: 
+    secondaryNames: []
+    myPersonalityAxes:
+      _serializedList: []
+    myPersonalityTraits:
+      _serializedList: []
+    myDrives:
+      _serializedList: []
+    myInterests:
+      _serializedList: []
+  myNeedController: {fileID: 1849462654}
+  myPersonAI: {fileID: 1849462653}
+  TempJsonString: 
+--- !u!114 &1849462653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034822716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae12b56b29b5c644b8ed2bb6e8afa5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myBasePerson: {fileID: 0}
+  myNeedController: {fileID: 0}
+  noticeBasicNeed: 0.5
+  noticeSubjectiveNeed: 0.5
+  inAction: 0
+--- !u!114 &1849462654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034822716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da5c30a8a0c35c449567caf9bc38862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myBasicNeeds: []
+  mySubjectiveNeeds: []
+  myBasicNeedsMapped:
+    _serializedList: []
+  mySubjectiveNeedsMapped:
+    _serializedList: []
 --- !u!1 &1933163578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5805,7 +6000,6 @@ GameObject:
   - component: {fileID: 2052788697}
   - component: {fileID: 2052788699}
   - component: {fileID: 2052788698}
-  - component: {fileID: 2052788700}
   m_Layer: 5
   m_Name: PersonalityAxes_SlidersRoot
   m_TagString: Untagged
@@ -5870,25 +6064,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052788696}
   m_CullTransparentMesh: 1
---- !u!114 &2052788700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2052788696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bfc2e17cd21b1449bebb84698811837, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 1414731332235455244, guid: 04ac65960bd73e047b81376b0f5265c8, type: 3}
-  shiftDown: -100
-  ownerCanvas: {fileID: 0}
-  baseSliderTransform: {fileID: 0}
-  baseSliderRectTransform: {fileID: 0}
-  theSliders: []
-  theSlidersTransforms: []
 --- !u!1 &2082903081
 GameObject:
   m_ObjectHideFlags: 0
@@ -5989,7 +6164,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1700573431}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_NamesMenu, Assembly-CSharp
+        m_MethodName: OnNameMenuUpdated
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -6335,7 +6522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2138305324
 RectTransform:
   m_ObjectHideFlags: 0

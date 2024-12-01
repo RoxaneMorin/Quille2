@@ -367,20 +367,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1414731332235455246}
-        m_TargetAssemblyTypeName: QuilleUI.PersonalityAxeSlider, Assembly-CSharp
-        m_MethodName: RoundValue
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1414731332235455246}
-        m_TargetAssemblyTypeName: QuilleUI.PersonalityAxeSlider, Assembly-CSharp
-        m_MethodName: SetColourByValue
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_PersonalityAxe, Assembly-CSharp
+        m_MethodName: OnSliderValueUpdated
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -409,9 +397,6 @@ MonoBehaviour:
   myIconRight: {fileID: 1414731333437250383}
   myCaptionLeft: {fileID: 1414731331567052636}
   myCaptionRight: {fileID: 1414731331703568410}
-  myColourLeft: {r: 0, g: 0.71949184, b: 0.9245283, a: 1}
-  myColourCenter: {r: 1, g: 1, b: 1, a: 1}
-  myColourRight: {r: 1, g: 0.2971698, b: 0.30412588, a: 1}
   myColourGradient:
     serializedVersion: 2
     key0: {r: 0, g: 0.7176471, b: 0.9254902, a: 1}

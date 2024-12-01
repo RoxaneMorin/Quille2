@@ -7,4 +7,11 @@ namespace QuilleUI
 {
     // GENERIC TAB EVENTS
     public delegate void ActiveTabUpdate(CCUI_GenericTab newActiveTab);
+
+
+    // CHARACTER CREATOR EVENTS
+    public delegate void NameMenuUpdate();
+
+    public delegate void PersonalityAxeSliderUpdate(Quille.PersonalityAxeSO relevantPersonalityAxeSO);
+    public delegate void PersonalityAxesMenuUpdate();
 }
