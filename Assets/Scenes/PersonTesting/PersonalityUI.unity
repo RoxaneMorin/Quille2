@@ -350,8 +350,8 @@ MonoBehaviour:
   prefab: {fileID: 1414731332235455244, guid: 04ac65960bd73e047b81376b0f5265c8, type: 3}
   shiftDown: -80
   ownerCanvas: {fileID: 758989212}
-  initialTransform: {fileID: 30700494}
-  initialRectTransform: {fileID: 30700494}
+  baseSliderTransform: {fileID: 0}
+  baseSliderRectTransform: {fileID: 0}
   theSliders: []
   theSlidersTransforms: []
 --- !u!1 &103841062

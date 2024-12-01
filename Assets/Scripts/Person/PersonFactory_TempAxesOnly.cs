@@ -7,14 +7,14 @@ using Newtonsoft.Json;
 
 namespace Quille
 {
-    public class PersonFactory_Temp : MonoBehaviour
+    public class PersonFactory_TempAxesOnly : MonoBehaviour
     {
         // TODO: an actual Person factory divorced from the one personality axe menu.
 
         // VARIABLES
 
         // UI Sources
-        [SerializeField] private QuilleUI.PersonalityAxesMenu sourcePersonalityAxesMenu;
+        [SerializeField] private QuilleUI.CCUI_PersonalityAxesMenu sourcePersonalityAxesMenu;
 
         // Quille parts
         [SerializeField] private Person_Character personCharacter;
@@ -64,7 +64,7 @@ namespace Quille
         // INIT
         private void FetchComponents()
         {
-            sourcePersonalityAxesMenu = GetComponentInChildren<QuilleUI.PersonalityAxesMenu>(); 
+            sourcePersonalityAxesMenu = GetComponentInChildren<QuilleUI.CCUI_PersonalityAxesMenu>(); 
         }
 
         // BUILT IN
