@@ -1,6 +1,7 @@
-using AYellowpaper.SerializedCollections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 namespace QuilleUI
@@ -9,7 +10,6 @@ namespace QuilleUI
     {
         // Test setup for a character creator's personality axe UI.
         // Procedurally populated from existing PersonalyAxeSOs.
-        // Handles the local saving and loading of an incomplete character using Person's JSON serialization system.
 
 
         // VARIABLES
@@ -19,10 +19,10 @@ namespace QuilleUI
 
         [Header("References")]
         [SerializeField] private Canvas ownerCanvas;
-        [SerializeField] private Transform baseSliderTransform;
+        [SerializeField] private Transform initialSliderTransform;
 
-        [SerializeField] private CCUI_PersonalityAxe[] theSliders;
-        private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe> theSlidersDict;
+        [SerializeField] private CCUI_PersonalityAxeSlider[] theSliders;
+        private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxeSlider> theSlidersDict;
         [SerializeField] private Transform[] theSlidersTransforms;
 
 
@@ -39,7 +39,7 @@ namespace QuilleUI
 
         public void SetSliderValuesFromSOFloatDict(SerializedDictionary<Quille.PersonalityAxeSO, float> sourceDict)
         {
-            foreach (CCUI_PersonalityAxe slider in theSliders)
+            foreach (CCUI_PersonalityAxeSlider slider in theSliders)
             {
                 if (sourceDict.ContainsKey(slider.MyPersonalityAxeSO))
                 {
@@ -71,7 +71,7 @@ namespace QuilleUI
         // UTILITY
         public void RandomizeValues()
         {
-            foreach (CCUI_PersonalityAxe slider in theSliders)
+            foreach (CCUI_PersonalityAxeSlider slider in theSliders)
             {
                 slider.RandomizeValue();
             }
@@ -81,7 +81,7 @@ namespace QuilleUI
 
         public void ResetValues()
         {
-            foreach (CCUI_PersonalityAxe slider in theSliders)
+            foreach (CCUI_PersonalityAxeSlider slider in theSliders)
             {
                 slider.ResetValue();
             }
@@ -95,9 +95,9 @@ namespace QuilleUI
         {
             ownerCanvas = GetComponentInParent<Canvas>();
 
-            if (!baseSliderTransform)
+            if (!initialSliderTransform)
             {
-                baseSliderTransform = gameObject.transform;
+                initialSliderTransform = gameObject.transform;
             }
             
         }
@@ -108,27 +108,27 @@ namespace QuilleUI
             Quille.PersonalityAxeSO[] personalityAxes = Resources.LoadAll<Quille.PersonalityAxeSO>(PathConstants.SO_PATH_PERSONALITYAXES);
             int nofOfAxes = personalityAxes.Length;
 
-            theSliders = new QuilleUI.CCUI_PersonalityAxe[nofOfAxes];
-            theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxe>();
+            theSliders = new QuilleUI.CCUI_PersonalityAxeSlider[nofOfAxes];
+            theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxeSlider>();
             theSlidersTransforms = new RectTransform[nofOfAxes];
 
             for (int i = 0; i < nofOfAxes; i++)
             {
-                theSlidersTransforms[i] = Instantiate<Transform>(sliderPrefab, baseSliderTransform);
-                theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.CCUI_PersonalityAxe>();
+                theSlidersTransforms[i] = Instantiate<Transform>(sliderPrefab, initialSliderTransform);
+                theSliders[i] = theSlidersTransforms[i].GetComponent<QuilleUI.CCUI_PersonalityAxeSlider>();
                 theSlidersDict.Add(personalityAxes[i], theSliders[i]);
 
-                // Set the slider's personalityAxe GO.
+                //  Set the slider's parent & position.
+                RectTransform thisSlidersRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
+                thisSlidersRectTransform.anchoredPosition = new UnityEngine.Vector2(((RectTransform)initialSliderTransform).anchoredPosition.x, i * shiftDown);
+
+                // Init it.
                 theSliders[i].MyPersonalityAxeSO = personalityAxes[i];
                 theSliders[i].Init();
 
                 // Name the game object.
                 string axeName = personalityAxes[i].AxeName;
                 theSlidersTransforms[i].name = string.Format("PersonalityAxe_{0}", axeName);
-
-                // Change its parent & position.
-                RectTransform thisSlidersRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
-                thisSlidersRectTransform.anchoredPosition = new Vector2(((RectTransform)baseSliderTransform).anchoredPosition.x, i * shiftDown);
 
                 // Subscribe to slider event.
                 theSliders[i].PersonalityAxeSliderUpdated += OnPersonalityAxeSliderUpdated;

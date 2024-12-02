@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace QuilleUI 
 {
-    public class CCUI_PersonalityAxe : MonoBehaviour
+    public class CCUI_PersonalityAxeSlider : MonoBehaviour
     {
         // Test setup for a character creator's individual personality axe UI.
         // Includes little cosmetic effects ~~
@@ -38,6 +38,7 @@ namespace QuilleUI
 
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
         internal float MySliderValueWithoutNotify { set { mySlider.SetValueWithoutNotify(value);
+                                                          StepValue();
                                                           SetColourByValue();
                                                   } }
 
