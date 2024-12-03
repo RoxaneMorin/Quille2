@@ -27,7 +27,7 @@ namespace Quille
         // CHARACTER HANDLING
         public void CreateCharacter()
         {
-            SerializedDictionary<Quille.PersonalityAxeSO, float> axeScoresFromMenu = sourcePersonalityAxesMenu.SetSlidersSOsAndValues();
+            SerializedDictionary<Quille.PersonalityAxeSO, float> axeScoresFromMenu = sourcePersonalityAxesMenu.GetSlidersSOsAndValues();
 
             personCharacter = new Person_Character(myPersonalityAxes: axeScoresFromMenu);
         }

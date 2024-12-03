@@ -15,7 +15,7 @@ namespace QuilleUI
     public delegate void PersonalityAxeSliderUpdate(Quille.PersonalityAxeSO relevantPersonalityAxeSO);
     public delegate void PersonalityAxesMenuUpdate();
 
-    public delegate void SteppedButtonUpdate(CCUI_GenericSteppedButton relevantSteppedButton);
+    public delegate void SteppedButtonUpdate(CCUI_GenericSteppedButton relevantSteppedButton, bool shouldItMove);
 
     public delegate void PersonalityTraitsMenuUpdate();
 }

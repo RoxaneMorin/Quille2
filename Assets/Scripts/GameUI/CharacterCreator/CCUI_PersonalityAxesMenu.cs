@@ -34,7 +34,7 @@ namespace QuilleUI
             return theSlidersDict[thePASO].MySliderValue;
         }
 
-        public SerializedDictionary<Quille.PersonalityAxeSO, float> SetSlidersSOsAndValues()
+        public SerializedDictionary<Quille.PersonalityAxeSO, float> GetSlidersSOsAndValues()
         {
             return theSliders.ToSerializedDictionary(slider => slider.MyPersonalityAxeSO, slider => slider.MySliderValue);
         }

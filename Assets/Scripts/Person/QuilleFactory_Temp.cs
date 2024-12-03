@@ -15,6 +15,7 @@ namespace Quille
         [Header("References")]
         [SerializeField] private QuilleUI.CCUI_NamesMenu sourceNamesMenu;
         [SerializeField] private QuilleUI.CCUI_PersonalityAxesMenu sourcePersonalityAxesMenu;
+        [SerializeField] private QuilleUI.CCUI_PersonalityTraitsMenu sourcePersonalityTraitsMenu;
 
 
         [Header("Misc")]
@@ -29,6 +30,7 @@ namespace Quille
         {
             UpdatePersonNamesFromUI();
             UpdatePersonPersonalityAxesFromUI();
+            UpdatePersonPersonalityTraitsFromUI();
         }
         public void UpdatePersonNamesFromUI()
         {
@@ -43,7 +45,11 @@ namespace Quille
         }
         public void UpdatePersonPersonalityAxesFromUI()
         {
-            currentPerson.MyPersonCharacter.SetAxeScoreDict(sourcePersonalityAxesMenu.SetSlidersSOsAndValues());
+            currentPerson.MyPersonCharacter.SetAxeScoreDict(sourcePersonalityAxesMenu.GetSlidersSOsAndValues());
+        }
+        public void UpdatePersonPersonalityTraitsFromUI()
+        {
+            currentPerson.MyPersonCharacter.SetTraitScoreDict(sourcePersonalityTraitsMenu.GetButtonsSOsAndValues());
         }
 
 
@@ -52,6 +58,7 @@ namespace Quille
         {
             UpdateUINamesFromPerson();
             UpdateUIPersonalityAxesFromPerson();
+            UpdateUIPersonalityTraitsFromPerson();
         }
 
         private void UpdateUINamesFromPerson()
@@ -64,6 +71,11 @@ namespace Quille
         private void UpdateUIPersonalityAxesFromPerson()
         {
             sourcePersonalityAxesMenu.SetSliderValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetAxeScoreDict());
+        }
+
+        private void UpdateUIPersonalityTraitsFromPerson()
+        {
+            sourcePersonalityTraitsMenu.SetButtonValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetTraitScoreDict());
         }
 
 
@@ -96,6 +108,8 @@ namespace Quille
 
             sourcePersonalityAxesMenu.PersonalityAxeSliderUpdated += UpdatePersonPersonalityAxeFromUI;
             sourcePersonalityAxesMenu.PersonalityAxesMenuUpdated += UpdatePersonPersonalityAxesFromUI;
+
+            sourcePersonalityTraitsMenu.PersonalityTraitsMenuUpdated += UpdatePersonPersonalityTraitsFromUI;
         }
 
 

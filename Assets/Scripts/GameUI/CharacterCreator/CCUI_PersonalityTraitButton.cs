@@ -10,6 +10,8 @@ namespace QuilleUI
     {
         // Test setup for a character creator's individual personality trait UI.
 
+        // TODO: upon person being updated, check if any trait should be forbidden.
+
 
         // PARAMETERS
         internal Quille.PersonalityTraitSO MyPersonalityTraitSO { get { return (Quille.PersonalityTraitSO)mySO; } set { mySO = value; } }

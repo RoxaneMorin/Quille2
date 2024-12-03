@@ -40,36 +40,22 @@ namespace QuilleUI
         // A HashSet would be better, but doesn't show up in editor :/
 
 
-        // PROPERTIES
-        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<ScriptableObject, float> sourceDict)
-        {
-            foreach (CCUI_GenericSteppedButton button in theButtons)
-            {
-                if (sourceDict.ContainsKey(button.MySO))
-                {
-                    button.Select(sourceDict[button.MySO]);
-                }
-                else
-                {
-                    button.Unselect();
-                }
-            }
-        }
-
-
 
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnSteppedButtonUpdated(CCUI_GenericSteppedButton theUpdatedButton)
+        public virtual void OnSteppedButtonUpdated(CCUI_GenericSteppedButton theUpdatedButton, bool shouldItMove)
         {
-            if (theUpdatedButton.IsSelected)
+            if (shouldItMove)
             {
-                MoveButtonToSelected(theUpdatedButton);
-            }
-            else
-            {
-                RemoveButtonFromSelected(theUpdatedButton);
+                if (theUpdatedButton.IsSelected)
+                {
+                    MoveButtonToSelected(theUpdatedButton);
+                }
+                else
+                {
+                    RemoveButtonFromSelected(theUpdatedButton);
+                }
             }
         }
 
@@ -102,16 +88,35 @@ namespace QuilleUI
             }
         }
 
-
-        protected virtual void Randomize()
+        public virtual void RandomizeValues(int numberToSelect)
         {
+            ResetValues();
 
+            int numberOfButtons = theButtons.Length;
+            int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
+
+            List<int> IDsToSelect = RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
+
+            foreach (int ID in IDsToSelect)
+            {
+                currentlySelectedButtons.Add(theButtons[ID]);
+
+                theButtons[ID].RandomizeValueAndSelect();
+            }
+
+            PositionSelectedButtons();
         }
 
-        //abstract public void RandomizeValues();
-        // randomise both selection & values?
-        //abstract public void ResetValues();
-        // unselect all?
+        public virtual void ResetValues()
+        {
+            foreach (CCUI_GenericSteppedButton button in currentlySelectedButtons)
+            {
+                button.Unselect();
+                button.ChangeParentAndPosition(allButtonsContainerTransform, button.MyDefaultPosition);
+            }
+
+            currentlySelectedButtons.Clear();
+        }
 
 
         // INIT

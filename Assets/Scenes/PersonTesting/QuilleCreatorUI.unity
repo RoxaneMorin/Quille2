@@ -2191,7 +2191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &668329980
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2263,7 +2263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myParentMenu: {fileID: 0}
+  myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 1088163887}
   tabName: PersonalityAxes
   buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
@@ -2283,7 +2283,7 @@ MonoBehaviour:
   sliderPrefab: {fileID: 1414731332235455244, guid: 04ac65960bd73e047b81376b0f5265c8,
     type: 3}
   shiftDown: -140
-  ownerCanvas: {fileID: 0}
+  ownerCanvas: {fileID: 897786191}
   allSlidersContainerTransform: {fileID: 515353732}
   initialSliderTransform: {fileID: 194083549}
   theSliders: []
@@ -2378,7 +2378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myParentMenu: {fileID: 0}
+  myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 275420143}
   tabName: Interests
   buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
@@ -2473,7 +2473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myParentMenu: {fileID: 0}
+  myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 1680202932}
   tabName: Drives
   buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
@@ -2970,6 +2970,7 @@ MonoBehaviour:
   currentPerson: {fileID: 1849462652}
   sourceNamesMenu: {fileID: 1700573431}
   sourcePersonalityAxesMenu: {fileID: 668329984}
+  sourcePersonalityTraitsMenu: {fileID: 2138305328}
   tempJSON: 
 --- !u!1 &931030845
 GameObject:
@@ -5833,7 +5834,7 @@ MonoBehaviour:
   charID: 0
   myPersonCharacter:
     firstName: 
-    lastName: D
+    lastName: 
     nickName: 
     secondaryNames: []
     myPersonalityAxes:
@@ -6714,7 +6715,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2120617463}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2138305328}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_PersonalityTraitsMenu, Assembly-CSharp
+        m_MethodName: RandomizeValues
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2120617463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6845,7 +6858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myParentMenu: {fileID: 0}
+  myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 2105585476}
   tabName: PersonalityTraits
   buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
@@ -6868,7 +6881,7 @@ MonoBehaviour:
   rowShift: -100
   containerPadding: 100
   selectedShift: -65
-  ownerCanvas: {fileID: 0}
+  ownerCanvas: {fileID: 897786191}
   selectedButtonsContainerTransform: {fileID: 1658511939}
   allButtonsContainerTransform: {fileID: 1538550196}
   initialButtonTransform: {fileID: 2006169429}
@@ -6973,7 +6986,7 @@ PrefabInstance:
     - target: {fileID: 1741636598589750845, guid: e4b176cc9cd5a874891236341203e66e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -75
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 1741636598589750845, guid: e4b176cc9cd5a874891236341203e66e,
         type: 3}

@@ -18,14 +18,66 @@ namespace QuilleUI
             return theButtonsDict[theTSO].MyButtonValue;
         }
 
-        public SerializedDictionary<Quille.PersonalityTraitSO, float> SetButtonsSOsAndValues()
+        public SerializedDictionary<Quille.PersonalityTraitSO, float> GetButtonsSOsAndValues()
         {
-            return currentlySelectedButtons.ToSerializedDictionary(button => ((CCUI_PersonalityTraitButton)button).MyPersonalityTraitSO, button => button.MyButtonValue);
+            SerializedDictionary<Quille.PersonalityTraitSO, float> SOsAndValuesDict = new SerializedDictionary<Quille.PersonalityTraitSO, float>();
+
+            foreach (CCUI_PersonalityTraitButton button in currentlySelectedButtons)
+            {
+                SOsAndValuesDict.Add(button.MyPersonalityTraitSO, button.MyButtonValue);
+            }
+
+            return SOsAndValuesDict;
         }
+
+        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.PersonalityTraitSO, float> sourceDict)
+        {
+            ResetValues();
+
+            foreach (KeyValuePair<Quille.PersonalityTraitSO, float> keyValuePair in sourceDict )
+            {
+                if (theButtonsDict.ContainsKey(keyValuePair.Key))
+                {
+                    theButtonsDict[keyValuePair.Key].Select(keyValuePair.Value);
+                    currentlySelectedButtons.Add(theButtonsDict[keyValuePair.Key]);
+                }
+            }
+
+            PositionSelectedButtons();
+        }
+
+
+        // EVENTS
+        public event PersonalityTraitsMenuUpdate PersonalityTraitsMenuUpdated;
 
 
 
         // METHODS
+
+        // EVENT LISTENERS
+        public override void OnSteppedButtonUpdated(CCUI_GenericSteppedButton theUpdatedButton, bool shouldItMove)
+        {
+            base.OnSteppedButtonUpdated(theUpdatedButton, shouldItMove);
+
+            PersonalityTraitsMenuUpdated?.Invoke();
+        }
+
+
+        // UTILITY
+        public  void RandomizeValues()
+        {
+            base.RandomizeValues(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
+
+            PersonalityTraitsMenuUpdated?.Invoke();
+        }
+
+        public override void ResetValues()
+        {
+            base.ResetValues();
+
+            PersonalityTraitsMenuUpdated?.Invoke();
+        }
+
 
         // INIT
         protected override void Init()

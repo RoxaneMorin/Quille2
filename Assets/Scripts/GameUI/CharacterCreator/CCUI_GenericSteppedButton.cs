@@ -61,17 +61,18 @@ namespace QuilleUI
             if (!isSelected)
             {
                 Select();
-                SteppedButtonUpdated?.Invoke(this);
+                SteppedButtonUpdated?.Invoke(this, true);
             }
             else if (myValue > myStepSize && !isForbidden)
             {
                 myCurrentStep--;
                 SetValueAndFill(myCurrentStep * myStepSize);
+                SteppedButtonUpdated?.Invoke(this, false);
             }
             else
             {
                 Unselect();
-                SteppedButtonUpdated?.Invoke(this);
+                SteppedButtonUpdated?.Invoke(this, true);
             }
         }
 
@@ -104,7 +105,7 @@ namespace QuilleUI
         {
             isSelected = true;
             
-            SetValueAndFill(atStep * myStepCount);
+            SetValueAndFill(atStep * myStepSize);
             myCurrentStep = atStep;
             myFrame.color = myColourSelected;
         }
@@ -195,7 +196,7 @@ namespace QuilleUI
         // BUILT IN
         void Start()
         {
-            Init(null);
+            //Init(null);
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
