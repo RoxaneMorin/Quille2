@@ -99,8 +99,10 @@ namespace QuilleUI
             myCaptionRight = transform.Find("CaptionRight").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
 
         }
-        public void Init()
+        public void Init(Quille.PersonalityAxeSO sourcePersonalityAxeSO)
         {
+            myPersonalityAxeSO = sourcePersonalityAxeSO;
+
             FetchComponents();
 
             if (myPersonalityAxeSO)
@@ -110,6 +112,8 @@ namespace QuilleUI
 
                 myCaptionLeft.text = myPersonalityAxeSO.AxeNameLeft;
                 myCaptionRight.text = myPersonalityAxeSO.AxeNameRight;
+
+                gameObject.name = string.Format("PersonalityAxe_{0}", myPersonalityAxeSO.AxeName);
             }
         }
 
@@ -117,7 +121,7 @@ namespace QuilleUI
         // BUILT IN
         void Start()
         {
-            //Init();
+            //Init(null);
         }
     }
 }

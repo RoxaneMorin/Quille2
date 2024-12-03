@@ -13,14 +13,16 @@ namespace QuilleUI
 
 
         // VARIABLES
-
+        [Header("Parameters")]
         [SerializeField] private Transform sliderPrefab;
         [SerializeField] private float shiftDown = 80f;
 
         [Header("References")]
         [SerializeField] private Canvas ownerCanvas;
+        [SerializeField] protected RectTransform allSlidersContainerTransform;
         [SerializeField] private Transform initialSliderTransform;
 
+        [Header("The Stuff")]
         [SerializeField] private CCUI_PersonalityAxeSlider[] theSliders;
         private SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxeSlider> theSlidersDict;
         [SerializeField] private Transform[] theSlidersTransforms;
@@ -112,6 +114,8 @@ namespace QuilleUI
             theSlidersDict = new SerializedDictionary<Quille.PersonalityAxeSO, CCUI_PersonalityAxeSlider>();
             theSlidersTransforms = new RectTransform[nofOfAxes];
 
+            Vector2 initialSliderPosition = ((RectTransform)initialSliderTransform).anchoredPosition;
+
             for (int i = 0; i < nofOfAxes; i++)
             {
                 theSlidersTransforms[i] = Instantiate<Transform>(sliderPrefab, initialSliderTransform);
@@ -120,15 +124,11 @@ namespace QuilleUI
 
                 //  Set the slider's parent & position.
                 RectTransform thisSlidersRectTransform = theSlidersTransforms[i].GetComponent<RectTransform>();
-                thisSlidersRectTransform.anchoredPosition = new UnityEngine.Vector2(((RectTransform)initialSliderTransform).anchoredPosition.x, i * shiftDown);
+                thisSlidersRectTransform.SetParent(allSlidersContainerTransform, false);
+                thisSlidersRectTransform.anchoredPosition = initialSliderPosition + new Vector2(0, i * shiftDown);
 
-                // Init it.
-                theSliders[i].MyPersonalityAxeSO = personalityAxes[i];
-                theSliders[i].Init();
-
-                // Name the game object.
-                string axeName = personalityAxes[i].AxeName;
-                theSlidersTransforms[i].name = string.Format("PersonalityAxe_{0}", axeName);
+                // Initialize it.
+                theSliders[i].Init(personalityAxes[i]);
 
                 // Subscribe to slider event.
                 theSliders[i].PersonalityAxeSliderUpdated += OnPersonalityAxeSliderUpdated;

@@ -131,6 +131,15 @@ public static class RandomExtended
     // Random cannot receive extention methods, cue this helper class.
 
 
+    // Unity style wrapper for an existing System.Random operation.
+    public static int RangeInt(int minInclusive, int maxInclusive)
+    {
+        var random = new System.Random();
+        return random.Next(minInclusive, maxInclusive + 1);
+    }
+
+
+    // Similar to Random.range, but the values produced are stepped.
     public static float RangeStepped(float minInclusive, float maxInclusive, float step)
     {
         int stepsInRange = Mathf.FloorToInt((maxInclusive - minInclusive) / step) + 1;
@@ -139,7 +148,7 @@ public static class RandomExtended
     }
 
 
-    // Get X non-repeating interests in this range. MaxValue is inclusive.
+    // Get X non-repeating interests in this range. MaxValue is exclusive.
     public static List<int> NonRepeatingIntegersInRange(int minInclusive, int maxExclusive, int targetCount)
     {
         var random = new System.Random();
@@ -169,4 +178,11 @@ public static class RandomExtended
 
 
     // New number in range, not X;
+    //public static int RangeInt(int minInclusive, int maxInclusive, int avoid)
+    //{
+    //    var random = new System.Random();
+
+
+    //    return random.Next(minInclusive, maxInclusive + 1);
+    //}
 }

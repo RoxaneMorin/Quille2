@@ -13,23 +13,16 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        //public float GetButtonValueFor(Quille.PersonalityTraitSO theTSO)
-        //{
-        //    return theButtonsDict[theTSO].MyButtonValue;
-        //}
+        public float GetButtonValueFor(Quille.PersonalityTraitSO theTSO)
+        {
+            return theButtonsDict[theTSO].MyButtonValue;
+        }
 
-        //public SerializedDictionary<Quille.PersonalityTraitSO, float> SetButtonsSOsAndValues()
-        //{
-        //    return theButtons.ToSerializedDictionary(button => button.MyPersonalityTraitSO, button => button.MyButtonValue);
-        //}
+        public SerializedDictionary<Quille.PersonalityTraitSO, float> SetButtonsSOsAndValues()
+        {
+            return currentlySelectedButtons.ToSerializedDictionary(button => ((CCUI_PersonalityTraitButton)button).MyPersonalityTraitSO, button => button.MyButtonValue);
+        }
 
-        //public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.PersonalityTraitSO, float> sourceDict)
-        //{
-        //    foreach (CCUI_PersonalityTraitButton button in theButtons)
-        //    {
-
-        //    }
-        //}
 
 
         // METHODS
@@ -37,6 +30,7 @@ namespace QuilleUI
         // INIT
         protected override void Init()
         {
+            base.Init();
             LoadSOsAndCreateButtons(PathConstants.SO_PATH_PERSONALITYTRAITS);
         }
     }

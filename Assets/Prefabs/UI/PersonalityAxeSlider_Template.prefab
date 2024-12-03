@@ -299,7 +299,7 @@ RectTransform:
   m_GameObject: {fileID: 1414731332235455235}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1414731333405509038}
@@ -310,8 +310,8 @@ RectTransform:
   - {fileID: 1414731331703568409}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -427,15 +427,8 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  stepped: 1
+  stepValues: 1
   roundingValue: 8
-  snapToSpecificValues: 0
-  specificValues:
-  - -0.75
-  - 0.25
-  - 0.25
-  - 0.75
-  specificRoundingValue: 20
 --- !u!1 &1414731332921975361
 GameObject:
   m_ObjectHideFlags: 0

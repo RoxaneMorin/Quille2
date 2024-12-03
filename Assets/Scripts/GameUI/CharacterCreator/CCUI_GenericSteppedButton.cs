@@ -21,7 +21,7 @@ namespace QuilleUI
 
         [Header("References")]
         [SerializeField] protected RectTransform myRectTransform;
-        [SerializeField] protected UnityEngine.Vector2 myDefaultPosition;
+        [SerializeField] protected Vector2 myDefaultPosition;
         [SerializeField] protected Image myFrame;
         [SerializeField] protected Image myIcon;
         [SerializeField] protected Button myButton;
@@ -39,7 +39,7 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        //internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
+        internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
         internal float MyButtonValue { get { return myValue; } }
         internal bool IsSelected { get { return isSelected; } }
         internal bool IsForbidden { get { return isForbidden; } }
@@ -56,11 +56,12 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnButtonClicked()
+        public virtual void OnSteppedButtonClicked()
         {
             if (!isSelected)
             {
                 Select();
+                SteppedButtonUpdated?.Invoke(this);
             }
             else if (myValue > myStepSize && !isForbidden)
             {
@@ -70,9 +71,8 @@ namespace QuilleUI
             else
             {
                 Unselect();
+                SteppedButtonUpdated?.Invoke(this);
             }
-
-            SteppedButtonUpdated?.Invoke(this);
         }
 
 
@@ -91,6 +91,24 @@ namespace QuilleUI
             myCurrentStep = myStepCount;
             myFrame.color = myColourSelected;
         }
+        public virtual void Select(float atValue)
+        {
+            isSelected = true;
+
+            // Careful, invalid value may cause errors.
+            SetValueAndFill(atValue);
+            myCurrentStep = atValue / myStepSize;
+            myFrame.color = myColourSelected;
+        }
+        public virtual void Select(int atStep)
+        {
+            isSelected = true;
+            
+            SetValueAndFill(atStep * myStepCount);
+            myCurrentStep = atStep;
+            myFrame.color = myColourSelected;
+        }
+
         public virtual void Unselect()
         {
             isSelected = false;
@@ -136,15 +154,19 @@ namespace QuilleUI
             myRectTransform.anchoredPosition = newPosition;
         }
 
+        public virtual void RandomizeValueAndSelect()
+        {
+            int targetStepCount = RandomExtended.RangeInt(1, myStepCount);
 
-        // TODO: add randomize, clear value;
+            Select(targetStepCount);
+        }
 
 
         // INIT
         protected virtual void FetchComponents()
         {
             myRectTransform = gameObject.GetComponent<RectTransform>();
-            myDefaultPosition = new UnityEngine.Vector2(myRectTransform.anchoredPosition.x, myRectTransform.anchoredPosition.y);
+            myDefaultPosition = new Vector2(myRectTransform.anchoredPosition.x, myRectTransform.anchoredPosition.y);
 
             myFrame = gameObject.GetComponent<Image>();
 
