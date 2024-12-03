@@ -232,7 +232,7 @@ MonoBehaviour:
   myDefaultPosition: {x: 0, y: 0}
   myFrame: {fileID: 6853151894013835166}
   myIcon: {fileID: 7322233200012067333}
-  myButton: {fileID: 2090917334453894591}
+  myButton: {fileID: 0}
   myCaption: {fileID: 1589630947122236357}
   myStepCount: 2
   myStepSize: 0.5
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 5652955155160156523}
   - component: {fileID: 7935430780067271664}
   - component: {fileID: 7322233200012067333}
-  - component: {fileID: 2090917334453894591}
+  - component: {fileID: 3611781936131914709}
   m_Layer: 5
   m_Name: IconAndButton
   m_TagString: Untagged
@@ -317,7 +317,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2090917334453894591
+--- !u!114 &3611781936131914709
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7452173143093490953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: eec11984a7ff38742a5948a0244f80fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -364,6 +364,36 @@ MonoBehaviour:
       - m_Target: {fileID: 934656432970652437}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
         m_MethodName: OnSteppedButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnRightClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 934656432970652437}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
+        m_MethodName: OnSteppedButtonRightClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnMiddleClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 934656432970652437}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
+        m_MethodName: OnSteppedButtonMiddleClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

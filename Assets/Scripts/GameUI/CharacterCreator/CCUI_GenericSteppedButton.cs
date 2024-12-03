@@ -27,7 +27,7 @@ namespace QuilleUI
         [SerializeField] protected Vector2 myDefaultPosition;
         [SerializeField] protected Image myFrame;
         [SerializeField] protected Image myIcon;
-        [SerializeField] protected Button myButton;
+        [SerializeField] protected ButtonExtended myButton;
         [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
 
         [Header("Resources")]
@@ -61,6 +61,10 @@ namespace QuilleUI
         // EVENT LISTENERS
         public virtual void OnSteppedButtonClicked()
         {
+            // If the button is not selected, do so and fill it completely.
+            // If it is full or mostly filled, decrease it.¸
+            // If it is almost empty, do so and unselect it.
+
             if (!isSelected)
             {
                 Select();
@@ -71,6 +75,39 @@ namespace QuilleUI
                 myCurrentStep--;
                 SetValueAndFill(myCurrentStep * myStepSize);
                 SteppedButtonUpdated?.Invoke(this, false);
+            }
+            else
+            {
+                Unselect();
+                SteppedButtonUpdated?.Invoke(this, true);
+            }
+        }
+        public virtual void OnSteppedButtonRightClicked()
+        {
+            // If the button is not selected, do so and fill it completely.
+            // If the button is currently partially full, increase it.
+
+            if (!isSelected)
+            {
+                Select();
+                SteppedButtonUpdated?.Invoke(this, true);
+            }
+            else if (myCurrentStep < myStepCount && !isForbidden)
+            {
+                myCurrentStep++;
+                SetValueAndFill(myCurrentStep * myStepSize);
+                SteppedButtonUpdated?.Invoke(this, false);
+            }
+        }
+        public virtual void OnSteppedButtonMiddleClicked()
+        {
+            // If the button is not selected, do so and fill it completely.
+            // If it is, unselect and empty it.
+
+            if (!isSelected)
+            {
+                Select();
+                SteppedButtonUpdated?.Invoke(this, true);
             }
             else
             {
@@ -89,11 +126,8 @@ namespace QuilleUI
 
         public virtual void Select()
         {
-            isSelected = true;
-
-            SetValueAndFill(1f);
-            myCurrentStep = myStepCount;
-            myFrame.color = myColourSelected;
+            // Select at full value.
+            Select(myStepCount);
         }
         public virtual void Select(float atValue)
         {
@@ -174,10 +208,13 @@ namespace QuilleUI
 
             myFrame = gameObject.GetComponent<Image>();
 
-            myButton = gameObject.GetComponentInChildren<Button>(true);
+            myButton = gameObject.GetComponentInChildren<ButtonExtended>(true);
             myIcon = myButton.image;
 
             myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
+
+
+            //myButton.onClick.AddListener(OnSteppedButtonClicked);
         }
         protected virtual void SetStepVariables()
         {
