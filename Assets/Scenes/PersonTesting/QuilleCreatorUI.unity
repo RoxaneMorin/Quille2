@@ -5845,8 +5845,8 @@ MonoBehaviour:
       _serializedList: []
     myInterests:
       _serializedList: []
-  myNeedController: {fileID: 1849462654}
-  myPersonAI: {fileID: 1849462653}
+  myNeedController: {fileID: 0}
+  myPersonAI: {fileID: 0}
   TempJsonString: 
 --- !u!114 &1849462653
 MonoBehaviour:

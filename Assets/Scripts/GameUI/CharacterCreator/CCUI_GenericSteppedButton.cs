@@ -12,6 +12,9 @@ namespace QuilleUI
         // Contains an icon which is always display, a "frame" which "fills" with the level of selection, and a caption visible on hover.
         // To be used as the parent class for the buttons of PersonalityTraits and Drives.
 
+        // TODO: should right clicking refill a half full button?
+        // Not sure how to handle that with the current setup :/
+
 
         // VARIABLES
         [SerializeField] protected ScriptableObject mySO;

@@ -71,13 +71,6 @@ namespace QuilleUI
             PersonalityTraitsMenuUpdated?.Invoke();
         }
 
-        public override void ResetValues()
-        {
-            base.ResetValues();
-
-            PersonalityTraitsMenuUpdated?.Invoke();
-        }
-
 
         // INIT
         protected override void Init()
