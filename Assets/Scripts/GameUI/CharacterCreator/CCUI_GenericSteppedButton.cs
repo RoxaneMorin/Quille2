@@ -86,6 +86,7 @@ namespace QuilleUI
         {
             // If the button is not selected, do so and fill it completely.
             // If the button is currently partially full, increase it.
+            // If it is forbidden, unselect it.
 
             if (!isSelected)
             {
@@ -97,6 +98,11 @@ namespace QuilleUI
                 myCurrentStep++;
                 SetValueAndFill(myCurrentStep * myStepSize);
                 SteppedButtonUpdated?.Invoke(this, false);
+            }
+            else if (isForbidden)
+            {
+                Unselect();
+                SteppedButtonUpdated?.Invoke(this, true);
             }
         }
         public virtual void OnSteppedButtonMiddleClicked()
@@ -212,9 +218,6 @@ namespace QuilleUI
             myIcon = myButton.image;
 
             myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
-
-
-            //myButton.onClick.AddListener(OnSteppedButtonClicked);
         }
         protected virtual void SetStepVariables()
         {

@@ -30,13 +30,30 @@ namespace Quille
         public float TrainMidpoint { get { return trainMidpoint; } }
 
         // INCOMPATIBILITIES
-        [SerializeField]
-        private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
+        [SerializeField]private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
         // Remove the separate incompatible traits category as we can now check for a full or half trait.
 
         // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
 
         // CATEGORIES?
+
+
+
+        // METHODS
+        public bool ForbiddenToPerson(Person targetPerson)
+        {
+            // Check whether this SO is incompatible with any relevant aspect of the given person.
+
+            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonalityScores)
+            {
+                if (check.Execute(targetPerson))
+                {
+                    Debug.Log(string.Format("{0} cannot have the trait '{1}' due to the incompatible check '{2}'.", targetPerson.CharIDAndCharacterName, this.traitName, check));
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
 

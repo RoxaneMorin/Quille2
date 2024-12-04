@@ -33,6 +33,7 @@ namespace Quille
 
         // PROPERTIES & GETTERS/SETTERS
        public int CharID { get { return charID; } }
+       public string CharIDAndCharacterName { get { return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName); } }
 
         // Data holders.
         public Person_Character MyPersonCharacter { get { return myPersonCharacter; } }
@@ -85,7 +86,7 @@ namespace Quille
             }
             catch (Exception theError)
             {
-                Debug.LogError(string.Format("Failed to convert the game data of {0}, to JSON. This character will not be saved.\n\nException text:\n{1}", GetCharacterNameAndCharID(), theError.ToString()));
+                Debug.LogError(string.Format("Failed to convert the game data of {0}, to JSON. This character will not be saved.\n\nException text:\n{1}", CharIDAndCharacterName, theError.ToString()));
                 return null;
             }
 
@@ -120,13 +121,13 @@ namespace Quille
                 file.Write(formatedJSON);
                 file.Close();
 
-                Debug.Log(string.Format("Successfully saved {0}, to {1}.", GetCharacterNameAndCharID(), fileName));
+                Debug.Log(string.Format("Successfully saved {0}, to {1}.", CharIDAndCharacterName, fileName));
 
                 return formatedJSON;
             }
             catch (Exception theError)
             {
-                Debug.LogError(string.Format("Failed to write JSON data for {0}, to file. This character will not be saved.\n\nException text:\n{1}", GetCharacterNameAndCharID(), theError.ToString()));
+                Debug.LogError(string.Format("Failed to write JSON data for {0}, to file. This character will not be saved.\n\nException text:\n{1}", CharIDAndCharacterName, theError.ToString()));
                 return null;
             }
         }
@@ -205,7 +206,7 @@ namespace Quille
                 return;
             }
 
-            Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", GetCharacterNameAndCharID(), fileName));
+            Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", CharIDAndCharacterName, fileName));
         }
 
         private string CreateJSONFileName()
@@ -217,13 +218,7 @@ namespace Quille
         {
             return string.Format("CharID_{0}.json.bak", charID);
         }
-
-        // TODO: make this into a true getter? Reformat/reword if necessary.
-        private string GetCharacterNameAndCharID()
-        {
-            return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName);
-        }
-
+        
 
         // INIT
         private void Init()

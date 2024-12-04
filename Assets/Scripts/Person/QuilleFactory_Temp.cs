@@ -22,6 +22,10 @@ namespace Quille
         [SerializeField, TextAreaAttribute(50, 100)] private string tempJSON;
 
 
+        // EVENTS
+        public event QuilleUI.TargetPersonModified TargetPersonWasModified;
+
+
 
         // METHODS
 
@@ -29,8 +33,10 @@ namespace Quille
         public void UpdatePersonFromUI()
         {
             UpdatePersonNamesFromUI();
-            UpdatePersonPersonalityAxesFromUI();
-            UpdatePersonPersonalityTraitsFromUI();
+            UpdatePersonPersonalityAxesFromUI(false);
+            UpdatePersonPersonalityTraitsFromUI(false);
+
+            TargetPersonWasModified?.Invoke(currentPerson);
         }
         public void UpdatePersonNamesFromUI()
         {
@@ -40,16 +46,43 @@ namespace Quille
         }
         public void UpdatePersonPersonalityAxeFromUI(Quille.PersonalityAxeSO thePASO)
         {
+            UpdatePersonPersonalityAxeFromUI(true, thePASO);
+        }
+        public void UpdatePersonPersonalityAxeFromUI(bool throwEvent, Quille.PersonalityAxeSO thePASO)
+        {
             float sliderValue = sourcePersonalityAxesMenu.GetSliderValueFor(thePASO);
             currentPerson.MyPersonCharacter.SetAxeScore(thePASO, sliderValue);
+
+            if (throwEvent)
+            {
+                TargetPersonWasModified?.Invoke(currentPerson);
+            }
         }
         public void UpdatePersonPersonalityAxesFromUI()
         {
+            UpdatePersonPersonalityAxesFromUI(true);
+        }
+        public void UpdatePersonPersonalityAxesFromUI(bool throwEvent)
+        {
             currentPerson.MyPersonCharacter.SetAxeScoreDict(sourcePersonalityAxesMenu.GetSlidersSOsAndValues());
+
+            if (throwEvent)
+            {
+                TargetPersonWasModified?.Invoke(currentPerson);
+            }
         }
         public void UpdatePersonPersonalityTraitsFromUI()
         {
+            UpdatePersonPersonalityTraitsFromUI(true);
+        }
+        public void UpdatePersonPersonalityTraitsFromUI(bool throwEvent)
+        {
             currentPerson.MyPersonCharacter.SetTraitScoreDict(sourcePersonalityTraitsMenu.GetButtonsSOsAndValues());
+
+            if (throwEvent)
+            {
+                TargetPersonWasModified?.Invoke(currentPerson);
+            }
         }
 
 
@@ -59,6 +92,8 @@ namespace Quille
             UpdateUINamesFromPerson();
             UpdateUIPersonalityAxesFromPerson();
             UpdateUIPersonalityTraitsFromPerson();
+
+            TargetPersonWasModified?.Invoke(currentPerson);
         }
 
         private void UpdateUINamesFromPerson()
@@ -110,6 +145,9 @@ namespace Quille
             sourcePersonalityAxesMenu.PersonalityAxesMenuUpdated += UpdatePersonPersonalityAxesFromUI;
 
             sourcePersonalityTraitsMenu.PersonalityTraitsMenuUpdated += UpdatePersonPersonalityTraitsFromUI;
+
+
+            TargetPersonWasModified += sourcePersonalityTraitsMenu.OnTargetPersonModified;
         }
 
 

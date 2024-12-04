@@ -92,16 +92,17 @@ namespace QuilleUI
         {
             ResetValues();
 
-            int numberOfButtons = theButtons.Length;
+            CCUI_GenericSteppedButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
+            int numberOfButtons = permittedButtons.Length;
             int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
 
             List<int> IDsToSelect = RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
 
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(theButtons[ID]);
+                currentlySelectedButtons.Add(permittedButtons[ID]);
 
-                theButtons[ID].RandomizeValueAndSelect();
+                permittedButtons[ID].RandomizeValueAndSelect();
             }
 
             PositionSelectedButtons();

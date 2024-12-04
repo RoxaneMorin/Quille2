@@ -62,6 +62,25 @@ namespace QuilleUI
             PersonalityTraitsMenuUpdated?.Invoke();
         }
 
+        public void OnTargetPersonModified(Quille.Person theTargetPerson)
+        {
+            // TODO: is there a cleaner/less repetitive way to do this?
+
+            //Debug.Log(string.Format("{0} sees that the targetPerson, {1}, was modified.", this.name, theTargetPerson.name));
+
+            foreach (CCUI_PersonalityTraitButton button in theButtons)
+            {
+                if (button.MyPersonalityTraitSO.ForbiddenToPerson(theTargetPerson))
+                {
+                    button.Forbid(button.IsSelected);
+                }
+                else
+                {
+                    button.Permit(button.IsSelected);
+                }
+            }
+        }
+
 
         // UTILITY
         public  void RandomizeValues()
