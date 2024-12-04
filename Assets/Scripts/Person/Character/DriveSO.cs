@@ -48,7 +48,7 @@ namespace Quille
             {
                 if (check.Execute(targetPerson))
                 {
-                    //Debug.Log(string.Format("{0} cannot have the Drive '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.driveName, check.ToString()));
+                    Debug.Log(string.Format("{0} cannot have the Drive '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.driveName, check.ToString()));
                     return true;
                 }
             }

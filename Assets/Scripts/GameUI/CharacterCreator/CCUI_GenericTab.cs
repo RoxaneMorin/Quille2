@@ -30,8 +30,10 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        private void OnSiblingActivated(CCUI_GenericTab activatedTab)
+        public void OnSiblingActivated(CCUI_GenericTab activatedTab)
         {
+            //Debug.Log(this.name + " received OnSiblingActivated for " + activatedTab.name);
+
             if (this != activatedTab)
             {
                 DeactivateMe();
@@ -61,7 +63,6 @@ namespace QuilleUI
         {
             // Find parent menu & register to its event.
             myParentMenu = gameObject.GetComponentInParent<CCUI_GenericMenu>(true);
-            myParentMenu.ActiveTabUpdated += OnSiblingActivated;
 
             // Find buttons if none have been assigned?
             if (!myButton)
@@ -69,7 +70,7 @@ namespace QuilleUI
                 Button[] potentialButtons = myParentMenu.GetComponentsInChildren<Button>(true).Where(button => button.CompareTag("UI_TabButton")).ToArray();
                 myButton = potentialButtons.First(button => button.name.Contains(tabName));
 
-                // How to add the event?
+                // Registering to the Unity envent doesn't seem possible.
             }
         }
 

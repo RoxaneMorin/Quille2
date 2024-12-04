@@ -53,6 +53,15 @@ namespace QuilleUI
         {
             FetchComponents();
 
+            // Register eventListeners
+            foreach (CCUI_GenericTab tab in myTabs)
+            {
+                tab.gameObject.SetActive(true);
+                ActiveTabUpdated += tab.OnSiblingActivated;
+            }
+        }
+        private void ActivateFirstTab()
+        {
             ActivateTab(myTabs[0]);
         }
 
@@ -61,6 +70,9 @@ namespace QuilleUI
         void Start()
         {
             Init();
+
+            // TODO: Is there a better way to give all tabs the time to init?
+            Invoke("ActivateFirstTab", 0.0001f);
         }
     }
 }
