@@ -26,5 +26,12 @@ namespace ChecksAndMods
         }
 
         // Check defined in parent class.
+
+
+        // OVERRIDES
+        public override string ToString()
+        {
+            return relevantInterest.InterestName;
+        }
     }
 }

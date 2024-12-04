@@ -6,8 +6,6 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.CheckBoolean))]
 public class CheckBooleanDrawer : PropertyDrawer
 {
-    private static readonly string[] checkSymbolsBoolean = { "", "==", "!=" };
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -35,7 +33,7 @@ public class CheckBooleanDrawer : PropertyDrawer
                     int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
                     string labelText = string.Format("Is Fetched Value {0} {1} ?",
-                        checkSymbolsBoolean[opIdx],
+                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[opIdx],
                         check.FindPropertyRelative("compareTo").boolValue);
 
                     // Handle special cases as needed.

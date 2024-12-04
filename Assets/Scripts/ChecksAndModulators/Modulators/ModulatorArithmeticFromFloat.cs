@@ -32,6 +32,29 @@ namespace ChecksAndMods
         {
             return modulator.Modulate(sourceObj, target, modifier, ((int)mainOpIdx), (int)modOpIdx);
         }
+
+
+        // OVERRIDES
+        public override string ToString()
+        {
+            // Handle special cases as needed.
+            if (mainOpIdx == 0)
+            {
+                return "Result = Targer Value";
+            }
+            else if (modOpIdx == 0)
+            {
+                return string.Format("Result = Target Value {0} Fetched Value", ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)mainOpIdx], ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)modOpIdx]);
+            }
+            else
+            {
+                return string.Format("Result = Target Value {0} ({1} {2} {3})",
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)mainOpIdx],
+                        modulator.ToString(),
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)modOpIdx],
+                        modifier);
+            }
+        }
     }
 }
 

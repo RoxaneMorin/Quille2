@@ -35,6 +35,29 @@ namespace ChecksAndMods
         {
             return modulator.Modulate(sourceObj, target, compareTo, modifier, ((int)checkOpIdx), (int)modOpIdx);
         }
+
+
+        // OVERRIDES
+        public override string ToString()
+        {
+            // Handle special cases as needed.
+            if (modOpIdx == 0)
+            {
+                return "Result = Targer Value";
+            }
+            else if (checkOpIdx == 0)
+            {
+                return string.Format("Result = {0} ? (Target Value {1} {2}) : Target Value", modulator.ToString(), ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)modOpIdx], modifier);
+            }
+            else
+            {
+                return string.Format("Result = (Fetched Value {0} {1}) ? (Target Value {2} {3}) : Target Value",
+                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[(int)checkOpIdx],
+                        (compareTo ? "true" : "false"),
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[(int)modOpIdx],
+                        modifier);
+            }
+        }
     }
 }
 

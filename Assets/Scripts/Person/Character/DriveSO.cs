@@ -35,6 +35,24 @@ namespace Quille
 
         // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
 
-        // CATEGORIES?s
+        // CATEGORIES?
+
+
+
+        // METHODS
+        public bool ForbiddenToPerson(Person targetPerson)
+        {
+            // Check whether this SO is incompatible with any relevant aspect of the given person.
+
+            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonalityScores)
+            {
+                if (check.Execute(targetPerson))
+                {
+                    //Debug.Log(string.Format("{0} cannot have the Drive '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.driveName, check.ToString()));
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

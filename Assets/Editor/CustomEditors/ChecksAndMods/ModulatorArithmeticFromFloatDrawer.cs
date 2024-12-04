@@ -6,8 +6,6 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.ModulatorArithmeticFromFloat))]
 public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
 {
-    private static readonly string[] operationSymbols = { "", "+", "-", "*", "/", "%", "^" };
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -36,15 +34,15 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
                     int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
 
                     string labelText = string.Format("Result = Target Value {0} (Fetched Value {1} {2})",
-                        operationSymbols[mainOpIdx],
-                        operationSymbols[modOpIdx],
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[mainOpIdx],
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx],
                         modulator.FindPropertyRelative("modifier").floatValue);
 
                     // Handle special cases as needed.
                     if (mainOpIdx == 0)
                         labelText = "Result = Target";
                     else if (modOpIdx == 0)
-                        labelText = string.Format("Result = Target Value {0} Fetched Value", operationSymbols[mainOpIdx], operationSymbols[modOpIdx]);
+                        labelText = string.Format("Result = Target Value {0} Fetched Value", ChecksAndMods.Symbols.operationSymbolsArithmetic[mainOpIdx], ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx]);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

@@ -6,9 +6,6 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.ModulatorArithmeticFromBool))]
 public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
 {
-    private static readonly string[] operationSymbolsArithmetic = { "", "+", "-", "*", "/", "%", "^" };
-    private static readonly string[] checkSymbolsBoolean = { "", "==", "!=" };
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -37,16 +34,16 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
                     int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
 
                     string labelText = string.Format("Result = (Fetched Value {0} {1}) ? (Target Value {2} {3}) : Target Value",
-                        checkSymbolsBoolean[mainOpIdx],
+                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[mainOpIdx],
                         modulator.FindPropertyRelative("compareTo").boolValue,
-                        operationSymbolsArithmetic[modOpIdx],
+                        ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx],
                         modulator.FindPropertyRelative("modifier").floatValue);
 
                     // Handle special cases as needed.
                     if (modOpIdx == 0) // Are we keeping the numerical value as is?
                         labelText = "Result = Target";
                     else if (mainOpIdx == 0) // Are we checking the value of the modulator itself?
-                        labelText = string.Format("Result = Fetched Value ? (Target Value {0} {1}) : Target Value", operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
+                        labelText = string.Format("Result = Fetched Value ? (Target Value {0} {1}) : Target Value", ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

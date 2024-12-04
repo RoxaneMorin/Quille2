@@ -26,5 +26,12 @@ namespace ChecksAndMods
         }
 
         // Modulate defined in parent class.
+
+
+        // OVERRIDES
+        public override string ToString()
+        {
+            return relevantDrive.DriveName;
+        }
     }
 }

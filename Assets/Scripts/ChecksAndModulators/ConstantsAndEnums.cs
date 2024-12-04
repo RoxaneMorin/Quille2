@@ -53,6 +53,15 @@ namespace ChecksAndMods
         };
     }
 
+    public static class Symbols
+    {
+        public static readonly string[] operationSymbolsArithmetic = { "", "+", "-", "*", "/", "%", "^" };
+
+        public static string[] comparisonSymbolsArithmetic = { "==", "!=", "~=", ">", ">=", "<", "<=" };
+
+        public static readonly string[] comparisonSymbolsBoolean = { "", "==", "!=" };
+    }
+
     // The mapping of Modulators' potential operations. Both names and indices will be used.
     public enum OperationsArithmetic
     {

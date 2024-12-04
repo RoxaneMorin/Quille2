@@ -101,7 +101,6 @@ namespace QuilleUI
             foreach (int ID in IDsToSelect)
             {
                 currentlySelectedButtons.Add(permittedButtons[ID]);
-
                 permittedButtons[ID].RandomizeValueAndSelect();
             }
 

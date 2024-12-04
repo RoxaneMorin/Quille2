@@ -48,7 +48,7 @@ namespace Quille
             {
                 if (check.Execute(targetPerson))
                 {
-                    Debug.Log(string.Format("{0} cannot have the trait '{1}' due to the incompatible check '{2}'.", targetPerson.CharIDAndCharacterName, this.traitName, check));
+                    //Debug.Log(string.Format("{0} cannot have the Trait '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.traitName, check.ToString()));
                     return true;
                 }
             }

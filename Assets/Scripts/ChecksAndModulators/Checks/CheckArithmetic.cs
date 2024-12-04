@@ -29,5 +29,12 @@ namespace ChecksAndMods
         {
             return check.Check(sourceObj, compareTo, (int)opIdx);
         }
+
+
+        // OVERRIDES
+        public override string ToString()
+        {
+            return string.Format("Is {0} {1} {2}?", check.ToString(), Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
+        }
     }
 }

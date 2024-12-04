@@ -6,8 +6,6 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic))]
 public class CheckArithmeticDrawer : PropertyDrawer
 {
-    private static readonly string[] checkSymbolsArithmetic = { "==", "!=", "~=", ">", ">=", "<", "<=" };
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -35,7 +33,7 @@ public class CheckArithmeticDrawer : PropertyDrawer
                     int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
 
                     string labelText = string.Format("Is Fetched Value {0} {1} ?",
-                        checkSymbolsArithmetic[opIdx],
+                        ChecksAndMods.Symbols.comparisonSymbolsArithmetic[opIdx],
                         check.FindPropertyRelative("compareTo").floatValue);
 
                     // Display the label proper.
