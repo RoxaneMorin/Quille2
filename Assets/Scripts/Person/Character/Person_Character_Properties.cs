@@ -109,7 +109,7 @@ namespace Quille
             {
                 return 0;
             }
-            else if (value < Constants.PERSONALITY_HALF_SPAN / 2)
+            else if (value <= Constants.PERSONALITY_HALF_SPAN / 2)
             {
                 return Constants.PERSONALITY_HALF_SPAN / 2;
             }
@@ -146,7 +146,7 @@ namespace Quille
 
                 foreach (PersonalityTraitSO key in personalityTraitDict.Keys)
                 {
-                    newPersonalityTraitDict[key] = capPersonalityAxeScore(personalityTraitDict[key]);
+                    newPersonalityTraitDict[key] = capPersonalityTraitScore(personalityTraitDict[key]);
                 }
 
                 this.myPersonalityTraits = newPersonalityTraitDict;
@@ -170,7 +170,7 @@ namespace Quille
             {
                 return 0;
             }
-            else if (value < Constants.DRIVE_SPAN / 2)
+            else if (value <= Constants.DRIVE_SPAN / 2)
             {
                 return Constants.DRIVE_SPAN / 2;
             }
@@ -260,7 +260,7 @@ namespace Quille
 
                 foreach (InterestSO key in interestDict.Keys)
                 {
-                    newInterestDict[key] = capPersonalityAxeScore(interestDict[key]);
+                    newInterestDict[key] = capInterestScore(interestDict[key]);
                 }
 
                 this.myInterests = newInterestDict;

@@ -16,6 +16,7 @@ namespace Quille
         [SerializeField] private QuilleUI.CCUI_NamesMenu sourceNamesMenu;
         [SerializeField] private QuilleUI.CCUI_PersonalityAxesMenu sourcePersonalityAxesMenu;
         [SerializeField] private QuilleUI.CCUI_PersonalityTraitsMenu sourcePersonalityTraitsMenu;
+        [SerializeField] private QuilleUI.CCUI_DrivesMenu sourceDrivesMenu;
 
 
         [Header("Misc")]
@@ -33,8 +34,10 @@ namespace Quille
         public void UpdatePersonFromUI()
         {
             UpdatePersonNamesFromUI();
+
             UpdatePersonPersonalityAxesFromUI(false);
             UpdatePersonPersonalityTraitsFromUI(false);
+            UpdatePersonDrivesFromUI(false);
 
             TargetPersonWasModified?.Invoke(currentPerson);
         }
@@ -84,6 +87,19 @@ namespace Quille
                 TargetPersonWasModified?.Invoke(currentPerson);
             }
         }
+        public void UpdatePersonDrivesFromUI()
+        {
+            UpdatePersonDrivesFromUI(true);
+        }
+        public void UpdatePersonDrivesFromUI(bool throwEvent)
+        {
+            currentPerson.MyPersonCharacter.SetDriveScoreDict(sourceDrivesMenu.GetButtonsSOsAndValues());
+
+            if (throwEvent)
+            {
+                TargetPersonWasModified?.Invoke(currentPerson);
+            }
+        }
 
 
         // UPDATE UI VALUES FROM PERSON
@@ -92,6 +108,7 @@ namespace Quille
             UpdateUINamesFromPerson();
             UpdateUIPersonalityAxesFromPerson();
             UpdateUIPersonalityTraitsFromPerson();
+            UpdateUIDrivesFromPerson();
 
             TargetPersonWasModified?.Invoke(currentPerson);
         }
@@ -111,6 +128,11 @@ namespace Quille
         private void UpdateUIPersonalityTraitsFromPerson()
         {
             sourcePersonalityTraitsMenu.SetButtonValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetTraitScoreDict());
+        }
+
+        private void UpdateUIDrivesFromPerson()
+        {
+            sourceDrivesMenu.SetButtonValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetDriveScoreDict());
         }
 
 
@@ -145,6 +167,8 @@ namespace Quille
             sourcePersonalityAxesMenu.PersonalityAxesMenuUpdated += UpdatePersonPersonalityAxesFromUI;
 
             sourcePersonalityTraitsMenu.PersonalityTraitsMenuUpdated += UpdatePersonPersonalityTraitsFromUI;
+
+            sourceDrivesMenu.DrivesMenuUpdated += UpdatePersonDrivesFromUI;
 
 
             TargetPersonWasModified += sourcePersonalityTraitsMenu.OnTargetPersonModified;
