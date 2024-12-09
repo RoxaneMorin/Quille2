@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_PersonalityTraitButton : CCUI_GenericSteppedButton
+    public class CCUI_PersonalityTraitButton : CCUI_GenericSteppedSelectableButton
     {
         // Test setup for a character creator's individual personality trait UI.
 

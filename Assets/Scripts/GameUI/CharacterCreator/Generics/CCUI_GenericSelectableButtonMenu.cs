@@ -6,15 +6,14 @@ using UnityEngine;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericSteppedButtonMenu : MonoBehaviour
+    public class CCUI_GenericSelectableButtonMenu : MonoBehaviour
     {
-        // Generic menu where steppedButtons are automatically generated, can be selected and scaled.
-        // Procedurally populated from a given type of scriptable objects.
+        // Generic menu where selectableButtons are automatically generated, and can be selected.
 
 
         // VARIABLES
         [Header("Parameters")]
-        [SerializeField] protected Transform steppedButtonPrefab;
+        [SerializeField] protected Transform buttonPrefab;
         [SerializeField] protected int countPerRow;
         [SerializeField] protected float rowShift;
         [SerializeField] protected float containerPadding;
@@ -32,11 +31,11 @@ namespace QuilleUI
         protected float initialYPos;
 
         [Header("The Stuff")]
-        [SerializeField] protected CCUI_GenericSteppedButton[] theButtons;
-        [SerializeField] protected SerializedDictionary<ScriptableObject, CCUI_GenericSteppedButton> theButtonsDict;
+        [SerializeField] protected CCUI_GenericSelectableButton[] theButtons;
+        [SerializeField] protected SerializedDictionary<ScriptableObject, CCUI_GenericSelectableButton> theButtonsDict;
         [SerializeField] protected Transform[] theButtonsTransforms;
         [Space]
-        [SerializeField] protected List<CCUI_GenericSteppedButton> currentlySelectedButtons;
+        [SerializeField] protected List<CCUI_GenericSelectableButton> currentlySelectedButtons;
         // A HashSet would be better, but doesn't show up in editor :/
 
 
@@ -44,7 +43,7 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnSteppedButtonUpdated(CCUI_GenericSteppedButton theUpdatedButton, bool shouldItMove)
+        public virtual void OnSelectableButtonUpdated(CCUI_GenericSelectableButton theUpdatedButton, bool shouldItMove)
         {
             if (shouldItMove)
             {
@@ -60,12 +59,12 @@ namespace QuilleUI
         }
 
         // UTILITY
-        protected virtual void MoveButtonToSelected(CCUI_GenericSteppedButton theTargetButton)
+        protected virtual void MoveButtonToSelected(CCUI_GenericSelectableButton theTargetButton)
         {
             currentlySelectedButtons.Add(theTargetButton);
             PositionSelectedButtons();
         }
-        protected virtual void RemoveButtonFromSelected(CCUI_GenericSteppedButton theTargetButton)
+        protected virtual void RemoveButtonFromSelected(CCUI_GenericSelectableButton theTargetButton)
         {
             theTargetButton.ChangeParentAndPosition(allButtonsContainerTransform, theTargetButton.MyDefaultPosition);
 
@@ -75,11 +74,14 @@ namespace QuilleUI
 
         protected virtual void PositionSelectedButtons()
         {
-            int expectedNumberOfButtons = Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT; // this should varry by button subtype.
+            PositionSelectedButtons(5);
+        }
+        protected virtual void PositionSelectedButtons(int expectedNumberOfButtons)
+        {
             float distanceBetweenButtons = containerWidthPadded / (expectedNumberOfButtons - 1);
 
             int i = 0;
-            foreach (CCUI_GenericSteppedButton button in currentlySelectedButtons)
+            foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
             {
                 Vector2 newPosition = new Vector2(initialXPos + i * distanceBetweenButtons, selectedShift);
                 button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
@@ -88,28 +90,19 @@ namespace QuilleUI
             }
         }
 
-        public virtual void RandomizeValues(int numberToSelect)
+        public virtual List<int> RandomizeValues(int numberToSelect)
         {
             ResetValues();
 
-            CCUI_GenericSteppedButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
-            int numberOfButtons = permittedButtons.Length;
+            int numberOfButtons = theButtons.Length;
             int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
 
-            List<int> IDsToSelect = RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
-
-            foreach (int ID in IDsToSelect)
-            {
-                currentlySelectedButtons.Add(permittedButtons[ID]);
-                permittedButtons[ID].RandomizeValueAndSelect();
-            }
-
-            PositionSelectedButtons();
+            return RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
         }
 
         public virtual void ResetValues()
         {
-            foreach (CCUI_GenericSteppedButton button in currentlySelectedButtons)
+            foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
             {
                 button.Unselect();
                 button.ChangeParentAndPosition(allButtonsContainerTransform, button.MyDefaultPosition);
@@ -142,8 +135,8 @@ namespace QuilleUI
             ScriptableObject[] theSOs = Resources.LoadAll<ScriptableObject>(SOsResourcePath);
             int noOfSOs = theSOs.Length;
 
-            theButtons = new CCUI_GenericSteppedButton[noOfSOs];
-            theButtonsDict = new SerializedDictionary<ScriptableObject, CCUI_GenericSteppedButton>();
+            theButtons = new CCUI_GenericSelectableButton[noOfSOs];
+            theButtonsDict = new SerializedDictionary<ScriptableObject, CCUI_GenericSelectableButton>();
             theButtonsTransforms = new RectTransform[noOfSOs];
 
             // Calculate the necessry values for generating the grid of buttons.
@@ -162,8 +155,8 @@ namespace QuilleUI
                         break;
                     }
 
-                    theButtonsTransforms[i] = Instantiate<Transform>(steppedButtonPrefab, initialButtonTransform);
-                    theButtons[i] = theButtonsTransforms[i].GetComponent<CCUI_GenericSteppedButton>();
+                    theButtonsTransforms[i] = Instantiate<Transform>(buttonPrefab, initialButtonTransform);
+                    theButtons[i] = theButtonsTransforms[i].GetComponent<CCUI_GenericSelectableButton>();
                     theButtonsDict.Add(theSOs[i], theButtons[i]);
 
                     // Set the button's parent and positione.
@@ -172,10 +165,11 @@ namespace QuilleUI
                     thisButtonsRectTransform.anchoredPosition = new Vector2(initialXPos + k * distanceBetweenButtons, initialYPos + j * rowShift);
 
                     // Initialize the button.
+                    theButtons[i].gameObject.SetActive(true);
                     theButtons[i].Init(theSOs[i]);
-
+ 
                     // Subscribe to its event.
-                    theButtons[i].SteppedButtonUpdated += OnSteppedButtonUpdated;
+                    theButtons[i].SelectableButtonUpdated += OnSelectableButtonUpdated;
 
                     i++;
                 }
@@ -185,8 +179,7 @@ namespace QuilleUI
         protected virtual void Init()
         {
             FetchComponents();
-
-            // Call LoadSOsAndCreateButtons with the relevant SO path in child classes.
+            //LoadSOsAndCreateButtons() called from child classes;
         }
 
 
@@ -196,5 +189,5 @@ namespace QuilleUI
             Init();
         }
     }
-
 }
+

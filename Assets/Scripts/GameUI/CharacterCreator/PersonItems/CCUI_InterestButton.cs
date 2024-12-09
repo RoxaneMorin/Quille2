@@ -13,8 +13,6 @@ namespace QuilleUI
 
 
         // VARIABLES
-        [SerializeField] protected Quille.InterestSO myInterestSO;
-
         [Header("References")]
         [SerializeField] protected Slider mySlider;
         [SerializeField] protected Graphic myHandle;
@@ -34,7 +32,7 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        internal Quille.InterestSO MyInterestSO { get { return myInterestSO; } set { myInterestSO = value; } }
+        internal Quille.InterestSO MyInterestSO { get { return (Quille.InterestSO)mySO; } set { mySO = value; } }
         internal KeyValuePair<Quille.InterestSO, float> MyAxeSOAndValue { get { return new KeyValuePair<Quille.InterestSO, float>(MyInterestSO, MySliderValue); } }
 
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
@@ -50,7 +48,7 @@ namespace QuilleUI
 
 
         // EVENTS
-        public event InterestButtonUpdate InterestButtonUpdated;
+        public override event SelectableButtonUpdate SelectableButtonUpdated;
 
 
 
@@ -64,12 +62,12 @@ namespace QuilleUI
             if (!isSelected)
             {
                 Select();
-                InterestButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
             else
             {
                 Unselect();
-                InterestButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
         }
         public void OnInterestSliderUpdated()
@@ -77,7 +75,7 @@ namespace QuilleUI
             StepValue();
             SetColourByValue();
 
-            InterestButtonUpdated?.Invoke(this, false);
+            SelectableButtonUpdated?.Invoke(this, false);
         }
 
 
@@ -135,14 +133,14 @@ namespace QuilleUI
             myHandle = mySlider.targetGraphic;
         }
 
-        public virtual void Init(Quille.InterestSO sourceSO)
+        public override void Init(ScriptableObject sourceSO)
         {
-            base.Init();
+            base.Init(sourceSO);
 
-            myInterestSO = sourceSO;
-
-            if (myInterestSO)
+            if (mySO is Quille.InterestSO)
             {
+                Quille.InterestSO myInterestSO = MyInterestSO;
+
                 myIcon.sprite = myInterestSO.interestIcon;
                 myCaption.text = myInterestSO.InterestName;
 

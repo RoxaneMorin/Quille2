@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericSteppedButton : CCUI_GenericSelectableButton
+    public class CCUI_GenericSteppedSelectableButton : CCUI_GenericSelectableButton
     {
         // A composite button that can be selected at different "fill levels".
         // Contains an icon which is always display, a "frame" which "fills" with the level of selection, and a caption visible on hover.
@@ -14,7 +14,6 @@ namespace QuilleUI
 
 
         // VARIABLES
-        [SerializeField] protected ScriptableObject mySO;
         [SerializeField] protected bool isForbidden;
         [SerializeField] protected float myValue;
 
@@ -31,14 +30,13 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
         internal float MyButtonValue { get { return myValue; } }
         internal bool IsForbidden { get { return isForbidden; } }
         internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
 
 
         // EVENTS
-        public event SteppedButtonUpdate SteppedButtonUpdated;
+        public override event SelectableButtonUpdate SelectableButtonUpdated;
 
 
 
@@ -54,18 +52,18 @@ namespace QuilleUI
             if (!isSelected)
             {
                 Select();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
             else if (myValue > myStepSize && !isForbidden)
             {
                 myCurrentStep--;
                 SetValueAndFill(myCurrentStep * myStepSize);
-                SteppedButtonUpdated?.Invoke(this, false);
+                SelectableButtonUpdated?.Invoke(this, false);
             }
             else
             {
                 Unselect();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
         }
         public override void OnButtonRightClicked()
@@ -77,18 +75,18 @@ namespace QuilleUI
             if (!isSelected)
             {
                 Select();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
             else if (myCurrentStep < myStepCount && !isForbidden)
             {
                 myCurrentStep++;
                 SetValueAndFill(myCurrentStep * myStepSize);
-                SteppedButtonUpdated?.Invoke(this, false);
+                SelectableButtonUpdated?.Invoke(this, false);
             }
             else if (isForbidden)
             {
                 Unselect();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
         }
         public override void OnButtonMiddleClicked()
@@ -99,12 +97,12 @@ namespace QuilleUI
             if (!isSelected)
             {
                 Select();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
             else
             {
                 Unselect();
-                SteppedButtonUpdated?.Invoke(this, true);
+                SelectableButtonUpdated?.Invoke(this, true);
             }
         }
 
@@ -199,11 +197,10 @@ namespace QuilleUI
             myCurrentStep = 0;
         }
 
-        public virtual void Init(ScriptableObject sourceSO)
+        public override void Init(ScriptableObject sourceSO)
         {
-            base.Init();
+            base.Init(sourceSO);
 
-            mySO = sourceSO;
             SetStepVariables();
         }
 

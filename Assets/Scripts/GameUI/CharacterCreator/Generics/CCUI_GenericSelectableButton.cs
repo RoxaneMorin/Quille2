@@ -13,6 +13,7 @@ namespace QuilleUI
 
 
         // VARIABLES
+        [SerializeField] protected ScriptableObject mySO;
         [SerializeField] protected bool isSelected;
 
         [Header("References")]
@@ -28,9 +29,12 @@ namespace QuilleUI
 
 
         // PROPERTIES
+        internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
         internal bool IsSelected { get { return isSelected; } }
         internal UnityEngine.Vector2 MyDefaultPosition { get { return myDefaultPosition; } set { myDefaultPosition = value; } }
 
+        // EVENTS
+        public virtual event SelectableButtonUpdate SelectableButtonUpdated;
 
 
         // METHODS
@@ -90,8 +94,10 @@ namespace QuilleUI
             myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
         }
 
-        public virtual void Init()
+        public virtual void Init(ScriptableObject sourceSO)
         {
+            mySO = sourceSO;
+
             FetchComponents();
 
             myCaption.gameObject.SetActive(false);
