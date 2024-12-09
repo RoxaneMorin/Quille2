@@ -1204,12 +1204,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1223919726}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericMenu, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_TabController, Assembly-CSharp
         m_MethodName: ActivateTab
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 669317803}
-          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_GenericTab, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_Tab, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2359,7 +2359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &668329980
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2428,14 +2428,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 668329979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
+  m_Script: {fileID: 11500000, guid: 43798036680969f4193524b10f01559b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 1088163887}
   tabName: PersonalityAxes
-  buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
-  buttonColourActive: {r: 0.3019608, g: 0.28235295, b: 0.43529412, a: 1}
+  buttonColourDefault: {r: 0.18431373, g: 0.17254902, b: 0.28235295, a: 1}
+  buttonColourActive: {r: 0.3263889, g: 0.30555555, b: 0.5, a: 1}
 --- !u!114 &668329984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2443,7 +2443,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 668329979}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bfc2e17cd21b1449bebb84698811837, type: 3}
   m_Name: 
@@ -2546,14 +2546,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 669317799}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
+  m_Script: {fileID: 11500000, guid: 43798036680969f4193524b10f01559b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 275420143}
   tabName: Interests
-  buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
-  buttonColourActive: {r: 0.3019608, g: 0.28235295, b: 0.43529412, a: 1}
+  buttonColourDefault: {r: 0.18431373, g: 0.17254902, b: 0.28235295, a: 1}
+  buttonColourActive: {r: 0.3263889, g: 0.30555555, b: 0.5, a: 1}
 --- !u!114 &669317804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2600,7 +2600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &783943841
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2670,14 +2670,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 783943840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
+  m_Script: {fileID: 11500000, guid: 43798036680969f4193524b10f01559b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 1680202932}
   tabName: Drives
-  buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
-  buttonColourActive: {r: 0.3019608, g: 0.28235295, b: 0.43529412, a: 1}
+  buttonColourDefault: {r: 0.18431373, g: 0.17254902, b: 0.28235295, a: 1}
+  buttonColourActive: {r: 0.3263889, g: 0.30555555, b: 0.5, a: 1}
 --- !u!114 &783943845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3753,12 +3753,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1223919726}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericMenu, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_TabController, Assembly-CSharp
         m_MethodName: ActivateTab
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 668329983}
-          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_GenericTab, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_Tab, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4305,13 +4305,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1223919722}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd67a977754a9674cb87a651ce10a31b, type: 3}
+  m_Script: {fileID: 11500000, guid: d57e10cb03b717a49a7b9282458d3455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myOwnerCanvas: {fileID: 0}
-  myTabs: []
-  myTabsButtons: []
-  activeTab: {fileID: 0}
+  myTabs:
+  - {fileID: 668329983}
+  - {fileID: 2138305327}
+  - {fileID: 783943844}
+  - {fileID: 669317803}
+  myTabsButtons:
+  - {fileID: 1088163887}
+  - {fileID: 2105585476}
+  - {fileID: 1680202932}
+  - {fileID: 275420143}
+  activeTab: {fileID: 668329983}
 --- !u!1 &1300090745
 GameObject:
   m_ObjectHideFlags: 0
@@ -6017,12 +6025,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1223919726}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericMenu, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_TabController, Assembly-CSharp
         m_MethodName: ActivateTab
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 783943844}
-          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_GenericTab, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_Tab, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7214,12 +7222,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1223919726}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericMenu, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_TabController, Assembly-CSharp
         m_MethodName: ActivateTab
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 2138305327}
-          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_GenericTab, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: QuilleUI.CCUI_Tab, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7414,7 +7422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2138305324
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7484,14 +7492,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2138305323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb38b04b2e9653c4c80998f6779a7586, type: 3}
+  m_Script: {fileID: 11500000, guid: 43798036680969f4193524b10f01559b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myParentMenu: {fileID: 1223919726}
   myButton: {fileID: 2105585476}
   tabName: PersonalityTraits
-  buttonColourDefault: {r: 0.19607843, g: 0.18039216, b: 0.29411766, a: 1}
-  buttonColourActive: {r: 0.3019608, g: 0.28235295, b: 0.43529412, a: 1}
+  buttonColourDefault: {r: 0.18431373, g: 0.17254902, b: 0.28235295, a: 1}
+  buttonColourActive: {r: 0.3263889, g: 0.30555555, b: 0.5, a: 1}
 --- !u!114 &2138305328
 MonoBehaviour:
   m_ObjectHideFlags: 0

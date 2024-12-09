@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericMenu: MonoBehaviour
+    public class CCUI_TabController: MonoBehaviour
     {
         // Test setup for a generic menu of the character creator, containing various submenues/tabs.
 
@@ -14,11 +14,11 @@ namespace QuilleUI
         // VARIABLES
         [Header("References")]
         [SerializeField] private Canvas myOwnerCanvas;
-        [SerializeField] private CCUI_GenericTab[] myTabs;
+        [SerializeField] private CCUI_Tab[] myTabs;
         [SerializeField] private Button[] myTabsButtons; // is this necessary?
 
         [Header("Utility")]
-        [SerializeField] private CCUI_GenericTab activeTab;
+        [SerializeField] private CCUI_Tab activeTab;
 
 
         // EVENTS
@@ -29,7 +29,7 @@ namespace QuilleUI
         // METHODS
 
         // UTILITY
-        public void ActivateTab(CCUI_GenericTab targetTab)
+        public void ActivateTab(CCUI_Tab targetTab)
         {
             // Activate the relevant tab.
             activeTab = targetTab;
@@ -45,7 +45,7 @@ namespace QuilleUI
         {
             myOwnerCanvas = GetComponentInParent<Canvas>(true);
 
-            myTabs = gameObject.transform.GetComponentsInChildren<CCUI_GenericTab>(true);
+            myTabs = gameObject.transform.GetComponentsInChildren<CCUI_Tab>(true);
             myTabsButtons = myTabs.Select(tab => tab.MyButtom).ToArray();
         }
 
@@ -54,7 +54,7 @@ namespace QuilleUI
             FetchComponents();
 
             // Register eventListeners
-            foreach (CCUI_GenericTab tab in myTabs)
+            foreach (CCUI_Tab tab in myTabs)
             {
                 tab.gameObject.SetActive(true);
                 ActiveTabUpdated += tab.OnSiblingActivated;

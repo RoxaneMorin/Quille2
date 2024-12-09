@@ -224,16 +224,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4517c42c06659ec4f96a11a4e5e83d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mySO: {fileID: 0}
   isSelected: 0
-  isForbidden: 0
-  myValue: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
-  myFrame: {fileID: 6853151894013835166}
   myIcon: {fileID: 7322233200012067333}
   myButton: {fileID: 0}
   myCaption: {fileID: 1589630947122236357}
+  mySO: {fileID: 0}
+  isForbidden: 0
+  myValue: 0
+  myFrame: {fileID: 6853151894013835166}
   myStepCount: 2
   myStepSize: 0.5
   myCurrentStep: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 934656432970652437}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
-        m_MethodName: OnSteppedButtonClicked
+        m_MethodName: OnButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -378,7 +378,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 934656432970652437}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
-        m_MethodName: OnSteppedButtonRightClicked
+        m_MethodName: OnButtonRightClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -393,7 +393,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 934656432970652437}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
-        m_MethodName: OnSteppedButtonMiddleClicked
+        m_MethodName: OnButtonMiddleClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

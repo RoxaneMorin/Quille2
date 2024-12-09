@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericSteppedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CCUI_GenericSteppedButton : CCUI_GenericSelectableButton
     {
         // A composite button that can be selected at different "fill levels".
         // Contains an icon which is always display, a "frame" which "fills" with the level of selection, and a caption visible on hover.
@@ -15,25 +15,17 @@ namespace QuilleUI
 
         // VARIABLES
         [SerializeField] protected ScriptableObject mySO;
-        [SerializeField] protected bool isSelected;
         [SerializeField] protected bool isForbidden;
         [SerializeField] protected float myValue;
 
         [Header("References")]
-        [SerializeField] protected RectTransform myRectTransform;
-        [SerializeField] protected Vector2 myDefaultPosition;
         [SerializeField] protected Image myFrame;
-        [SerializeField] protected Image myIcon;
-        [SerializeField] protected ButtonExtended myButton;
-        [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
 
         [Header("Resources")]
         // TODO: give the option to use an array of step values instead?
         [SerializeField] protected int myStepCount = 2;
         [SerializeField] protected float myStepSize = 0.5f;
         [SerializeField] protected float myCurrentStep = 0;
-        [SerializeField] protected Color myColourDefault;
-        [SerializeField] protected Color myColourSelected;
         [SerializeField] protected Color myColourForbidden;
         [SerializeField] protected Color myColourSelectedeButForbidden;
 
@@ -41,11 +33,8 @@ namespace QuilleUI
         // PARAMETERS
         internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
         internal float MyButtonValue { get { return myValue; } }
-        internal bool IsSelected { get { return isSelected; } }
         internal bool IsForbidden { get { return isForbidden; } }
-
         internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
-        internal UnityEngine.Vector2 MyDefaultPosition { get { return myDefaultPosition; } set { myDefaultPosition = value; } }
 
 
         // EVENTS
@@ -56,7 +45,7 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnSteppedButtonClicked()
+        public override void OnButtonClicked()
         {
             // If the button is not selected, do so and fill it completely.
             // If it is full or mostly filled, decrease it.¸
@@ -79,7 +68,7 @@ namespace QuilleUI
                 SteppedButtonUpdated?.Invoke(this, true);
             }
         }
-        public virtual void OnSteppedButtonRightClicked()
+        public override void OnButtonRightClicked()
         {
             // If the button is not selected, do so and fill it completely.
             // If the button is currently partially full, increase it.
@@ -102,7 +91,7 @@ namespace QuilleUI
                 SteppedButtonUpdated?.Invoke(this, true);
             }
         }
-        public virtual void OnSteppedButtonMiddleClicked()
+        public override void OnButtonMiddleClicked()
         {
             // If the button is not selected, do so and fill it completely.
             // If it is, unselect and empty it.
@@ -127,7 +116,7 @@ namespace QuilleUI
             myFrame.fillAmount = value;
         }
 
-        public virtual void Select()
+        public override void Select()
         {
             // Select at full value.
             Select(myStepCount);
@@ -150,9 +139,9 @@ namespace QuilleUI
             myFrame.color = myColourSelected;
         }
 
-        public virtual void Unselect()
+        public override void Unselect()
         {
-            isSelected = false;
+            base.Unselect();
 
             SetValueAndFill(0f);
             myCurrentStep = 0;
@@ -189,12 +178,6 @@ namespace QuilleUI
             }
         }
 
-        public virtual void ChangeParentAndPosition(Transform newParent, UnityEngine.Vector2 newPosition)
-        {
-            transform.SetParent(newParent);
-            myRectTransform.anchoredPosition = newPosition;
-        }
-
         public virtual void RandomizeValueAndSelect()
         {
             int targetStepCount = RandomExtended.RangeInt(1, myStepCount);
@@ -204,17 +187,11 @@ namespace QuilleUI
 
 
         // INIT
-        protected virtual void FetchComponents()
+        protected override void FetchComponents()
         {
-            myRectTransform = gameObject.GetComponent<RectTransform>();
-            myDefaultPosition = new Vector2(myRectTransform.anchoredPosition.x, myRectTransform.anchoredPosition.y);
+            base.FetchComponents();
 
             myFrame = gameObject.GetComponent<Image>();
-
-            myButton = gameObject.GetComponentInChildren<ButtonExtended>(true);
-            myIcon = myButton.image;
-
-            myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
         }
         protected virtual void SetStepVariables()
         {
@@ -224,12 +201,10 @@ namespace QuilleUI
 
         public virtual void Init(ScriptableObject sourceSO)
         {
+            base.Init();
+
             mySO = sourceSO;
-
-            FetchComponents();
-
             SetStepVariables();
-            myCaption.gameObject.SetActive(false);
         }
 
 
@@ -237,16 +212,6 @@ namespace QuilleUI
         void Start()
         {
             //Init(null);
-        }
-
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
-        {
-            myCaption.gameObject.SetActive(true);
-        }
-
-        void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
-        {
-            myCaption.gameObject.SetActive(false);
         }
     }
 }

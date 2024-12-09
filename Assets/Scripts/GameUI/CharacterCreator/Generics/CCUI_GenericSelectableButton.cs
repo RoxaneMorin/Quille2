@@ -22,6 +22,10 @@ namespace QuilleUI
         [SerializeField] protected ButtonExtended myButton;
         [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
 
+        [Header("Resources")]
+        [SerializeField] protected Color myColourDefault;
+        [SerializeField] protected Color myColourSelected;
+
 
         // PROPERTIES
         internal bool IsSelected { get { return isSelected; } }
@@ -97,7 +101,7 @@ namespace QuilleUI
         // BUILT IN
         void Start()
         {
-            Init();
+            //Init();
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)

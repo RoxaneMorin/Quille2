@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_InterestButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CCUI_InterestButton : CCUI_GenericSelectableButton
     {
         // Test setup for a character creator's indivudal interest UI.
         // When selected, a slider component will appear.
@@ -14,16 +14,10 @@ namespace QuilleUI
 
         // VARIABLES
         [SerializeField] protected Quille.InterestSO myInterestSO;
-        [SerializeField] protected bool isSelected;
 
         [Header("References")]
-        [SerializeField] protected RectTransform myRectTransform;
-        [SerializeField] protected Vector2 myDefaultPosition;
-        [SerializeField] protected Image myIcon;
-        [SerializeField] protected ButtonExtended myButton;
         [SerializeField] protected Slider mySlider;
         [SerializeField] protected Graphic myHandle;
-        [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
 
         [Header("Resources")]
         [SerializeField] Gradient myColourGradient;
@@ -36,13 +30,13 @@ namespace QuilleUI
 
 
         // TODO: put together a radial slider, it'll look better.
+        // TODO: colour the slider like the steppedbuttons' frames are?
 
 
         // PARAMETERS
         internal Quille.InterestSO MyInterestSO { get { return myInterestSO; } set { myInterestSO = value; } }
         internal KeyValuePair<Quille.InterestSO, float> MyAxeSOAndValue { get { return new KeyValuePair<Quille.InterestSO, float>(MyInterestSO, MySliderValue); } }
 
-        internal bool IsSelected { get { return isSelected; } }
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
         internal float MySliderValueWithoutNotify
         {
@@ -54,8 +48,6 @@ namespace QuilleUI
             }
         }
 
-        internal UnityEngine.Vector2 MyDefaultPosition { get { return myDefaultPosition; } set { myDefaultPosition = value; } }
-
 
         // EVENTS
         public event InterestButtonUpdate InterestButtonUpdated;
@@ -65,7 +57,7 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnInterestButtonClicked()
+        public override void OnButtonClicked()
         {
             // If the button is not selected, unselect it, and viseversa.
 
@@ -90,7 +82,7 @@ namespace QuilleUI
 
 
         // UTILITY
-        public virtual void Select()
+        public override void Select()
         {
             Select(0);
         }
@@ -102,19 +94,13 @@ namespace QuilleUI
             mySlider.gameObject.SetActive(true);
             myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
-        public virtual void Unselect()
+        public override void Unselect()
         {
-            isSelected = false;
+            base.Unselect();
             MySliderValueWithoutNotify = 0;
 
             mySlider.gameObject.SetActive(false);
             myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
-        }
-
-        public virtual void ChangeParentAndPosition(Transform newParent, UnityEngine.Vector2 newPosition)
-        {
-            transform.SetParent(newParent);
-            myRectTransform.anchoredPosition = newPosition;
         }
 
         private void StepValue()
@@ -141,25 +127,19 @@ namespace QuilleUI
 
 
         // INIT
-        protected virtual void FetchComponents()
+        protected override void FetchComponents()
         {
-            myRectTransform = gameObject.GetComponent<RectTransform>();
-            myDefaultPosition = new Vector2(myRectTransform.anchoredPosition.x, myRectTransform.anchoredPosition.y);
-
-            myButton = gameObject.GetComponentInChildren<ButtonExtended>(true);
-            myIcon = myButton.image;
+            base.FetchComponents();
 
             mySlider = gameObject.GetComponentInChildren<Slider>(true);
             myHandle = mySlider.targetGraphic;
-
-            myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
         }
 
         public virtual void Init(Quille.InterestSO sourceSO)
         {
-            myInterestSO = sourceSO;
+            base.Init();
 
-            FetchComponents();
+            myInterestSO = sourceSO;
 
             if (myInterestSO)
             {
@@ -170,7 +150,6 @@ namespace QuilleUI
             }
 
             mySlider.gameObject.SetActive(false);
-            myCaption.gameObject.SetActive(false);
         }
 
 
@@ -178,16 +157,6 @@ namespace QuilleUI
         void Start()
         {
             //Init(myInterestSO);
-        }
-
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
-        {
-            myCaption.gameObject.SetActive(true);
-        }
-
-        void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
-        {
-            myCaption.gameObject.SetActive(false);
         }
     }
 }

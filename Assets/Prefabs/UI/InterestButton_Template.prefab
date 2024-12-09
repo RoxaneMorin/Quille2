@@ -298,7 +298,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
-        m_MethodName: OnInterestButtonClicked
+        m_MethodName: OnButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -313,7 +313,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
-        m_MethodName: OnInterestButtonClicked
+        m_MethodName: OnButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -328,7 +328,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
-        m_MethodName: OnInterestButtonClicked
+        m_MethodName: OnButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -577,15 +577,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7a73ff46ca9034187941bb5bf66868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myInterestSO: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
   isSelected: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
   myIcon: {fileID: 0}
   myButton: {fileID: 0}
+  myCaption: {fileID: 0}
+  myInterestSO: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
   mySlider: {fileID: 0}
   myHandle: {fileID: 0}
-  myCaption: {fileID: 0}
   myColourGradient:
     serializedVersion: 2
     key0: {r: 0.53720176, g: 0.011127713, b: 0, a: 1}

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace QuilleUI
 {
     // GENERIC TAB EVENTS
-    public delegate void ActiveTabUpdate(CCUI_GenericTab newActiveTab);
+    public delegate void ActiveTabUpdate(CCUI_Tab newActiveTab);
 
 
     // CHARACTER CREATOR EVENTS

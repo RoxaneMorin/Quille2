@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericTab : MonoBehaviour
+    public class CCUI_Tab : MonoBehaviour
     {
         // Test setup for a generic tab in the character creator.
 
 
         // VARIABLES
         [Header("References")]
-        [SerializeField] private CCUI_GenericMenu myParentMenu;
+        [SerializeField] private CCUI_TabController myParentMenu;
         [SerializeField] private Button myButton;
 
         [Header("Utility")]
@@ -30,7 +30,7 @@ namespace QuilleUI
         // METHODS
 
         // EVENT LISTENERS
-        public void OnSiblingActivated(CCUI_GenericTab activatedTab)
+        public void OnSiblingActivated(CCUI_Tab activatedTab)
         {
             //Debug.Log(this.name + " received OnSiblingActivated for " + activatedTab.name);
 
@@ -62,7 +62,7 @@ namespace QuilleUI
         private void Init()
         {
             // Find parent menu & register to its event.
-            myParentMenu = gameObject.GetComponentInParent<CCUI_GenericMenu>(true);
+            myParentMenu = gameObject.GetComponentInParent<CCUI_TabController>(true);
 
             // Find buttons if none have been assigned?
             if (!myButton)
