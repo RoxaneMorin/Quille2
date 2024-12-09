@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_InterestButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectable
+    public class CCUI_InterestButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         // Test setup for a character creator's indivudal interest UI.
         // When selected, a slider component will appear.
