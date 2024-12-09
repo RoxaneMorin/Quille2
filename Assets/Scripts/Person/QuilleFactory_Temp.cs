@@ -17,6 +17,7 @@ namespace Quille
         [SerializeField] private QuilleUI.CCUI_PersonalityAxesMenu sourcePersonalityAxesMenu;
         [SerializeField] private QuilleUI.CCUI_PersonalityTraitsMenu sourcePersonalityTraitsMenu;
         [SerializeField] private QuilleUI.CCUI_DrivesMenu sourceDrivesMenu;
+        [SerializeField] private QuilleUI.CCUI_InterestsMenu sourceInterestsMenu;
 
 
         [Header("Misc")]
@@ -38,6 +39,7 @@ namespace Quille
             UpdatePersonPersonalityAxesFromUI(false);
             UpdatePersonPersonalityTraitsFromUI(false);
             UpdatePersonDrivesFromUI(false);
+            UpdatePersonInterestsFromUI(false);
 
             TargetPersonWasModified?.Invoke(currentPerson);
         }
@@ -100,6 +102,19 @@ namespace Quille
                 TargetPersonWasModified?.Invoke(currentPerson);
             }
         }
+        public void UpdatePersonInterestsFromUI()
+        {
+            UpdatePersonInterestsFromUI(true);
+        }
+        public void UpdatePersonInterestsFromUI(bool throwEvent)
+        {
+            currentPerson.MyPersonCharacter.SetInterestScoreDict(sourceInterestsMenu.GetButtonsSOsAndValues());
+
+            if (throwEvent)
+            {
+                TargetPersonWasModified?.Invoke(currentPerson);
+            }
+        }
 
 
         // UPDATE UI VALUES FROM PERSON
@@ -109,6 +124,7 @@ namespace Quille
             UpdateUIPersonalityAxesFromPerson();
             UpdateUIPersonalityTraitsFromPerson();
             UpdateUIDrivesFromPerson();
+            UpdateUIInterestsFromPerson();
 
             TargetPersonWasModified?.Invoke(currentPerson);
         }
@@ -133,6 +149,11 @@ namespace Quille
         private void UpdateUIDrivesFromPerson()
         {
             sourceDrivesMenu.SetButtonValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetDriveScoreDict());
+        }
+
+        private void UpdateUIInterestsFromPerson()
+        {
+            sourceInterestsMenu.SetButtonValuesFromSOFloatDict(currentPerson.MyPersonCharacter.GetInterestScoreDict());
         }
 
 
@@ -170,6 +191,7 @@ namespace Quille
 
             sourceDrivesMenu.DrivesMenuUpdated += UpdatePersonDrivesFromUI;
 
+            sourceInterestsMenu.InterestsMenuUpdated += UpdatePersonInterestsFromUI;
 
             TargetPersonWasModified += sourcePersonalityTraitsMenu.OnTargetPersonModified;
         }

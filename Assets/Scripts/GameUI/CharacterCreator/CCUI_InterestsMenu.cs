@@ -6,15 +6,16 @@ using UnityEngine;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericSteppedButtonMenu : MonoBehaviour
+    public class CCUI_InterestsMenu : MonoBehaviour
     {
-        // Generic menu where steppedButtons are automatically generated, can be selected and scaled.
-        // Procedurally populated from a given type of scriptable objects.
+        // Test setup for a character creator's interest UI.
+        // Procedurally populated from existing InterestSO.
+        // Sadly repeats a lot from the GenericSteppedButtonMenu without being able to inherit from it :/ maybe I should rework that stuff.
 
 
         // VARIABLES
         [Header("Parameters")]
-        [SerializeField] protected Transform steppedButtonPrefab;
+        [SerializeField] protected Transform interestButtonPrefab;
         [SerializeField] protected int countPerRow;
         [SerializeField] protected float rowShift;
         [SerializeField] protected float containerPadding;
@@ -32,19 +33,58 @@ namespace QuilleUI
         protected float initialYPos;
 
         [Header("The Stuff")]
-        [SerializeField] protected CCUI_GenericSteppedButton[] theButtons;
-        [SerializeField] protected SerializedDictionary<ScriptableObject, CCUI_GenericSteppedButton> theButtonsDict;
+        [SerializeField] protected CCUI_InterestButton[] theButtons;
+        [SerializeField] protected SerializedDictionary<ScriptableObject, CCUI_InterestButton> theButtonsDict;
         [SerializeField] protected Transform[] theButtonsTransforms;
         [Space]
-        [SerializeField] protected List<CCUI_GenericSteppedButton> currentlySelectedButtons;
+        [SerializeField] protected List<CCUI_InterestButton> currentlySelectedButtons;
         // A HashSet would be better, but doesn't show up in editor :/
+
+
+        // PROPERTIES
+        public float GetSliderValueFor(Quille.InterestSO theISO)
+        {
+            return theButtonsDict[theISO].MySliderValue;
+        }
+
+        public SerializedDictionary<Quille.InterestSO, float> GetButtonsSOsAndValues()
+        {
+            SerializedDictionary<Quille.InterestSO, float> SOsAndValuesDict = new SerializedDictionary<Quille.InterestSO, float>();
+
+            foreach (CCUI_InterestButton button in currentlySelectedButtons)
+            {
+                SOsAndValuesDict.Add(button.MyInterestSO, button.MySliderValue);
+            }
+
+            return SOsAndValuesDict;
+        }
+
+        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.InterestSO, float> sourceDict)
+        {
+            ResetValues();
+
+            foreach (KeyValuePair<Quille.InterestSO, float> keyValuePair in sourceDict)
+            {
+                if (theButtonsDict.ContainsKey(keyValuePair.Key))
+                {
+                    theButtonsDict[keyValuePair.Key].Select(keyValuePair.Value);
+                    currentlySelectedButtons.Add(theButtonsDict[keyValuePair.Key]);
+                }
+            }
+
+            PositionSelectedButtons();
+        }
+
+
+        // EVENTS
+        public event InterestsMenuUpdate InterestsMenuUpdated;
 
 
 
         // METHODS
 
         // EVENT LISTENERS
-        public virtual void OnSteppedButtonUpdated(CCUI_GenericSteppedButton theUpdatedButton, bool shouldItMove)
+        public virtual void OnInterestButtonUpdated(CCUI_InterestButton theUpdatedButton, bool shouldItMove)
         {
             if (shouldItMove)
             {
@@ -57,15 +97,18 @@ namespace QuilleUI
                     RemoveButtonFromSelected(theUpdatedButton);
                 }
             }
+
+            InterestsMenuUpdated?.Invoke();
         }
 
+
         // UTILITY
-        protected virtual void MoveButtonToSelected(CCUI_GenericSteppedButton theTargetButton)
+        protected virtual void MoveButtonToSelected(CCUI_InterestButton theTargetButton)
         {
             currentlySelectedButtons.Add(theTargetButton);
             PositionSelectedButtons();
         }
-        protected virtual void RemoveButtonFromSelected(CCUI_GenericSteppedButton theTargetButton)
+        protected virtual void RemoveButtonFromSelected(CCUI_InterestButton theTargetButton)
         {
             theTargetButton.ChangeParentAndPosition(allButtonsContainerTransform, theTargetButton.MyDefaultPosition);
 
@@ -75,11 +118,11 @@ namespace QuilleUI
 
         protected virtual void PositionSelectedButtons()
         {
-            int expectedNumberOfButtons = Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT; // this should varry by button subtype.
+            int expectedNumberOfButtons = Quille.Constants.DEFAULT_INTEREST_COUNT;
             float distanceBetweenButtons = containerWidthPadded / (expectedNumberOfButtons - 1);
 
             int i = 0;
-            foreach (CCUI_GenericSteppedButton button in currentlySelectedButtons)
+            foreach (CCUI_InterestButton button in currentlySelectedButtons)
             {
                 Vector2 newPosition = new Vector2(initialXPos + i * distanceBetweenButtons, selectedShift);
                 button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
@@ -88,20 +131,25 @@ namespace QuilleUI
             }
         }
 
+        public void RandomizeValues()
+        {
+            RandomizeValues(Quille.Constants.DEFAULT_INTEREST_COUNT);
+
+            InterestsMenuUpdated?.Invoke();
+        }
         public virtual void RandomizeValues(int numberToSelect)
         {
             ResetValues();
 
-            CCUI_GenericSteppedButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
-            int numberOfButtons = permittedButtons.Length;
+            int numberOfButtons = theButtons.Length;
             int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
 
             List<int> IDsToSelect = RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
 
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(permittedButtons[ID]);
-                permittedButtons[ID].RandomizeValueAndSelect();
+                currentlySelectedButtons.Add(theButtons[ID]);
+                theButtons[ID].RandomizeValueAndSelect();
             }
 
             PositionSelectedButtons();
@@ -109,7 +157,7 @@ namespace QuilleUI
 
         public virtual void ResetValues()
         {
-            foreach (CCUI_GenericSteppedButton button in currentlySelectedButtons)
+            foreach (CCUI_InterestButton button in currentlySelectedButtons)
             {
                 button.Unselect();
                 button.ChangeParentAndPosition(allButtonsContainerTransform, button.MyDefaultPosition);
@@ -137,13 +185,13 @@ namespace QuilleUI
             initialYPos = ((RectTransform)initialButtonTransform).anchoredPosition.y;
         }
 
-        protected virtual void LoadSOsAndCreateButtons(string SOsResourcePath)
+        protected virtual void LoadSOsAndCreateButtons()
         {
-            ScriptableObject[] theSOs = Resources.LoadAll<ScriptableObject>(SOsResourcePath);
+            Quille.InterestSO[] theSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
             int noOfSOs = theSOs.Length;
 
-            theButtons = new CCUI_GenericSteppedButton[noOfSOs];
-            theButtonsDict = new SerializedDictionary<ScriptableObject, CCUI_GenericSteppedButton>();
+            theButtons = new CCUI_InterestButton[noOfSOs];
+            theButtonsDict = new SerializedDictionary<ScriptableObject, CCUI_InterestButton>();
             theButtonsTransforms = new RectTransform[noOfSOs];
 
             // Calculate the necessry values for generating the grid of buttons.
@@ -162,8 +210,8 @@ namespace QuilleUI
                         break;
                     }
 
-                    theButtonsTransforms[i] = Instantiate<Transform>(steppedButtonPrefab, initialButtonTransform);
-                    theButtons[i] = theButtonsTransforms[i].GetComponent<CCUI_GenericSteppedButton>();
+                    theButtonsTransforms[i] = Instantiate<Transform>(interestButtonPrefab, initialButtonTransform);
+                    theButtons[i] = theButtonsTransforms[i].GetComponent<CCUI_InterestButton>();
                     theButtonsDict.Add(theSOs[i], theButtons[i]);
 
                     // Set the button's parent and positione.
@@ -175,7 +223,7 @@ namespace QuilleUI
                     theButtons[i].Init(theSOs[i]);
 
                     // Subscribe to its event.
-                    theButtons[i].SteppedButtonUpdated += OnSteppedButtonUpdated;
+                    theButtons[i].InterestButtonUpdated += OnInterestButtonUpdated;
 
                     i++;
                 }
@@ -185,8 +233,7 @@ namespace QuilleUI
         protected virtual void Init()
         {
             FetchComponents();
-
-            // Call LoadSOsAndCreateButtons with the relevant SO path in child classes.
+            LoadSOsAndCreateButtons();
         }
 
 
@@ -196,5 +243,5 @@ namespace QuilleUI
             Init();
         }
     }
-
 }
+
