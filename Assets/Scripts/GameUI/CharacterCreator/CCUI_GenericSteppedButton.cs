@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_GenericSteppedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CCUI_GenericSteppedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectable, IForbiddable
     {
         // A composite button that can be selected at different "fill levels".
         // Contains an icon which is always display, a "frame" which "fills" with the level of selection, and a caption visible on hover.

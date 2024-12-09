@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace QuilleUI
 {
-    public class CCUI_InterestButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CCUI_InterestButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectable
     {
         // Test setup for a character creator's indivudal interest UI.
         // When selected, a slider component will appear.
@@ -34,6 +34,8 @@ namespace QuilleUI
         [SerializeField] bool stepValues = true;
         [SerializeField, Tooltip("Rounds to 100/this value.")] int roundingValue = 8;
 
+
+        // TODO: put together a radial slider, it'll look better.
 
 
         // PARAMETERS
@@ -85,7 +87,6 @@ namespace QuilleUI
 
             InterestButtonUpdated?.Invoke(this, false);
         }
-        // TODO: stop the clicked slider from deselecting the button x:
 
 
         // UTILITY
