@@ -50,7 +50,7 @@ namespace UnityEngine.UI
         public class SliderEvent : UnityEvent<float> {}
 
         [SerializeField]
-        private RectTransform m_FillRect;
+        protected RectTransform m_FillRect;
 
         /// <summary>
         /// Optional RectTransform to use as fill for the slider.
@@ -81,7 +81,7 @@ namespace UnityEngine.UI
         public RectTransform fillRect { get { return m_FillRect; } set { if (SetPropertyUtility.SetClass(ref m_FillRect, value)) {UpdateCachedReferences(); UpdateVisuals(); } } }
 
         [SerializeField]
-        private RectTransform m_HandleRect;
+        protected RectTransform m_HandleRect;
 
         /// <summary>
         /// Optional RectTransform to use as a handle for the slider.
@@ -115,7 +115,7 @@ namespace UnityEngine.UI
         [Space]
 
         [SerializeField]
-        private Direction m_Direction = Direction.LeftToRight;
+        protected Direction m_Direction = Direction.LeftToRight;
 
         /// <summary>
         /// The direction of the slider, from minimum to maximum value.
@@ -146,7 +146,7 @@ namespace UnityEngine.UI
         public Direction direction { get { return m_Direction; } set { if (SetPropertyUtility.SetStruct(ref m_Direction, value)) UpdateVisuals(); } }
 
         [SerializeField]
-        private float m_MinValue = 0;
+        protected float m_MinValue = 0;
 
         /// <summary>
         /// The minimum allowed value of the slider.
@@ -174,7 +174,7 @@ namespace UnityEngine.UI
         public float minValue { get { return m_MinValue; } set { if (SetPropertyUtility.SetStruct(ref m_MinValue, value)) { Set(m_Value); UpdateVisuals(); } } }
 
         [SerializeField]
-        private float m_MaxValue = 1;
+        protected float m_MaxValue = 1;
 
         /// <summary>
         /// The maximum allowed value of the slider.
@@ -202,7 +202,7 @@ namespace UnityEngine.UI
         public float maxValue { get { return m_MaxValue; } set { if (SetPropertyUtility.SetStruct(ref m_MaxValue, value)) { Set(m_Value); UpdateVisuals(); } } }
 
         [SerializeField]
-        private bool m_WholeNumbers = false;
+        protected bool m_WholeNumbers = false;
 
         /// <summary>
         /// Should the value only be allowed to be whole numbers?
@@ -318,7 +318,7 @@ namespace UnityEngine.UI
         [Space]
 
         [SerializeField]
-        private SliderEvent m_OnValueChanged = new SliderEvent();
+        protected SliderEvent m_OnValueChanged = new SliderEvent();
 
         /// <summary>
         /// Callback executed when the value of the slider is changed.
@@ -353,25 +353,25 @@ namespace UnityEngine.UI
 
         // Private fields
 
-        private Image m_FillImage;
-        private Transform m_FillTransform;
-        private RectTransform m_FillContainerRect;
-        private Transform m_HandleTransform;
-        private RectTransform m_HandleContainerRect;
+        protected Image m_FillImage;
+        protected Transform m_FillTransform;
+        protected RectTransform m_FillContainerRect;
+        protected Transform m_HandleTransform;
+        protected RectTransform m_HandleContainerRect;
 
         // The offset from handle position to mouse down position
-        private Vector2 m_Offset = Vector2.zero;
+        protected Vector2 m_Offset = Vector2.zero;
 
         // field is never assigned warning
-        #pragma warning disable 649
-        private DrivenRectTransformTracker m_Tracker;
-        #pragma warning restore 649
+#pragma warning disable 649
+        protected DrivenRectTransformTracker m_Tracker;
+#pragma warning restore 649
 
         // This "delayed" mechanism is required for case 1037681.
-        private bool m_DelayedUpdateVisuals = false;
+        protected bool m_DelayedUpdateVisuals = false;
 
         // Size of each step.
-        float stepSize { get { return wholeNumbers ? 1 : (maxValue - minValue) * 0.1f; } }
+        protected float stepSize { get { return wholeNumbers ? 1 : (maxValue - minValue) * 0.1f; } }
 
         protected Slider()
         {}
@@ -478,7 +478,7 @@ namespace UnityEngine.UI
             base.OnDidApplyAnimationProperties();
         }
 
-        void UpdateCachedReferences()
+        protected virtual void UpdateCachedReferences()
         {
             if (m_FillRect && m_FillRect != (RectTransform)transform)
             {
@@ -552,17 +552,17 @@ namespace UnityEngine.UI
             UpdateVisuals();
         }
 
-        enum Axis
+        protected enum Axis
         {
             Horizontal = 0,
             Vertical = 1
         }
 
-        Axis axis { get { return (m_Direction == Direction.LeftToRight || m_Direction == Direction.RightToLeft) ? Axis.Horizontal : Axis.Vertical; } }
-        bool reverseValue { get { return m_Direction == Direction.RightToLeft || m_Direction == Direction.TopToBottom; } }
+        protected Axis axis { get { return (m_Direction == Direction.LeftToRight || m_Direction == Direction.RightToLeft) ? Axis.Horizontal : Axis.Vertical; } }
+        protected bool reverseValue { get { return m_Direction == Direction.RightToLeft || m_Direction == Direction.TopToBottom; } }
 
         // Force-update the slider. Useful if you've changed the properties and want it to update visually.
-        private void UpdateVisuals()
+        protected virtual void UpdateVisuals()
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -605,7 +605,7 @@ namespace UnityEngine.UI
         }
 
         // Update the slider's position based on the mouse.
-        void UpdateDrag(PointerEventData eventData, Camera cam)
+        protected virtual void UpdateDrag(PointerEventData eventData, Camera cam)
         {
             RectTransform clickRect = m_HandleContainerRect ?? m_FillContainerRect;
             if (clickRect != null && clickRect.rect.size[(int)axis] > 0)
@@ -624,7 +624,7 @@ namespace UnityEngine.UI
             }
         }
 
-        private bool MayDrag(PointerEventData eventData)
+        protected bool MayDrag(PointerEventData eventData)
         {
             return IsActive() && IsInteractable() && eventData.button == PointerEventData.InputButton.Left;
         }
