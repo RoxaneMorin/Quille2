@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7898927159827476893}
   - component: {fileID: 8602596544194688498}
   - component: {fileID: 7115466768898969024}
-  - component: {fileID: 5814033937874363213}
+  - component: {fileID: 1570634288136567125}
   m_Layer: 5
   m_Name: IconAndButton
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5814033937874363213
+--- !u!114 &1570634288136567125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 146135731408820501}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec11984a7ff38742a5948a0244f80fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -119,9 +119,12 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7115466768898969024}
   m_OnClick:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnLeftClick:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6551079930481791064}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedSelectableButton, Assembly-CSharp
         m_MethodName: OnButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -136,7 +139,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6551079930481791064}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedSelectableButton, Assembly-CSharp
         m_MethodName: OnButtonRightClicked
         m_Mode: 1
         m_Arguments:
@@ -151,7 +154,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6551079930481791064}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedButton, Assembly-CSharp
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSteppedSelectableButton, Assembly-CSharp
         m_MethodName: OnButtonMiddleClicked
         m_Mode: 1
         m_Arguments:
@@ -252,21 +255,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81d5a3b83c3ce24096e8d96457c6bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySO: {fileID: 0}
   isSelected: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
   myIcon: {fileID: 7115466768898969024}
-  myButton: {fileID: 5814033937874363213}
+  myButton: {fileID: 0}
   myCaption: {fileID: 8055618537292032621}
-  mySO: {fileID: 0}
+  myColourDefault: {r: 0.23529412, g: 0.21960784, b: 0.35686275, a: 1}
+  myColourSelected: {r: 1, g: 1, b: 1, a: 1}
   isForbidden: 0
   myValue: 0
   myFrame: {fileID: 6845836189155728242}
   myStepCount: 2
   myStepSize: 0.5
   myCurrentStep: 0
-  myColourDefault: {r: 0.23529412, g: 0.21960784, b: 0.35686275, a: 1}
-  myColourSelected: {r: 1, g: 1, b: 1, a: 1}
   myColourForbidden: {r: 0.4, g: 0.4, b: 0.4, a: 1}
   myColourSelectedeButForbidden: {r: 0.7490196, g: 0, b: 0, a: 1}
 --- !u!1 &6921916988982655199

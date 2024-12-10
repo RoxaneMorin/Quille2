@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 8454495887291659686}
   - component: {fileID: 716579016848316235}
   - component: {fileID: 911629502622163336}
-  - component: {fileID: 5908278647801439558}
+  - component: {fileID: 8543150134420328836}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5908278647801439558
+--- !u!114 &8543150134420328836
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1961483787954913219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec11984a7ff38742a5948a0244f80fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -295,6 +295,9 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 911629502622163336}
   m_OnClick:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnLeftClick:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
         m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
@@ -312,8 +315,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
-        m_MethodName: OnButtonClicked
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSelectableButton, Assembly-CSharp
+        m_MethodName: OnButtonRightClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -327,8 +330,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5605891295564607627}
-        m_TargetAssemblyTypeName: QuilleUI.CCUI_InterestButton, Assembly-CSharp
-        m_MethodName: OnButtonClicked
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_GenericSelectableButton, Assembly-CSharp
+        m_MethodName: OnButtonMiddleClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -577,13 +580,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7a73ff46ca9034187941bb5bf66868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySO: {fileID: 0}
   isSelected: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
   myIcon: {fileID: 0}
   myButton: {fileID: 0}
   myCaption: {fileID: 0}
-  myInterestSO: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
+  myColourDefault: {r: 0, g: 0, b: 0, a: 0}
+  myColourSelected: {r: 0, g: 0, b: 0, a: 0}
   mySlider: {fileID: 0}
   myHandle: {fileID: 0}
   myColourGradient:

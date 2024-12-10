@@ -20,7 +20,7 @@ namespace QuilleUI
         [SerializeField] protected RectTransform myRectTransform;
         [SerializeField] protected Vector2 myDefaultPosition;
         [SerializeField] protected Image myIcon;
-        [SerializeField] protected ButtonExtended myButton;
+        [SerializeField] protected Button myButton;
         [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
 
         [Header("Resources")]
@@ -84,10 +84,10 @@ namespace QuilleUI
             myRectTransform = gameObject.GetComponent<RectTransform>();
             myDefaultPosition = new Vector2(myRectTransform.anchoredPosition.x, myRectTransform.anchoredPosition.y);
 
-            myButton = gameObject.GetComponent<ButtonExtended>();
+            myButton = gameObject.GetComponent<Button>();
             if (myButton == null)
             {
-                myButton = gameObject.GetComponentInChildren<ButtonExtended>(true);
+                myButton = gameObject.GetComponentInChildren<Button>(true);
             }
             myIcon = myButton.image;
 

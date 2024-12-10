@@ -20,8 +20,10 @@ namespace UnityEngine.UI
 
         // Event delegates triggered on click.
         [FormerlySerializedAs("onClick")]
-        [SerializeField]
-        private ButtonClickedEvent m_OnClick = new ButtonClickedEvent();
+        [SerializeField] private ButtonClickedEvent m_OnClick = new ButtonClickedEvent();
+        [SerializeField] private ButtonClickedEvent m_OnLeftClick = new ButtonClickedEvent();
+        [SerializeField] private ButtonClickedEvent m_OnRightClick = new ButtonClickedEvent();
+        [SerializeField] private ButtonClickedEvent m_OnMiddleClick = new ButtonClickedEvent();
 
         protected Button()
         {}
@@ -60,14 +62,34 @@ namespace UnityEngine.UI
             get { return m_OnClick; }
             set { m_OnClick = value; }
         }
+        public ButtonClickedEvent onLeftClick
+        {
+            get { return m_OnLeftClick; }
+            set { m_OnLeftClick = value; }
+        }
+        public ButtonClickedEvent onRightClick
+        {
+            get { return m_OnRightClick; }
+            set { m_OnRightClick = value; }
+        }
+        public ButtonClickedEvent onMiddleClick
+        {
+            get { return m_OnMiddleClick; }
+            set { m_OnMiddleClick = value; }
+        }
 
         private void Press()
         {
+            UISystemProfilerApi.AddMarker("Button.onClick", this);
+            m_OnClick.Invoke();
+
+            // if we get set disabled during the press
+            // don't run the coroutine.
             if (!IsActive() || !IsInteractable())
                 return;
 
-            UISystemProfilerApi.AddMarker("Button.onClick", this);
-            m_OnClick.Invoke();
+            DoStateTransition(SelectionState.Pressed, false);
+            StartCoroutine(OnFinishSubmit());
         }
 
         /// <summary>
@@ -108,8 +130,24 @@ namespace UnityEngine.UI
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
+            if (!IsActive() || !IsInteractable())
                 return;
+
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                UISystemProfilerApi.AddMarker("Button.onLeftClick", this);
+                m_OnLeftClick.Invoke();
+            }
+            else if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                UISystemProfilerApi.AddMarker("Button.onRightClick", this);
+                m_OnRightClick.Invoke();
+            }
+            else if (eventData.button == PointerEventData.InputButton.Middle)
+            {
+                UISystemProfilerApi.AddMarker("Button.onMiddleClick", this);
+                m_OnMiddleClick.Invoke();
+            }
 
             Press();
         }
@@ -148,14 +186,6 @@ namespace UnityEngine.UI
         public virtual void OnSubmit(BaseEventData eventData)
         {
             Press();
-
-            // if we get set disabled during the press
-            // don't run the coroutine.
-            if (!IsActive() || !IsInteractable())
-                return;
-
-            DoStateTransition(SelectionState.Pressed, false);
-            StartCoroutine(OnFinishSubmit());
         }
 
         private IEnumerator OnFinishSubmit()
