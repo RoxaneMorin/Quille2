@@ -27,6 +27,8 @@ namespace QuilleUI
         [SerializeField] protected float myCurrentStep = 0;
         [SerializeField] protected Color myColourForbidden;
         [SerializeField] protected Color myColourSelectedeButForbidden;
+        [SerializeField] Vector2 myCaptionPositionUnselected;
+        [SerializeField] Vector2 myCaptionPositionSelected;
 
 
         // PARAMETERS
@@ -118,6 +120,8 @@ namespace QuilleUI
         {
             // Select at full value.
             Select(myStepCount);
+
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
         public virtual void Select(float atValue)
         {
@@ -144,6 +148,8 @@ namespace QuilleUI
             SetValueAndFill(0f);
             myCurrentStep = 0;
             myFrame.color = myColourDefault;
+
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
         }
 
         public virtual void Forbid(bool isSelected)

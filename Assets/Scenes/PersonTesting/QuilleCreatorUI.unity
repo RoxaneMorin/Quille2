@@ -3060,8 +3060,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 639561110}
-  countPerRow: 7
-  rowShift: -100
+  countPerRow: 8
+  rowShift: -120
   containerPadding: 100
   selectedShift: -50
   ownerCanvas: {fileID: 0}
@@ -3258,8 +3258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 1741636599295134379}
-  countPerRow: 7
-  rowShift: -100
+  countPerRow: 8
+  rowShift: -120
   containerPadding: 100
   selectedShift: -65
   ownerCanvas: {fileID: 0}
@@ -6761,7 +6761,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14.13747, y: 13.137827}
+  m_AnchoredPosition: {x: 21.027218, y: 5.2732735}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1641442960
@@ -8268,7 +8268,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.505
+  m_Value: 0.579
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -9058,7 +9058,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 2
-  m_FillAmount: 0.505
+  m_FillAmount: 0.579
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -9181,8 +9181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 2006169429}
-  countPerRow: 7
-  rowShift: -100
+  countPerRow: 8
+  rowShift: -120
   containerPadding: 100
   selectedShift: -65
   ownerCanvas: {fileID: 897786191}
