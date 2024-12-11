@@ -18,7 +18,16 @@ namespace UnityEngine.UI
 
         // VARIABLES
         [SerializeField] protected RectTransform m_RootRect;
+        [SerializeField] protected Vector2 m_OriginalWidthAndHeight;
         [SerializeField] protected RectTransform m_BackgroundRect;
+        [SerializeField] protected Image m_BackgroundImage;
+
+        [SerializeField] protected Sprite m_BackgroundSprite360;
+        [SerializeField] protected Sprite m_FillSprite360;
+        [SerializeField] protected Sprite[] m_BackgroundSprite180;
+        [SerializeField] protected Sprite[] m_FillSprite180;
+        [SerializeField] protected Sprite[] m_BackgroundSprite90;
+        [SerializeField] protected Sprite[] m_FillSprite90;
 
         [SerializeField] private Shape m_Shape = Shape.Full360;
         private Image.Origin90 m_Origin90;
@@ -52,7 +61,15 @@ namespace UnityEngine.UI
         public void SetShape(Shape shape)
         {
             m_Shape = shape;
+            SetShape();
 
+            // Secondary data.
+            SetOrigin();
+            SetClockwise();
+            SetSecondaryData();
+        }
+        public void SetShape()
+        {
             if (m_Shape == Shape.Quarter90)
             {
                 SetImageShape(Image.FillMethod.Radial90);
@@ -65,13 +82,16 @@ namespace UnityEngine.UI
             {
                 SetImageShape(Image.FillMethod.Radial360);
             }
-
-            SetOrigin();
         }
         public void SetOrigin(int originID)
         {
             m_Origin = originID;
             SetOrigin();
+
+            // Secondary data.
+            SetShape();
+            SetClockwise();
+            SetSecondaryData();
         }
         public void SetOrigin()
         {
@@ -84,21 +104,40 @@ namespace UnityEngine.UI
                 m_FillImage.type = Image.Type.Filled;
                 m_FillImage.fillOrigin = m_Origin;
             }
-
-            SetCenterPoint();
-            SetInitialPoint();
         }
         public void SetClockwise(bool isClockwise)
         {
             m_Clockwise = isClockwise;
+            SetClockwise();
 
+            // Secondary data.
+            SetShape();
+            SetOrigin();
+            SetSecondaryData();
+        }
+        public void SetClockwise()
+        {
             if (m_FillRect)
             {
                 m_FillImage.type = Image.Type.Filled;
                 m_FillImage.fillClockwise = m_Clockwise;
             }
-
+        }
+        protected void SetSecondaryData()
+        {
+            SetComponentImages();
+            SetCenterPoint();
+            SetInitialPoint();
+        }
+        public void SetAllData()
+        {
+            SetShape();
             SetOrigin();
+            SetClockwise();
+
+            SetComponentImages();
+            SetCenterPoint();
+            SetInitialPoint();
         }
 
         // Helpers for the above.
@@ -108,6 +147,68 @@ namespace UnityEngine.UI
             {
                 m_FillImage.type = Image.Type.Filled;
                 m_FillImage.fillMethod = fillMethod;
+            }
+        }
+
+        protected void SetComponentImages()
+        {
+            if (m_Shape == Shape.Half180)
+            {
+                Vector2 newSize = new Vector2(m_OriginalWidthAndHeight.x, m_OriginalWidthAndHeight.y);
+
+                if (m_Origin180 == Image.Origin180.Bottom || m_Origin180 == Image.Origin180.Top)
+                {
+                    newSize.y /= 2;
+                    m_RootRect.sizeDelta = newSize;
+                }
+                else if (m_Origin180 == Image.Origin180.Left || m_Origin180 == Image.Origin180.Right)
+                {
+                    newSize.x /= 2;
+                    m_RootRect.sizeDelta = newSize;
+                }
+            }
+            else
+            {
+                m_RootRect.sizeDelta = m_OriginalWidthAndHeight;
+            }
+
+            SetBackgroundImage();
+            SetFillImage();
+        }
+        protected void SetBackgroundImage()
+        {
+            if (m_BackgroundRect && m_BackgroundImage)
+            {
+                if (m_Shape == Shape.Full360)
+                {
+                    m_BackgroundImage.sprite = m_BackgroundSprite360;
+                }
+                else if (m_Shape == Shape.Half180)
+                {
+                    m_BackgroundImage.sprite = m_BackgroundSprite180[(int)m_Origin180];
+                }
+                else if (m_Shape == Shape.Quarter90)
+                {
+                    m_BackgroundImage.sprite = m_BackgroundSprite90[(int)m_Origin90];
+                }
+            }
+        }
+        protected void SetFillImage()
+        {
+            if (m_FillRect && m_FillImage)
+            {
+                if (m_Shape == Shape.Full360)
+                {
+                    m_FillImage.sprite = m_FillSprite360;
+                }
+                else if (m_Shape == Shape.Half180)
+                {
+                    m_FillImage.sprite = m_FillSprite180[(int)m_Origin180];
+                }
+                else if (m_Shape == Shape.Quarter90)
+                {
+                    m_FillImage.sprite = m_FillSprite90[(int)m_Origin90];
+                }
             }
         }
 
@@ -304,7 +405,6 @@ namespace UnityEngine.UI
                 testInitialPoint.anchoredPosition = initialPoint;
             }
         }
-
         protected (Vector2, Vector2) GetBestRectsInfo()
         {
             Vector2 anchoredPosition;
@@ -314,22 +414,16 @@ namespace UnityEngine.UI
             {
                 anchoredPosition = m_HandleContainerRect.anchoredPosition;
                 areaSize = m_HandleContainerRect.rect.size;
-
-                Debug.Log("Using m_HandleContainerRect");
             }
             else if (m_FillContainerRect)
             {
                 anchoredPosition = m_FillContainerRect.anchoredPosition;
                 areaSize = m_FillContainerRect.rect.size;
-
-                Debug.Log("Using m_FillContainerRect");
             }
             else
             {
                 anchoredPosition = m_FillContainerRect.anchoredPosition;
                 areaSize = m_FillContainerRect.rect.size;
-
-                Debug.Log("Using the base slider's rect");
             }
             areaSize /= 2;
 
@@ -387,6 +481,12 @@ namespace UnityEngine.UI
             if (!m_RootRect)
             {
                 m_RootRect = this.gameObject.GetComponent<RectTransform>();
+                m_OriginalWidthAndHeight = m_RootRect.sizeDelta;
+            }
+
+            if (m_BackgroundRect && !m_BackgroundImage)
+            {
+                m_BackgroundImage = m_BackgroundRect.gameObject.GetComponent<Image>();
             }
 
             SetOrigin(); // Not sure this is necessary.
@@ -434,16 +534,13 @@ namespace UnityEngine.UI
                 Vector2 newHandleCoords = CalculateHandlePositionFromFill();
                 m_HandleRect.anchoredPosition = newHandleCoords;
             }
-
-            //testHandlePoint.anchoredPosition = newHandleCoords;
         }
-
 
 
         // BUILT IN
         protected override void Start()
         {
-            SetOrigin();
+            SetAllData();
             UpdateVisuals();
         }
     }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 13c946c6eef103c4794f82beb1d43eca
+guid: ec0ff804a4fd96b41914aebe359c17cc
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,91 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RadialSlider90_Fill_BottomRight
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 256
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 59984417645f5054aba8032ea81b7c2a
-      internalID: -1929155817
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RadialSlider90_Fill_BottomLef
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 256
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: efd859c040492234fb7fe142c9049c88
-      internalID: -1863127011
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RadialSlider90_Fill_TopRight
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3a6c6228d80661149b91372f9acaaef7
-      internalID: -313062634
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RadialSlider90_Fill_TopLeft
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 24f84294d92d1a44ca78782042e5582d
-      internalID: -383129745
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RadialSlider360_Fill
+      name: RadialSlider360_Background
       rect:
         serializedVersion: 2
         x: 0
@@ -195,14 +111,98 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aaebabf31898e9e4faeaa3953d861f50
-      internalID: -244985061
+      spriteID: 1f71421dcc8f13a43a6daa721ed32bb8
+      internalID: -1562701849
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RadialSlider180_Fill_Right
+      name: RadialSlider90_Background_BottomRight
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4635beaea20e26f4db2ed2c0687d29cd
+      internalID: 286789593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RadialSlider90_Background_BottomLeft
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 251e5f0e66aff914fb186c80e58a9f26
+      internalID: -312824871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RadialSlider90_Background_TopRight
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a6c7a76708308d45b434afb3af1992f
+      internalID: 673449539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RadialSlider90_Background_TopLeft
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7b7e658fb6c73a4083f1809d780bddd
+      internalID: -592618820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RadialSlider180_Background_Right
       rect:
         serializedVersion: 2
         x: 0
@@ -210,20 +210,20 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a4e4e7d05b2c1044fbc38ccc2a524a34
-      internalID: -624403706
+      spriteID: a056d4e47b9fb2843bd4d41d3f596913
+      internalID: 1521131113
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RadialSlider180_Fill_Left
+      name: RadialSlider180_Background_Left
       rect:
         serializedVersion: 2
         x: 256
@@ -231,20 +231,20 @@ TextureImporter:
         width: 256
         height: 512
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e40ccb8410155ef4fb8431bb6295bd28
-      internalID: 1678760450
+      spriteID: 7e8bd6e5977ba694889355cb576d64ad
+      internalID: -820647457
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RadialSlider180_Fill_Bottom
+      name: RadialSlider180_Background_Bottom
       rect:
         serializedVersion: 2
         x: 0
@@ -252,20 +252,20 @@ TextureImporter:
         width: 512
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af650fead5445a04db0c50bcd1b116af
-      internalID: 1272725147
+      spriteID: 35bed6edcc4d2bd45a027e13d7756570
+      internalID: 1672181295
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RadialSlider180_Fill_Top
+      name: RadialSlider180_Background_Top
       rect:
         serializedVersion: 2
         x: 0
@@ -279,8 +279,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2883f1b775581bf4ca45205c0b40adc0
-      internalID: -1666750287
+      spriteID: 533e7981f35324443a3d86837a01f68c
+      internalID: -396006858
       vertices: []
       indices: 
       edges: []
@@ -296,15 +296,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      RadialSlider180_Fill_Bottom: 1272725147
-      RadialSlider180_Fill_Left: 1678760450
-      RadialSlider180_Fill_Right: -624403706
-      RadialSlider180_Fill_Top: -1666750287
-      RadialSlider360_Fill: -244985061
-      RadialSlider90_Fill_BottomLef: -1863127011
-      RadialSlider90_Fill_BottomRight: -1929155817
-      RadialSlider90_Fill_TopLeft: -383129745
-      RadialSlider90_Fill_TopRight: -313062634
+      RadialSlider180_Background_Bottom: 1672181295
+      RadialSlider180_Background_Left: -820647457
+      RadialSlider180_Background_Right: 1521131113
+      RadialSlider180_Background_Top: -396006858
+      RadialSlider360_Background: -1562701849
+      RadialSlider90_Background_BottomLeft: -312824871
+      RadialSlider90_Background_BottomRight: 286789593
+      RadialSlider90_Background_TopLeft: -592618820
+      RadialSlider90_Background_TopRight: 673449539
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

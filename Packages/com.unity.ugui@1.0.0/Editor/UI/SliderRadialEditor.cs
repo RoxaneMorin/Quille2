@@ -17,10 +17,18 @@ namespace UnityEditor.UI
         SerializedProperty m_Clockwise;
         SerializedProperty m_HandleShift;
 
+        SerializedProperty m_OriginalWidthAndHeight;
         SerializedProperty m_RootRect;
         SerializedProperty m_BackgroundRect;
         SerializedProperty m_FillRect;
         SerializedProperty m_HandleRect;
+
+        SerializedProperty m_BackgroundSprite360;
+        SerializedProperty m_FillSprite360;
+        SerializedProperty m_BackgroundSprite180;
+        SerializedProperty m_FillSprite180;
+        SerializedProperty m_BackgroundSprite90;
+        SerializedProperty m_FillSprite90;
 
         SerializedProperty m_MinValue;
         SerializedProperty m_MaxValue;
@@ -66,6 +74,7 @@ namespace UnityEditor.UI
         protected override void OnEnable()
         {
             base.OnEnable();
+            m_OriginalWidthAndHeight = serializedObject.FindProperty("m_OriginalWidthAndHeight");
             m_RootRect = serializedObject.FindProperty("m_RootRect");
             m_BackgroundRect = serializedObject.FindProperty("m_BackgroundRect");
             m_FillRect = serializedObject.FindProperty("m_FillRect");
@@ -79,6 +88,13 @@ namespace UnityEditor.UI
             m_Origin = serializedObject.FindProperty("m_Origin");
             m_Clockwise = serializedObject.FindProperty("m_Clockwise");
             m_HandleShift = serializedObject.FindProperty("m_HandleShift");
+
+            m_BackgroundSprite360 = serializedObject.FindProperty("m_BackgroundSprite360");
+            m_FillSprite360 = serializedObject.FindProperty("m_FillSprite360");
+            m_BackgroundSprite180 = serializedObject.FindProperty("m_BackgroundSprite180");
+            m_FillSprite180 = serializedObject.FindProperty("m_FillSprite180");
+            m_BackgroundSprite90 = serializedObject.FindProperty("m_BackgroundSprite90");
+            m_FillSprite90 = serializedObject.FindProperty("m_FillSprite90");
 
             m_MinValue = serializedObject.FindProperty("m_MinValue");
             m_MaxValue = serializedObject.FindProperty("m_MaxValue");
@@ -94,13 +110,28 @@ namespace UnityEditor.UI
 
             serializedObject.Update();
 
+            EditorGUILayout.LabelField("Rect References", EditorStyles.boldLabel);
+
             EditorGUILayout.PropertyField(m_RootRect);
+            EditorGUILayout.PropertyField(m_OriginalWidthAndHeight);
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_BackgroundRect);
             EditorGUILayout.PropertyField(m_FillRect);
             EditorGUILayout.PropertyField(m_HandleRect);
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.LabelField("Sprite References", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(m_BackgroundSprite360);
+            EditorGUILayout.PropertyField(m_FillSprite360);
+            EditorGUILayout.PropertyField(m_BackgroundSprite180);
+            EditorGUILayout.PropertyField(m_FillSprite180);
+            EditorGUILayout.PropertyField(m_BackgroundSprite90);
+            EditorGUILayout.PropertyField(m_FillSprite90);
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Testing", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(testCenterPoint);
             EditorGUILayout.PropertyField(testInitialPoint);
             //EditorGUILayout.PropertyField(testHandlePoint);
@@ -108,6 +139,8 @@ namespace UnityEditor.UI
             if (m_FillRect.objectReferenceValue != null || m_HandleRect.objectReferenceValue != null)
             {
                 EditorGUILayout.Space();
+
+                EditorGUILayout.LabelField("Slider Parameters", EditorStyles.boldLabel);
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(m_Shape);
@@ -158,7 +191,7 @@ namespace UnityEditor.UI
                     foreach (var obj in serializedObject.targetObjects)
                     {
                         SliderRadial slider = obj as SliderRadial;
-                        slider.SetOrigin();
+                        slider.SetAllData();
                         // Do we need to make it update the graphics here?
                     }
                 }
