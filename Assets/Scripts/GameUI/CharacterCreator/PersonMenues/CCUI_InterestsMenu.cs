@@ -65,11 +65,6 @@ namespace QuilleUI
 
 
         // UTILITY
-        protected override void PositionSelectedButtons()
-        {
-            PositionSelectedButtons(Quille.Constants.DEFAULT_INTEREST_COUNT);
-        }
-
         public void RandomizeValues()
         {
             List<int> IDsToSelect = base.RandomizeValues(Quille.Constants.DEFAULT_INTEREST_COUNT);

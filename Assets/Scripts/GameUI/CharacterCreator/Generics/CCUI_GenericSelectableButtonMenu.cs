@@ -18,6 +18,7 @@ namespace QuilleUI
         [SerializeField] protected float rowShift;
         [SerializeField] protected float containerPadding;
         [SerializeField] protected float selectedShift;
+        [SerializeField] protected float selectedMaximumSpacing;
 
         [Header("References")]
         [SerializeField] protected Canvas ownerCanvas;
@@ -74,20 +75,35 @@ namespace QuilleUI
 
         protected virtual void PositionSelectedButtons()
         {
-            PositionSelectedButtons(5);
-        }
-        protected virtual void PositionSelectedButtons(int expectedNumberOfButtons)
-        {
-            float distanceBetweenButtons = containerWidthPadded / (expectedNumberOfButtons - 1);
+            int numberOfButtons = currentlySelectedButtons.Count;
+            float expectedDistanceBetweenButtons = containerWidthPadded / (numberOfButtons - 1);
 
             int i = 0;
-            foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
+            if (expectedDistanceBetweenButtons > selectedMaximumSpacing)
             {
-                Vector2 newPosition = new Vector2(initialXPos + i * distanceBetweenButtons, selectedShift);
-                button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
+                // Place the buttons around the center.
+                float selectedButtonContainerXTransform = selectedButtonsContainerTransform.anchoredPosition.x;
+                float localInitialXPos = selectedButtonContainerXTransform - selectedMaximumSpacing * ((numberOfButtons - 1) / 2f);
 
-                i++;
+                foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
+                {
+                    Vector2 newPosition = new Vector2(localInitialXPos + i * selectedMaximumSpacing, selectedShift);
+                    button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
+
+                    i++;
+                }
             }
+            else
+            { 
+                // Place them going from one side to the other.
+                foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
+                {
+                    Vector2 newPosition = new Vector2(initialXPos + i * expectedDistanceBetweenButtons, selectedShift);
+                    button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
+
+                    i++;
+                }
+            } 
         }
 
         public virtual List<int> RandomizeValues(int numberToSelect)

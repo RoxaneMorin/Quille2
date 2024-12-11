@@ -3064,6 +3064,7 @@ MonoBehaviour:
   rowShift: -120
   containerPadding: 100
   selectedShift: -50
+  selectedMaximumSpacing: 160
   ownerCanvas: {fileID: 0}
   selectedButtonsContainerTransform: {fileID: 656128193}
   allButtonsContainerTransform: {fileID: 297295712}
@@ -3262,6 +3263,7 @@ MonoBehaviour:
   rowShift: -120
   containerPadding: 100
   selectedShift: -65
+  selectedMaximumSpacing: 160
   ownerCanvas: {fileID: 0}
   selectedButtonsContainerTransform: {fileID: 1649403619}
   allButtonsContainerTransform: {fileID: 1396029495}
@@ -9185,6 +9187,7 @@ MonoBehaviour:
   rowShift: -120
   containerPadding: 100
   selectedShift: -65
+  selectedMaximumSpacing: 160
   ownerCanvas: {fileID: 897786191}
   selectedButtonsContainerTransform: {fileID: 1658511939}
   allButtonsContainerTransform: {fileID: 1538550196}

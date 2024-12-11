@@ -83,11 +83,6 @@ namespace QuilleUI
 
 
         // UTILITY
-        protected override void PositionSelectedButtons()
-        {
-            PositionSelectedButtons(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
-        }
-
         public  void RandomizeValues()
         {
             base.RandomizeValues(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
