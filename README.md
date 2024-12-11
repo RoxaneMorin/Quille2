@@ -11,13 +11,14 @@ So far, I've mostly worked on:
 - The implementation of initial need and personality systems, including their interplay, serialization, and some example assets and in-game UI.
 - The implementation of a system of “checks and modulators”, small objects meant to fetch specific bits of character information, and alter or evaluate it. They’re meant to be the building blocks of the character AI.
 - The creation of custom editors and property drawers for most of the above.
+- A simple character creation UI, containing names and personality elements.
 - A first sketch of the characters’ need management loop.
 - An incomplete genetics system, partially ported from an older project.
 - Miscellaneous fancies such as procedural grid generation and some post processing shaders.
 
 My next steps will likely be:
 - Implementing a few more character data structures (long term needs, miscellaneous personality quirks).
-- Sketching out more of the personality creation UI for ease of testing.
+- Sketching out more of the personality creation UI, and actually implementing loading a character from an external file, for ease of testing.
 - Further modularizing character needs? (At the moment, personality elements' impact on a need are set in the need’s scriptableObject instance. This could be decoupled.)
 - Sketching out a basic data model for interactions, and logic for characters’ to choose the best fit for satisfying a specific need. Stress testing once that is done.
 - More testing and tinkering with my grids. Possibly the creation of wall and room tools using their framework. 
