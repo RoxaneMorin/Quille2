@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QuilleUI
 {
-    public class CCUI_DrivesMenu : CCUI_GenericSelectableButtonMenu
+    public class CCUI_DrivesMenu : CCUI_GenericSteppedSelectableButtonMenu
     {
         // Test setup for a character creator's drive UI.
         // Procedurally populated from existing DriveSOs.
@@ -90,15 +90,7 @@ namespace QuilleUI
 
         public void RandomizeValues()
         {
-            List<int> IDsToSelect = base.RandomizeValues(Quille.Constants.DEFAULT_DRIVES_COUNT);
-
-            foreach (int ID in IDsToSelect)
-            {
-                currentlySelectedButtons.Add(theButtons[ID]);
-                ((CCUI_GenericSteppedSelectableButton)theButtons[ID]).RandomizeValueAndSelect();
-            }
-
-            PositionSelectedButtons();
+            base.RandomizeValues(Quille.Constants.DEFAULT_DRIVES_COUNT);
 
             DrivesMenuUpdated?.Invoke();
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QuilleUI
 {
-    public class CCUI_PersonalityTraitsMenu : CCUI_GenericSelectableButtonMenu
+    public class CCUI_PersonalityTraitsMenu : CCUI_GenericSteppedSelectableButtonMenu
     {
         // Test setup for a character creator's personality trait UI.
         // Procedurally populated from existing PersonalyTraitSOs.
@@ -90,15 +90,7 @@ namespace QuilleUI
 
         public  void RandomizeValues()
         {
-            List<int> IDsToSelect = base.RandomizeValues(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
-
-            foreach (int ID in IDsToSelect)
-            {
-                currentlySelectedButtons.Add(theButtons[ID]);
-                ((CCUI_GenericSteppedSelectableButton)theButtons[ID]).RandomizeValueAndSelect();
-            }
-
-            PositionSelectedButtons();
+            base.RandomizeValues(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
 
             PersonalityTraitsMenuUpdated?.Invoke();
         }

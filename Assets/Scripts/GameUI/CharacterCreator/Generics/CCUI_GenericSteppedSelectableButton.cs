@@ -120,8 +120,6 @@ namespace QuilleUI
         {
             // Select at full value.
             Select(myStepCount);
-
-            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
         public virtual void Select(float atValue)
         {
@@ -131,6 +129,8 @@ namespace QuilleUI
             SetValueAndFill(atValue);
             myCurrentStep = atValue / myStepSize;
             myFrame.color = myColourSelected;
+
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
         public virtual void Select(int atStep)
         {
@@ -139,6 +139,8 @@ namespace QuilleUI
             SetValueAndFill(atStep * myStepSize);
             myCurrentStep = atStep;
             myFrame.color = myColourSelected;
+
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
 
         public override void Unselect()
