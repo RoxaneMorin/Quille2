@@ -15,6 +15,7 @@ namespace QuilleUI
         // VARIABLES
         [SerializeField] protected ScriptableObject mySO;
         [SerializeField] protected bool isSelected;
+        [SerializeField] protected bool isForbidden;
 
         [Header("References")]
         [SerializeField] protected RectTransform myRectTransform;
@@ -26,11 +27,17 @@ namespace QuilleUI
         [Header("Resources")]
         [SerializeField] protected Color myColourDefault;
         [SerializeField] protected Color myColourSelected;
+        [SerializeField] protected Color myColourForbidden;
+        [SerializeField] protected Color myColourSelectedeButForbidden;
+        [SerializeField] protected Vector2 myCaptionPositionUnselected;
+        [SerializeField] protected Vector2 myCaptionPositionSelected;
 
 
         // PROPERTIES
         internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
         internal bool IsSelected { get { return isSelected; } }
+        internal bool IsForbidden { get { return isForbidden; } }
+        internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
         internal UnityEngine.Vector2 MyDefaultPosition { get { return myDefaultPosition; } set { myDefaultPosition = value; } }
 
         // EVENTS
@@ -65,10 +72,23 @@ namespace QuilleUI
         public virtual void Select() 
         {
             isSelected = true;
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
         public virtual void Unselect() 
         {
             isSelected = false;
+            myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
+        }
+
+        public virtual void Forbid()
+        {
+            isForbidden = true;
+            myButton.interactable = false;
+        }
+        public virtual void Permit()
+        {
+            isForbidden = false;
+            myButton.interactable = true;
         }
 
         public virtual void ChangeParentAndPosition(Transform newParent, UnityEngine.Vector2 newPosition)

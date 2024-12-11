@@ -14,7 +14,6 @@ namespace QuilleUI
 
 
         // VARIABLES
-        [SerializeField] protected bool isForbidden;
         [SerializeField] protected float myValue;
 
         [Header("References")]
@@ -25,16 +24,10 @@ namespace QuilleUI
         [SerializeField] protected int myStepCount = 2;
         [SerializeField] protected float myStepSize = 0.5f;
         [SerializeField] protected float myCurrentStep = 0;
-        [SerializeField] protected Color myColourForbidden;
-        [SerializeField] protected Color myColourSelectedeButForbidden;
-        [SerializeField] Vector2 myCaptionPositionUnselected;
-        [SerializeField] Vector2 myCaptionPositionSelected;
 
 
         // PARAMETERS
         internal float MyButtonValue { get { return myValue; } }
-        internal bool IsForbidden { get { return isForbidden; } }
-        internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
 
 
         // EVENTS
@@ -154,25 +147,24 @@ namespace QuilleUI
             myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
         }
 
-        public virtual void Forbid(bool isSelected)
+        public override void Forbid()
         {
-            isForbidden = true;
+            base.Forbid();
 
             if (isSelected)
             {
                 // Remain interactable so the player may remove it.
+                myButton.interactable = true;
                 myFrame.color = myColourSelectedeButForbidden;
             }
             else
             {
-                myButton.interactable = false;
                 myFrame.color = myColourForbidden;
             }
         }
-        public virtual void Permit(bool isSelected)
+        public override void Permit()
         {
-            isForbidden = false;
-            myButton.interactable = true;
+            base.Permit();
 
             if (isSelected)
             {

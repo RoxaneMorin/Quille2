@@ -19,8 +19,6 @@ namespace QuilleUI
 
         [Header("Resources")]
         [SerializeField] Gradient myColourGradient;
-        [SerializeField] Vector2 myCaptionPositionUnselected;
-        [SerializeField] Vector2 myCaptionPositionSelected;
 
         [Header("Snapping")]
         [SerializeField] bool stepValues = true;
@@ -84,21 +82,19 @@ namespace QuilleUI
         {
             Select(0);
         }
-        public virtual void Select(float value)
+        public void Select(float value)
         {
-            isSelected = true;
-            MySliderValueWithoutNotify = value;
+            base.Select();
 
+            MySliderValueWithoutNotify = value;
             mySlider.gameObject.SetActive(true);
-            myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
         }
         public override void Unselect()
         {
             base.Unselect();
-            MySliderValueWithoutNotify = 0;
 
+            MySliderValueWithoutNotify = 0;
             mySlider.gameObject.SetActive(false);
-            myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
         }
 
         private void StepValue()

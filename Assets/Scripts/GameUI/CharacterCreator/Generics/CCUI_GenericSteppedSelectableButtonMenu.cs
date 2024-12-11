@@ -11,17 +11,9 @@ namespace QuilleUI
         // METHODS
 
         // UTILITY
-        public virtual List<int> RandomizeValues(int numberOfButtons, int numberToSelect)
+        public override void RandomizeValues(int numberToSelect)
         {
-            ResetValues();
-
-            int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
-            return RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
-        }
-
-        public new void RandomizeValues(int numberToSelect)
-        {
-            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !((CCUI_GenericSteppedSelectableButton)button).IsForbidden).ToArray();
+            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
             List<int> IDsToSelect = RandomizeValues(numberOfButtons, numberToSelect);
@@ -36,4 +28,3 @@ namespace QuilleUI
         }
     }
 }
-

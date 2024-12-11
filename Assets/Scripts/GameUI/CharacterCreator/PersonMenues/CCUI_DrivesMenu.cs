@@ -72,11 +72,11 @@ namespace QuilleUI
             {
                 if (button.MyDriveSO.ForbiddenToPerson(theTargetPerson))
                 {
-                    button.Forbid(button.IsSelected);
+                    button.Forbid();
                 }
                 else
                 {
-                    button.Permit(button.IsSelected);
+                    button.Permit();
                 }
             }
         }

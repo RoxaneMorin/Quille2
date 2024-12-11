@@ -67,7 +67,10 @@ namespace QuilleUI
         // UTILITY
         public void RandomizeValues()
         {
-            List<int> IDsToSelect = base.RandomizeValues(Quille.Constants.DEFAULT_INTEREST_COUNT);
+            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
+            int numberOfButtons = permittedButtons.Length;
+
+            List<int> IDsToSelect = base.RandomizeValues(numberOfButtons, Quille.Constants.DEFAULT_INTEREST_COUNT);
 
             foreach (int ID in IDsToSelect)
             {
