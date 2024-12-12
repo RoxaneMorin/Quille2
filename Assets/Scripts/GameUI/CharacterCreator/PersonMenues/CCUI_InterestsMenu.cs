@@ -70,7 +70,7 @@ namespace QuilleUI
             CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
-            List<int> IDsToSelect = base.RandomizeValues(numberOfButtons, Quille.Constants.DEFAULT_INTEREST_COUNT);
+            List<int> IDsToSelect = base.RandomizeValues(numberOfButtons, Quille.Constants_Quille.DEFAULT_INTEREST_COUNT);
 
             foreach (int ID in IDsToSelect)
             {
@@ -88,7 +88,7 @@ namespace QuilleUI
         protected override void Init()
         {
             base.Init();
-            LoadSOsAndCreateButtons(PathConstants.SO_PATH_INTERESTS);
+            LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_INTERESTS);
         }
 
 

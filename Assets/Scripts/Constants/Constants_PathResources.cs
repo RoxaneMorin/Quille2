@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PathConstants
+public static class Constants_PathResources
 {
     // Reference class keeping track of the paths to various Resources.
 

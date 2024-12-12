@@ -85,7 +85,7 @@ namespace QuilleUI
         // UTILITY
         public  void RandomizeValues()
         {
-            base.RandomizeValues(Quille.Constants.DEFAULT_PERSONALITY_TRAIT_COUNT);
+            base.RandomizeValues(Quille.Constants_Quille.DEFAULT_PERSONALITY_TRAIT_COUNT);
 
             PersonalityTraitsMenuUpdated?.Invoke();
         }
@@ -95,7 +95,7 @@ namespace QuilleUI
         protected override void Init()
         {
             base.Init();
-            LoadSOsAndCreateButtons(PathConstants.SO_PATH_PERSONALITYTRAITS);
+            LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_PERSONALITYTRAITS);
         }
     }
 }

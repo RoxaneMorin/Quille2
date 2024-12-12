@@ -106,7 +106,7 @@ namespace QuilleUI
         }
         public void RandomizeValues()
         {
-            RandomizeValues(Quille.Constants.DEFAULT_DRIVES_COUNT);
+            RandomizeValues(Quille.Constants_Quille.DEFAULT_DRIVES_COUNT);
 
             DrivesMenuUpdated?.Invoke();
         }
@@ -116,7 +116,7 @@ namespace QuilleUI
         protected override void Init()
         {
             base.Init();
-            LoadSOsAndCreateButtons(PathConstants.SO_PATH_DRIVES);
+            LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_DRIVES);
         }
     }
 

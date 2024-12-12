@@ -50,10 +50,10 @@ namespace Quille
         // PERSONALITY AXES
         private float capPersonalityAxeScore(float value)
         {
-            if (value < -Constants.PERSONALITY_HALF_SPAN)
-                return -Constants.PERSONALITY_HALF_SPAN;
-            else if (value > Constants.PERSONALITY_HALF_SPAN)
-                return Constants.PERSONALITY_HALF_SPAN;
+            if (value < -Constants_Quille.PERSONALITY_HALF_SPAN)
+                return -Constants_Quille.PERSONALITY_HALF_SPAN;
+            else if (value > Constants_Quille.PERSONALITY_HALF_SPAN)
+                return Constants_Quille.PERSONALITY_HALF_SPAN;
             
             return value;
         }
@@ -109,11 +109,11 @@ namespace Quille
             {
                 return 0;
             }
-            else if (value <= Constants.PERSONALITY_HALF_SPAN / 2)
+            else if (value <= Constants_Quille.PERSONALITY_HALF_SPAN / 2)
             {
-                return Constants.PERSONALITY_HALF_SPAN / 2;
+                return Constants_Quille.PERSONALITY_HALF_SPAN / 2;
             }
-            return Constants.PERSONALITY_HALF_SPAN;
+            return Constants_Quille.PERSONALITY_HALF_SPAN;
         }
 
         // Single scores.
@@ -170,11 +170,11 @@ namespace Quille
             {
                 return 0;
             }
-            else if (value <= Constants.DRIVE_SPAN / 2)
+            else if (value <= Constants_Quille.DRIVE_SPAN / 2)
             {
-                return Constants.DRIVE_SPAN / 2;
+                return Constants_Quille.DRIVE_SPAN / 2;
             }
-            return Constants.DRIVE_SPAN;
+            return Constants_Quille.DRIVE_SPAN;
         }
 
         // Single scores.
@@ -226,10 +226,10 @@ namespace Quille
         // INTERESTS
         private float capInterestScore(float value)
         {
-            if (value < -Constants.INTEREST_HALF_SPAN)
-                value = -Constants.INTEREST_HALF_SPAN;
-            else if (value > Constants.INTEREST_HALF_SPAN)
-                value = Constants.INTEREST_HALF_SPAN;
+            if (value < -Constants_Quille.INTEREST_HALF_SPAN)
+                value = -Constants_Quille.INTEREST_HALF_SPAN;
+            else if (value > Constants_Quille.INTEREST_HALF_SPAN)
+                value = Constants_Quille.INTEREST_HALF_SPAN;
 
             return value;
         }

@@ -24,7 +24,7 @@ namespace Quille
         // OTHER VALUES
         [BeginInspectorReadOnlyGroup]
         [SerializeField]
-        private floatPair interestSpan = (-Constants.INTEREST_HALF_SPAN, Constants.INTEREST_HALF_SPAN); // The span from hatred to passion for this interest.
+        private floatPair interestSpan = (-Constants_Quille.INTEREST_HALF_SPAN, Constants_Quille.INTEREST_HALF_SPAN); // The span from hatred to passion for this interest.
         public floatPair AxeSpan { get { return interestSpan; } }
 
         [EndInspectorReadOnlyGroup]

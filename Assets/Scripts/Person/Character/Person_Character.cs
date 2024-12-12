@@ -123,7 +123,7 @@ namespace Quille
         // UTILITY
         public void PopulatePersonalityAxesDict(bool randomize = false)
         {
-            PersonalityAxeSO[] personalityAxeSOs = Resources.LoadAll<PersonalityAxeSO>(PathConstants.SO_PATH_PERSONALITYAXES);
+            PersonalityAxeSO[] personalityAxeSOs = Resources.LoadAll<PersonalityAxeSO>(Constants_PathResources.SO_PATH_PERSONALITYAXES);
             this.myPersonalityAxes =personalityAxeSOs.ToSerializedDictionary(personalityAxeSO => personalityAxeSO, personalityAxeSO => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
         }
         public void ClearPersonalityAxesDict()
@@ -135,11 +135,11 @@ namespace Quille
         {
             // TODO: avoid incompatible traits.
 
-            PersonalityTraitSO[] personalityTraitSOs = Resources.LoadAll<PersonalityTraitSO>(PathConstants.SO_PATH_PERSONALITYTRAITS);
+            PersonalityTraitSO[] personalityTraitSOs = Resources.LoadAll<PersonalityTraitSO>(Constants_PathResources.SO_PATH_PERSONALITYTRAITS);
             int SOCount = personalityTraitSOs.Length;
 
             // Make sure we're not trying to get more than the existing number of traits.
-            int targetCount = Mathf.Min(Constants.DEFAULT_PERSONALITY_TRAIT_COUNT, SOCount);
+            int targetCount = Mathf.Min(Constants_Quille.DEFAULT_PERSONALITY_TRAIT_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
             this.myPersonalityTraits = targetIDs.ToSerializedDictionary(ID => personalityTraitSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
@@ -153,11 +153,11 @@ namespace Quille
         {
             // TODO: avoid incompatible drives.
 
-            DriveSO[] driveSOs = Resources.LoadAll<DriveSO>(PathConstants.SO_PATH_DRIVES);
+            DriveSO[] driveSOs = Resources.LoadAll<DriveSO>(Constants_PathResources.SO_PATH_DRIVES);
             int SOCount = driveSOs.Length;
 
             // Make sure we're not trying to get more than the existing number of drives.
-            int targetCount = Mathf.Min(Constants.DEFAULT_DRIVES_COUNT, SOCount);
+            int targetCount = Mathf.Min(Constants_Quille.DEFAULT_DRIVES_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
             this.myDrives = targetIDs.ToSerializedDictionary(ID => driveSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
@@ -169,11 +169,11 @@ namespace Quille
 
         public void RandomPopulateInterestsDict(bool randomize = false)
         {
-            InterestSO[] interestSOs = Resources.LoadAll<InterestSO>(PathConstants.SO_PATH_INTERESTS);
+            InterestSO[] interestSOs = Resources.LoadAll<InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
             int SOCount = interestSOs.Length;
 
             // Make sure we're not trying to get more than the existing number of drives.
-            int targetCount = Mathf.Min(Constants.DEFAULT_INTEREST_COUNT, SOCount);
+            int targetCount = Mathf.Min(Constants_Quille.DEFAULT_INTEREST_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
             this.myInterests = targetIDs.ToSerializedDictionary(ID => interestSOs[ID], ID => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));

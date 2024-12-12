@@ -21,8 +21,8 @@ namespace Quille
 
         // Values.
         // Percentile thresholds at which the character AI will consider a need to require its attention.
-        [SerializeField] private float noticeBasicNeed = Constants.DEFAULT_NOTICE_BASIC_NEED;
-        [SerializeField] private float noticeSubjectiveNeed = Constants.DEFAULT_NOTICE_SUBJECTIVE_NEED;
+        [SerializeField] private float noticeBasicNeed = Constants_Quille.DEFAULT_NOTICE_BASIC_NEED;
+        [SerializeField] private float noticeSubjectiveNeed = Constants_Quille.DEFAULT_NOTICE_SUBJECTIVE_NEED;
 
         // Checks/bools.
         [SerializeField] private bool inAction; // Is the character currently absorbed in something? 
@@ -34,13 +34,13 @@ namespace Quille
             get { return noticeBasicNeed; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    noticeBasicNeed = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    noticeBasicNeed = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
                 }
-                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.1f)
+                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f)
                 {
-                    noticeBasicNeed = Constants.MIN_THRESHOLD_NEGATIVE + 0.1f;
+                    noticeBasicNeed = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f;
                 }
                 else
                 {
@@ -53,13 +53,13 @@ namespace Quille
             get { return noticeSubjectiveNeed; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    noticeSubjectiveNeed = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    noticeSubjectiveNeed = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
                 }
-                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.1f)
+                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f)
                 {
-                    noticeSubjectiveNeed = Constants.MIN_THRESHOLD_NEGATIVE + 0.1f;
+                    noticeSubjectiveNeed = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f;
                 }
                 else
                 {

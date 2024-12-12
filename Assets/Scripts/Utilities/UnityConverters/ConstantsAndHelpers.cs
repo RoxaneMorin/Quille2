@@ -39,7 +39,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         // Load scriptable objects from name string.
         public static PersonalityAxeSO loadPersonalityAxeSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_PERSONALITYAXES + nameString;
+            string path = Constants_PathResources.SO_PATH_PERSONALITYAXES + nameString;
 
             try
             {
@@ -54,7 +54,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         }
         public static PersonalityTraitSO loadPersonalityTraitSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_PERSONALITYTRAITS + nameString;
+            string path = Constants_PathResources.SO_PATH_PERSONALITYTRAITS + nameString;
 
             try
             {
@@ -70,7 +70,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
         public static DriveSO loadDriveSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_DRIVES + nameString;
+            string path = Constants_PathResources.SO_PATH_DRIVES + nameString;
 
             try
             {
@@ -86,7 +86,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
         public static InterestSO loadInterestSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_INTERESTS + nameString;
+            string path = Constants_PathResources.SO_PATH_INTERESTS + nameString;
 
             try
             {
@@ -102,7 +102,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
 
         public static BasicNeedSO loadBasicNeedSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_NEEDSBASIC + nameString;
+            string path = Constants_PathResources.SO_PATH_NEEDSBASIC + nameString;
 
             try
             {
@@ -117,7 +117,7 @@ namespace Newtonsoft.Json.UnityConverters.Quille
         }
         public static SubjectiveNeedSO loadSubjectiveNeedSO(string nameString)
         {
-            string path = PathConstants.SO_PATH_NEEDSSUBJECTIVE + nameString;
+            string path = Constants_PathResources.SO_PATH_NEEDSSUBJECTIVE + nameString;
 
             try
             {

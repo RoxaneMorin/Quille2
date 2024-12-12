@@ -55,14 +55,14 @@ namespace Quille
             get { return localAiPriorityWeighting; }
             set
             {
-                if (value < Constants.MIN_PRIORITY)
+                if (value < Constants_Quille.MIN_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants.MIN_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MIN_PRIORITY;
                     return;
                 }
-                else if (value > Constants.MAX_PRIORITY)
+                else if (value > Constants_Quille.MAX_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants.MAX_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MAX_PRIORITY;
                     return;
                 }
                 else localAiPriorityWeighting = value;
@@ -127,7 +127,7 @@ namespace Quille
             set 
             { 
                 currentChangeRate = value;
-                currentChangeRateScaled = currentChangeRate/Constants.NEED_CHANGE_RATE_DIVIDER;
+                currentChangeRateScaled = currentChangeRate/Constants_Quille.NEED_CHANGE_RATE_DIVIDER;
             }
         }
         [JsonIgnore] public float CurrentChangeRateScaled
@@ -148,14 +148,14 @@ namespace Quille
             get { return thresholdElated; }
             set
             {
-                if (value > Constants.DEFAULT_LEVEL_FULL)
+                if (value > Constants_Quille.DEFAULT_LEVEL_FULL)
                 {
-                    thresholdElated = Constants.DEFAULT_LEVEL_FULL;
+                    thresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL;
                     return;
                 }
-                else if (value < Constants.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    thresholdElated = Constants.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    thresholdElated = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
                     return;
                 }
                 else thresholdElated = value;
@@ -166,14 +166,14 @@ namespace Quille
             get { return thresholdWarning; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD_NEGATIVE)
+                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE)
                 {
-                    thresholdWarning = Constants.MAX_THRESHOLD_NEGATIVE;
+                    thresholdWarning = Constants_Quille.MAX_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    thresholdWarning = Constants.MIN_THRESHOLD_NEGATIVE + 0.05f;
+                    thresholdWarning = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f;
                     return;
                 }
                 else thresholdWarning = value;
@@ -184,14 +184,14 @@ namespace Quille
             get { return thresholdCritical; }
             set
             {
-                if (value > Constants.MAX_THRESHOLD_NEGATIVE - 0.05f)
+                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f)
                 {
-                    thresholdCritical = Constants.MAX_THRESHOLD_NEGATIVE - 0.05f;
+                    thresholdCritical = Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f;
                     return;
                 }
-                else if (value < Constants.MIN_THRESHOLD_NEGATIVE)
+                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE)
                 {
-                    thresholdCritical = Constants.MIN_THRESHOLD_NEGATIVE;
+                    thresholdCritical = Constants_Quille.MIN_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else thresholdCritical = value;
@@ -371,14 +371,14 @@ namespace Quille
 
             // TODO: clean this up
             // The BaseChangeRate cannot be higher than -0.0001f
-            if (BaseChangeRate > -Constants.MIN_BASE_CHANGE_RATE)
+            if (BaseChangeRate > -Constants_Quille.MIN_BASE_CHANGE_RATE)
             {
-                BaseChangeRate = -Constants.MIN_BASE_CHANGE_RATE;
+                BaseChangeRate = -Constants_Quille.MIN_BASE_CHANGE_RATE;
             }
             // The BaseChangeRate cannot be lower than -0.5f
-            if (BaseChangeRate < - Constants.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRate < - Constants_Quille.MAX_BASE_CHANGE_RATE)
             {
-                BaseChangeRate = -Constants.MAX_BASE_CHANGE_RATE;
+                BaseChangeRate = -Constants_Quille.MAX_BASE_CHANGE_RATE;
             }
 
             CurrentChangeRate = BaseChangeRate;
@@ -474,7 +474,7 @@ namespace Quille
                         OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
                 }
-                yield return new WaitForSeconds(Constants.NEED_DECAY_INTERVAL);
+                yield return new WaitForSeconds(Constants_Quille.NEED_DECAY_INTERVAL);
             }
         }
     }

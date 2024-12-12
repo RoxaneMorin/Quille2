@@ -12,7 +12,7 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            hairColours = Resources.LoadAll<GeneHairColour>(PathConstants.SO_PATH_HAIRCOLOURS);
+            hairColours = Resources.LoadAll<GeneHairColour>(Constants_PathResources.SO_PATH_HAIRCOLOURS);
         }
 
 

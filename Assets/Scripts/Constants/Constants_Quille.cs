@@ -14,7 +14,7 @@ namespace Quille
 
     // TODO: move gene colour familes enum heres.
     
-    public static class Constants
+    public static class Constants_Quille
     {
         // PERSONALITY
         // Maximum value of personality axes and traits. 

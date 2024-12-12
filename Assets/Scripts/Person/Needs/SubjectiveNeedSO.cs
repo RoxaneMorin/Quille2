@@ -32,19 +32,19 @@ namespace Quille
         public Sprite needIconRight;
 
         // NEED'S DEFAULT VALUES
-        [SerializeField, Range(Constants.MIN_PRIORITY, Constants.MAX_PRIORITY)] // Priorize larger values? 
+        [SerializeField, Range(Constants_Quille.MIN_PRIORITY, Constants_Quille.MAX_PRIORITY)] // Priorize larger values? 
         private float aiPriorityWeighting = 1; // Should this be static, since it'll likely by the same for all characters?
         public float AiPriorityWeighting { get { return aiPriorityWeighting; } }
         // Are separate priorities needed for the two sides? Only bother on a per character basis?
 
         [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
-        private float levelFullLeft = Constants.DEFAULT_LEVEL_FULL;
+        private float levelFullLeft = Constants_Quille.DEFAULT_LEVEL_FULL;
         public float LevelFullLeft { get { return levelFullLeft; } }
-        public float LevelEmptyLeft { get { return Constants.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
+        public float LevelEmptyLeft { get { return Constants_Quille.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
         [SerializeField]
-        private float levelFullRight = Constants.DEFAULT_LEVEL_FULL;
+        private float levelFullRight = Constants_Quille.DEFAULT_LEVEL_FULL;
         public float LevelFullRight { get { return levelFullRight; } }
-        public float LevelEmptyRight { get { return Constants.DEFAULT_LEVEL_EMPTY; } }
+        public float LevelEmptyRight { get { return Constants_Quille.DEFAULT_LEVEL_EMPTY; } }
 
         [SerializeField]
         private float defaultChangeRateLeft = 0;
@@ -54,22 +54,22 @@ namespace Quille
         public float DefaultChangeRateRight { get { return defaultChangeRateRight; } }
 
         [SerializeField]
-        private float thresholdElatedLeft = Constants.DEFAULT_THRESHOLD_ELATED;
+        private float thresholdElatedLeft = Constants_Quille.DEFAULT_THRESHOLD_ELATED;
         public float ThresholdElatedLeft { get { return thresholdElatedLeft; } }
         [SerializeField]
-        private float thresholdWarningLeft = Constants.DEFAULT_THRESHOLD_WARNING;
+        private float thresholdWarningLeft = Constants_Quille.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarningLeft { get { return thresholdWarningLeft; } }
         [SerializeField]
-        private float thresholdCriticalLeft = Constants.DEFAULT_THRESHOLD_CRITICAL;
+        private float thresholdCriticalLeft = Constants_Quille.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCriticalLeft { get { return thresholdCriticalLeft; } }
         [SerializeField]
-        private float thresholdElatedRight = Constants.DEFAULT_THRESHOLD_ELATED;
+        private float thresholdElatedRight = Constants_Quille.DEFAULT_THRESHOLD_ELATED;
         public float ThresholdElatedRight { get { return thresholdElatedRight; } }
         [SerializeField]
-        private float thresholdWarningRight = Constants.DEFAULT_THRESHOLD_WARNING;
+        private float thresholdWarningRight = Constants_Quille.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarningRight { get { return thresholdWarningRight; } }
         [SerializeField]
-        private float thresholdCriticalRight = Constants.DEFAULT_THRESHOLD_CRITICAL;
+        private float thresholdCriticalRight = Constants_Quille.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCriticalRight { get { return thresholdCriticalRight; } }
 
 

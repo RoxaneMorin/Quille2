@@ -97,8 +97,8 @@ public class InterestSOEditor : Editor
 
     private void FixInterestReferences()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(PathConstants.SO_PATH_INTERESTDOMAINS);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
 
         InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
         InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);
@@ -110,8 +110,8 @@ public class InterestSOEditor : Editor
 
     private void DeleteInterestReferences()
     {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(PathConstants.SO_PATH_INTERESTS);
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(PathConstants.SO_PATH_INTERESTDOMAINS);
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
 
         InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
         InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);

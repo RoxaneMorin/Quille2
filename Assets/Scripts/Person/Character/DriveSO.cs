@@ -23,10 +23,10 @@ namespace Quille
 
         // OTHER VALUES
         // The intensity of drives is either 0.5 or 1.
-        [SerializeField] [InspectorReadOnly] private float driveSpan = Constants.DRIVE_SPAN;
+        [SerializeField] [InspectorReadOnly] private float driveSpan = Constants_Quille.DRIVE_SPAN;
         public float DriveSpan { get { return driveSpan; } }
 
-        [SerializeField] [InspectorReadOnly] private float driveMidpoint = Constants.DRIVE_SPAN / 2;
+        [SerializeField] [InspectorReadOnly] private float driveMidpoint = Constants_Quille.DRIVE_SPAN / 2;
         public float DriveMidpoint { get { return driveSpan; } }
 
         // INCOMPATIBILITIES

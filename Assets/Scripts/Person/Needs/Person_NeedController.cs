@@ -149,8 +149,8 @@ namespace Quille
         // INIT
         public void Init() // For use during testing.
         {
-            BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>(PathConstants.SO_PATH_NEEDSBASIC);
-            SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>(PathConstants.SO_PATH_NEEDSSUBJECTIVE);
+            BasicNeedSO[] basicNeedSOs = Resources.LoadAll<BasicNeedSO>(Constants_PathResources.SO_PATH_NEEDSBASIC);
+            SubjectiveNeedSO[] subjectiveNeedSOs = Resources.LoadAll<SubjectiveNeedSO>(Constants_PathResources.SO_PATH_NEEDSSUBJECTIVE);
 
             Init(basicNeedSOs, subjectiveNeedSOs);
         }
