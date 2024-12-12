@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using World;
 
 namespace Quille
 {
@@ -32,7 +33,7 @@ namespace Quille
 
 
         // PROPERTIES & GETTERS/SETTERS
-       public int CharID { get { return charID; } }
+       public int CharID { get { return charID; } internal set { charID = value; } } // TODO: make sure the Setter is safe.
        public string CharIDAndCharacterName { get { return string.Format("Character #{0}, {1}", charID, myPersonCharacter.FirstNickAndLastName); } }
 
         // Data holders.
@@ -65,6 +66,7 @@ namespace Quille
 
         // SAVE & LOAD
         // TODO: move this to its on partial segment?
+        // Or else, to the serialization helper?
         public string SaveToJSON()
         {
             // Init variables.
@@ -94,64 +96,21 @@ namespace Quille
             string formatedJSON = jsonPerson.ToString(Formatting.Indented);
 
             // Create and write the save file.
-            try 
-            {
-                // TODO: set proper, potentially customisable save location
-                // TODO: create and rely on a ressource that track world info, character IDs, etc.
-                string fileName = CreateJSONFileName();
-                string filePath = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + fileName;
+            string fileName = CreateJSONFileName();
+            SerializationHelper.SaveJSONCharacterToFile(this, fileName, formatedJSON);
 
-                // Create the save directory if it doesn't already exist.
-                if (!System.IO.Directory.Exists(Constants.DEFAULT_CHARACTER_SAVE_LOCATION))
-                {
-                    System.IO.Directory.CreateDirectory(Constants.DEFAULT_CHARACTER_SAVE_LOCATION);
-                }
-
-                // If a previous save file exists, turn it into a back up.
-                if (File.Exists(filePath))
-                {
-                    string backupFilePath = Constants.DEFAULT_CHARACTER_SAVE_LOCATION + CreateJSONBakFileName();
-
-                    System.IO.File.Delete(backupFilePath);
-                    System.IO.File.Move(filePath, backupFilePath);
-                }
-
-                // Save the new data proper.
-                var file = File.CreateText(filePath);
-                file.Write(formatedJSON);
-                file.Close();
-
-                Debug.Log(string.Format("Successfully saved {0}, to {1}.", CharIDAndCharacterName, fileName));
-
-                return formatedJSON;
-            }
-            catch (Exception theError)
-            {
-                Debug.LogError(string.Format("Failed to write JSON data for {0}, to file. This character will not be saved.\n\nException text:\n{1}", CharIDAndCharacterName, theError.ToString()));
-                return null;
-            }
+            return formatedJSON;
         }
 
         public void LoadFromJSON(string sourceJSON)
         {
-            // TODO: chose what file to load. Likely will be done elsewhere/by the general save game loader.
+            // TODO: where to load from? Replace sourceJSON by file name or path.
+
+            // Hardcoding while I test.
             //string fileName = "placeholderFileName.json";
             string fileName = "CharID_0.json";
-
-            //string[] allCharacterJSONs = Directory.GetFiles(Constants.DEFAULT_CHARACTER_SAVE_LOCATION);
-            //foreach (string fileFound in allCharacterJSONs)
-            //{
-            //    Debug.Log(fileFound);
-            //}
-            // Directory.EnumerateFiles instead?
-
-            // TODO: on exception, check if a backup exists and try to load that instead.
-            //string backupFilePath = string.Format("{0}{1}.bak", Constants.DEFAULT_CHARACTER_SAVE_LOCATION, fileName);
-            //if (File.Exists(backupFilePath))
-            //{
-            //    Debug.Log(string.Format("A backup exists for the file {0}. It could be (re)loaded instead. ", fileName));
-            //    // TODO: give the player a pop up option whether to do so.
-            //}
+            string filePath = "SavedGameData/Quilleland/Characters/CharID_0.json";
+            sourceJSON = SerializationHelper.LoadJSONCharacterFromFile(filePath);
 
             // Init variables.
             JObject jsonPerson;
@@ -212,11 +171,6 @@ namespace Quille
         private string CreateJSONFileName()
         {
             return string.Format("CharID_{0}.json", charID);
-        }
-
-        private string CreateJSONBakFileName()
-        {
-            return string.Format("CharID_{0}.json.bak", charID);
         }
         
 

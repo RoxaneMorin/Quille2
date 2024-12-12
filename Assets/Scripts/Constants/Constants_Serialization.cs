@@ -6,6 +6,8 @@ public static class Constants_Serialization
     // The enums and constants in serializing, saving and loading games.
     // They are regrouped here for ease of editability.
 
+    // 
+    public const string SUFFIX_BACKUP = ".bak";
 
     // STORAGE PATHS
     public const string DEFAULT_GAME_SAVE_LOCATION_PATH = "";
