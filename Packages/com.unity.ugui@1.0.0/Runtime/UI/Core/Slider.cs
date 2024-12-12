@@ -641,7 +641,9 @@ namespace UnityEngine.UI
             {
                 Vector2 localMousePos;
                 if (RectTransformUtility.ScreenPointToLocalPointInRectangle(m_HandleRect, eventData.pointerPressRaycast.screenPosition, eventData.pressEventCamera, out localMousePos))
+                {
                     m_Offset = localMousePos;
+                }
             }
             else
             {

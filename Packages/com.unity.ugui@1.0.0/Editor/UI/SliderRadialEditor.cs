@@ -16,6 +16,7 @@ namespace UnityEditor.UI
         SerializedProperty m_Origin;
         SerializedProperty m_Clockwise;
         SerializedProperty m_HandleShift;
+        SerializedProperty m_360CanLoopBack;
 
         SerializedProperty m_OriginalWidthAndHeight;
         SerializedProperty m_RootRect;
@@ -36,8 +37,8 @@ namespace UnityEditor.UI
         SerializedProperty m_Value;
         SerializedProperty m_OnValueChanged;
 
-        SerializedProperty testCenterPoint;
-        SerializedProperty testInitialPoint;
+        //SerializedProperty testCenterPoint;
+        //SerializedProperty testInitialPoint;
         //SerializedProperty testHandlePoint;
 
 
@@ -80,14 +81,15 @@ namespace UnityEditor.UI
             m_FillRect = serializedObject.FindProperty("m_FillRect");
             m_HandleRect = serializedObject.FindProperty("m_HandleRect");
 
-            testCenterPoint = serializedObject.FindProperty("testCenterPoint");
-            testInitialPoint = serializedObject.FindProperty("testInitialPoint");
+            //testCenterPoint = serializedObject.FindProperty("testCenterPoint");
+            //testInitialPoint = serializedObject.FindProperty("testInitialPoint");
             //testHandlePoint = serializedObject.FindProperty("testHandlePoint");
 
             m_Shape = serializedObject.FindProperty("m_Shape");
             m_Origin = serializedObject.FindProperty("m_Origin");
             m_Clockwise = serializedObject.FindProperty("m_Clockwise");
             m_HandleShift = serializedObject.FindProperty("m_HandleShift");
+            m_360CanLoopBack = serializedObject.FindProperty("m_360CanLoopBack");
 
             m_BackgroundSprite360 = serializedObject.FindProperty("m_BackgroundSprite360");
             m_FillSprite360 = serializedObject.FindProperty("m_FillSprite360");
@@ -131,9 +133,9 @@ namespace UnityEditor.UI
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Testing", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(testCenterPoint);
-            EditorGUILayout.PropertyField(testInitialPoint);
+            //EditorGUILayout.LabelField("Testing", EditorStyles.boldLabel);
+            //EditorGUILayout.PropertyField(testCenterPoint);
+            //EditorGUILayout.PropertyField(testInitialPoint);
             //EditorGUILayout.PropertyField(testHandlePoint);
 
             if (m_FillRect.objectReferenceValue != null || m_HandleRect.objectReferenceValue != null)
@@ -212,6 +214,8 @@ namespace UnityEditor.UI
                     }
                 }
 
+                EditorGUILayout.PropertyField(m_360CanLoopBack);
+
                 EditorGUILayout.Space();
 
                 EditorGUI.BeginChangeCheck();
@@ -279,6 +283,17 @@ namespace UnityEditor.UI
 
                 if (warning)
                     EditorGUILayout.HelpBox("The selected slider direction conflicts with navigation. Not all navigation options may work.", MessageType.Warning);
+
+                // Button to update the parameters.
+                EditorGUILayout.Space();
+                if (GUILayout.Button("Sync All Slider Parameters"))
+                {
+                    foreach (var obj in serializedObject.targetObjects)
+                    {
+                        SliderRadial slider = obj as SliderRadial;
+                        slider.SetAllData();
+                    }
+                }
 
                 // Draw the event notification options
                 EditorGUILayout.Space();
