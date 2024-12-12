@@ -36,12 +36,17 @@ namespace UnityEngine.UI
         [SerializeField] private int m_Origin = 0;
         [SerializeField] private bool m_Clockwise = true;
         [SerializeField] private float m_HandleShift;
+        [SerializeField] private bool m_360CanLoopBack;
 
         private Vector2 centerPoint;
         private Vector2 initialPoint;
+        private float initialAngleOffset;
+        private float previousAngleValue;
+        private float lockedAngleValue;
+        private bool lockLoop;
 
-        [SerializeField] private RectTransform testCenterPoint;
-        [SerializeField] private RectTransform testInitialPoint;
+        //[SerializeField] private RectTransform testCenterPoint;
+        //[SerializeField] private RectTransform testInitialPoint;
         //[SerializeField] private RectTransform testHandlePoint;
 
 
@@ -51,7 +56,7 @@ namespace UnityEngine.UI
         public Image.Origin180 origin180 { get { return m_Origin180; }}
         public Image.Origin360 origin360 { get { return m_Origin360; }}
         public bool Clockwise { get { return m_Clockwise; }}
-        new bool reverseValue { get { return !m_Clockwise; } }
+        public bool reverseClockwise { get { return !m_Clockwise; } }
 
 
 
@@ -242,10 +247,10 @@ namespace UnityEngine.UI
                 centerPoint = m_RootRect.anchoredPosition;
             }
 
-            if (testCenterPoint)
-            {
-                testCenterPoint.anchoredPosition = centerPoint;
-            }
+            //if (testCenterPoint)
+            //{
+            //    testCenterPoint.anchoredPosition = centerPoint;
+            //}
         }
         protected void SetCenterPointHalf180()
         {
@@ -268,10 +273,10 @@ namespace UnityEngine.UI
                 centerPoint = positionInfo.Item1 + new Vector2(positionInfo.Item2.x, 0);
             }
 
-            if (testCenterPoint)
-            {
-                testCenterPoint.anchoredPosition = centerPoint;
-            }
+            //if (testCenterPoint)
+            //{
+            //    testCenterPoint.anchoredPosition = centerPoint;
+            //}
         }
         protected void SetCenterPointQuater90()
         {
@@ -294,10 +299,10 @@ namespace UnityEngine.UI
                 centerPoint = positionInfo.Item1 + new Vector2(positionInfo.Item2.x, -positionInfo.Item2.y);
             }
 
-            if (testCenterPoint)
-            {
-                testCenterPoint.anchoredPosition = centerPoint;
-            }
+            //if (testCenterPoint)
+            //{
+            //    testCenterPoint.anchoredPosition = centerPoint;
+            //}
         }
 
         protected void SetInitialPoint()
@@ -313,6 +318,13 @@ namespace UnityEngine.UI
             if (m_Shape == Shape.Full360)
             {
                 SetInitialPointFull360();
+            }
+
+            Vector2 initialDirection = initialPoint - centerPoint;
+            initialAngleOffset = Mathf.Atan2(initialDirection.y, initialDirection.x) * Mathf.Rad2Deg;
+            if (initialAngleOffset < 0)
+            {
+                initialAngleOffset += 360;
             }
         }
         protected void SetInitialPointFull360()
@@ -336,10 +348,10 @@ namespace UnityEngine.UI
                 initialPoint = positionInfo.Item1 + new Vector2(positionInfo.Item2.x + m_HandleShift, 0);
             }
 
-            if (testInitialPoint)
-            {
-                testInitialPoint.anchoredPosition = initialPoint;
-            }
+            //if (testInitialPoint)
+            //{
+            //    testInitialPoint.anchoredPosition = initialPoint;
+            //}
         }
         protected void SetInitialPointHalf180()
         {
@@ -366,10 +378,10 @@ namespace UnityEngine.UI
                 initialPoint = positionInfo.Item1 + new Vector2(positionInfo.Item2.x, y);
             }
 
-            if (testInitialPoint)
-            {
-                testInitialPoint.anchoredPosition = initialPoint;
-            }
+            //if (testInitialPoint)
+            //{
+            //    testInitialPoint.anchoredPosition = initialPoint;
+            //}
         }
         protected void SetInitialPointQuater90()
         {
@@ -400,10 +412,10 @@ namespace UnityEngine.UI
                 initialPoint = positionInfo.Item1 + new Vector2(x, y);
             }
 
-            if (testInitialPoint)
-            {
-                testInitialPoint.anchoredPosition = initialPoint;
-            }
+            //if (testInitialPoint)
+            //{
+            //    testInitialPoint.anchoredPosition = initialPoint;
+            //}
         }
         protected (Vector2, Vector2) GetBestRectsInfo()
         {
@@ -489,7 +501,7 @@ namespace UnityEngine.UI
                 m_BackgroundImage = m_BackgroundRect.gameObject.GetComponent<Image>();
             }
 
-            SetOrigin(); // Not sure this is necessary.
+            SetAllData(); // Not sure this is necessary.
         }
         protected override void UpdateVisuals()
         {
@@ -512,7 +524,7 @@ namespace UnityEngine.UI
                 }
                 else
                 {
-                    if (reverseValue)
+                    if (reverseClockwise)
                         anchorMin[(int)axis] = 1 - normalizedValue;
                     else
                         anchorMax[(int)axis] = normalizedValue;
@@ -524,15 +536,125 @@ namespace UnityEngine.UI
 
             if (m_HandleContainerRect != null)
             {
-                //m_Tracker.Add(this, m_HandleRect, DrivenTransformProperties.Anchors);
-                //Vector2 anchorMin = Vector2.zero;
-                //Vector2 anchorMax = Vector2.one;
-                //anchorMin[(int)axis] = anchorMax[(int)axis] = (reverseValue ? (1 - normalizedValue) : normalizedValue);
-                //m_HandleRect.anchorMin = anchorMin;
-                //m_HandleRect.anchorMax = anchorMax;
-
                 Vector2 newHandleCoords = CalculateHandlePositionFromFill();
                 m_HandleRect.anchoredPosition = newHandleCoords;
+            }
+        }
+
+        protected override void UpdateDrag(PointerEventData eventData, Camera cam)
+        {
+            RectTransform clickRect = m_HandleContainerRect ?? m_FillContainerRect;
+            if (clickRect != null && clickRect.rect.size[(int)axis] > 0)
+            {
+                // Stuff from the original slider.
+                Vector2 relativeMousePosition = Vector2.zero;
+                if (!MultipleDisplayUtilities.GetRelativeMousePositionForDrag(eventData, ref relativeMousePosition))
+                {
+                    return;
+                }
+
+                Vector2 localCursor;
+                if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(clickRect, relativeMousePosition, cam, out localCursor))
+                {
+                    return;
+                }
+
+                // Calculate the difference between the zero angle and our own.
+                Vector2 dragDirection = localCursor - centerPoint;
+                float dragAngle = Mathf.Atan2(dragDirection.y, dragDirection.x) * Mathf.Rad2Deg;
+                if (dragAngle < 0)
+                {
+                    dragAngle += 360f;
+                }
+
+                float angleValue = initialAngleOffset - dragAngle;
+                if (angleValue < 0)
+                {
+                    angleValue += 360f;
+                }
+                if (!m_Clockwise)
+                {
+                    angleValue = 360f - angleValue;
+                }
+
+                // Avoid overflow on a per shape basis.
+                if (m_Shape == Shape.Half180)
+                {
+                    if (angleValue > 180f)
+                    {
+                        if (angleValue >= 190f && angleValue <= 350f)
+                        {
+                            return;
+                        }
+                        angleValue = (angleValue < 190f) ? 180f : 0f;
+                    }
+                    normalizedValue = angleValue / 180f;
+                    return;
+                }
+                else if (m_Shape == Shape.Quarter90)
+                {
+                    if (angleValue > 90f)
+                    {
+                        if (angleValue >= 100f && angleValue <= 350f)
+                        {
+                            return;
+                        }
+                        angleValue = (angleValue < 100f) ? 90f : 0f;
+                    }
+                    normalizedValue = angleValue / 90f;
+                    return;
+                }
+
+                // Everything 360.
+                if (m_360CanLoopBack)
+                {
+                    if (angleValue <= 5f || angleValue >= 355f)
+                    {
+                        angleValue = (angleValue >= 355f) ? 360f : 0f;
+                    }
+
+                    normalizedValue = angleValue / 360f;
+                    return;
+                }
+
+                float angleDelta = previousAngleValue - angleValue;
+
+                if (lockLoop)
+                {
+                    if (angleValue >= 5f && angleValue <= 355f)
+                    {
+                        if (lockedAngleValue == 360f && angleDelta > 0 && angleDelta < 50f)
+                        {
+                            normalizedValue = angleValue / 360f;
+                            lockLoop = false;
+                            return;
+                        }
+                        else if (lockedAngleValue == 0 && angleDelta < 0 && angleDelta > -50f)
+                        {
+                            normalizedValue = angleValue / 360f;
+                            lockLoop = false;
+                            return;
+                        }
+                    }
+                    previousAngleValue = angleValue;
+                }
+                else
+                {
+                    if (angleValue >= 5f && angleValue <= 355f)
+                    {
+                        normalizedValue = angleValue / 360f;
+                    }
+                    else
+                    {
+                        angleValue = (angleValue >= 5f) ? 360f : 0f;
+                        normalizedValue = angleValue / 360f;
+
+                        lockLoop = true;
+                    }
+
+                    previousAngleValue = angleValue;
+                    lockedAngleValue = previousAngleValue;
+                }
             }
         }
 
