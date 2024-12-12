@@ -14,11 +14,13 @@ namespace QuilleUI
 
         // VARIABLES
         [Header("References")]
-        [SerializeField] protected Slider mySlider;
+        [SerializeField] protected SliderRadial mySlider;
         [SerializeField] protected Graphic myHandle;
 
         [Header("Resources")]
         [SerializeField] Gradient myColourGradient;
+        [SerializeField] Sprite myFillSpritePositive;
+        [SerializeField] Sprite myFillSpriteNegative;
 
         [Header("Snapping")]
         [SerializeField] bool stepValues = true;
@@ -56,7 +58,6 @@ namespace QuilleUI
         public override void OnButtonClicked()
         {
             // If the button is not selected, unselect it, and viseversa.
-
             if (!isSelected)
             {
                 Select();
@@ -72,6 +73,8 @@ namespace QuilleUI
         {
             StepValue();
             SetColourByValue();
+            SetSpriteByValue();
+            RegenerateCaption();
 
             SelectableButtonUpdated?.Invoke(this, false);
         }
@@ -97,6 +100,11 @@ namespace QuilleUI
             mySlider.gameObject.SetActive(false);
         }
 
+        protected override string MakeNewCaption()
+        {
+            return string.Format("{0} ({1})", MyInterestSO.InterestName, MySliderValue);
+        }
+
         private void StepValue()
         {
             if (stepValues)
@@ -106,17 +114,35 @@ namespace QuilleUI
         }
         private void SetColourByValue()
         {
-            myHandle.color = myColourGradient.Evaluate((mySlider.value + 1) / 2);
+            myHandle.color = myColourGradient.Evaluate(mySlider.normalizedValue);
+        }
+        private void SetSpriteByValue()
+        {
+            if (mySlider.value >= 0 && mySlider.FillSprite360 != myFillSpritePositive)
+            {
+                mySlider.FillSprite360 = myFillSpritePositive;
+            }
+            else if (mySlider.value < 0 && mySlider.FillSprite360 != myFillSpriteNegative)
+            {
+                mySlider.FillSprite360 = myFillSpriteNegative;
+            }
         }
 
         public virtual void RandomizeValueAndSelect()
         {
             Select(RandomExtended.RangeStepped(-1f, 1f, 0.125f));
+
+            SetColourByValue();
+            SetSpriteByValue();
+            RegenerateCaption();
         }
         public void ResetValue()
         {
             MySliderValueWithoutNotify = 0;
+
             SetColourByValue();
+            SetSpriteByValue();
+            RegenerateCaption();
         }
 
 
@@ -125,7 +151,7 @@ namespace QuilleUI
         {
             base.FetchComponents();
 
-            mySlider = gameObject.GetComponentInChildren<Slider>(true);
+            mySlider = gameObject.GetComponentInChildren<SliderRadial>(true);
             myHandle = mySlider.targetGraphic;
         }
 
@@ -139,6 +165,7 @@ namespace QuilleUI
 
                 myIcon.sprite = myInterestSO.interestIcon;
                 myCaption.text = myInterestSO.InterestName;
+                myDefaultCaption = myCaption.text;
 
                 gameObject.name = string.Format("Interest_{0}", myInterestSO.InterestName);
             }

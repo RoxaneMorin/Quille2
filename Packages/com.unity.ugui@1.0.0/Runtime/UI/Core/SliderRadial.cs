@@ -58,6 +58,42 @@ namespace UnityEngine.UI
         public bool Clockwise { get { return m_Clockwise; }}
         public bool reverseClockwise { get { return !m_Clockwise; } }
 
+        public Sprite BackgroundSprite360 
+        { 
+            get { return m_BackgroundSprite360; } 
+            set { m_BackgroundSprite360 = value;
+                  SetBackgroundImage(); }
+        }
+        public Sprite FillSprite360 
+        { 
+            get { return m_FillSprite360; }
+            set { m_FillSprite360 = value;
+                  SetFillImage(); } 
+        }
+        public Sprite[] BackgroundSprite180 
+        { 
+            get { return m_BackgroundSprite180; } 
+            set { m_BackgroundSprite180 = value;
+                  SetBackgroundImage(); } 
+        }
+        public Sprite[] FillSprite180 
+        { 
+            get { return m_FillSprite180; } 
+            set { m_FillSprite180 = value;
+                  SetFillImage(); }
+        }
+        public Sprite[] BackgroundSprite90
+        {
+            get { return m_BackgroundSprite90; }
+            set { m_BackgroundSprite90 = value; 
+                  SetBackgroundImage(); }
+        }
+        public Sprite[] FillSprite90
+        { 
+            get { return m_FillSprite90; } 
+            set { m_FillSprite90 = value; 
+                  SetFillImage(); } 
+        }
 
 
         // METHODS

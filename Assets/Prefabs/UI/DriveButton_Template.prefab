@@ -257,6 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mySO: {fileID: 0}
   isSelected: 0
+  isForbidden: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
   myIcon: {fileID: 7115466768898969024}
@@ -264,16 +265,15 @@ MonoBehaviour:
   myCaption: {fileID: 8055618537292032621}
   myColourDefault: {r: 0.23529412, g: 0.21960784, b: 0.35686275, a: 1}
   myColourSelected: {r: 1, g: 1, b: 1, a: 1}
-  isForbidden: 0
+  myColourForbidden: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  myColourSelectedeButForbidden: {r: 0.7490196, g: 0, b: 0, a: 1}
+  myCaptionPositionUnselected: {x: 0, y: -55}
+  myCaptionPositionSelected: {x: 0, y: -75}
   myValue: 0
   myFrame: {fileID: 6845836189155728242}
   myStepCount: 2
   myStepSize: 0.5
   myCurrentStep: 0
-  myColourForbidden: {r: 0.4, g: 0.4, b: 0.4, a: 1}
-  myColourSelectedeButForbidden: {r: 0.7490196, g: 0, b: 0, a: 1}
-  myCaptionPositionUnselected: {x: 0, y: -55}
-  myCaptionPositionSelected: {x: 0, y: -75}
 --- !u!1 &6921916988982655199
 GameObject:
   m_ObjectHideFlags: 0

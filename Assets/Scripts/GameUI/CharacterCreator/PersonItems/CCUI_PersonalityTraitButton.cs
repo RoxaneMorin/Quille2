@@ -18,6 +18,12 @@ namespace QuilleUI
 
         // METHODS
 
+        // OVERRIDES
+        protected override string MakeNewCaption()
+        {
+            return string.Format("{0} ({1})", MyPersonalityTraitSO.TraitName, MyButtonValue);
+        }
+
         // INIT
         public override void Init(ScriptableObject sourceSO)
         {
@@ -29,6 +35,7 @@ namespace QuilleUI
 
                 myIcon.sprite = myPersonalityTraitSO.traitIcon;
                 myCaption.text = myPersonalityTraitSO.TraitName;
+                myDefaultCaption = myCaption.text;
 
                 gameObject.name = string.Format("PersonalityTraitButton_{0}", myPersonalityTraitSO.TraitName);
             }

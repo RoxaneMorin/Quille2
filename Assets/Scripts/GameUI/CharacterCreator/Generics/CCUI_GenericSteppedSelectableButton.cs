@@ -107,6 +107,8 @@ namespace QuilleUI
         {
             myValue = value;
             myFrame.fillAmount = value;
+
+            RegenerateCaption();
         }
 
         public override void Select()
@@ -144,6 +146,7 @@ namespace QuilleUI
             myCurrentStep = 0;
             myFrame.color = myColourDefault;
 
+            //RegenerateCaption();
             myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
         }
 

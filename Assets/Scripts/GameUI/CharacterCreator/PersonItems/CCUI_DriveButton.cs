@@ -18,6 +18,12 @@ namespace QuilleUI
 
         // METHODS
 
+        // OVERRIDES
+        protected override string MakeNewCaption()
+        {
+            return string.Format("{0} ({1})", MyDriveSO.DriveName, MyButtonValue);
+        }
+
         // INIT
         public override void Init(ScriptableObject sourceSO)
         {
@@ -29,6 +35,7 @@ namespace QuilleUI
 
                 myIcon.sprite = myDriveSO.driveIcon;
                 myCaption.text = myDriveSO.DriveName;
+                myDefaultCaption = myCaption.text;
 
                 gameObject.name = string.Format("DriveButton_{0}", myDriveSO.DriveName);
             }

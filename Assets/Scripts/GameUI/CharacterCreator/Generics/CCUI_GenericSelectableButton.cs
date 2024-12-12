@@ -23,6 +23,7 @@ namespace QuilleUI
         [SerializeField] protected Image myIcon;
         [SerializeField] protected Button myButton;
         [SerializeField] protected TMPro.TextMeshProUGUI myCaption;
+        protected string myDefaultCaption;
 
         [Header("Resources")]
         [SerializeField] protected Color myColourDefault;
@@ -72,12 +73,16 @@ namespace QuilleUI
         public virtual void Select() 
         {
             isSelected = true;
+
             myCaption.rectTransform.anchoredPosition = myCaptionPositionSelected;
+            RegenerateCaption();
         }
         public virtual void Unselect() 
         {
             isSelected = false;
+
             myCaption.rectTransform.anchoredPosition = myCaptionPositionUnselected;
+            RegenerateCaption();
         }
 
         public virtual void Forbid()
@@ -95,6 +100,15 @@ namespace QuilleUI
         {
             transform.SetParent(newParent);
             myRectTransform.anchoredPosition = newPosition;
+        }
+
+        public void RegenerateCaption() 
+        {
+            myCaption.text = isSelected ? MakeNewCaption() : myDefaultCaption;
+        }
+        protected virtual string MakeNewCaption()
+        {
+            return myDefaultCaption;
         }
 
 
@@ -120,6 +134,7 @@ namespace QuilleUI
 
             FetchComponents();
 
+            myDefaultCaption = myCaption.text;
             myCaption.gameObject.SetActive(false);
         }
 

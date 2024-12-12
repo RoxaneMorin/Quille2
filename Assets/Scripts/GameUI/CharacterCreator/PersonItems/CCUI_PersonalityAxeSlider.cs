@@ -72,7 +72,7 @@ namespace QuilleUI
         }
         private void SetColourByValue()
         {
-            myHandle.color = myColourGradient.Evaluate((mySlider.value + 1) / 2);
+            myHandle.color = myColourGradient.Evaluate(mySlider.normalizedValue);
         }
 
         public void ResetValue()
