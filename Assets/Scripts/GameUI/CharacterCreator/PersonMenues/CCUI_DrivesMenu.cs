@@ -83,9 +83,30 @@ namespace QuilleUI
 
 
         // UTILITY
+        public override void RandomizeValues(int numberToSelect)
+        {
+            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
+            int numberOfButtons = permittedButtons.Length;
+
+            List<int> IDsToSelect = RandomizeValues(numberOfButtons, numberToSelect);
+
+            int i = 0;
+            foreach (int ID in IDsToSelect)
+            {
+                currentlySelectedButtons.Add(theButtons[ID]);
+
+                // Pick one full drive, two half ones.
+                float value = (i == 1 ? 1f : 0.5f);
+                ((CCUI_GenericSteppedSelectableButton)theButtons[ID]).Select(value);
+
+                i++;
+            }
+
+            PositionSelectedButtons();
+        }
         public void RandomizeValues()
         {
-            base.RandomizeValues(Quille.Constants.DEFAULT_DRIVES_COUNT);
+            RandomizeValues(Quille.Constants.DEFAULT_DRIVES_COUNT);
 
             DrivesMenuUpdated?.Invoke();
         }

@@ -317,7 +317,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   myFillSpritePositive: {fileID: 21300000, guid: 5c3b1ac87e257a24f92fb945e89188d2,
     type: 3}
-  myFillSpriteNegative: {fileID: 21300000, guid: ab8c3c58b68d6e6468c28f5fbb1a620b,
+  myFillSpriteNegative: {fileID: 21300000, guid: 5c3b1ac87e257a24f92fb945e89188d2,
     type: 3}
   stepValues: 1
   roundingValue: 8
@@ -427,7 +427,8 @@ MonoBehaviour:
   m_OriginalWidthAndHeight: {x: 110, y: 110}
   m_BackgroundRect: {fileID: 0}
   m_BackgroundImage: {fileID: 0}
-  m_BackgroundSprite360: {fileID: 0}
+  m_BackgroundSprite360: {fileID: 21300000, guid: 1e471d37e9b39fe4bb0c8c203cfd4aaa,
+    type: 3}
   m_FillSprite360: {fileID: 21300000, guid: 5c3b1ac87e257a24f92fb945e89188d2, type: 3}
   m_BackgroundSprite180: []
   m_FillSprite180:

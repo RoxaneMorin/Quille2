@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PA_FancifulvsGrounded
   m_EditorClassIdentifier: 
   axeName: Mentality
-  axeNameLeft: Fanciful/Cerebral/Abstractive
-  axeNameRight: Grounded/Sensual/Hands On
+  axeNameLeft: Abstractive
+  axeNameRight: Hands On
   axeIconLeft: {fileID: 21300000, guid: d67b482ea93faa14c88660bc37241936, type: 3}
   axeIconRight: {fileID: 21300000, guid: a10e92edd684a0448a3b26fcad22cede, type: 3}
   axeSpan:

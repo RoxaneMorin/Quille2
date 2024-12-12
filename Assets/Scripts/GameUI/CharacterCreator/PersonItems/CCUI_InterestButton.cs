@@ -19,8 +19,6 @@ namespace QuilleUI
 
         [Header("Resources")]
         [SerializeField] Gradient myColourGradient;
-        [SerializeField] Sprite myFillSpritePositive;
-        [SerializeField] Sprite myFillSpriteNegative;
 
         [Header("Snapping")]
         [SerializeField] bool stepValues = true;
@@ -73,7 +71,6 @@ namespace QuilleUI
         {
             StepValue();
             SetColourByValue();
-            SetSpriteByValue();
             RegenerateCaption();
 
             SelectableButtonUpdated?.Invoke(this, false);
@@ -116,24 +113,20 @@ namespace QuilleUI
         {
             myHandle.color = myColourGradient.Evaluate(mySlider.normalizedValue);
         }
-        private void SetSpriteByValue()
-        {
-            if (mySlider.value >= 0 && mySlider.FillSprite360 != myFillSpritePositive)
-            {
-                mySlider.FillSprite360 = myFillSpritePositive;
-            }
-            else if (mySlider.value < 0 && mySlider.FillSprite360 != myFillSpriteNegative)
-            {
-                mySlider.FillSprite360 = myFillSpriteNegative;
-            }
-        }
 
         public virtual void RandomizeValueAndSelect()
         {
-            Select(RandomExtended.RangeStepped(-1f, 1f, 0.125f));
-
+            // Bias in favour of positive results.
+            if (RandomExtended.RangeInt(1, 3) > 1)
+            {
+                Select(RandomExtended.RangeStepped(0.125f, 1f, 0.125f));
+            }
+            else
+            {
+                Select(RandomExtended.RangeStepped(-1f, -0.125f, 0.125f));
+            }
+            
             SetColourByValue();
-            SetSpriteByValue();
             RegenerateCaption();
         }
         public void ResetValue()
@@ -141,7 +134,6 @@ namespace QuilleUI
             MySliderValueWithoutNotify = 0;
 
             SetColourByValue();
-            SetSpriteByValue();
             RegenerateCaption();
         }
 

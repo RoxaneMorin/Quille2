@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PA_RationalvsPassionate
   m_EditorClassIdentifier: 
   axeName: Reactions
-  axeNameLeft: Rational/Thinking/By the Book
-  axeNameRight: Passionate/Feeling/Instinctive
+  axeNameLeft: Reasoned
+  axeNameRight: Instinctive
   axeIconLeft: {fileID: 21300000, guid: 9e62fb59585eb4d40a0eda4353c2bac9, type: 3}
   axeIconRight: {fileID: 21300000, guid: 345dce56c218e0b459211831b51a912f, type: 3}
   axeSpan:
