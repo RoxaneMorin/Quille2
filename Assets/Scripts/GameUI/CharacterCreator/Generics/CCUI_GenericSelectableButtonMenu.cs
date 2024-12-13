@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Quille;
 
 namespace QuilleUI
 {
@@ -14,6 +15,7 @@ namespace QuilleUI
         // VARIABLES
         [Header("Parameters")]
         [SerializeField] protected Transform buttonPrefab;
+        [SerializeField] protected int selectionBoxCapacity;
         [SerializeField] protected int countPerRow;
         [SerializeField] protected float rowShift;
         [SerializeField] protected float containerPadding;
@@ -40,6 +42,10 @@ namespace QuilleUI
         // A HashSet would be better, but doesn't show up in editor :/
 
 
+        // PROPERTIES
+        public bool SelectionBoxAtCapacity { get { return currentlySelectedButtons.Count >= selectionBoxCapacity; } }
+
+
 
         // METHODS
 
@@ -58,6 +64,15 @@ namespace QuilleUI
                 }
             }
         }
+        public virtual void OnTargetPersonModified(Person theTargetPerson)
+        {
+            // Does this happen too often?
+            foreach (CCUI_GenericSelectableButton button in theButtons)
+            {
+                button.PermitIfCompatible(theTargetPerson, SelectionBoxAtCapacity);
+            }
+        }
+
 
         // UTILITY
         protected virtual void MoveButtonToSelected(CCUI_GenericSelectableButton theTargetButton)
@@ -103,18 +118,39 @@ namespace QuilleUI
 
                     i++;
                 }
-            } 
+            }
+        }
+
+        public void ForbidUnselectedButtons()
+        {
+            foreach (CCUI_GenericSelectableButton button in theButtons)
+            {
+                if (!button.IsSelected)
+                {
+                    button.Forbid();
+                }
+            }
+        }
+        public void PermitUnselectedButtons()
+        {
+            foreach (CCUI_GenericSelectableButton button in theButtons)
+            {
+                if (!button.IsSelected)
+                {
+                    button.Permit();
+                }
+            }
         }
 
         public virtual List<int> RandomizeValues(int numberOfButtons, int numberToSelect)
         {
-            ResetValues();
-
             int minNumberToSelect = Mathf.Min(numberToSelect, numberOfButtons);
             return RandomExtended.NonRepeatingIntegersInRange(0, numberOfButtons, minNumberToSelect);
         }
         public virtual void RandomizeValues(int numberToSelect)
         {
+            ResetValues();
+
             CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
@@ -122,8 +158,8 @@ namespace QuilleUI
 
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(theButtons[ID]);
-                theButtons[ID].Select();
+                currentlySelectedButtons.Add(permittedButtons[ID]);
+                permittedButtons[ID].Select();
             }
 
             PositionSelectedButtons();
@@ -161,7 +197,8 @@ namespace QuilleUI
 
         protected virtual void LoadSOsAndCreateButtons(string SOsResourcePath)
         {
-            ScriptableObject[] theSOs = Resources.LoadAll<ScriptableObject>(SOsResourcePath);
+            PersonalityItemSO[] theSOs = Resources.LoadAll<PersonalityItemSO>(SOsResourcePath);
+            theSOs = theSOs.OrderBy(so => so.MenuSortingIndex).ToArray();
             int noOfSOs = theSOs.Length;
 
             theButtons = new CCUI_GenericSelectableButton[noOfSOs];

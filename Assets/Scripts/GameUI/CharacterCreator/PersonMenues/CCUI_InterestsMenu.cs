@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Quille;
 
 namespace QuilleUI
 {
@@ -14,14 +15,14 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        public float GetSliderValueFor(Quille.InterestSO theISO)
+        public float GetSliderValueFor(InterestSO theISO)
         {
             return ((CCUI_InterestButton)theButtonsDict[theISO]).MySliderValue;
         }
 
-        public SerializedDictionary<Quille.InterestSO, float> GetButtonsSOsAndValues()
+        public SerializedDictionary<InterestSO, float> GetButtonsSOsAndValues()
         {
-            SerializedDictionary<Quille.InterestSO, float> SOsAndValuesDict = new SerializedDictionary<Quille.InterestSO, float>();
+            SerializedDictionary<InterestSO, float> SOsAndValuesDict = new SerializedDictionary<InterestSO, float>();
 
             foreach (CCUI_InterestButton button in currentlySelectedButtons)
             {
@@ -31,11 +32,11 @@ namespace QuilleUI
             return SOsAndValuesDict;
         }
 
-        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.InterestSO, float> sourceDict)
+        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<InterestSO, float> sourceDict)
         {
             ResetValues();
 
-            foreach (KeyValuePair<Quille.InterestSO, float> keyValuePair in sourceDict)
+            foreach (KeyValuePair<InterestSO, float> keyValuePair in sourceDict)
             {
                 if (theButtonsDict.ContainsKey(keyValuePair.Key))
                 {
@@ -67,15 +68,17 @@ namespace QuilleUI
         // UTILITY
         public void RandomizeValues()
         {
+            ResetValues();
+
             CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
-            List<int> IDsToSelect = base.RandomizeValues(numberOfButtons, Quille.Constants_Quille.DEFAULT_INTEREST_COUNT);
+            List<int> IDsToSelect = base.RandomizeValues(numberOfButtons, Constants_Quille.DEFAULT_INTEREST_COUNT);
 
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(theButtons[ID]);
-                ((CCUI_InterestButton)theButtons[ID]).RandomizeValueAndSelect();
+                currentlySelectedButtons.Add(permittedButtons[ID]);
+                ((CCUI_InterestButton)permittedButtons[ID]).RandomizeValueAndSelect();
             }
 
             PositionSelectedButtons();
@@ -89,6 +92,7 @@ namespace QuilleUI
         {
             base.Init();
             LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_INTERESTS);
+            selectionBoxCapacity = Constants_Quille.MAXIMUM_INITIAL_INTEREST_COUNT;
         }
 
 

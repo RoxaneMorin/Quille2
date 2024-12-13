@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Quille;
 
 namespace QuilleUI
 {
@@ -12,32 +13,44 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        internal Quille.DriveSO MyDriveSO { get { return (Quille.DriveSO)mySO; } set { mySO = value; } }
+        internal DriveSO MyDriveSO { get { return (DriveSO)mySO; } set { mySO = value; } }
 
 
 
         // METHODS
 
         // OVERRIDES
+        public override void PermitIfCompatible(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        {
+            if (MyDriveSO.IsCompatibleWithPerson(theTargetPerson) && (isSelected || !selectionBoxAtCapacity))
+            {
+                Permit();
+            }
+            else
+            {
+                Forbid();
+            }
+        }
+
         protected override string MakeNewCaption()
         {
-            return string.Format("{0} ({1})", MyDriveSO.DriveName, MyButtonValue);
+            return string.Format("{0} ({1})", MyDriveSO.ItemName, MyButtonValue);
         }
 
         // INIT
-        public override void Init(ScriptableObject sourceSO)
+        public override void Init(PersonalityItemSO sourceSO)
         {
             base.Init(sourceSO);
 
-            if (mySO is Quille.DriveSO)
+            if (mySO is DriveSO)
             {
-                Quille.DriveSO myDriveSO = MyDriveSO;
+                DriveSO myDriveSO = MyDriveSO;
 
-                myIcon.sprite = myDriveSO.driveIcon;
-                myCaption.text = myDriveSO.DriveName;
+                myIcon.sprite = myDriveSO.ItemIcon;
+                myCaption.text = myDriveSO.ItemName;
                 myDefaultCaption = myCaption.text;
 
-                gameObject.name = string.Format("DriveButton_{0}", myDriveSO.DriveName);
+                gameObject.name = string.Format("DriveButton_{0}", myDriveSO.ItemName);
             }
         }
     }

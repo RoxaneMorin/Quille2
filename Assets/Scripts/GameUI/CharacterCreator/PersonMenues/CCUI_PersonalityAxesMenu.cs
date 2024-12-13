@@ -108,6 +108,7 @@ namespace QuilleUI
             FetchComponents();
 
             Quille.PersonalityAxeSO[] personalityAxes = Resources.LoadAll<Quille.PersonalityAxeSO>(Constants_PathResources.SO_PATH_PERSONALITYAXES);
+            personalityAxes = personalityAxes.OrderBy(axe => axe.MenuSortingIndex).ToArray();
             int nofOfAxes = personalityAxes.Length;
 
             theSliders = new QuilleUI.CCUI_PersonalityAxeSlider[nofOfAxes];

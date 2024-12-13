@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Quille;
 
 namespace QuilleUI
 {
@@ -13,14 +14,14 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        public float GetButtonValueFor(Quille.PersonalityTraitSO theTSO)
+        public float GetButtonValueFor(PersonalityTraitSO theTSO)
         {
             return ((CCUI_GenericSteppedSelectableButton)theButtonsDict[theTSO]).MyButtonValue;
         }
 
-        public SerializedDictionary<Quille.PersonalityTraitSO, float> GetButtonsSOsAndValues()
+        public SerializedDictionary<PersonalityTraitSO, float> GetButtonsSOsAndValues()
         {
-            SerializedDictionary<Quille.PersonalityTraitSO, float> SOsAndValuesDict = new SerializedDictionary<Quille.PersonalityTraitSO, float>();
+            SerializedDictionary<PersonalityTraitSO, float> SOsAndValuesDict = new SerializedDictionary<PersonalityTraitSO, float>();
 
             foreach (CCUI_PersonalityTraitButton button in currentlySelectedButtons)
             {
@@ -30,11 +31,11 @@ namespace QuilleUI
             return SOsAndValuesDict;
         }
 
-        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.PersonalityTraitSO, float> sourceDict)
+        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<PersonalityTraitSO, float> sourceDict)
         {
             ResetValues();
 
-            foreach (KeyValuePair<Quille.PersonalityTraitSO, float> keyValuePair in sourceDict )
+            foreach (KeyValuePair<PersonalityTraitSO, float> keyValuePair in sourceDict )
             {
                 if (theButtonsDict.ContainsKey(keyValuePair.Key))
                 {
@@ -62,30 +63,11 @@ namespace QuilleUI
             PersonalityTraitsMenuUpdated?.Invoke();
         }
 
-        public void OnTargetPersonModified(Quille.Person theTargetPerson)
-        {
-            // TODO: is there a cleaner/less repetitive way to do this?
-
-            //Debug.Log(string.Format("{0} sees that the targetPerson, {1}, was modified.", this.name, theTargetPerson.name));
-
-            foreach (CCUI_PersonalityTraitButton button in theButtons)
-            {
-                if (button.MyPersonalityTraitSO.ForbiddenToPerson(theTargetPerson))
-                {
-                    button.Forbid();
-                }
-                else
-                {
-                    button.Permit();
-                }
-            }
-        }
-
 
         // UTILITY
         public  void RandomizeValues()
         {
-            base.RandomizeValues(Quille.Constants_Quille.DEFAULT_PERSONALITY_TRAIT_COUNT);
+            base.RandomizeValues(Constants_Quille.DEFAULT_PERSONALITY_TRAIT_COUNT);
 
             PersonalityTraitsMenuUpdated?.Invoke();
         }
@@ -96,6 +78,7 @@ namespace QuilleUI
         {
             base.Init();
             LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_PERSONALITYTRAITS);
+            selectionBoxCapacity = Constants_Quille.MAXIMUM_INITIAL_PERSONALITY_TRAIT_COUNT;
         }
     }
 }

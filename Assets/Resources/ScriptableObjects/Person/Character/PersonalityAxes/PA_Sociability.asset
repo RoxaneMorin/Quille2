@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d48d72294332430479085b4bb9b5bbd3, type: 3}
-  m_Name: PA_ChillvsRestless
+  m_Name: PA_Sociability
   m_EditorClassIdentifier: 
-  itemName: Temperament
+  itemName: Sociability
   itemIcon: {fileID: 0}
-  menuSortingIndex: 2
-  axeNameLeft: Easygoing
-  axeNameRight: Restless
-  axeIconLeft: {fileID: 21300000, guid: 112a47fcb8b21c746a14ec78b533eb3e, type: 3}
-  axeIconRight: {fileID: 21300000, guid: 3ea8128088b5c4e46b5f30477d968dd8, type: 3}
+  menuSortingIndex: 4
+  axeNameLeft: Introverted
+  axeNameRight: Extraverted
+  axeIconLeft: {fileID: 21300000, guid: 1db466e2b3cf0ab4d83e9d0ca2867d32, type: 3}
+  axeIconRight: {fileID: 21300000, guid: 6751c363886d6554d8640cbd3e45b594, type: 3}
   axeSpan:
     Item1: -1
     Item2: 1

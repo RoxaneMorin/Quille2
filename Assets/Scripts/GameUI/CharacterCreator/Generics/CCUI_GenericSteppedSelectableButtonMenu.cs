@@ -13,6 +13,8 @@ namespace QuilleUI
         // UTILITY
         public override void RandomizeValues(int numberToSelect)
         {
+            ResetValues();
+
             CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
@@ -20,8 +22,8 @@ namespace QuilleUI
 
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(theButtons[ID]);
-                ((CCUI_GenericSteppedSelectableButton)theButtons[ID]).RandomizeValueAndSelect();
+                currentlySelectedButtons.Add(permittedButtons[ID]);
+                ((CCUI_GenericSteppedSelectableButton)permittedButtons[ID]).RandomizeValueAndSelect();
             }
 
             PositionSelectedButtons();

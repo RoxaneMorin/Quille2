@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Quille;
 
 namespace QuilleUI
 {
@@ -30,8 +31,8 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        internal Quille.InterestSO MyInterestSO { get { return (Quille.InterestSO)mySO; } set { mySO = value; } }
-        internal KeyValuePair<Quille.InterestSO, float> MyAxeSOAndValue { get { return new KeyValuePair<Quille.InterestSO, float>(MyInterestSO, MySliderValue); } }
+        internal InterestSO MyInterestSO { get { return (InterestSO)mySO; } set { mySO = value; } }
+        internal KeyValuePair<Quille.InterestSO, float> MyAxeSOAndValue { get { return new KeyValuePair<InterestSO, float>(MyInterestSO, MySliderValue); } }
 
         internal float MySliderValue { get { return mySlider.value; } set { mySlider.value = value; } }
         internal float MySliderValueWithoutNotify
@@ -99,7 +100,7 @@ namespace QuilleUI
 
         protected override string MakeNewCaption()
         {
-            return string.Format("{0} ({1})", MyInterestSO.InterestName, MySliderValue);
+            return string.Format("{0} ({1})", MyInterestSO.ItemName, MySliderValue);
         }
 
         private void StepValue()
@@ -147,19 +148,19 @@ namespace QuilleUI
             myHandle = mySlider.targetGraphic;
         }
 
-        public override void Init(ScriptableObject sourceSO)
+        public override void Init(PersonalityItemSO sourceSO)
         {
             base.Init(sourceSO);
 
-            if (mySO is Quille.InterestSO)
+            if (mySO is InterestSO)
             {
                 Quille.InterestSO myInterestSO = MyInterestSO;
 
-                myIcon.sprite = myInterestSO.interestIcon;
-                myCaption.text = myInterestSO.InterestName;
+                myIcon.sprite = myInterestSO.ItemIcon;
+                myCaption.text = myInterestSO.ItemName;
                 myDefaultCaption = myCaption.text;
 
-                gameObject.name = string.Format("Interest_{0}", myInterestSO.InterestName);
+                gameObject.name = string.Format("Interest_{0}", myInterestSO.ItemName);
             }
 
             mySlider.gameObject.SetActive(false);

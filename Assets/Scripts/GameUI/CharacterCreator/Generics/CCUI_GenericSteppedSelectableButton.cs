@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Quille;
 
 namespace QuilleUI
 {
@@ -200,7 +201,7 @@ namespace QuilleUI
             myCurrentStep = 0;
         }
 
-        public override void Init(ScriptableObject sourceSO)
+        public override void Init(PersonalityItemSO sourceSO)
         {
             base.Init(sourceSO);
 

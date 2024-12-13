@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Quille;
 
 namespace QuilleUI
 {
@@ -13,7 +14,7 @@ namespace QuilleUI
 
 
         // VARIABLES
-        [SerializeField] protected ScriptableObject mySO;
+        [SerializeField] protected PersonalityItemSO mySO;
         [SerializeField] protected bool isSelected;
         [SerializeField] protected bool isForbidden;
 
@@ -35,7 +36,7 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        internal ScriptableObject MySO { get { return mySO; } set { mySO = value; } }
+        internal PersonalityItemSO MySO { get { return mySO; } set { mySO = value; } }
         internal bool IsSelected { get { return isSelected; } }
         internal bool IsForbidden { get { return isForbidden; } }
         internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
@@ -95,6 +96,17 @@ namespace QuilleUI
             isForbidden = false;
             myButton.interactable = true;
         }
+        public virtual void PermitIfCompatible(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        {
+            if (isSelected || !selectionBoxAtCapacity)
+            {
+                Permit();
+            }
+            else
+            {
+                Forbid();
+            }
+        }
 
         public virtual void ChangeParentAndPosition(Transform newParent, UnityEngine.Vector2 newPosition)
         {
@@ -128,7 +140,7 @@ namespace QuilleUI
             myCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
         }
 
-        public virtual void Init(ScriptableObject sourceSO)
+        public virtual void Init(PersonalityItemSO sourceSO)
         {
             mySO = sourceSO;
 

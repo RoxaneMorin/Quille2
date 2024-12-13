@@ -15,6 +15,9 @@ MonoBehaviour:
   itemName: Family
   itemIcon: {fileID: 21300000, guid: 070be3df29db4be4693f07baf7bea941, type: 3}
   menuSortingIndex: 1
-  incompatiblePersonChecks: []
+  incompatiblePersonChecks:
+  - check: {fileID: 11400000, guid: 7e36888f6c2a67f4099a3290271518d5, type: 2}
+    opIdx: 6
+    compareTo: -0.85
   driveSpan: 1
   driveMidpoint: 0.5

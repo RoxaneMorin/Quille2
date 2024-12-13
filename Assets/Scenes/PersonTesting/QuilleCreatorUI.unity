@@ -2596,6 +2596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 2772560256907149702}
+  selectionBoxCapacity: 5
   countPerRow: 8
   rowShift: -120
   containerPadding: 100
@@ -2721,6 +2722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 6812270311302051032, guid: ee4c5d56bea8f4446b3873240c8b4d66,
     type: 3}
+  selectionBoxCapacity: 5
   countPerRow: 8
   rowShift: -120
   containerPadding: 100
@@ -3225,6 +3227,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPerson: {fileID: 1849462652}
+  currentWorldData:
+    worldName: Quilleland
+    safeWorldName: Quilleland
+    highestCharID: -1
   sourceNamesMenu: {fileID: 1700573431}
   sourcePersonalityAxesMenu: {fileID: 668329984}
   sourcePersonalityTraitsMenu: {fileID: 2138305328}
@@ -7219,6 +7225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 2006169429}
+  selectionBoxCapacity: 5
   countPerRow: 8
   rowShift: -120
   containerPadding: 100

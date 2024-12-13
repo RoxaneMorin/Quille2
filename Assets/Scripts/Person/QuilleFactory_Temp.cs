@@ -197,14 +197,15 @@ public class QuilleFactory_Temp : MonoBehaviour
 
         sourcePersonalityAxesMenu.PersonalityAxeSliderUpdated += UpdatePersonPersonalityAxeFromUI;
         sourcePersonalityAxesMenu.PersonalityAxesMenuUpdated += UpdatePersonPersonalityAxesFromUI;
-
         sourcePersonalityTraitsMenu.PersonalityTraitsMenuUpdated += UpdatePersonPersonalityTraitsFromUI;
-
         sourceDrivesMenu.DrivesMenuUpdated += UpdatePersonDrivesFromUI;
-
         sourceInterestsMenu.InterestsMenuUpdated += UpdatePersonInterestsFromUI;
 
+
+        // What other menues may contain foriddable items?
         TargetPersonWasModified += sourcePersonalityTraitsMenu.OnTargetPersonModified;
+        TargetPersonWasModified += sourceDrivesMenu.OnTargetPersonModified;
+        TargetPersonWasModified += sourceInterestsMenu.OnTargetPersonModified;
     }
 
 

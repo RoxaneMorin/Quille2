@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Quille;
 
 namespace QuilleUI
 {
@@ -12,32 +13,44 @@ namespace QuilleUI
 
 
         // PARAMETERS
-        internal Quille.PersonalityTraitSO MyPersonalityTraitSO { get { return (Quille.PersonalityTraitSO)mySO; } set { mySO = value; } }
+        internal Quille.PersonalityTraitSO MyPersonalityTraitSO { get { return (PersonalityTraitSO)mySO; } set { mySO = value; } }
 
 
 
         // METHODS
 
         // OVERRIDES
+        public override void PermitIfCompatible(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        {
+            if (MyPersonalityTraitSO.IsCompatibleWithPerson(theTargetPerson) && (isSelected || !selectionBoxAtCapacity))
+            {
+                Permit();
+            }
+            else
+            {
+                Forbid();
+            }
+        }
+
         protected override string MakeNewCaption()
         {
-            return string.Format("{0} ({1})", MyPersonalityTraitSO.TraitName, MyButtonValue);
+            return string.Format("{0} ({1})", MyPersonalityTraitSO.ItemName, MyButtonValue);
         }
 
         // INIT
-        public override void Init(ScriptableObject sourceSO)
+        public override void Init(PersonalityItemSO sourceSO)
         {
             base.Init(sourceSO);
 
-            if (mySO is Quille.PersonalityTraitSO)
+            if (mySO is PersonalityTraitSO)
             {
-                Quille.PersonalityTraitSO myPersonalityTraitSO = MyPersonalityTraitSO;
+               PersonalityTraitSO myPersonalityTraitSO = MyPersonalityTraitSO;
 
-                myIcon.sprite = myPersonalityTraitSO.traitIcon;
-                myCaption.text = myPersonalityTraitSO.TraitName;
+                myIcon.sprite = myPersonalityTraitSO.ItemIcon;
+                myCaption.text = myPersonalityTraitSO.ItemName;
                 myDefaultCaption = myCaption.text;
 
-                gameObject.name = string.Format("PersonalityTraitButton_{0}", myPersonalityTraitSO.TraitName);
+                gameObject.name = string.Format("PersonalityTraitButton_{0}", myPersonalityTraitSO.ItemName);
             }
         }
     }

@@ -107,13 +107,13 @@ namespace QuilleUI
 
             if (myPersonalityAxeSO)
             {
-                myIconLeft.sprite = myPersonalityAxeSO.axeIconLeft;
-                myIconRight.sprite = myPersonalityAxeSO.axeIconRight;
+                myIconLeft.sprite = myPersonalityAxeSO.AxeIconLeft;
+                myIconRight.sprite = myPersonalityAxeSO.AxeIconRight;
 
                 myCaptionLeft.text = myPersonalityAxeSO.AxeNameLeft;
                 myCaptionRight.text = myPersonalityAxeSO.AxeNameRight;
 
-                gameObject.name = string.Format("PersonalityAxe_{0}", myPersonalityAxeSO.AxeName);
+                gameObject.name = string.Format("PersonalityAxe_{0}", myPersonalityAxeSO.ItemName);
             }
         }
 

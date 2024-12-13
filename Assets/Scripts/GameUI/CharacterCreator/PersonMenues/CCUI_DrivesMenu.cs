@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using Quille;
 
 namespace QuilleUI
 {
@@ -13,14 +14,14 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        public float GetButtonValueFor(Quille.DriveSO theTSO)
+        public float GetButtonValueFor(DriveSO theTSO)
         {
             return ((CCUI_GenericSteppedSelectableButton)theButtonsDict[theTSO]).MyButtonValue;
         }
 
-        public SerializedDictionary<Quille.DriveSO, float> GetButtonsSOsAndValues()
+        public SerializedDictionary<DriveSO, float> GetButtonsSOsAndValues()
         {
-            SerializedDictionary<Quille.DriveSO, float> SOsAndValuesDict = new SerializedDictionary<Quille.DriveSO, float>();
+            SerializedDictionary<DriveSO, float> SOsAndValuesDict = new SerializedDictionary<DriveSO, float>();
 
             foreach (CCUI_DriveButton button in currentlySelectedButtons)
             {
@@ -30,11 +31,11 @@ namespace QuilleUI
             return SOsAndValuesDict;
         }
 
-        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<Quille.DriveSO, float> sourceDict)
+        public void SetButtonValuesFromSOFloatDict(SerializedDictionary<DriveSO, float> sourceDict)
         {
             ResetValues();
 
-            foreach (KeyValuePair<Quille.DriveSO, float> keyValuePair in sourceDict)
+            foreach (KeyValuePair<DriveSO, float> keyValuePair in sourceDict)
             {
                 if (theButtonsDict.ContainsKey(keyValuePair.Key))
                 {
@@ -62,29 +63,12 @@ namespace QuilleUI
             DrivesMenuUpdated?.Invoke();
         }
 
-        public void OnTargetPersonModified(Quille.Person theTargetPerson)
-        {
-            // TODO: is there a cleaner/less repetitive way to do this?
-
-            //Debug.Log(string.Format("{0} sees that the targetPerson, {1}, was modified.", this.name, theTargetPerson.name));
-
-            foreach (CCUI_DriveButton button in theButtons)
-            {
-                if (button.MyDriveSO.ForbiddenToPerson(theTargetPerson))
-                {
-                    button.Forbid();
-                }
-                else
-                {
-                    button.Permit();
-                }
-            }
-        }
-
 
         // UTILITY
         public override void RandomizeValues(int numberToSelect)
         {
+            ResetValues();
+
             CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
@@ -93,11 +77,11 @@ namespace QuilleUI
             int i = 0;
             foreach (int ID in IDsToSelect)
             {
-                currentlySelectedButtons.Add(theButtons[ID]);
+                currentlySelectedButtons.Add(permittedButtons[ID]);
 
                 // Pick one full drive, two half ones.
                 float value = (i == 1 ? 1f : 0.5f);
-                ((CCUI_GenericSteppedSelectableButton)theButtons[ID]).Select(value);
+                ((CCUI_GenericSteppedSelectableButton)permittedButtons[ID]).Select(value);
 
                 i++;
             }
@@ -106,7 +90,7 @@ namespace QuilleUI
         }
         public void RandomizeValues()
         {
-            RandomizeValues(Quille.Constants_Quille.DEFAULT_DRIVES_COUNT);
+            RandomizeValues(Constants_Quille.DEFAULT_DRIVES_COUNT);
 
             DrivesMenuUpdated?.Invoke();
         }
@@ -117,6 +101,7 @@ namespace QuilleUI
         {
             base.Init();
             LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_DRIVES);
+            selectionBoxCapacity = Constants_Quille.MAXIMUM_INITIAL_DRIVES_COUNT;
         }
     }
 
