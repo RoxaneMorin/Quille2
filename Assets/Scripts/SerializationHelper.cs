@@ -17,27 +17,30 @@ public static class SerializationHelper
     // METHODS
 
     // PATH CONSTRUCTORS
-    private static string ReturnCurrentSavePath()
+    private static string ReturSavePath()
     {
         // TODO: ability to change the default paths.
         return string.Format("{0}{1}", Constants_Serialization.DEFAULT_GAME_SAVE_LOCATION_PATH, Constants_Serialization.DEFAULT_GAME_SAVE_FOLDER_NAME);
     }
-    private static string ReturnCurrentWorldSavePath()
-    {
-        return string.Format("{0}/{1}", ReturnCurrentSavePath(), WorldData.GetCurrentWorldData().SafeWorldName);
-    }
+
     private static string ReturnBackpackSavePath()
     {
-        return string.Format("{0}/{1}", ReturnCurrentSavePath(), Constants_Serialization.DEFAULT_BACKPACK_SAVE_FOLDER_NAME);
-    }
-    private static string ReturnCurrentCharacterSavePath()
-    {
-        return string.Format("{0}/{1}", ReturnCurrentWorldSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
+        return string.Format("{0}/{1}", ReturSavePath(), Constants_Serialization.DEFAULT_BACKPACK_SAVE_FOLDER_NAME);
     }
     private static string ReturnBackpackCharacterSavePath()
     {
         return string.Format("{0}/{1}", ReturnBackpackSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
     }
+
+    private static string ReturnCurrentWorldSavePath()
+    {
+        return string.Format("{0}/{1}/{2}", ReturSavePath(), Constants_Serialization.DEFAULT_WORLD_SAVE_FOLDER_NAME, WorldData.GetCurrentWorldData().SafeWorldName);
+    }
+    private static string ReturnCurrentCharacterSavePath()
+    {
+        return string.Format("{0}/{1}", ReturnCurrentWorldSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
+    }
+
     private static string ReturnBackUpFilePath(string sourceFilePath)
     {
         return sourceFilePath + Constants_Serialization.SUFFIX_BACKUP;

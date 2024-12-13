@@ -26,5 +26,6 @@ public static class Constants_Serialization
     // FOLDER NAMES
     public const string DEFAULT_GAME_SAVE_FOLDER_NAME = "SavedGameData";
     public const string DEFAULT_BACKPACK_SAVE_FOLDER_NAME = "Backpack";
+    public const string DEFAULT_WORLD_SAVE_FOLDER_NAME = "Worlds";
     public const string DEFAULT_CHARACTER_SAVE_FOLDER_NAME = "Characters";
 }
