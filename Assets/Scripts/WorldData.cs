@@ -101,8 +101,6 @@ namespace World
             }
 
             Debug.Log(messageToPrint);
-
-            SerializationHelper.ListCharactersInCurrentWorldSave();
         }
 
 

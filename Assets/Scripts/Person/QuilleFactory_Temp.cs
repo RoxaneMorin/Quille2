@@ -171,7 +171,7 @@ public class QuilleFactory_Temp : MonoBehaviour
 
     public void SaveCharacter()
     {
-        tempJSON = currentPerson.SaveToJSON();
+        tempJSON = currentPerson.SaveToJSON(SaveType.Backpack);
     }
 
     public void LoadCharacter()
@@ -180,6 +180,8 @@ public class QuilleFactory_Temp : MonoBehaviour
         UpdateUIFromPerson();
 
         // TODO: assign new ids to loaded characters?
+
+        // TODO: menu to choose what file to load.
     }
 
 

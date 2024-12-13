@@ -138,6 +138,18 @@ public static class RandomExtended
         return random.Next(minInclusive, maxInclusive + 1);
     }
 
+    // New random number in range, not X;
+    public static int RangeInt(int minInclusive, int maxInclusive, int avoid)
+    {
+        var random = new System.Random();
+
+        int randomNumber = avoid;
+        while (randomNumber == avoid)
+        {
+            randomNumber = random.Next(minInclusive, maxInclusive + 1);
+        }
+        return randomNumber;
+    }
 
     // Similar to Random.range, but the values produced are stepped.
     public static float RangeStepped(float minInclusive, float maxInclusive, float step)
@@ -146,9 +158,15 @@ public static class RandomExtended
         int randomStep = UnityEngine.Random.Range(0, stepsInRange);
         return minInclusive + (randomStep * step);
     }
+    public static int RangeIntStepped(int minInclusive, int maxInclusive, int step)
+    {
+        int stepsInRange = Mathf.FloorToInt((maxInclusive - minInclusive) / step) + 1;
+        int randomStep = RangeInt(0, stepsInRange);
+        return minInclusive + (randomStep * step);
+    }
 
 
-    // Get X non-repeating interests in this range. MaxValue is exclusive.
+    // Get X non-repeating Ints in this range. MaxValue is exclusive.
     public static List<int> NonRepeatingIntegersInRange(int minInclusive, int maxExclusive, int targetCount)
     {
         var random = new System.Random();
@@ -169,7 +187,6 @@ public static class RandomExtended
         return UnityEngine.Random.value > 0.5f;
     }
 
-
     // Either of the two given values.
     public static float CoinFlipBetween(float valueA, float valueB)
     {
@@ -177,12 +194,17 @@ public static class RandomExtended
     }
 
 
-    // New number in range, not X;
-    //public static int RangeInt(int minInclusive, int maxInclusive, int avoid)
-    //{
-    //    var random = new System.Random();
+    // Generate a random alphanumeric string of length X;
+    public static string RandomAlphanumericString(int targetLength)
+    {
+        var random = new System.Random();
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-
-    //    return random.Next(minInclusive, maxInclusive + 1);
-    //}
+        string randomString = "";
+        for (int i = 0; i < targetLength; i++)
+        {
+            randomString += chars[random.Next(chars.Length)];
+        }
+        return randomString;    
+    }
 }

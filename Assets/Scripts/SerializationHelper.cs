@@ -26,9 +26,17 @@ public static class SerializationHelper
     {
         return string.Format("{0}/{1}", ReturnCurrentSavePath(), WorldData.GetCurrentWorldData().SafeWorldName);
     }
+    private static string ReturnBackpackSavePath()
+    {
+        return string.Format("{0}/{1}", ReturnCurrentSavePath(), Constants_Serialization.DEFAULT_BACKPACK_SAVE_FOLDER_NAME);
+    }
     private static string ReturnCurrentCharacterSavePath()
     {
         return string.Format("{0}/{1}", ReturnCurrentWorldSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
+    }
+    private static string ReturnBackpackCharacterSavePath()
+    {
+        return string.Format("{0}/{1}", ReturnBackpackSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
     }
     private static string ReturnBackUpFilePath(string sourceFilePath)
     {
@@ -48,18 +56,18 @@ public static class SerializationHelper
         string[] allCharacterFilesFound = Directory.GetFiles(ReturnCurrentCharacterSavePath());
         if (!includeBackUps)
         {
-            // TODO: check the array's sizing isn't fucky.
-            allCharacterFilesFound = allCharacterFilesFound.Where(path => !path.EndsWith(Constants_Serialization.SUFFIX_BACKUP)).ToArray();
+            string[] allJSONCharacterFilesFound = allCharacterFilesFound.Where(path => !path.EndsWith(Constants_Serialization.SUFFIX_BACKUP)).ToArray();
+            return allJSONCharacterFilesFound;
         }
 
         return allCharacterFilesFound;
     }
 
-    public static void SaveJSONCharacterToFile(Person theCharacter, string fileName, string formatedJSON)
+    public static void SaveJSONCharacterToFile(Person theCharacter, string fileName, string formatedJSON, SaveType saveTo = SaveType.CurrentWorld)
     {
         try
         {
-            string folderPath = ReturnCurrentCharacterSavePath();
+            string folderPath = saveTo == SaveType.CurrentWorld ? ReturnCurrentCharacterSavePath() : ReturnBackpackCharacterSavePath();
             string filePath = String.Format("{0}/{1}", folderPath, fileName);
 
             // Create the save directory if it doesn't already exist.

@@ -67,8 +67,10 @@ namespace Quille
         // SAVE & LOAD
         // TODO: move this to its on partial segment?
         // Or else, to the serialization helper?
-        public string SaveToJSON()
+        public string SaveToJSON(SaveType saveTo = SaveType.CurrentWorld)
         {
+            // TODO: save characters without IDs in a non-world folder?
+
             // Init variables.
             JObject jsonPerson;
             string jsonPersonCharacter;
@@ -96,8 +98,8 @@ namespace Quille
             string formatedJSON = jsonPerson.ToString(Formatting.Indented);
 
             // Create and write the save file.
-            string fileName = CreateJSONFileName();
-            SerializationHelper.SaveJSONCharacterToFile(this, fileName, formatedJSON);
+            string fileName = CreateJSONFileNameForSaveType(saveTo);
+            SerializationHelper.SaveJSONCharacterToFile(this, fileName, formatedJSON, saveTo);
 
             return formatedJSON;
         }
@@ -168,11 +170,24 @@ namespace Quille
             Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", CharIDAndCharacterName, fileName));
         }
 
-        private string CreateJSONFileName()
+        private string CreateJSONFileNameFromID()
         {
-            return string.Format("CharID_{0}.json", charID);
+            return string.Format("CharID_{0}{1}", charID, Constants_Serialization.SUFFIX_JSON);
         }
-        
+        private string CreateJSONFileNameFromName()
+        {
+            string safeCharacterName = MyPersonCharacter.FirstNickAndLastName.StripComplexChars();
+            if (string.IsNullOrEmpty(safeCharacterName))
+            {
+                safeCharacterName = "Unnamed";
+            }
+            return string.Format("{0}_{1}{2}", DateTime.Now.ToString("yyMMddHHmmss"), safeCharacterName, Constants_Serialization.SUFFIX_JSON);
+        }
+        private string CreateJSONFileNameForSaveType(SaveType saveType)
+        {
+            return saveType == SaveType.CurrentWorld ? CreateJSONFileNameFromID() : CreateJSONFileNameFromName();
+        }
+
 
         // INIT
         private void Init()
