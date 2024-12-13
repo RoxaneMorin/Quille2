@@ -36,12 +36,12 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityAxeScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityAxeScore>();
             newModulatorSO.RelevantPersonalityAxe = personalityAxe;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_PERSONALITYAXES, personalityAxe.AxeName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityAxe_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_PERSONALITYAXES, personalityAxe.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of ModulatorPersonalityAxeScore was created for the '{0}' PersonalityAxe.", personalityAxe.AxeName));
+            Debug.Log(string.Format("A new instance of ModulatorPersonalityAxeScore was created for the '{0}' PersonalityAxe.", personalityAxe.ItemName));
         }
     }
 
@@ -70,12 +70,12 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorPersonalityTraitScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorPersonalityTraitScore>();
             newModulatorSO.RelevantPersonalityTrait = personalityTrait;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_PERSONALITYTRAITS, personalityTrait.TraitName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_PersonalityTrait_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_PERSONALITYTRAITS, personalityTrait.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of ModulatorPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.TraitName));
+            Debug.Log(string.Format("A new instance of ModulatorPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.ItemName));
         }
     }
 
@@ -104,12 +104,12 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorDriveScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorDriveScore>();
             newModulatorSO.RelevantDrive = Drive;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Drive_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_DRIVES, Drive.DriveName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Drive_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_DRIVES, Drive.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of ModulatorDriveScore was created for the '{0}' Drive.", Drive.DriveName));
+            Debug.Log(string.Format("A new instance of ModulatorDriveScore was created for the '{0}' Drive.", Drive.ItemName));
         }
     }
 
@@ -138,12 +138,12 @@ public class ModulatorsMenuUtilities : MonoBehaviour
             ChecksAndMods.ModulatorInterestScore newModulatorSO = ScriptableObject.CreateInstance<ChecksAndMods.ModulatorInterestScore>();
             newModulatorSO.RelevantInterest = Interest;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Interest_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_INTERESTS, Interest.InterestName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Modulator_Interest_{1}.asset", Constants_PathResources.SO_PATH_MODULATORS_INTERESTS, Interest.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newModulatorSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of ModulatorInterestScore was created for the '{0}' Interest.", Interest.InterestName));
+            Debug.Log(string.Format("A new instance of ModulatorInterestScore was created for the '{0}' Interest.", Interest.ItemName));
         }
     }
 }

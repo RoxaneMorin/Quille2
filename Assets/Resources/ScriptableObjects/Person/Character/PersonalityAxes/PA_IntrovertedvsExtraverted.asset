@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48d72294332430479085b4bb9b5bbd3, type: 3}
   m_Name: PA_IntrovertedvsExtraverted
   m_EditorClassIdentifier: 
-  axeName: Sociality
+  itemName: Sociability
+  itemIcon: {fileID: 0}
+  menuSortingIndex: 4
   axeNameLeft: Introverted
   axeNameRight: Extraverted
   axeIconLeft: {fileID: 21300000, guid: 1db466e2b3cf0ab4d83e9d0ca2867d32, type: 3}

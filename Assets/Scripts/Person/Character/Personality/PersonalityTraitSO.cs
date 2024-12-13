@@ -9,50 +9,35 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "PersonalityTrait", menuName = "Quille/Character/Personality Trait", order = 1)]
-    public class PersonalityTraitSO : ScriptableObject
+    public class PersonalityTraitSO : ForbiddablePersonalityItemSO
     {
         // VARIABLES/PARAMS 
-        [SerializeField]
-        private string traitName = "Undefined";
-        public string TraitName { get { return traitName; } }
-
-        // Description.
-
-        // TRAIT GRAPHICS
-        public Sprite traitIcon;
-
-        // OTHER VALUES
-        // The intensity of traits is either 0.5 or 1.
         [SerializeField] [InspectorReadOnly] private float traitSpan = Constants_Quille.PERSONALITY_HALF_SPAN;
-        public float TraitSpan { get { return traitSpan; } }
-
         [SerializeField] [InspectorReadOnly] private float trainMidpoint = Constants_Quille.PERSONALITY_HALF_SPAN / 2;
+
+        // Favorable and defavorable personaltiy scores?
+        // Categories?
+
+
+        // PROPERTIES
+        public float TraitSpan { get { return traitSpan; } }
         public float TrainMidpoint { get { return trainMidpoint; } }
-
-        // INCOMPATIBILITIES
-        [SerializeField]private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
-        // Remove the separate incompatible traits category as we can now check for a full or half trait.
-
-        // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
-
-        // CATEGORIES?
-
+        
 
 
         // METHODS
-        public bool ForbiddenToPerson(Person targetPerson)
+        public override bool IsCompatibleWithPerson(Person targetPerson)
         {
             // Check whether this SO is incompatible with any relevant aspect of the given person.
-
-            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonalityScores)
+            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonChecks)
             {
                 if (check.Execute(targetPerson))
                 {
-                    Debug.Log(string.Format("{0} cannot have the Trait '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.traitName, check.ToString()));
-                    return true;
+                    Debug.Log(string.Format("The Trait '{1}' is forbidden to {0} due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.itemName, check.ToString()));
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
     }
 }

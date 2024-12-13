@@ -9,30 +9,23 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Character/Personality Axe", order = 0)]
-    public class PersonalityAxeSO : ScriptableObject
+    public class PersonalityAxeSO : PersonalityItemSO
     {
         // VARIABLES/PARAMS 
-        [SerializeField]
-        private string axeName = "Undefined";
-        public string AxeName { get { return axeName; } }
+        [SerializeField] private string axeNameLeft = "Undefined (Left)";
+        [SerializeField] private string axeNameRight = "Undefined (Right)";
 
-        [SerializeField]
-        private string axeNameLeft = "Undefined (Left)";
+        [SerializeField] private Sprite axeIconLeft;
+        [SerializeField] private Sprite axeIconRight;
+
+        [SerializeField] [BeginInspectorReadOnlyGroup] private floatPair axeSpan = (-Constants_Quille.PERSONALITY_HALF_SPAN, Constants_Quille.PERSONALITY_HALF_SPAN); //[EndInspectorReadOnlyGroup]
+
+
+        // PROPERITES
         public string AxeNameLeft { get { return axeNameLeft; } }
-
-        [SerializeField]
-        private string axeNameRight = "Undefined (Right)";
         public string AxeNameRight { get { return axeNameRight; } }
-
-        // Description.
-
-        // AXE GRAPHICS
-        public Sprite axeIconLeft;
-        public Sprite axeIconRight;
-
-        // OTHER VALUES
-        [SerializeField] [BeginInspectorReadOnlyGroup] private floatPair axeSpan = (-Constants_Quille.PERSONALITY_HALF_SPAN, Constants_Quille.PERSONALITY_HALF_SPAN);
-        //[EndInspectorReadOnlyGroup]
+        public Sprite AxeIconLeft { get { return axeIconLeft; } }
+        public Sprite AxeIconRight { get { return axeIconRight; } }
         public floatPair AxeSpan { get { return axeSpan; } }
     }
 }

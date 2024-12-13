@@ -27,7 +27,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 if (!interest.InDomains.Contains(interestDomain))
                 {
                     interest.InDomains.Add(interestDomain);
-                    Debug.Log(string.Format("The Interest '{0}' now considers itself part of the '{1}' InterestDomain.", interest.InterestName, interestDomain.DomainName));
+                    Debug.Log(string.Format("The Interest '{0}' now considers itself part of the '{1}' InterestDomain.", interest.ItemName, interestDomain.DomainName));
                 }
             }
         }
@@ -47,7 +47,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 if (!interestDomain.InterestInThisDomain.Contains(interest))
                 {
                     interestDomain.InterestInThisDomain.Add(interest);
-                    Debug.Log(string.Format("The InterestDomain '{0}' now considers the Interest '{1}' one of its members.", interestDomain.DomainName, interest.InterestName));
+                    Debug.Log(string.Format("The InterestDomain '{0}' now considers the Interest '{1}' one of its members.", interestDomain.DomainName, interest.ItemName));
                 }
             }
         }
@@ -72,7 +72,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(string.Format("The Interest '{0}' was delete from the '{1}' InterestDomain's children.", interest.InterestName, interestDomain.DomainName));
+                    Debug.Log(string.Format("The Interest '{0}' was delete from the '{1}' InterestDomain's children.", interest.ItemName, interestDomain.DomainName));
                 }
             }
 
@@ -99,7 +99,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(string.Format("The InterestDomain '{0}' was delete from the '{1}' Interest's parents.", interestDomain.DomainName, interest.InterestName));
+                    Debug.Log(string.Format("The InterestDomain '{0}' was delete from the '{1}' Interest's parents.", interestDomain.DomainName, interest.ItemName));
                 }
             }
 
@@ -121,7 +121,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 if (!relatedInterest.RelatedInterests.Contains(interest))
                 {
                     relatedInterest.RelatedInterests.Add(interest);
-                    Debug.Log(string.Format("The Interest '{0}' now considers the Interest '{1}' to be related.", interest.InterestName, relatedInterest.InterestName));
+                    Debug.Log(string.Format("The Interest '{0}' now considers the Interest '{1}' to be related.", interest.ItemName, relatedInterest.ItemName));
                 }
             }
         }
@@ -146,7 +146,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(string.Format("The Interest '{0}' no longer considers the Interest '{1}' to be related.", interest.InterestName, relatedInterest.InterestName));
+                    Debug.Log(string.Format("The Interest '{0}' no longer considers the Interest '{1}' to be related.", interest.ItemName, relatedInterest.ItemName));
                 }
             }
 
@@ -162,7 +162,7 @@ public class InterestsMenuUtilities : MonoBehaviour
             if (interest.RelatedInterests.Contains(interest))
             {
                 interest.RelatedInterests.Remove(interest);
-                Debug.Log(string.Format("A self-refering RelatedInterest was removed from '{0}.'", interest.InterestName));
+                Debug.Log(string.Format("A self-refering RelatedInterest was removed from '{0}.'", interest.ItemName));
             }
 
             // Remove duplicates in RelatedInterests and InDomains.

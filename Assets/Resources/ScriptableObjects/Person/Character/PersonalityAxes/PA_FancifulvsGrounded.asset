@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48d72294332430479085b4bb9b5bbd3, type: 3}
   m_Name: PA_FancifulvsGrounded
   m_EditorClassIdentifier: 
-  axeName: Mentality
+  itemName: Mentality
+  itemIcon: {fileID: 0}
+  menuSortingIndex: 1
   axeNameLeft: Abstractive
   axeNameRight: Hands On
   axeIconLeft: {fileID: 21300000, guid: d67b482ea93faa14c88660bc37241936, type: 3}

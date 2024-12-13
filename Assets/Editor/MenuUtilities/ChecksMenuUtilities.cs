@@ -35,12 +35,12 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckPersonalityAxeScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckPersonalityAxeScore>();
             newCheckSO.RelevantPersonalityAxe = personalityAxe;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityAxe_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_PERSONALITYAXES, personalityAxe.AxeName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityAxe_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_PERSONALITYAXES, personalityAxe.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of CheckPersonalityAxeScore was created for the '{0}' PersonalityAxe.", personalityAxe.AxeName));
+            Debug.Log(string.Format("A new instance of CheckPersonalityAxeScore was created for the '{0}' PersonalityAxe.", personalityAxe.ItemName));
         }
     }
 
@@ -69,12 +69,12 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckPersonalityTraitScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckPersonalityTraitScore>();
             newCheckSO.RelevantPersonalityTrait = personalityTrait;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityTrait_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_PERSONALITYTRAITS, personalityTrait.TraitName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_PersonalityTrait_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_PERSONALITYTRAITS, personalityTrait.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of CheckPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.TraitName));
+            Debug.Log(string.Format("A new instance of CheckPersonalityTraitScore was created for the '{0}' PersonalityTrait.", personalityTrait.ItemName));
         }
     }
 
@@ -103,12 +103,12 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckDriveScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckDriveScore>();
             newCheckSO.RelevantDrive = Drive;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Drive_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_DRIVES, Drive.DriveName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Drive_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_DRIVES, Drive.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of CheckDriveScore was created for the '{0}' Drive.", Drive.DriveName));
+            Debug.Log(string.Format("A new instance of CheckDriveScore was created for the '{0}' Drive.", Drive.ItemName));
         }
     }
 
@@ -137,12 +137,12 @@ public class ChecksMenuUtilities : MonoBehaviour
             ChecksAndMods.CheckInterestScore newCheckSO = ScriptableObject.CreateInstance<ChecksAndMods.CheckInterestScore>();
             newCheckSO.RelevantInterest = interest;
 
-            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Interest_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_INTERESTS, interest.InterestName.StripComplexChars()));
+            string savePath = AssetDatabase.GenerateUniqueAssetPath(string.Format("Assets/Resources/{0}Check_Interest_{1}.asset", Constants_PathResources.SO_PATH_CHECKS_INTERESTS, interest.ItemName.StripComplexChars()));
 
             AssetDatabase.CreateAsset(newCheckSO, savePath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log(string.Format("A new instance of CheckInterestScore was created for the '{0}' Interest.", interest.InterestName));
+            Debug.Log(string.Format("A new instance of CheckInterestScore was created for the '{0}' Interest.", interest.ItemName));
         }
     }
 }

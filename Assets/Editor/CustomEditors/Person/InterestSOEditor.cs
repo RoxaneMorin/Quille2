@@ -9,8 +9,8 @@ public class InterestSOEditor : Editor
 {
     private SerializedProperty scriptProperty;
 
-    private SerializedProperty interestName;
-    private SerializedProperty interestIcon;
+    private SerializedProperty itemName;
+    private SerializedProperty itemIcon;
     private SerializedProperty interestSpan;
 
     private SerializedProperty inDomains;
@@ -20,8 +20,8 @@ public class InterestSOEditor : Editor
     {
         scriptProperty = serializedObject.FindProperty("m_Script");
 
-        interestName = serializedObject.FindProperty("interestName");
-        interestIcon = serializedObject.FindProperty("interestIcon");
+        itemName = serializedObject.FindProperty("itemName");
+        itemIcon = serializedObject.FindProperty("itemIcon");
         interestSpan = serializedObject.FindProperty("interestSpan");
 
         inDomains = serializedObject.FindProperty("inDomains");
@@ -37,8 +37,8 @@ public class InterestSOEditor : Editor
             EditorGUILayout.PropertyField(scriptProperty);
 
         // Draw generic properties.
-        EditorGUILayout.PropertyField(interestName);
-        EditorGUILayout.PropertyField(interestIcon);
+        EditorGUILayout.PropertyField(itemName);
+        EditorGUILayout.PropertyField(itemIcon);
         EditorGUILayout.PropertyField(interestSpan);
 
         // Draw inDomains, and handle potential warning message.

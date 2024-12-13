@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65b2f4dd92689840b0e0ebd0aa92eb5, type: 3}
   m_Name: PT_Childish
   m_EditorClassIdentifier: 
-  traitName: Childish
-  traitIcon: {fileID: 21300000, guid: 5dd8dd332fa379048acaea02741d101a, type: 3}
+  itemName: Childish
+  itemIcon: {fileID: 21300000, guid: 5dd8dd332fa379048acaea02741d101a, type: 3}
+  menuSortingIndex: 0
+  incompatiblePersonChecks: []
   traitSpan: 1
   trainMidpoint: 0.5
-  incompatiblePersonalityScores: []

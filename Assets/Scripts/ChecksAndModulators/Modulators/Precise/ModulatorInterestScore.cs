@@ -31,7 +31,7 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return relevantInterest.InterestName;
+            return relevantInterest.ItemName;
         }
     }
 }

@@ -8,23 +8,26 @@ public class PersonalityAxeSOEditor : Editor
 {
     private SerializedProperty scriptProperty;
 
-    private SerializedProperty axeName;
+    private SerializedProperty itemName;
+    private SerializedProperty menuSortingIndex;
+    private SerializedProperty axeSpan;
     private SerializedProperty axeNameLeft;
     private SerializedProperty axeNameRight;
     private SerializedProperty axeIconLeft;
     private SerializedProperty axeIconRight;
-    private SerializedProperty axeSpan;
-
+    
     private void OnEnable()
     {
         scriptProperty = serializedObject.FindProperty("m_Script");
 
-        axeName = serializedObject.FindProperty("axeName");
+        itemName = serializedObject.FindProperty("itemName");
+        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+
+        axeSpan = serializedObject.FindProperty("axeSpan");
         axeNameLeft = serializedObject.FindProperty("axeNameLeft");
         axeNameRight = serializedObject.FindProperty("axeNameRight");
         axeIconLeft = serializedObject.FindProperty("axeIconLeft");
         axeIconRight = serializedObject.FindProperty("axeIconRight");
-        axeSpan = serializedObject.FindProperty("axeSpan");
     }
 
     public override void OnInspectorGUI()
@@ -36,13 +39,14 @@ public class PersonalityAxeSOEditor : Editor
             EditorGUILayout.PropertyField(scriptProperty);
 
         // Draw generic properties.
-        EditorGUILayout.PropertyField(axeName);
+        EditorGUILayout.PropertyField(itemName);
+        EditorGUILayout.PropertyField(menuSortingIndex);
         GUI.enabled = false;
         EditorGUILayout.PropertyField(axeSpan);
         GUI.enabled = true;
-
+        GUILayout.Space(EditorGUIUtility.singleLineHeight/2);
+        
         // Draw side labels.
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Left", EditorStyles.boldLabel);
         GUILayout.FlexibleSpace();
@@ -52,8 +56,6 @@ public class PersonalityAxeSOEditor : Editor
         // Draw the paired properties.
         EditorUtilities.drawAmbidextrousProperty(axeNameLeft, axeNameRight);
         EditorUtilities.drawAmbidextrousProperty(axeIconLeft, axeIconRight);
-
-        // Add the various checks when I get there.
 
         serializedObject.ApplyModifiedProperties();
     }

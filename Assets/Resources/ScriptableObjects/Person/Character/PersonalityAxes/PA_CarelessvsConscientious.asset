@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48d72294332430479085b4bb9b5bbd3, type: 3}
   m_Name: PA_CarelessvsConscientious
   m_EditorClassIdentifier: 
-  axeName: Responsibleness
+  itemName: Responsibleness
+  itemIcon: {fileID: 0}
+  menuSortingIndex: 3
   axeNameLeft: Careless
   axeNameRight: Conscientious
   axeIconLeft: {fileID: 21300000, guid: e7ab3c648e778c44386268165b098d39, type: 3}

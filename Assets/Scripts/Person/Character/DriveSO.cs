@@ -9,50 +9,36 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "Drive", menuName = "Quille/Character/Drive", order = 5)]
-    public class DriveSO : ScriptableObject
+    public class DriveSO : ForbiddablePersonalityItemSO
     {
         // VARIABLES/PARAMS 
-        [SerializeField]
-        private string driveName = "Undefined";
-        public string DriveName { get { return driveName; } }
-
-        // Description.
-
-        // DRIVE GRAPHICS
-        public Sprite driveIcon;
-
-        // OTHER VALUES
         // The intensity of drives is either 0.5 or 1.
         [SerializeField] [InspectorReadOnly] private float driveSpan = Constants_Quille.DRIVE_SPAN;
-        public float DriveSpan { get { return driveSpan; } }
-
         [SerializeField] [InspectorReadOnly] private float driveMidpoint = Constants_Quille.DRIVE_SPAN / 2;
+
+        // Favorable and defavorable personaltiy scores?
+        // Categories?
+
+
+        // PROPERTIES
+        public float DriveSpan { get { return driveSpan; } }
         public float DriveMidpoint { get { return driveSpan; } }
-
-        // INCOMPATIBILITIES
-        [SerializeField]
-        private ChecksAndMods.CheckArithmetic[] incompatiblePersonalityScores;
-
-        // FAVORABLE AND DEFAVORABLE PERSONALITY SCORES?
-
-        // CATEGORIES?
 
 
 
         // METHODS
-        public bool ForbiddenToPerson(Person targetPerson)
+        public override bool IsCompatibleWithPerson(Person targetPerson)
         {
             // Check whether this SO is incompatible with any relevant aspect of the given person.
-
-            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonalityScores)
+            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonChecks)
             {
                 if (check.Execute(targetPerson))
                 {
-                    Debug.Log(string.Format("{0} cannot have the Drive '{1}' due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.driveName, check.ToString()));
-                    return true;
+                    Debug.Log(string.Format("The Drive '{1}' is forbidden to {0} due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.itemName, check.ToString()));
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
     }
 }
