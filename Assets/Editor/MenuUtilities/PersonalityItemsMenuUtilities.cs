@@ -107,8 +107,10 @@ public class PersonalityItemsMenuUtilities : MonoBehaviour
     {
         foreach (Quille.PersonalityItemDomainSO domain in domainSOs)
         {
-            // Remove duplicates in ItemsInThisDomain.
-            domain.ItemsInThisDomain = domain.ItemsInThisDomain.Distinct().ToList();
+            // Remove nulls and duplicates in ItemsInThisDomain.
+            domain.ItemsInThisDomain = domain.ItemsInThisDomain.Where(item => item).Distinct().ToList();
+
+            Debug.Log(string.Format("The Domain '{0}' was checked for invalid references. Any found where removed.", domain.DomainName));
         }
     }
 }

@@ -22,7 +22,7 @@ public class InterestsMenuUtilities : MonoBehaviour
             {
                 //Debug.Log(relatedInterest.InterestName);
 
-                if (!relatedInterest.RelatedInterests.Contains(interest))
+                if (relatedInterest && !relatedInterest.RelatedInterests.Contains(interest))
                 {
                     relatedInterest.RelatedInterests.Add(interest);
                     Debug.Log(string.Format("The Interest '{0}' now considers the Interest '{1}' to be related.", interest.ItemName, relatedInterest.ItemName));
@@ -62,23 +62,48 @@ public class InterestsMenuUtilities : MonoBehaviour
     {
         foreach (Quille.InterestSO interest in interestSOs)
         {
-            // Remove self-references in RelatedInterests.
-            if (interest.RelatedInterests.Contains(interest))
-            {
-                interest.RelatedInterests.Remove(interest);
-                Debug.Log(string.Format("A self-refering RelatedInterest was removed from '{0}.'", interest.ItemName));
-            }
+            // Copy lists and remove invalid values: self references, nulls and duplicates.
+            List<Quille.InterestSO> validRelatedInterests = interest.RelatedInterests.Where(otherInterest => otherInterest && otherInterest != interest).Distinct().ToList();
+            List<Quille.InterestDomainSO> validInDomains = interest.InInterestDomains.Where(domain => domain != null).Distinct().ToList();
 
-            // Remove duplicates in RelatedInterests and InDomains.
-            interest.RelatedInterests = interest.RelatedInterests.Distinct().ToList();
-            interest.InDomains = interest.InDomains.Distinct().ToList();
+            // Apply the new lists.
+            interest.RelatedInterests = validRelatedInterests;
+            interest.InInterestDomains = validInDomains;
+
+            Debug.Log(string.Format("The Interest '{0}' was checked for invalid references. Any found where removed.", interest.ItemName));
         }
     }
 
 
+    // UI Methods.
+    static public void FixInterestReferences()
+    {
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
+
+        DeleteBadInterestReferences(interestSOs);
+        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
+
+        PersonalityItemsMenuUtilities.RegisterDomainsInItems(interestDomainSOs);
+        PersonalityItemsMenuUtilities.RegisterDomainsFromItems(interestSOs);
+        RegisterRelatedInterests(interestSOs);
+    }
+
+    static public void DeleteInterestReferences()
+    {
+        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
+        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
+
+        DeleteBadInterestReferences(interestSOs);
+        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
+
+        PersonalityItemsMenuUtilities.ClearItemsNotInDomains(interestDomainSOs);
+        PersonalityItemsMenuUtilities.ClearDomainsNotInItems(interestSOs);
+        DeleteRelatedInterests(interestSOs);
+    }
 
 
-     // Menu methods.
+    // Menu methods.
     [MenuItem("Quille/Person/Interests/Fix InterestDomains' one-sided references to child Interests.")]
     static void RegisterDomainsInInterests()
     {

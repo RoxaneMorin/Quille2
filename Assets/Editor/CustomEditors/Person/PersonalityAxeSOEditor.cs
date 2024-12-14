@@ -34,18 +34,20 @@ public class PersonalityAxeSOEditor : Editor
     {
         serializedObject.Update();
 
-        // Draw script field.
+        // Draw script field & read only axe span.
         using (new EditorGUI.DisabledScope(true))
+        {
             EditorGUILayout.PropertyField(scriptProperty);
+            EditorGUILayout.PropertyField(axeSpan);
+        }
+        GUI.enabled = true;
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(menuSortingIndex);
-        GUI.enabled = false;
-        EditorGUILayout.PropertyField(axeSpan);
-        GUI.enabled = true;
-        GUILayout.Space(EditorGUIUtility.singleLineHeight/2);
-        
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+
         // Draw side labels.
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Left", EditorStyles.boldLabel);

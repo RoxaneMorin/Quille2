@@ -11,6 +11,8 @@ public class InterestSOEditor : Editor
 
     private SerializedProperty itemName;
     private SerializedProperty itemIcon;
+    private SerializedProperty menuSortingIndex;
+
     private SerializedProperty interestSpan;
 
     private SerializedProperty inDomains;
@@ -22,6 +24,8 @@ public class InterestSOEditor : Editor
 
         itemName = serializedObject.FindProperty("itemName");
         itemIcon = serializedObject.FindProperty("itemIcon");
+        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+
         interestSpan = serializedObject.FindProperty("interestSpan");
 
         inDomains = serializedObject.FindProperty("inDomains");
@@ -32,14 +36,21 @@ public class InterestSOEditor : Editor
     {
         serializedObject.Update();
 
-        // Draw script field.
+        // Draw script field & read only span.
         using (new EditorGUI.DisabledScope(true))
+        {
             EditorGUILayout.PropertyField(scriptProperty);
+            EditorGUILayout.PropertyField(interestSpan);
+        }
+        GUI.enabled = true;
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(interestSpan);
+        EditorGUILayout.PropertyField(menuSortingIndex);
+
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.
         EditorGUILayout.PropertyField(inDomains);
@@ -48,18 +59,20 @@ public class InterestSOEditor : Editor
         {
             EditorGUILayout.HelpBox("An interest should belong to one or more domains.", MessageType.Error);
         }
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw relatedInterests.
         EditorGUILayout.PropertyField(relatedInterests);
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw clean up button.
         if (GUILayout.Button("Clean Up & Fix Dangling References"))
         {
-            FixInterestReferences();
+            InterestsMenuUtilities.FixInterestReferences();
         }
         if (GUILayout.Button("Clean Up & Delete Dangling References"))
         {
-            DeleteInterestReferences();
+            InterestsMenuUtilities.DeleteInterestReferences();
         }
 
         // Apply modified properties; modified linked objects as needed.
@@ -71,53 +84,27 @@ public class InterestSOEditor : Editor
         }
     }
 
-    private void UpdateReferencedDomains(Quille.InterestSO interestSO)
+    private void UpdateReferencedDomains(Quille.InterestSO interest)
     {
-        foreach (Quille.InterestDomainSO domain in interestSO.InDomains)
+        foreach (Quille.InterestDomainSO domain in interest.InDomains)
         {
-            if (!domain.InterestInThisDomain.Contains(interestSO))
+            if (domain && !domain.InterestInThisDomain.Contains(interest))
             {
-                domain.InterestInThisDomain.Add(interestSO);
+                domain.AddToDomain(interest);
                 EditorUtility.SetDirty(domain);
             }
         }
     }
 
-    private void UpdateReferencedInterests(Quille.InterestSO interestSO)
+    private void UpdateReferencedInterests(Quille.InterestSO interest)
     {
-        foreach (Quille.InterestSO otherInterest in interestSO.RelatedInterests)
+        foreach (Quille.InterestSO otherInterest in interest.RelatedInterests)
         {
-            if (!otherInterest.RelatedInterests.Contains(interestSO))
+            if (otherInterest && !otherInterest.RelatedInterests.Contains(interest))
             {
-                otherInterest.RelatedInterests.Add(interestSO);
+                otherInterest.RelatedInterests.Add(interest);
                 EditorUtility.SetDirty(otherInterest);
             }
         }
-    }
-
-    private void FixInterestReferences()
-    {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
-
-        InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
-        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
-
-        PersonalityItemsMenuUtilities.RegisterDomainsInItems(interestDomainSOs);
-        PersonalityItemsMenuUtilities.RegisterDomainsFromItems(interestSOs);
-        InterestsMenuUtilities.RegisterRelatedInterests(interestSOs);
-    }
-
-    private void DeleteInterestReferences()
-    {
-        Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
-        Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
-
-        InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
-        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
-
-        PersonalityItemsMenuUtilities.ClearItemsNotInDomains(interestDomainSOs);
-        PersonalityItemsMenuUtilities.ClearDomainsNotInItems(interestSOs);
-        InterestsMenuUtilities.DeleteRelatedInterests(interestSOs);
     }
 }

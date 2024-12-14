@@ -21,3 +21,5 @@ MonoBehaviour:
     compareTo: -0.85
   driveSpan: 1
   driveMidpoint: 0.5
+  inDomains:
+  - {fileID: 11400000, guid: df191e127177dc441b2d20117a4e08a9, type: 2}
