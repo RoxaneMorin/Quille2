@@ -71,7 +71,15 @@ public class PersonalityTraitSOEditor : Editor
         EditorGUILayout.PropertyField(incompatiblePersonChecks);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // TODO: add clean up buttons.
+        // Draw clean up buttons.
+        if (GUILayout.Button("Clean Up & Fix Dangling References"))
+        {
+            TraitsMenuUtilities.FixPersonalityTraitReferences();
+        }
+        if (GUILayout.Button("Clean Up & Delete Dangling References"))
+        {
+            TraitsMenuUtilities.DeletePersonalityTraitReferences();
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

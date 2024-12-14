@@ -71,7 +71,15 @@ public class DriveSOEditor : Editor
         EditorGUILayout.PropertyField(incompatiblePersonChecks);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // TODO: add clean up buttons.
+        // Draw clean up buttons.
+        if (GUILayout.Button("Clean Up & Fix Dangling References"))
+        {
+            DrivesMenuUtilities.FixDriveReferences();
+        }
+        if (GUILayout.Button("Clean Up & Delete Dangling References"))
+        {
+            DrivesMenuUtilities.DeleteDriveReferences();
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

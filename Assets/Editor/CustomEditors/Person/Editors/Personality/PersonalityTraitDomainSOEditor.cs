@@ -48,16 +48,15 @@ public class PersonalityTraitDomainSOEditor : Editor
         EditorGUILayout.PropertyField(itemsInThisDomain);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // TODO: implement this stuff.
-        //// Draw clean up button.
-        //if (GUILayout.Button("Clean Up & Fix Dangling References"))
-        //{
-        //    TraitsMenuUtilities.FixTraitReferences();
-        //}
-        //if (GUILayout.Button("Clean Up & Delete Dangling References"))
-        //{
-        //    TraitsMenuUtilities.DeleteTraitReferences();
-        //}
+        // Draw clean up buttons.
+        if (GUILayout.Button("Clean Up & Fix Dangling References"))
+        {
+            TraitsMenuUtilities.FixPersonalityTraitReferences();
+        }
+        if (GUILayout.Button("Clean Up & Delete Dangling References"))
+        {
+            TraitsMenuUtilities.DeletePersonalityTraitReferences();
+        }
 
         // Apply modified properties; modified linked objects as needed.
         if (serializedObject.ApplyModifiedProperties())
