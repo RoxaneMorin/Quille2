@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4201aa49271e9af4f80d2599d7a8bf44, type: 3}
-  m_Name: DoI_Social
+  m_Script: {fileID: 11500000, guid: 6d8867dce72f0ee47be19b3895c810e1, type: 3}
+  m_Name: IDom_Genres
   m_EditorClassIdentifier: 
-  domainName: Social
-  domainColour: {r: 1, g: 0.7576219, b: 0.2216981, a: 1}
+  domainName: Genres
+  domainColour: {r: 0.44903526, g: 0.15566039, b: 1, a: 1}
   domainIcon: {fileID: 0}
+  menuSortingIndex: 0
   itemsInThisDomain: []

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Quille
@@ -9,7 +10,7 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "Interest_", menuName = "Quille/Character/Interests/Interest", order = 1)]
-    public class InterestSO : PersonalityItemSO
+    public class InterestSO : PersonalityItemSO, IUseDomains
     {
         // VARIABLES/PARAMS
         [BeginInspectorReadOnlyGroup]
@@ -25,7 +26,15 @@ namespace Quille
 
         // PROPERTIES
         public floatPair InterestSpan { get { return interestSpan; } }
-        public List<InterestDomainSO> InDomains { get { return inDomains; } set { inDomains = value; } }
+        public List<InterestDomainSO> InInterestDomains { get { return inDomains; ; } set { inDomains = value; } }
+        public List<PersonalityItemDomainSO> InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToList(); ; } set { inDomains = value.Cast<InterestDomainSO>().ToList(); } }
         public List<InterestSO> RelatedInterests { get { return relatedInterests; } set { relatedInterests = value; } }
+
+
+        // METHODS
+        public void AddDomain(PersonalityItemDomainSO newDomain)
+        {
+            inDomains.Add((InterestDomainSO) newDomain);
+        }
     }
 }

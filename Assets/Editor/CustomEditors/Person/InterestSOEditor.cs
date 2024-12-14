@@ -101,10 +101,10 @@ public class InterestSOEditor : Editor
         Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
 
         InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
-        InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);
+        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
 
-        InterestsMenuUtilities.RegisterDomainsInInterests(interestDomainSOs);
-        InterestsMenuUtilities.RegisterDomainsFromInterests(interestSOs);
+        PersonalityItemsMenuUtilities.RegisterDomainsInItems(interestDomainSOs);
+        PersonalityItemsMenuUtilities.RegisterDomainsFromItems(interestSOs);
         InterestsMenuUtilities.RegisterRelatedInterests(interestSOs);
     }
 
@@ -114,10 +114,10 @@ public class InterestSOEditor : Editor
         Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
 
         InterestsMenuUtilities.DeleteBadInterestReferences(interestSOs);
-        InterestsMenuUtilities.DeleteBadInterestDomainReferences(interestDomainSOs);
+        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
 
-        InterestsMenuUtilities.ClearInterestsNotInDomains(interestDomainSOs);
-        InterestsMenuUtilities.ClearDomainsNotInInterests(interestSOs);
+        PersonalityItemsMenuUtilities.ClearItemsNotInDomains(interestDomainSOs);
+        PersonalityItemsMenuUtilities.ClearDomainsNotInItems(interestSOs);
         InterestsMenuUtilities.DeleteRelatedInterests(interestSOs);
     }
 }

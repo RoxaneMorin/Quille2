@@ -19,7 +19,7 @@ MonoBehaviour:
     Item1: -1
     Item2: 1
   inDomains:
-  - {fileID: 11400000, guid: 2c08d6a1c4988894e98acee746aa2580, type: 2}
-  - {fileID: 11400000, guid: 4072f1bf66211634bbc57f516f67a5f2, type: 2}
+  - {fileID: 11400000, guid: c0bb5c85cabc56940ab64b8f34ba5cbf, type: 2}
+  - {fileID: 11400000, guid: 090b24b40c48af6409854558b8392428, type: 2}
   relatedInterests:
   - {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}

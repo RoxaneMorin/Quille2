@@ -13,8 +13,6 @@ namespace Quille
         [SerializeField] protected Sprite domainIcon;
         [SerializeField] protected int menuSortingIndex;
 
-        [SerializeField] protected List<PersonalityItemSO> itemsInThisDomain;
-
 
         // PROPERTIES
         public string DomainName { get { return domainName; } }
@@ -22,6 +20,11 @@ namespace Quille
         public Sprite DomainIcon { get { return domainIcon; } }
         public int MenuSortingIndex { get { return menuSortingIndex; } }
 
-        public List<PersonalityItemSO> ItemsInThisDomain { get { return itemsInThisDomain; } set { itemsInThisDomain = value; } }
+        public abstract List<PersonalityItemSO> ItemsInThisDomain { get; set; }
+
+
+
+        // METHODS
+        public abstract void AddToDomain(PersonalityItemSO itemToAdd);
     }
 }

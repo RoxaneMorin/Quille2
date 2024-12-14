@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4201aa49271e9af4f80d2599d7a8bf44, type: 3}
-  m_Name: DoI_Civic
+  m_Script: {fileID: 11500000, guid: 6d8867dce72f0ee47be19b3895c810e1, type: 3}
+  m_Name: IDom_Nature
   m_EditorClassIdentifier: 
-  domainName: Civic / Societal
-  domainColour: {r: 0.3726415, g: 0.38758874, b: 1, a: 1}
+  domainName: Nature
+  domainColour: {r: 0, g: 0.764151, b: 0.11546115, a: 1}
   domainIcon: {fileID: 0}
+  menuSortingIndex: 0
   itemsInThisDomain: []

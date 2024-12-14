@@ -18,3 +18,4 @@ MonoBehaviour:
   incompatiblePersonChecks: []
   driveSpan: 1
   driveMidpoint: 0.5
+  inDomains: []

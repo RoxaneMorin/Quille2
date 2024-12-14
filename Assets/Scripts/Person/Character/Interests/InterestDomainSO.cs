@@ -10,16 +10,33 @@ namespace Quille
     // These are used to group Interests into wider categories, such as technical or creative fields/topics.
 
 
-    [CreateAssetMenu(fileName = "DoI_", menuName = "Quille/Character/Interests/Domain of Interest", order = 10)]
+    [CreateAssetMenu(fileName = "IDom_", menuName = "Quille/Character/Interests/Interest Domain", order = 5)]
     public class InterestDomainSO : PersonalityItemDomainSO
     {
+        // VARIABLES
+        [SerializeField] protected List<InterestSO> itemsInThisDomain;
+
+
         // PROPERTIES
-        public List<InterestSO> InterestInThisDomain 
+        public List<InterestSO> InterestInThisDomain
+        {
+            get { return itemsInThisDomain; }
+            set { itemsInThisDomain = value; }
+        }
+        public override List<PersonalityItemSO> ItemsInThisDomain
         { 
-            get { return itemsInThisDomain.Cast<InterestSO>().ToList(); } 
-            set { itemsInThisDomain = value.Cast<PersonalityItemSO>().ToList(); } 
+            get { return itemsInThisDomain.Cast<PersonalityItemSO>().ToList(); } 
+            set { itemsInThisDomain = value.Cast<InterestSO>().ToList(); } 
         }
 
         // Anything else?
+
+
+
+        // METHODS
+        public override void AddToDomain(PersonalityItemSO itemToAdd)
+        {
+            itemsInThisDomain.Add((InterestSO)itemToAdd);
+        }
     }
 }

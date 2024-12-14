@@ -29,5 +29,19 @@ namespace Quille
         // METHODS
         public abstract bool IsCompatibleWithPerson(Person targetPerson);
     }
+
+
+    // Interface to ease the manipulation of items that use domains.
+    public interface IUseDomains
+    {
+        // PROPERTIES
+        public string ItemName { get; }
+        public List<PersonalityItemDomainSO> InDomains { get; set; }
+
+
+
+        // METHODS
+        public void AddDomain(PersonalityItemDomainSO newDomain);
+    }
 }
 

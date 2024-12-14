@@ -11,102 +11,6 @@ public class InterestsMenuUtilities : MonoBehaviour
 
 
     // METHODS
-
-    // Base methods.
-    public static void RegisterDomainsInInterests(Quille.InterestDomainSO[] interestDomainSOs)
-    {
-        // Ensure every Interest contained in an InterestDomain also refers to it.
-        foreach (Quille.InterestDomainSO interestDomain in interestDomainSOs)
-        {
-            //Debug.Log(interestDomain.DomainName);
-
-            foreach (Quille.InterestSO interest in interestDomain.ItemsInThisDomain)
-            {
-                //Debug.Log(interest.InterestName);
-
-                if (!interest.InDomains.Contains(interestDomain))
-                {
-                    interest.InDomains.Add(interestDomain);
-                    Debug.Log(string.Format("The Interest '{0}' now considers itself part of the '{1}' InterestDomain.", interest.ItemName, interestDomain.DomainName));
-                }
-            }
-        }
-    }
-
-    public static void RegisterDomainsFromInterests(Quille.InterestSO[] interestSOs)
-    {
-        // Ensure every InterestDomain contains the Interests that refer to it.
-        foreach (Quille.InterestSO interest in interestSOs)
-        {
-            Debug.Log(interest.ItemName);
-
-            foreach (Quille.InterestDomainSO interestDomain in interest.InDomains)
-            {
-                Debug.Log(interestDomain.DomainName);
-
-                if (!interestDomain.ItemsInThisDomain.Contains(interest))
-                {
-                    interestDomain.ItemsInThisDomain.Add(interest);
-                    Debug.Log(string.Format("The InterestDomain '{0}' now considers the Interest '{1}' one of its members.", interestDomain.DomainName, interest.ItemName));
-                }
-            }
-        }
-    }
-
-    public static void ClearInterestsNotInDomains(Quille.InterestDomainSO[] interestDomainSOs)
-    {
-        // Deletes all Interest references from InterestDomains they do not refer to.
-        foreach (Quille.InterestDomainSO interestDomain in interestDomainSOs)
-        {
-            //Debug.Log(interestDomain.DomainName);
-
-            List<Quille.InterestSO> reciprocatedInterestInThisDomain = new List<Quille.InterestSO>();
-
-            foreach (Quille.InterestSO interest in interestDomain.ItemsInThisDomain)
-            {
-                //Debug.Log(interest.InterestName);
-
-                if (interest.InDomains.Contains(interestDomain))
-                {
-                    reciprocatedInterestInThisDomain.Add(interest);
-                }
-                else
-                {
-                    Debug.Log(string.Format("The Interest '{0}' was delete from the '{1}' InterestDomain's children.", interest.ItemName, interestDomain.DomainName));
-                }
-            }
-
-            interestDomain.InterestInThisDomain = reciprocatedInterestInThisDomain;
-        }
-    }
-
-    public static void ClearDomainsNotInInterests(Quille.InterestSO[] interestSOs)
-    {
-        // Deletes all InterestDomain references from Interests they do not contain.
-        foreach (Quille.InterestSO interest in interestSOs)
-        {
-            //Debug.Log(interest.InterestName);
-
-            List<Quille.InterestDomainSO> reciprocatedInDomains = new List<Quille.InterestDomainSO>();
-
-            foreach (Quille.InterestDomainSO interestDomain in interest.InDomains)
-            {
-                //Debug.Log(interestDomain.DomainName);
-
-                if (interestDomain.ItemsInThisDomain.Contains(interest))
-                {
-                    reciprocatedInDomains.Add(interestDomain);
-                }
-                else
-                {
-                    Debug.Log(string.Format("The InterestDomain '{0}' was delete from the '{1}' Interest's parents.", interestDomain.DomainName, interest.ItemName));
-                }
-            }
-
-            interest.InDomains = reciprocatedInDomains;
-        }
-    }
-
     public static void RegisterRelatedInterests(Quille.InterestSO[] interestSOs)
     {
         // Ensure that every reference in an Interest' RelatedInterests is reciprocal.
@@ -171,14 +75,7 @@ public class InterestsMenuUtilities : MonoBehaviour
         }
     }
 
-    public static void DeleteBadInterestDomainReferences(Quille.InterestDomainSO[] interestDomainSOs)
-    {
-        foreach (Quille.InterestDomainSO interestDomain in interestDomainSOs)
-        {
-            // Remove duplicates in InterestInThisDomain.
-            interestDomain.ItemsInThisDomain = interestDomain.ItemsInThisDomain.Distinct().ToList();
-        }
-    }
+
 
 
      // Menu methods.
@@ -186,28 +83,28 @@ public class InterestsMenuUtilities : MonoBehaviour
     static void RegisterDomainsInInterests()
     {
         Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
-        RegisterDomainsInInterests(interestDomainSOs);
+        PersonalityItemsMenuUtilities.RegisterDomainsInItems(interestDomainSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Fix Interests' one-sided references to parent InterestDomains.")]
     static void RegisterDomainsFromInterests()
     {
         Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
-        RegisterDomainsFromInterests(interestSOs);
+        PersonalityItemsMenuUtilities.RegisterDomainsFromItems(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Delete InterestDomains' one-sided references to child Interests.")]
     static void ClearInterestsNotInDomains()
     {
         Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
-        ClearInterestsNotInDomains(interestDomainSOs);
+        PersonalityItemsMenuUtilities.ClearItemsNotInDomains(interestDomainSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Delete Interests' one-sided references to parent InterestDomains.")]
     static void ClearDomainsNotInInterests()
     {
         Quille.InterestSO[] interestSOs = Resources.LoadAll<Quille.InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
-        ClearDomainsNotInInterests(interestSOs);
+        PersonalityItemsMenuUtilities.ClearDomainsNotInItems(interestSOs);
     }
 
     [MenuItem("Quille/Person/Interests/Fix Interests' one-sided references to RelatedInterests.")]
@@ -231,6 +128,6 @@ public class InterestsMenuUtilities : MonoBehaviour
         Quille.InterestDomainSO[] interestDomainSOs = Resources.LoadAll<Quille.InterestDomainSO>(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
 
         DeleteBadInterestReferences(interestSOs);
-        DeleteBadInterestDomainReferences(interestDomainSOs);
+        PersonalityItemsMenuUtilities.DeleteBadItemDomainReferences(interestDomainSOs);
     }
 }

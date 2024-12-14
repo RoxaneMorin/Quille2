@@ -28,8 +28,10 @@ public static class Constants_PathResources
 
     // Character
     public const string SO_PATH_PERSONALITYAXES = "ScriptableObjects/Person/Character/PersonalityAxes/";
-    public const string SO_PATH_PERSONALITYTRAITS = "ScriptableObjects/Person/Character/PersonalityTraits/";
-    public const string SO_PATH_DRIVES = "ScriptableObjects/Person/Character/Drives/";
+    public const string SO_PATH_PERSONALITYTRAITS = "ScriptableObjects/Person/Character/PersonalityTraits/PersonalityTraits/";
+    public const string SO_PATH_PERSONALITYTRAITDOMAINS = "ScriptableObjects/Person/Character/PersonalityTraits/Domains/";
+    public const string SO_PATH_DRIVES = "ScriptableObjects/Person/Character/Drives/Drives/";
+    public const string SO_PATH_DRIVEDOMAINS = "ScriptableObjects/Person/Character/Drives/Domains/";
     public const string SO_PATH_INTERESTS = "ScriptableObjects/Person/Character/Interests/Interests/";
     public const string SO_PATH_INTERESTDOMAINS = "ScriptableObjects/Person/Character/Interests/Domains/";
 
