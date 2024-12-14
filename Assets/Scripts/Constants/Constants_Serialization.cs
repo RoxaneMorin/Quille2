@@ -16,7 +16,7 @@ public static class Constants_Serialization
 {
     // FILE NAMES & TYPES
     public const int RANDOM_PREFIX_LENGTH = 6;
-    public const string SUFFIX_JSON = ".json";
+    public const string SUFFIX_JSON = ".quille";
     public const string SUFFIX_BACKUP = ".bak";
 
     // STORAGE PATHS

@@ -29,13 +29,25 @@ namespace Quille
         // Add secondary name.
         // Remove secondary name.
         // TODO: same thing for the following.
-        [JsonIgnore] public string FirstAndLastName { get { return string.Format("{0} {1}", firstName, lastName); } } // Name order?
-        [JsonIgnore] public string FirstNickAndLastName { get { return (nickName != "" ? string.Format("{0} '{1}' {2}", firstName, nickName, lastName) : FirstAndLastName); } }
+        [JsonIgnore] public string FirstAndLastName { get {
+                if (string.IsNullOrEmpty(lastName))
+                {
+                    return string.IsNullOrEmpty(firstName) ? "Unnamed" : firstName;
+                }
+                else if (string.IsNullOrEmpty(firstName))
+                {
+                    return lastName;
+                }
+                return string.Format("{0} {1}", firstName, lastName); 
+            } } // Name order?
+        [JsonIgnore] public string FirstNickAndLastName { get { 
+                return string.IsNullOrEmpty(nickName) ? FirstAndLastName : string.Format("{0} '{1}' {2}", firstName, nickName, lastName); 
+            } }
         [JsonIgnore] public string FullName { get {
 
                 if (secondaryNames != null & secondaryNames.Count > 0)
                 {
-                    return (nickName != "" ? string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName) : string.Format("{0} {1} {2}", firstName, string.Join(" ", secondaryNames), lastName));
+                    return string.IsNullOrEmpty(nickName) ? string.Format("{0} {1} {2}", firstName, string.Join(" ", secondaryNames), lastName) : string.Format("{0} {1} {2}, '{3}'", firstName, string.Join(" ", secondaryNames), lastName, nickName);
                 }
                 else 
                     return FirstNickAndLastName;

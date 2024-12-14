@@ -13,6 +13,7 @@ public static class SerializationHelper
 {
     // Static class containing methods for writing and manipulation the actual JSON save files.
 
+    // TODO: verify how a computer choses whether to use / or \.
 
     // METHODS
 
@@ -25,20 +26,20 @@ public static class SerializationHelper
 
     private static string ReturnBackpackSavePath()
     {
-        return string.Format("{0}/{1}", ReturSavePath(), Constants_Serialization.DEFAULT_BACKPACK_SAVE_FOLDER_NAME);
+        return string.Format("{0}\\{1}", ReturSavePath(), Constants_Serialization.DEFAULT_BACKPACK_SAVE_FOLDER_NAME);
     }
     private static string ReturnBackpackCharacterSavePath()
     {
-        return string.Format("{0}/{1}", ReturnBackpackSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
+        return string.Format("{0}\\{1}", ReturnBackpackSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
     }
 
     private static string ReturnCurrentWorldSavePath()
     {
-        return string.Format("{0}/{1}/{2}", ReturSavePath(), Constants_Serialization.DEFAULT_WORLD_SAVE_FOLDER_NAME, WorldData.GetCurrentWorldData().SafeWorldName);
+        return string.Format("{0}\\{1}\\{2}", ReturSavePath(), Constants_Serialization.DEFAULT_WORLD_SAVE_FOLDER_NAME, WorldData.GetCurrentWorldData().SafeWorldName);
     }
     private static string ReturnCurrentCharacterSavePath()
     {
-        return string.Format("{0}/{1}", ReturnCurrentWorldSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
+        return string.Format("{0}\\{1}", ReturnCurrentWorldSavePath(), Constants_Serialization.DEFAULT_CHARACTER_SAVE_FOLDER_NAME);
     }
 
     private static string ReturnBackUpFilePath(string sourceFilePath)
@@ -52,16 +53,18 @@ public static class SerializationHelper
 
 
     // CHARACTERS
+    public static string[] ReturnAllCharacterFilePathsAt(SaveType location = SaveType.CurrentWorld, bool includeBackUps = false)
+    {
+        return location == SaveType.CurrentWorld ? ReturnAllCurrentCharacterFilePaths(includeBackUps) : ReturnAllBackpackCharacterFilePaths(includeBackUps);
+    }
     public static string[] ReturnAllCurrentCharacterFilePaths(bool includeBackUps = false)
     {
-        // TODO: chose what file to load. Likely will be done elsewhere/by the general save game loader.
-
-        string[] allCharacterFilesFound = Directory.GetFiles(ReturnCurrentCharacterSavePath());
-        if (!includeBackUps)
-        {
-            string[] allJSONCharacterFilesFound = allCharacterFilesFound.Where(path => !path.EndsWith(Constants_Serialization.SUFFIX_BACKUP)).ToArray();
-            return allJSONCharacterFilesFound;
-        }
+        string[] allCharacterFilesFound = includeBackUps ? Directory.GetFiles(ReturnCurrentCharacterSavePath()) : Directory.GetFiles(ReturnCurrentCharacterSavePath(),  "*" + Constants_Serialization.SUFFIX_JSON);
+        return allCharacterFilesFound;
+    }
+    public static string[] ReturnAllBackpackCharacterFilePaths(bool includeBackUps = false)
+    {
+        string[] allCharacterFilesFound = includeBackUps ? Directory.GetFiles(ReturnBackpackCharacterSavePath()) : Directory.GetFiles(ReturnBackpackCharacterSavePath(), "*" + Constants_Serialization.SUFFIX_JSON);
 
         return allCharacterFilesFound;
     }
@@ -71,7 +74,7 @@ public static class SerializationHelper
         try
         {
             string folderPath = saveTo == SaveType.CurrentWorld ? ReturnCurrentCharacterSavePath() : ReturnBackpackCharacterSavePath();
-            string filePath = String.Format("{0}/{1}", folderPath, fileName);
+            string filePath = String.Format("{0}\\{1}", folderPath, fileName);
 
             // Create the save directory if it doesn't already exist.
             if (!System.IO.Directory.Exists(folderPath))
@@ -109,7 +112,7 @@ public static class SerializationHelper
         try
         {
             JSONContent = File.ReadAllText(filePath);
-            Debug.Log(string.Format("Successfully read the character file at path '{0}'.", filePath));
+            //Debug.Log(string.Format("Successfully read the character file at path '{0}'.", filePath));
         }
         catch (Exception theError)
         {

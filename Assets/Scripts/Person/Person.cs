@@ -67,7 +67,7 @@ namespace Quille
         // SAVE & LOAD
         // TODO: move this to its on partial segment?
         // Or else, to the serialization helper?
-        public string SaveToJSON(SaveType saveTo = SaveType.CurrentWorld)
+        public void SaveToJSON(SaveType saveTo = SaveType.CurrentWorld)
         {
             // TODO: save characters without IDs in a non-world folder?
 
@@ -91,7 +91,7 @@ namespace Quille
             catch (Exception theError)
             {
                 Debug.LogError(string.Format("Failed to convert the game data of {0}, to JSON. This character will not be saved.\n\nException text:\n{1}", CharIDAndCharacterName, theError.ToString()));
-                return null;
+                return;
             }
 
             // Testing: save the sting to a variable.
@@ -100,19 +100,11 @@ namespace Quille
             // Create and write the save file.
             string fileName = CreateJSONFileNameForSaveType(saveTo);
             SerializationHelper.SaveJSONCharacterToFile(this, fileName, formatedJSON, saveTo);
-
-            return formatedJSON;
         }
 
-        public void LoadFromJSON(string sourceJSON)
+        public void LoadFromJSON(string sourceFilePath)
         {
-            // TODO: where to load from? Replace sourceJSON by file name or path.
-
-            // Hardcoding while I test.
-            //string fileName = "placeholderFileName.json";
-            string fileName = "CharID_0.json";
-            string filePath = "SavedGameData/Quilleland/Characters/CharID_0.json";
-            sourceJSON = SerializationHelper.LoadJSONCharacterFromFile(filePath);
+            string sourceJSON = SerializationHelper.LoadJSONCharacterFromFile(sourceFilePath);
 
             // Init variables.
             JObject jsonPerson;
@@ -131,7 +123,7 @@ namespace Quille
             }
             catch(JsonException theError)
             {
-                Debug.LogError(string.Format("Failed to parse JSON data from {0}. This character will not be loaded.\n\nException text:\n{1}", fileName, theError.ToString()));
+                Debug.LogError(string.Format("Failed to parse JSON data at {0}. This character will not be loaded.\n\nException text:\n{1}", sourceFilePath, theError.ToString()));
                 return;
             }
 
@@ -163,11 +155,11 @@ namespace Quille
             }
             catch (Exception theError)
             {
-                Debug.LogError(string.Format("Failed to rebuild game data from the JSON data of {0}. This character will not be loaded.\n\nException text:\n{1}", fileName, theError.ToString()));
+                Debug.LogError(string.Format("Failed to rebuild game data from the JSON data at {0}. This character will not be loaded.\n\nException text:\n{1}", sourceFilePath, theError.ToString()));
                 return;
             }
 
-            Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", CharIDAndCharacterName, fileName));
+            Debug.Log(string.Format("Successfully (re)loaded {0}, from {1}.", CharIDAndCharacterName, sourceFilePath));
         }
 
         private string CreateJSONFileNameFromID()
@@ -177,10 +169,6 @@ namespace Quille
         private string CreateJSONFileNameFromName()
         {
             string safeCharacterName = MyPersonCharacter.FirstNickAndLastName.StripComplexChars();
-            if (string.IsNullOrEmpty(safeCharacterName))
-            {
-                safeCharacterName = "Unnamed";
-            }
             return string.Format("{0}_{1}{2}", DateTime.Now.ToString("yyMMddHHmmss"), safeCharacterName, Constants_Serialization.SUFFIX_JSON);
         }
         private string CreateJSONFileNameForSaveType(SaveType saveType)

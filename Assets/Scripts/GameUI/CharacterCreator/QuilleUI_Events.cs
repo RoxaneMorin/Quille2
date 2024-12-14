@@ -8,6 +8,8 @@ namespace QuilleUI
     // GENERIC TAB EVENTS
     public delegate void ActiveTabUpdate(CCUI_Tab newActiveTab);
 
+    // SAVE AND LOAD EVENTS
+    public delegate void FilePicked(string filePath);
 
     // CHARACTER CREATOR EVENTS
     public delegate void NameMenuUpdate();

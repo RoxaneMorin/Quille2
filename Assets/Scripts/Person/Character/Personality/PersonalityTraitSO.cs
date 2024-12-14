@@ -33,7 +33,7 @@ namespace Quille
             {
                 if (check.Execute(targetPerson))
                 {
-                    Debug.Log(string.Format("The Trait '{1}' is forbidden to {0} due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.itemName, check.ToString()));
+                    Debug.Log(string.Format("The Trait '{1}' is forbidden to {0}, due to the Check '{2}'.", targetPerson.CharIDAndCharacterName, this.itemName, check.ToString()));
                     return false;
                 }
             }

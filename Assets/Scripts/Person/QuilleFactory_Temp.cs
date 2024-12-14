@@ -8,6 +8,8 @@ public class QuilleFactory_Temp : MonoBehaviour
 {
     // A tentative sketch of the character creator's factory script.
 
+    // TODO: separate the save & load UI stuff into its own class.
+
 
     // VARIABLES
     [SerializeField] private Person currentPerson;
@@ -16,6 +18,8 @@ public class QuilleFactory_Temp : MonoBehaviour
     [SerializeField] private WorldData currentWorldData;
 
     [Header("References")]
+    [SerializeField] private QuilleUI.CCUI_CharacterManagementMenu characterManagementMenu;
+
     [SerializeField] private QuilleUI.CCUI_NamesMenu sourceNamesMenu;
     [SerializeField] private QuilleUI.CCUI_PersonalityAxesMenu sourcePersonalityAxesMenu;
     [SerializeField] private QuilleUI.CCUI_PersonalityTraitsMenu sourcePersonalityTraitsMenu;
@@ -23,8 +27,8 @@ public class QuilleFactory_Temp : MonoBehaviour
     [SerializeField] private QuilleUI.CCUI_InterestsMenu sourceInterestsMenu;
 
 
-    [Header("Misc")]
-    [SerializeField, TextAreaAttribute(50, 100)] private string tempJSON;
+    //[Header("Misc")]
+    //[SerializeField, TextAreaAttribute(50, 100)] private string tempJSON;
 
 
     // EVENTS
@@ -164,24 +168,21 @@ public class QuilleFactory_Temp : MonoBehaviour
     public void CreateNewCharacter()
     {
         currentPerson.ResetMe();
-        currentPerson.CharID = currentWorldData.GenerateNextCharID();
+        //currentPerson.CharID = currentWorldData.GenerateNextCharID();
 
         UpdateUIFromPerson();
     }
 
     public void SaveCharacter()
     {
-        tempJSON = currentPerson.SaveToJSON(SaveType.Backpack);
+        //tempJSON = currentPerson.SaveToJSON(SaveType.Backpack);
+        currentPerson.SaveToJSON(SaveType.Backpack);
     }
 
-    public void LoadCharacter()
+    public void LoadCharacter(string filePath)
     {
-        currentPerson.LoadFromJSON(tempJSON);
+        currentPerson.LoadFromJSON(filePath);
         UpdateUIFromPerson();
-
-        // TODO: assign new ids to loaded characters?
-
-        // TODO: menu to choose what file to load.
     }
 
 
