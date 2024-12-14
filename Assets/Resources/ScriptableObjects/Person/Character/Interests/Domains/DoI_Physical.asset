@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Physical
   m_EditorClassIdentifier: 
   domainName: Physical
-  domainColour: {r: 0.990566, g: 0.5769869, b: 0.3224012, a: 0}
+  domainColour: {r: 0.990566, g: 0.5769869, b: 0.3224012, a: 1}
   domainIcon: {fileID: 0}
-  interestsInThisDomain: []
+  itemsInThisDomain: []

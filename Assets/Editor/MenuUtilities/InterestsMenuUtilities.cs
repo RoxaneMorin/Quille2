@@ -20,7 +20,7 @@ public class InterestsMenuUtilities : MonoBehaviour
         {
             //Debug.Log(interestDomain.DomainName);
 
-            foreach (Quille.InterestSO interest in interestDomain.InterestInThisDomain)
+            foreach (Quille.InterestSO interest in interestDomain.ItemsInThisDomain)
             {
                 //Debug.Log(interest.InterestName);
 
@@ -38,15 +38,15 @@ public class InterestsMenuUtilities : MonoBehaviour
         // Ensure every InterestDomain contains the Interests that refer to it.
         foreach (Quille.InterestSO interest in interestSOs)
         {
-            //Debug.Log(interest.InterestName);
+            Debug.Log(interest.ItemName);
 
             foreach (Quille.InterestDomainSO interestDomain in interest.InDomains)
             {
-                //Debug.Log(interestDomain.DomainName);
+                Debug.Log(interestDomain.DomainName);
 
-                if (!interestDomain.InterestInThisDomain.Contains(interest))
+                if (!interestDomain.ItemsInThisDomain.Contains(interest))
                 {
-                    interestDomain.InterestInThisDomain.Add(interest);
+                    interestDomain.ItemsInThisDomain.Add(interest);
                     Debug.Log(string.Format("The InterestDomain '{0}' now considers the Interest '{1}' one of its members.", interestDomain.DomainName, interest.ItemName));
                 }
             }
@@ -62,7 +62,7 @@ public class InterestsMenuUtilities : MonoBehaviour
 
             List<Quille.InterestSO> reciprocatedInterestInThisDomain = new List<Quille.InterestSO>();
 
-            foreach (Quille.InterestSO interest in interestDomain.InterestInThisDomain)
+            foreach (Quille.InterestSO interest in interestDomain.ItemsInThisDomain)
             {
                 //Debug.Log(interest.InterestName);
 
@@ -93,7 +93,7 @@ public class InterestsMenuUtilities : MonoBehaviour
             {
                 //Debug.Log(interestDomain.DomainName);
 
-                if (interestDomain.InterestInThisDomain.Contains(interest))
+                if (interestDomain.ItemsInThisDomain.Contains(interest))
                 {
                     reciprocatedInDomains.Add(interestDomain);
                 }
@@ -176,7 +176,7 @@ public class InterestsMenuUtilities : MonoBehaviour
         foreach (Quille.InterestDomainSO interestDomain in interestDomainSOs)
         {
             // Remove duplicates in InterestInThisDomain.
-            interestDomain.InterestInThisDomain = interestDomain.InterestInThisDomain.Distinct().ToList();
+            interestDomain.ItemsInThisDomain = interestDomain.ItemsInThisDomain.Distinct().ToList();
         }
     }
 

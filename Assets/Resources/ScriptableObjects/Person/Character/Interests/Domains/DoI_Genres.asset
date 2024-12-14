@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Genres
   m_EditorClassIdentifier: 
   domainName: Genre
-  domainColour: {r: 0.5667277, g: 0.376157, b: 0.745283, a: 0}
+  domainColour: {r: 0.5667277, g: 0.376157, b: 0.745283, a: 1}
   domainIcon: {fileID: 0}
-  interestsInThisDomain: []
+  itemsInThisDomain: []

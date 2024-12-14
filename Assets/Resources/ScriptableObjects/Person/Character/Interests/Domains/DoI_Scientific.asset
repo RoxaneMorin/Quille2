@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Scientific
   m_EditorClassIdentifier: 
   domainName: Scientific
-  domainColour: {r: 0.37254903, g: 0.86580914, b: 0.972549, a: 0}
+  domainColour: {r: 0.37254903, g: 0.86580914, b: 0.972549, a: 1}
   domainIcon: {fileID: 0}
-  interestsInThisDomain: []
+  itemsInThisDomain: []

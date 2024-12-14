@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Should it be within the Quille namespace?
@@ -10,26 +11,15 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "DoI_", menuName = "Quille/Character/Interests/Domain of Interest", order = 10)]
-    public class InterestDomainSO : ScriptableObject
+    public class InterestDomainSO : PersonalityItemDomainSO
     {
-        // VARIABLES/PARAMS
-        [SerializeField]
-        private string domainName = "Undefined";
-        public string DomainName { get { return domainName; } }
-
-        // Description.
-
-        // GRAPHICS
-        public Color domainColour;
-        public Sprite domainIcon;
-
+        // PROPERTIES
+        public List<InterestSO> InterestInThisDomain 
+        { 
+            get { return itemsInThisDomain.Cast<InterestSO>().ToList(); } 
+            set { itemsInThisDomain = value.Cast<PersonalityItemSO>().ToList(); } 
+        }
 
         // Anything else?
-        // Keep track of the interests in this domain?
-        // Automatize through UI script?
-
-        [SerializeField]
-        private List<InterestSO> interestsInThisDomain;
-        public List<InterestSO> InterestInThisDomain { get { return interestsInThisDomain; } set { interestsInThisDomain = value; } }
     }
 }

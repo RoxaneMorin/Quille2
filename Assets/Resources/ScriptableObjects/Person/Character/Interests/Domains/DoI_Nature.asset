@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DoI_Nature
   m_EditorClassIdentifier: 
   domainName: Natural World
-  domainColour: {r: 0.18098079, g: 0.7830189, b: 0.44344276, a: 0}
+  domainColour: {r: 0.18098079, g: 0.7830189, b: 0.44344276, a: 1}
   domainIcon: {fileID: 0}
-  interestsInThisDomain: []
+  itemsInThisDomain: []
