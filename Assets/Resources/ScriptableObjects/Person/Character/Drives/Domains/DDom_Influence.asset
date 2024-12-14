@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7f16bc58385b0c4ca394e49e95ae585, type: 3}
-  m_Name: DDom_Social
+  m_Name: DDom_Influence
   m_EditorClassIdentifier: 
-  domainName: Social
-  domainColour: {r: 1, g: 0.57254905, b: 0.74242455, a: 1}
+  domainName: Influence
+  domainColour: {r: 1, g: 0.67668855, b: 0, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 2
   itemsInThisDomain:
-  - {fileID: 11400000, guid: fcfbf1df6dbf05c4493a06ac0e2c3577, type: 2}
-  - {fileID: 11400000, guid: 5df8f791394c4554c8b3d9b7be498649, type: 2}
-  - {fileID: 11400000, guid: 9fcfdf36a5c080e49a2d1d717d4d04ca, type: 2}
-  - {fileID: 11400000, guid: 170f2d83c35c62e45805c0b538c1f78a, type: 2}
   - {fileID: 11400000, guid: 625747d79ffc3c946bef4571bf3a35a2, type: 2}
+  - {fileID: 11400000, guid: bb3fcab76aca0294287478a8d662c2f9, type: 2}
+  - {fileID: 11400000, guid: 2e251d0aefd6b8149ab038e6cf56e3e9, type: 2}
+  - {fileID: 11400000, guid: 9f49c19df991ceb4383f6d56512ae477, type: 2}
+  - {fileID: 11400000, guid: 6c6dc246639d3e34ea83247a207b0bc4, type: 2}

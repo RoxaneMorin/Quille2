@@ -18,3 +18,6 @@ MonoBehaviour:
   incompatiblePersonChecks: []
   driveSpan: 1
   driveMidpoint: 0.5
+  inDomains:
+  - {fileID: 11400000, guid: 1f424f6c3458b024a8a74b02b448503c, type: 2}
+  - {fileID: 11400000, guid: 8e8720ab0411b5b46885ec934f96024f, type: 2}
