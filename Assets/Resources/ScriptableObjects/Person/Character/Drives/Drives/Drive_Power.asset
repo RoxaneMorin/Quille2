@@ -20,3 +20,4 @@ MonoBehaviour:
   driveMidpoint: 0.5
   inDomains:
   - {fileID: 11400000, guid: 1f424f6c3458b024a8a74b02b448503c, type: 2}
+  - {fileID: 11400000, guid: df191e127177dc441b2d20117a4e08a9, type: 2}

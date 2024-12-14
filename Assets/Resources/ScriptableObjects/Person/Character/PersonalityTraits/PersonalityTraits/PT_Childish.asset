@@ -18,3 +18,5 @@ MonoBehaviour:
   incompatiblePersonChecks: []
   traitSpan: 1
   trainMidpoint: 0.5
+  inDomains:
+  - {fileID: 11400000, guid: b307824ac1f49ee4aab51018d791af46, type: 2}

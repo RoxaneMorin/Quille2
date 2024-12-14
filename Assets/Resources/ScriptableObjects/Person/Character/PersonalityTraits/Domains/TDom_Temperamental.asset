@@ -16,4 +16,6 @@ MonoBehaviour:
   domainColour: {r: 0.4009434, g: 0.44041827, b: 1, a: 1}
   domainIcon: {fileID: 0}
   menuSortingIndex: 0
-  itemsInThisDomain: []
+  itemsInThisDomain:
+  - {fileID: 11400000, guid: 6392ad27cdfd3934ba2f7971a0330110, type: 2}
+  - {fileID: 11400000, guid: 0b29738c5a189cf4eb4741c463f4430c, type: 2}
