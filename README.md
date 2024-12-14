@@ -69,6 +69,8 @@ The project uses the following third party assets:
 
   -> [VectorsLab](https://www.flaticon.com/authors/vectorslab)
 
+  -> [Fathema Khanom](https://www.flaticon.com/authors/fathema-khanom)
+
   -> [MythArt](https://www.freepik.com/author/user24791284/icons)
 
   -> [IconPlace](https://www.freepik.com/author/iconplace/icons)
