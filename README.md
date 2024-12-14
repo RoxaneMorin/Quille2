@@ -13,14 +13,15 @@ So far, I've mostly worked on:
 - The implementation of initial need and personality systems, including their interplay, serialization, and some example assets and in-game UI.
 - The implementation of a system of “checks and modulators”, small objects meant to fetch specific bits of character information, and alter or evaluate it. They’re meant to be the building blocks of the character AI.
 - The creation of custom editors and property drawers for most of the above.
-- A simple character creation UI, containing names and personality elements. The ability to save characters to file there.
+- A simple character creation UI, containing names and personality elements. The ability to save and load external character files, written in JSON.
 - A first sketch of the characters’ need management loop.
 - An incomplete genetics system, partially ported from an older project.
 - Miscellaneous fancies such as procedural grid generation and some post processing shaders.
 
 My next steps will likely be:
-- Continued work on the character creator, including the ability to load from a file proper.
 - Implementing a few more character data structures (long term needs, miscellaneous personality quirks).
+- Expanding the character creation UI for the above. Adding the ability to sort items by categories, such as general interest "domains".
+- Sketching out UI for needs.
 - Further modularizing character needs? (At the moment, personality elements' impact on a need are set in the need’s scriptableObject instance. This could be decoupled.)
 - Sketching out a basic data model for interactions, and logic for characters’ to choose the best fit for satisfying a specific need. Stress testing once that is done.
 - Investigating whether Unity's Job system could be useful / optimize the checks and modulators' action.
