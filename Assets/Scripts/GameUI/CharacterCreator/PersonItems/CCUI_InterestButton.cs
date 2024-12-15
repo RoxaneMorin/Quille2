@@ -89,6 +89,8 @@ namespace QuilleUI
 
             MySliderValueWithoutNotify = value;
             mySlider.gameObject.SetActive(true);
+
+            RegenerateCaption();
         }
         public override void Unselect()
         {

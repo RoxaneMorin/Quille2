@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8867dce72f0ee47be19b3895c810e1, type: 3}
   m_Name: IDom_Amusement
   m_EditorClassIdentifier: 
-  domainName: Amusement
+  domainName: Fun
   domainColour: {r: 1, g: 0.3820755, b: 0.7384937, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 9
   itemsInThisDomain: []

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DDom_Material
   m_EditorClassIdentifier: 
   domainName: Material
-  domainColour: {r: 0.5330188, g: 0.85723615, b: 1, a: 1}
+  domainColour: {r: 0.09732112, g: 0.6405794, b: 0.764151, a: 1}
   domainIcon: {fileID: 0}
   menuSortingIndex: 3
   itemsInThisDomain:

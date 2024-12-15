@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: IDom_Technical
   m_EditorClassIdentifier: 
   domainName: Technical
-  domainColour: {r: 0.74074405, g: 0.7498149, b: 0.7735849, a: 1}
+  domainColour: {r: 0.5313279, g: 0.5400054, b: 0.5660378, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 1
+  menuSortingIndex: 0
   itemsInThisDomain:
   - {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}

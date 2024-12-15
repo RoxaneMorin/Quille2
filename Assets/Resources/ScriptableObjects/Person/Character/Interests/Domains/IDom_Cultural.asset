@@ -15,6 +15,6 @@ MonoBehaviour:
   domainName: Cultural
   domainColour: {r: 1, g: 0.40118876, b: 0.3443396, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 6
   itemsInThisDomain:
   - {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}

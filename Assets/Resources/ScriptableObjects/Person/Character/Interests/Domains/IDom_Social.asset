@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IDom_Social
   m_EditorClassIdentifier: 
   domainName: Social
-  domainColour: {r: 1, g: 0.7873626, b: 0, a: 1}
+  domainColour: {r: 1, g: 0.67256117, b: 0, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 4
   itemsInThisDomain: []

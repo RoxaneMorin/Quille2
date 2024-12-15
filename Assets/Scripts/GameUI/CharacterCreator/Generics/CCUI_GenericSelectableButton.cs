@@ -31,6 +31,7 @@ namespace QuilleUI
         [SerializeField] protected Color myColourSelected;
         [SerializeField] protected Color myColourForbidden;
         [SerializeField] protected Color myColourSelectedeButForbidden;
+        [SerializeField] protected bool alwaysShowCaption = true;
         [SerializeField] protected Vector2 myCaptionPositionUnselected;
         [SerializeField] protected Vector2 myCaptionPositionSelected;
 
@@ -147,7 +148,10 @@ namespace QuilleUI
             FetchComponents();
 
             myDefaultCaption = myCaption.text;
-            myCaption.gameObject.SetActive(false);
+            if (!alwaysShowCaption)
+            {
+                myCaption.gameObject.SetActive(false);
+            }
         }
 
 
@@ -159,12 +163,18 @@ namespace QuilleUI
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            myCaption.gameObject.SetActive(true);
+            if (!alwaysShowCaption)
+            {
+                myCaption.gameObject.SetActive(true);
+            }
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
-            myCaption.gameObject.SetActive(false);
+            if (!alwaysShowCaption)
+            {
+                myCaption.gameObject.SetActive(false);
+            }
         }
     }
 }

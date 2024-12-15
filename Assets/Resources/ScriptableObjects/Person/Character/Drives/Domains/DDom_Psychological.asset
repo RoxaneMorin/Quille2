@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DDom_Psychological
   m_EditorClassIdentifier: 
   domainName: Psychological
-  domainColour: {r: 0.47569606, g: 0.39999998, b: 1, a: 1}
+  domainColour: {r: 0.4119457, g: 0.31746176, b: 0.7735849, a: 1}
   domainIcon: {fileID: 0}
   menuSortingIndex: 2
   itemsInThisDomain:

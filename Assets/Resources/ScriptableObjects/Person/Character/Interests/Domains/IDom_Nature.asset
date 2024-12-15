@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IDom_Nature
   m_EditorClassIdentifier: 
   domainName: Nature
-  domainColour: {r: 0, g: 0.764151, b: 0.11546115, a: 1}
+  domainColour: {r: 0, g: 0.7075472, b: 0.24736682, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 2
   itemsInThisDomain: []

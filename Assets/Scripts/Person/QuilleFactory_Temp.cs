@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Quille;
 using World;
@@ -218,8 +219,18 @@ public class QuilleFactory_Temp : MonoBehaviour
     void Start()
     {
         Init();
-
         CreateNewCharacter();
+
+        // If the game was openned with a character file, try and load it.
+        string[] commandLineArgs = System.Environment.GetCommandLineArgs();
+        foreach (string arg in commandLineArgs)
+        {
+            if (arg.EndsWith(Constants_Serialization.SUFFIX_JSON, System.StringComparison.OrdinalIgnoreCase))
+            {
+                LoadCharacter(arg);
+                break;
+            }
+        }
 
         currentWorldData.LogCurrentGameData();
     }

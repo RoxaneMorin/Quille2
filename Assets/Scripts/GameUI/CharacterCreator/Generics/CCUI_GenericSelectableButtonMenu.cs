@@ -1,9 +1,9 @@
-using System.Collections;
+using AYellowpaper.SerializedCollections;
+using Quille;
 using System.Collections.Generic;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using Quille;
+using UnityEngine.UI;
 
 namespace QuilleUI
 {
@@ -15,10 +15,14 @@ namespace QuilleUI
         // VARIABLES
         [Header("Parameters")]
         [SerializeField] protected Transform buttonPrefab;
+        [SerializeField] protected float buttonContainerPadding;
+        [SerializeField] protected int buttonCountPerRow;
+        [SerializeField] protected float buttonSpacingBetweenRows;
+        [Space]
+        [SerializeField] protected Transform domainFilterPrefab;
+        [SerializeField] protected float domainFilterSpacing;
+        [Space]
         [SerializeField] protected int selectionBoxCapacity;
-        [SerializeField] protected int countPerRow;
-        [SerializeField] protected float rowShift;
-        [SerializeField] protected float containerPadding;
         [SerializeField] protected float selectedShift;
         [SerializeField] protected float selectedMaximumSpacing;
 
@@ -26,17 +30,25 @@ namespace QuilleUI
         [SerializeField] protected Canvas ownerCanvas;
         [SerializeField] protected RectTransform selectedButtonsContainerTransform;
         [SerializeField] protected RectTransform allButtonsContainerTransform;
+        [Space]
         [SerializeField] protected Transform initialButtonTransform;
+        [SerializeField] protected Transform initialDomainTransform;
 
         protected float containerWidthPadded;
         protected float containerHalfWidthPadded;
-        protected float initialXPos;
-        protected float initialYPos;
+        protected float initialButtonXPos;
+        protected float initialButtonYPos;
+
+        protected float containerWidthDomainPadded;
+        protected float initialDomainXPos;
 
         [Header("The Stuff")]
         [SerializeField] protected CCUI_GenericSelectableButton[] theButtons;
         [SerializeField] protected SerializedDictionary<ScriptableObject, CCUI_GenericSelectableButton> theButtonsDict;
         [SerializeField] protected Transform[] theButtonsTransforms;
+        [Space]
+        [SerializeField] protected CCUI_DomainFilter[] theDomainsFilters;
+        [SerializeField] protected Transform[] theDomainsFiltersTransforms;
         [Space]
         [SerializeField] protected List<CCUI_GenericSelectableButton> currentlySelectedButtons;
         // A HashSet would be better, but doesn't show up in editor :/
@@ -113,7 +125,7 @@ namespace QuilleUI
                 // Place them going from one side to the other.
                 foreach (CCUI_GenericSelectableButton button in currentlySelectedButtons)
                 {
-                    Vector2 newPosition = new Vector2(initialXPos + i * expectedDistanceBetweenButtons, selectedShift);
+                    Vector2 newPosition = new Vector2(initialButtonXPos + i * expectedDistanceBetweenButtons, selectedShift);
                     button.ChangeParentAndPosition(selectedButtonsContainerTransform, newPosition);
 
                     i++;
@@ -188,11 +200,14 @@ namespace QuilleUI
             }
 
             // And calculate values for reuse.
-            containerWidthPadded = allButtonsContainerTransform.rect.width - (2 * containerPadding);
+            containerWidthPadded = allButtonsContainerTransform.rect.width - (2 * buttonContainerPadding);
             containerHalfWidthPadded = containerWidthPadded / 2;
 
-            initialXPos = allButtonsContainerTransform.anchoredPosition.x - containerHalfWidthPadded;
-            initialYPos = ((RectTransform)initialButtonTransform).anchoredPosition.y;
+            initialButtonXPos = allButtonsContainerTransform.anchoredPosition.x - containerHalfWidthPadded;
+            initialButtonYPos = ((RectTransform)initialButtonTransform).anchoredPosition.y;
+
+            containerWidthDomainPadded = allButtonsContainerTransform.rect.width - (2 * domainFilterSpacing);
+            initialDomainXPos = -containerWidthDomainPadded / 2;
         }
 
         protected virtual void LoadSOsAndCreateButtons(string SOsResourcePath)
@@ -206,14 +221,14 @@ namespace QuilleUI
             theButtonsTransforms = new RectTransform[noOfSOs];
 
             // Calculate the necessry values for generating the grid of buttons.
-            int noOfRows = Mathf.CeilToInt((float)noOfSOs / countPerRow);
-            float distanceBetweenButtons = containerWidthPadded / (countPerRow - 1);
+            int noOfRows = Mathf.CeilToInt((float)noOfSOs / buttonCountPerRow);
+            float distanceBetweenButtons = containerWidthPadded / (buttonCountPerRow - 1);
 
             // Generate the buttons.
             int i = 0;
             for (int j = 0; j < noOfRows; j++)
             {
-                for (int k = 0; k < countPerRow; k++)
+                for (int k = 0; k < buttonCountPerRow; k++)
                 {
                     // Break 
                     if (i == noOfSOs)
@@ -225,10 +240,10 @@ namespace QuilleUI
                     theButtons[i] = theButtonsTransforms[i].GetComponent<CCUI_GenericSelectableButton>();
                     theButtonsDict.Add(theSOs[i], theButtons[i]);
 
-                    // Set the button's parent and positione.
+                    // Set the button's parent and position.
                     RectTransform thisButtonsRectTransform = theButtonsTransforms[i].GetComponent<RectTransform>();
                     thisButtonsRectTransform.SetParent(allButtonsContainerTransform, false);
-                    thisButtonsRectTransform.anchoredPosition = new Vector2(initialXPos + k * distanceBetweenButtons, initialYPos + j * rowShift);
+                    thisButtonsRectTransform.anchoredPosition = new Vector2(initialButtonXPos + k * distanceBetweenButtons, initialButtonYPos + j * buttonSpacingBetweenRows);
 
                     // Initialize the button.
                     theButtons[i].gameObject.SetActive(true);
@@ -241,11 +256,49 @@ namespace QuilleUI
                 }
             }
         }
+        protected virtual void LoadDomainsAndCreateFilters(string SOsResourcePath)
+        {
+            if (domainFilterPrefab)
+            {
+                PersonalityItemDomainSO[] theDomainSOs = Resources.LoadAll<PersonalityItemDomainSO>(SOsResourcePath);
+                theDomainSOs = theDomainSOs.OrderBy(so => so.MenuSortingIndex).ToArray();
+                int noOfDomains = theDomainSOs.Length;
+
+                // Create the arrays.
+                theDomainsFiltersTransforms = new Transform[noOfDomains];
+                theDomainsFilters = new CCUI_DomainFilter[noOfDomains];
+
+                // Calculate reused values.
+                float horizontalSpaceAvailable = containerWidthDomainPadded - (domainFilterSpacing * (noOfDomains - 1f));
+                float domainFilterWidth = horizontalSpaceAvailable / noOfDomains;
+                float distanceBetweenDomainFilters = domainFilterWidth + domainFilterSpacing;
+
+                RectTransform initialDomainRectTransform = (RectTransform)initialDomainTransform;
+
+                // Create the UI elements.
+                for (int i = 0; i < noOfDomains; i++)
+                {
+                    theDomainsFiltersTransforms[i] = Instantiate<Transform>(domainFilterPrefab, initialDomainTransform);
+                    theDomainsFilters[i] = theDomainsFiltersTransforms[i].GetComponent<CCUI_DomainFilter>();
+
+                    // Set the domainFilter's parent and position.
+                    RectTransform thisDomainFiltersRectTransform = theDomainsFiltersTransforms[i].GetComponent<RectTransform>();
+                    thisDomainFiltersRectTransform.SetParent(allButtonsContainerTransform, false);
+                    thisDomainFiltersRectTransform.anchoredPosition = new Vector2(initialDomainXPos + i * distanceBetweenDomainFilters, initialDomainRectTransform.anchoredPosition.y);
+                    thisDomainFiltersRectTransform.sizeDelta = new Vector2(domainFilterWidth, thisDomainFiltersRectTransform.sizeDelta.y);
+
+                    // Init & subscribe to events.
+                    theDomainsFilters[i].Init(theDomainSOs[i]);
+                }
+            }
+        }
 
         protected virtual void Init()
         {
             FetchComponents();
-            //LoadSOsAndCreateButtons() called from child classes;
+
+            //LoadDomainsAndCreateButtons();
+            //LoadDomainsAndCreateFilters() called from child classes;
         }
 
 

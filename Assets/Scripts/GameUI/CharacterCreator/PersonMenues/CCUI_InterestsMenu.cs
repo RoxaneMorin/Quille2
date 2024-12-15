@@ -91,7 +91,10 @@ namespace QuilleUI
         protected override void Init()
         {
             base.Init();
+
             LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_INTERESTS);
+            LoadDomainsAndCreateFilters(Constants_PathResources.SO_PATH_INTERESTDOMAINS);
+
             selectionBoxCapacity = Constants_Quille.MAXIMUM_INITIAL_INTEREST_COUNT;
         }
 

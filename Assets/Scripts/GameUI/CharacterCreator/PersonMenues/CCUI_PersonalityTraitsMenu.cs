@@ -77,7 +77,10 @@ namespace QuilleUI
         protected override void Init()
         {
             base.Init();
+
             LoadSOsAndCreateButtons(Constants_PathResources.SO_PATH_PERSONALITYTRAITS);
+            LoadDomainsAndCreateFilters(Constants_PathResources.SO_PATH_PERSONALITYTRAITDOMAINS);
+
             selectionBoxCapacity = Constants_Quille.MAXIMUM_INITIAL_PERSONALITY_TRAIT_COUNT;
         }
     }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IDom_Scientific
   m_EditorClassIdentifier: 
   domainName: Scientific
-  domainColour: {r: 0.3254717, g: 0.9036213, b: 1, a: 1}
+  domainColour: {r: 0.014907437, g: 0.5906546, b: 0.6320754, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 1
   itemsInThisDomain: []

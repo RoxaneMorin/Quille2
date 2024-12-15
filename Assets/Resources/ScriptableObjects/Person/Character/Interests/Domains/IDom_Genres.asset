@@ -15,5 +15,5 @@ MonoBehaviour:
   domainName: Genres
   domainColour: {r: 0.44903526, g: 0.15566039, b: 1, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 7
   itemsInThisDomain: []

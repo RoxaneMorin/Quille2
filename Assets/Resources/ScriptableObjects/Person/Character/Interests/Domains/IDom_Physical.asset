@@ -15,5 +15,5 @@ MonoBehaviour:
   domainName: Physical
   domainColour: {r: 1, g: 0.5279412, b: 0.25, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 3
   itemsInThisDomain: []

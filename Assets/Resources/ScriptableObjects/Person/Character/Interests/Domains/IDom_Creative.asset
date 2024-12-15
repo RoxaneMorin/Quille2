@@ -15,7 +15,7 @@ MonoBehaviour:
   domainName: Creative
   domainColour: {r: 0.8972825, g: 0.21226418, b: 1, a: 1}
   domainIcon: {fileID: 0}
-  menuSortingIndex: 0
+  menuSortingIndex: 8
   itemsInThisDomain:
   - {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
   - {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}
