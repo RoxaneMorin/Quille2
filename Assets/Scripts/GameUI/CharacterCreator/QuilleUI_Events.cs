@@ -12,8 +12,15 @@ namespace QuilleUI
     public delegate void FilePicked(string filePath);
 
     // CHARACTER CREATOR EVENTS
+
+    // NAME MENUS
+    public delegate void AdditionalNameInputFieldUpdate(CCUI_AdditionalNameInputField relevantInputField);
+    public delegate void AdditionalNameDeleted(CCUI_AdditionalNameInputField relevantInputField);
+
+    public delegate void AdditionalNameMenuUpdate();
     public delegate void NameMenuUpdate();
 
+    // PERSONALITY MENUS
     public delegate void PersonalityAxesMenuUpdate();
     public delegate void PersonalityTraitsMenuUpdate();
     public delegate void DrivesMenuUpdate();

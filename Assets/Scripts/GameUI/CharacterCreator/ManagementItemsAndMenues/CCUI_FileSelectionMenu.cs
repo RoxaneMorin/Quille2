@@ -13,6 +13,7 @@ namespace QuilleUI
         // VARIABLES
         [Header("Parameters")]
         [SerializeField] private Transform buttonPrefab;
+        [SerializeField] private float initialHeight = 120f;
         [SerializeField] private float shiftDown = 80f;
 
         [Header("References")]
@@ -72,7 +73,7 @@ namespace QuilleUI
                 int noOfFilepaths = filepaths.Length;
 
                 // Adjust the base menu's height based on the number of buttons.
-                float newHeight = 120 + Mathf.Abs(shiftDown) * (noOfFilepaths - 1);
+                float newHeight = initialHeight + Mathf.Abs(shiftDown) * (noOfFilepaths - 1);
                 myRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newHeight);
 
                 // Create the buttons proper.
@@ -101,6 +102,7 @@ namespace QuilleUI
         private void Start()
         {
             //Init();
+            gameObject.SetActive(false);
         }
     }
 }

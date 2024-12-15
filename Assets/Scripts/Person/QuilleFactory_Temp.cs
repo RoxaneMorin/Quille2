@@ -55,6 +55,8 @@ public class QuilleFactory_Temp : MonoBehaviour
         currentPerson.MyPersonCharacter.FirstName = sourceNamesMenu.InputFieldFirstName;
         currentPerson.MyPersonCharacter.LastName = sourceNamesMenu.InputFieldLastName;
         currentPerson.MyPersonCharacter.NickName = sourceNamesMenu.InputFieldNickname;
+
+        currentPerson.MyPersonCharacter.SecondaryNames = sourceNamesMenu.InputFieldsAdditionalNames;
     }
     public void UpdatePersonPersonalityAxeFromUI(Quille.PersonalityAxeSO thePASO)
     {
@@ -141,6 +143,8 @@ public class QuilleFactory_Temp : MonoBehaviour
         sourceNamesMenu.InputFieldFirstName = currentPerson.MyPersonCharacter.FirstName;
         sourceNamesMenu.InputFieldLastName = currentPerson.MyPersonCharacter.LastName;
         sourceNamesMenu.InputFieldNickname = currentPerson.MyPersonCharacter.NickName;
+
+        sourceNamesMenu.InputFieldsAdditionalNames = currentPerson.MyPersonCharacter.SecondaryNames;
     }
 
     private void UpdateUIPersonalityAxesFromPerson()
