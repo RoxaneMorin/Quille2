@@ -258,6 +258,7 @@ MonoBehaviour:
   mySO: {fileID: 0}
   isSelected: 0
   isForbidden: 0
+  inActiveFilter: 0
   myRectTransform: {fileID: 0}
   myDefaultPosition: {x: 0, y: 0}
   myIcon: {fileID: 7115466768898969024}
@@ -267,6 +268,8 @@ MonoBehaviour:
   myColourSelected: {r: 1, g: 1, b: 1, a: 1}
   myColourForbidden: {r: 0.4, g: 0.4, b: 0.4, a: 1}
   myColourSelectedeButForbidden: {r: 0.7490196, g: 0, b: 0, a: 1}
+  myColourFilteredAway: {r: 1, g: 1, b: 1, a: 0.050980393}
+  alwaysShowCaption: 1
   myCaptionPositionUnselected: {x: 0, y: -55}
   myCaptionPositionSelected: {x: 0, y: -75}
   myValue: 0

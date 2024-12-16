@@ -32,6 +32,10 @@ namespace Quille
 
 
         // METHODS
+        public bool InDomain(PersonalityItemDomainSO domain)
+        {
+            return inDomains.Contains(domain);
+        }
         public void AddDomain(PersonalityItemDomainSO newDomain)
         {
             inDomains.Add((InterestDomainSO) newDomain);

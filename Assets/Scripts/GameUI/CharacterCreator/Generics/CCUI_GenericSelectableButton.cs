@@ -10,13 +10,16 @@ namespace QuilleUI
     public class CCUI_GenericSelectableButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         // A button that is (un)selected via click, potentially moving it between areas.
-        // Will display a caption upon hover.
+        // Will display a caption (upon hover?).
+        // Can be filtered by an associated domain.
 
 
         // VARIABLES
         [SerializeField] protected PersonalityItemSO mySO;
         [SerializeField] protected bool isSelected;
         [SerializeField] protected bool isForbidden;
+        [SerializeField] protected bool isExlcudedByCurrentFilter;
+        //[SerializeField] protected List<CCUI_DomainFilter> filteredBy;
 
         [Header("References")]
         [SerializeField] protected RectTransform myRectTransform;
@@ -41,6 +44,7 @@ namespace QuilleUI
         internal bool IsSelected { get { return isSelected; } }
         internal bool IsForbidden { get { return isForbidden; } }
         internal bool IsSelectedButForbidden { get { return isSelected && isForbidden; } }
+        internal bool IsExlcudedByCurrentFilter { get { return isExlcudedByCurrentFilter; } }
         internal UnityEngine.Vector2 MyDefaultPosition { get { return myDefaultPosition; } set { myDefaultPosition = value; } }
 
         // EVENTS
@@ -70,6 +74,20 @@ namespace QuilleUI
             OnButtonClicked();
         }
 
+        public virtual void OnDomainFilterUpdated(CCUI_DomainFilter theDomainFilter)
+        {
+            if (theDomainFilter)
+            {
+                isExlcudedByCurrentFilter = !((IUseDomains)mySO).InDomain(theDomainFilter.MyDomain);
+            }
+            else
+            {
+                isExlcudedByCurrentFilter = false;
+            }
+
+            HandleFiltering();
+        }
+
 
         // UTILITY
         public virtual void Select() 
@@ -91,13 +109,15 @@ namespace QuilleUI
         {
             isForbidden = true;
             myButton.interactable = false;
+            myCaption.gameObject.SetActive(false);
         }
         public virtual void Permit()
         {
             isForbidden = false;
             myButton.interactable = true;
+            myCaption.gameObject.SetActive(true);
         }
-        public virtual void PermitIfCompatible(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        public virtual void UpdatePermissionAndDisplay(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
         {
             if (isSelected || !selectionBoxAtCapacity)
             {
@@ -106,6 +126,20 @@ namespace QuilleUI
             else
             {
                 Forbid();
+            }
+
+            HandleFiltering();
+        }
+
+        protected virtual void HandleFiltering()
+        {
+            if (!isSelected & isExlcudedByCurrentFilter)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                gameObject.SetActive(true);
             }
         }
 

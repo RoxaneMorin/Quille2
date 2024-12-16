@@ -20,7 +20,7 @@ namespace QuilleUI
         // METHODS
 
         // OVERRIDES
-        public override void PermitIfCompatible(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        public override void UpdatePermissionAndDisplay(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
         {
             if (MyDriveSO.IsCompatibleWithPerson(theTargetPerson) && (isSelected || !selectionBoxAtCapacity))
             {
@@ -30,6 +30,8 @@ namespace QuilleUI
             {
                 Forbid();
             }
+
+            HandleFiltering();
         }
 
         protected override string MakeNewCaption()

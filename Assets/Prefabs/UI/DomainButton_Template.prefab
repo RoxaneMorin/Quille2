@@ -121,7 +121,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2697946644149445683}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6562080886672480939}
+        m_TargetAssemblyTypeName: QuilleUI.CCUI_DomainFilter, Assembly-CSharp
+        m_MethodName: OnDomainFilterClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnLeftClick:
     m_PersistentCalls:
       m_Calls: []
@@ -144,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mySO: {fileID: 0}
+  isActive: 0
   myButton: {fileID: 5794457225598680041}
   myButtonsCaption: {fileID: 1699457186787910067}
 --- !u!1 &6565233837122752392

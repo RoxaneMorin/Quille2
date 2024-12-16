@@ -25,6 +25,7 @@ namespace Quille
 
 
         // METHODS
+        public abstract bool IsItemInDomain(PersonalityItemSO item);
         public abstract void AddToDomain(PersonalityItemSO itemToAdd);
     }
 }

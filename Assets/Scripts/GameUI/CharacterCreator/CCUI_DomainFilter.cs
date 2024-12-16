@@ -14,16 +14,40 @@ namespace QuilleUI
 
         // VARIABLES
         [SerializeField] protected PersonalityItemDomainSO mySO;
+        [SerializeField] protected bool isActive;
 
         [Header("References")]
         [SerializeField] protected Button myButton;
         [SerializeField] protected TMPro.TextMeshProUGUI myButtonsCaption;
+        //[SerializeField] protected CCUI_GenericSelectableButton[] buttonsInMyDomain;
 
-        // stuff in this domain?
 
+        // PROPERTIES
+        public PersonalityItemDomainSO MyDomain { get { return mySO; } }
+
+
+        // EVENTS
+        public event DomainFilterUpdate DomainFilterClicked;
 
 
         // METHODS
+
+        // EVENT RECEIVERS
+        public void OnDomainFilterClicked()
+        {
+            if (!isActive)
+            {
+                isActive = true;
+                //myButtonsCaption.fontStyle = TMPro.FontStyles.UpperCase;
+            }
+            else
+            {
+                isActive = false;
+                //myButtonsCaption.fontStyle = TMPro.FontStyles.LowerCase;
+            }
+
+            DomainFilterClicked?.Invoke(this);
+        }
 
         // INIT
         protected virtual void FetchComponents()
@@ -32,7 +56,7 @@ namespace QuilleUI
             myButtonsCaption = gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
         }
 
-        public virtual void Init(PersonalityItemDomainSO sourceSO)
+        public virtual void Init(PersonalityItemDomainSO sourceSO, SerializedDictionary<ScriptableObject, CCUI_GenericSelectableButton> sourceButtonsDict)
         {
             FetchComponents();
 
@@ -40,7 +64,9 @@ namespace QuilleUI
             myButtonsCaption.text = mySO.DomainName;
             myButton.image.color = mySO.DomainColour;
 
-            // Collect the stuff in this domain?
+            //buttonsInMyDomain = mySO.ItemsInThisDomain.Select(item => sourceButtonsDict[item]).ToArray();
+
+            gameObject.name = string.Format("DomainFilter_{0}", mySO.DomainName);
         }
     }
 }

@@ -45,6 +45,11 @@ namespace QuilleUI
             }
         }
 
+        public void OnExitClicked()
+        {
+            Application.Quit();
+        }
+
 
         // INIT
         public void Init()

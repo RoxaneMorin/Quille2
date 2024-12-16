@@ -32,6 +32,10 @@ namespace Quille
 
 
         // METHODS
+        public override bool IsItemInDomain(PersonalityItemSO item)
+        {
+            return itemsInThisDomain.Contains(item);
+        }
         public override void AddToDomain(PersonalityItemSO itemToAdd)
         {
             itemsInThisDomain.Add((PersonalityTraitSO)itemToAdd);

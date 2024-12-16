@@ -5,11 +5,16 @@ using UnityEngine.Events;
 
 namespace QuilleUI
 {
+    // SAVE AND LOAD EVENTS
+    public delegate void FilePicked(string filePath);
+
+
     // GENERIC TAB EVENTS
     public delegate void ActiveTabUpdate(CCUI_Tab newActiveTab);
 
-    // SAVE AND LOAD EVENTS
-    public delegate void FilePicked(string filePath);
+    public delegate void DomainFilterUpdate(CCUI_DomainFilter theDomainFilter);
+    
+
 
     // CHARACTER CREATOR EVENTS
 

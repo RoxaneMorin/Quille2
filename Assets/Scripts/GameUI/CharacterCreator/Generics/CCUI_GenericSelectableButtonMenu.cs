@@ -51,11 +51,16 @@ namespace QuilleUI
         [SerializeField] protected Transform[] theDomainsFiltersTransforms;
         [Space]
         [SerializeField] protected List<CCUI_GenericSelectableButton> currentlySelectedButtons;
+        [SerializeField] protected CCUI_DomainFilter currentlyActiveFilter;
         // A HashSet would be better, but doesn't show up in editor :/
 
 
         // PROPERTIES
         public bool SelectionBoxAtCapacity { get { return currentlySelectedButtons.Count >= selectionBoxCapacity; } }
+
+
+        // EVENTS
+        public event DomainFilterUpdate DomainFilterUpdated;
 
 
 
@@ -76,12 +81,17 @@ namespace QuilleUI
                 }
             }
         }
+        public virtual void OnDomainFilterUpdated(CCUI_DomainFilter theDomainFilter)
+        {
+            currentlyActiveFilter = currentlyActiveFilter == theDomainFilter ? null : theDomainFilter;
+            DomainFilterUpdated?.Invoke(currentlyActiveFilter);
+        }
         public virtual void OnTargetPersonModified(Person theTargetPerson)
         {
             // Does this happen too often?
             foreach (CCUI_GenericSelectableButton button in theButtons)
             {
-                button.PermitIfCompatible(theTargetPerson, SelectionBoxAtCapacity);
+                button.UpdatePermissionAndDisplay(theTargetPerson, SelectionBoxAtCapacity);
             }
         }
 
@@ -163,7 +173,7 @@ namespace QuilleUI
         {
             ResetValues();
 
-            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
+            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden && !button.IsExlcudedByCurrentFilter).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
             List<int> IDsToSelect = RandomizeValues(numberOfButtons, numberToSelect);
@@ -249,8 +259,9 @@ namespace QuilleUI
                     theButtons[i].gameObject.SetActive(true);
                     theButtons[i].Init(theSOs[i]);
  
-                    // Subscribe to its event.
+                    // Event subscriptions.
                     theButtons[i].SelectableButtonUpdated += OnSelectableButtonUpdated;
+                    DomainFilterUpdated += theButtons[i].OnDomainFilterUpdated;
 
                     i++;
                 }
@@ -288,7 +299,8 @@ namespace QuilleUI
                     thisDomainFiltersRectTransform.sizeDelta = new Vector2(domainFilterWidth, thisDomainFiltersRectTransform.sizeDelta.y);
 
                     // Init & subscribe to events.
-                    theDomainsFilters[i].Init(theDomainSOs[i]);
+                    theDomainsFilters[i].Init(theDomainSOs[i], theButtonsDict);
+                    theDomainsFilters[i].DomainFilterClicked += OnDomainFilterUpdated; 
                 }
             }
         }

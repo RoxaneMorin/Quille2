@@ -41,6 +41,7 @@ namespace Quille
 
 
         // METHODS
+        public bool InDomain(PersonalityItemDomainSO domain);
         public void AddDomain(PersonalityItemDomainSO newDomain);
     }
 }

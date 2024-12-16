@@ -69,7 +69,7 @@ namespace QuilleUI
         {
             ResetValues();
 
-            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden).ToArray();
+            CCUI_GenericSelectableButton[] permittedButtons = theButtons.Where(button => !button.IsForbidden && !button.IsExlcudedByCurrentFilter).ToArray();
             int numberOfButtons = permittedButtons.Length;
 
             List<int> IDsToSelect = RandomizeValues(numberOfButtons, numberToSelect);
