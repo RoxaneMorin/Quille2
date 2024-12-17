@@ -47,7 +47,7 @@ namespace Quille
         [JsonIgnore] public BasicNeedSO NeedSO { get { return needSO; } }
 
         [JsonIgnore] public string NeedName { get { return needSO.NeedName; } }
-        [JsonIgnore] public Sprite NeedIcon { get { return needSO.needIcon; } }
+        [JsonIgnore] public Sprite NeedIcon { get { return needSO.NeedIcon; } }
 
         [JsonIgnore] public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
         [JsonIgnore] public float LocalAiPriorityWeighting

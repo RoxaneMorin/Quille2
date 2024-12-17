@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa2f60c58af9154eaa1255aa9d50e95, type: 3}
+  m_Name: HalfNeed_Socialization
+  m_EditorClassIdentifier: 
+  needName: Socialization
+  needIcon: {fileID: 21300000, guid: 5adfd28db80f4514985ce1089bef391b, type: 3}
+  aiPriorityWeighting: 1
+  levelFull: 1
+  defaultChangeRate: -0.01
+  thresholdElated: 0.9
+  thresholdWarning: 0.25
+  thresholdCritical: 0.1
+  baseAIWeightingModulatedBy: []
+  baseChangeRateModulatedBy:
+  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 1
+    modOpIdx: 3
+    modifier: 0.025
+  thresholdsModulatedBy: []

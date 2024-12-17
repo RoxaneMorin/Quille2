@@ -12,37 +12,31 @@ namespace Quille
     public class BasicNeedSO : ScriptableObject
     {
         // VARIABLES/PARAMS   
-        [SerializeField]
-        private string needName = "Undefined";
         public string NeedName { get { return needName; } }
-
-        // Description.
+        [SerializeField] private string needName = "Undefined";
 
         // NEED GRAPHICS
-        public Sprite needIcon;
+        [SerializeField]private Sprite needIcon;
+        public Sprite NeedIcon { get { return needIcon; } }
+
 
         // NEED'S DEFAULT VALUES
         [SerializeField, Range(Constants_Quille.MIN_PRIORITY, Constants_Quille.MAX_PRIORITY)] // Priorize larger values? 
         private float aiPriorityWeighting = 1; // Should this be static, since it'll likely by the same for all characters?
         public float AiPriorityWeighting { get { return aiPriorityWeighting; } }
 
-        [SerializeField] // not sure about the nomenclature for these. level, range, gauge, etc? 
-        private float levelFull = Constants_Quille.DEFAULT_LEVEL_FULL;
+        [SerializeField] private float levelFull = Constants_Quille.DEFAULT_LEVEL_FULL;
         public float LevelFull { get { return levelFull; } }
         public float LevelEmpty { get { return Constants_Quille.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
 
-        [SerializeField]
-        private float defaultChangeRate = 0; // the need's universal default decay rate.
+        [SerializeField] private float defaultChangeRate = 0; // the need's universal default decay rate.
         public float DefaultChangeRate { get { return defaultChangeRate; } }
 
-        [SerializeField]
-        private float thresholdElated = Constants_Quille.DEFAULT_THRESHOLD_ELATED;
+        [SerializeField] private float thresholdElated = Constants_Quille.DEFAULT_THRESHOLD_ELATED;
         public float ThresholdElated { get { return thresholdElated; } }
-        [SerializeField]
-        private float thresholdWarning = Constants_Quille.DEFAULT_THRESHOLD_WARNING;
+        [SerializeField] private float thresholdWarning = Constants_Quille.DEFAULT_THRESHOLD_WARNING;
         public float ThresholdWarning { get { return thresholdWarning; } }
-        [SerializeField]
-        private float thresholdCritical = Constants_Quille.DEFAULT_THRESHOLD_CRITICAL;
+        [SerializeField] private float thresholdCritical = Constants_Quille.DEFAULT_THRESHOLD_CRITICAL;
         public float ThresholdCritical { get { return thresholdCritical; } }
 
 

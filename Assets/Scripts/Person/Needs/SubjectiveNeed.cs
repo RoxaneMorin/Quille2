@@ -66,10 +66,11 @@ namespace Quille
         [JsonIgnore] public string NeedName { get { return needSO.NeedName; } }
         [JsonIgnore] public string NeedNameLeft { get { return needSO.NeedNameLeft; } }
         [JsonIgnore] public string NeedNameRight { get { return needSO.NeedNameRight; } }
-        [JsonIgnore] public Sprite NeedIconLeft { get { return needSO.needIconLeft; } }
-        [JsonIgnore] public Sprite NeedIconRight { get { return needSO.needIconRight; } }
+        [JsonIgnore] public Sprite NeedIconLeft { get { return needSO.NeedIconLeft; } }
+        [JsonIgnore] public Sprite NeedIconRight { get { return needSO.NeedIconRight; } }
 
-        [JsonIgnore] public float AiPriorityWeighting { get { return needSO.AiPriorityWeighting; } }
+        [JsonIgnore] public float AiPriorityWeightingLeft { get { return needSO.AIPriorityWeightingLeft; } }
+        [JsonIgnore] public float AiPriorityWeightingRight { get { return needSO.AIPriorityWeightingRight; } }
         [JsonIgnore] public float LocalAiPriorityWeighting
         {
             get { return localAiPriorityWeighting; }
@@ -513,9 +514,9 @@ namespace Quille
         }
         private void SetParametersFromSO()
         {
-            LocalAiPriorityWeighting = AiPriorityWeighting;
-            LocalAiPriorityWeightingLeft = AiPriorityWeighting;
-            LocalAiPriorityWeightingRight = AiPriorityWeighting;
+            LocalAiPriorityWeighting = AiPriorityWeightingLeft;
+            LocalAiPriorityWeightingLeft = AiPriorityWeightingLeft;
+            LocalAiPriorityWeightingRight = AiPriorityWeightingLeft;
 
             LevelFull = (DefaultLevelFullLeft, DefaultLevelFullRight);
             LevelCurrent = (DefaultLevelFullLeft, DefaultLevelFullRight);

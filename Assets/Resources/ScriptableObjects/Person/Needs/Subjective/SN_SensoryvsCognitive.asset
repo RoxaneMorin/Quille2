@@ -13,22 +13,5 @@ MonoBehaviour:
   m_Name: SN_SensoryvsCognitive
   m_EditorClassIdentifier: 
   needName: Stimulation
-  needNameLeft: Sensory
-  needNameRight: Cognitive
-  needIconLeft: {fileID: 21300000, guid: 727fe75804c1017438e04cf6695de795, type: 3}
-  needIconRight: {fileID: 21300000, guid: eb52f472bd405714d832b720a56ff273, type: 3}
-  aiPriorityWeighting: 1
-  levelFullLeft: 1
-  levelFullRight: 1
-  defaultChangeRateLeft: -0.05
-  defaultChangeRateRight: -0.05
-  thresholdWarningLeft: 0.25
-  thresholdCriticalLeft: 0.1
-  thresholdWarningRight: 0.25
-  thresholdCriticalRight: 0.1
-  baseAIWeightingModulatedByLeft: []
-  baseChangeRateModulatedByLeft: []
-  thresholdsModulatedByLeft: []
-  baseAIWeightingModulatedByRight: []
-  baseChangeRateModulatedByRight: []
-  thresholdsModulatedByRight: []
+  leftNeedSO: {fileID: 11400000, guid: b43956bbc28e5f849989ddc38b7fcf8b, type: 2}
+  rightNeedSO: {fileID: 11400000, guid: b3d00211a64ce164889a89ab47ef273a, type: 2}

@@ -13,38 +13,5 @@ MonoBehaviour:
   m_Name: SN_SocializationvsTimeAlone
   m_EditorClassIdentifier: 
   needName: Socialization vs Time Alone
-  needNameLeft: Socialization
-  needNameRight: Time Alone
-  needIconLeft: {fileID: 21300000, guid: 5adfd28db80f4514985ce1089bef391b, type: 3}
-  needIconRight: {fileID: 21300000, guid: 4544c12d5089aa342b0f3de9fa5861c9, type: 3}
-  aiPriorityWeighting: 1
-  levelFullLeft: 1
-  levelFullRight: 1
-  defaultChangeRateLeft: -0.05
-  defaultChangeRateRight: -0.05
-  thresholdWarningLeft: 0.25
-  thresholdCriticalLeft: 0.1
-  thresholdWarningRight: 0.25
-  thresholdCriticalRight: 0.1
-  baseAIWeightingModulatedByLeft:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 1
-    modOpIdx: 3
-    modifier: 0.1
-  baseChangeRateModulatedByLeft:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 2
-    modOpIdx: 3
-    modifier: 0.025
-  thresholdsModulatedByLeft: []
-  baseAIWeightingModulatedByRight:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 2
-    modOpIdx: 3
-    modifier: 0.1
-  baseChangeRateModulatedByRight:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 1
-    modOpIdx: 3
-    modifier: 0.025
-  thresholdsModulatedByRight: []
+  leftNeedSO: {fileID: 11400000, guid: 7f38463341be23b4c9be8d7d96045732, type: 2}
+  rightNeedSO: {fileID: 11400000, guid: 7e933bb06896c324685a4c105eb4755f, type: 2}

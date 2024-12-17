@@ -9,11 +9,18 @@ public class SubjectiveNeedSOEditor : Editor
     private SerializedProperty scriptProperty;
 
     private SerializedProperty needName;
+    private SerializedProperty leftNeedSO;
+    private SerializedProperty rightNeedSO;
+
+    private SerializedObject leftSerializedObject;
+    private SerializedObject rightSerializedObject;
+
     private SerializedProperty needNameLeft;
     private SerializedProperty needNameRight;
     private SerializedProperty needIconLeft;
     private SerializedProperty needIconRight;
-    private SerializedProperty aiPriorityWeighting;
+    private SerializedProperty aiPriorityWeightingLeft;
+    private SerializedProperty aiPriorityWeightingRight;
     private SerializedProperty levelFullLeft;
     private SerializedProperty levelFullRight;
     private SerializedProperty defaultChangeRateLeft;
@@ -37,29 +44,79 @@ public class SubjectiveNeedSOEditor : Editor
         scriptProperty = serializedObject.FindProperty("m_Script");
 
         needName = serializedObject.FindProperty("needName");
-        aiPriorityWeighting = serializedObject.FindProperty("aiPriorityWeighting");
+        leftNeedSO = serializedObject.FindProperty("leftNeedSO");
+        rightNeedSO = serializedObject.FindProperty("rightNeedSO");
 
-        needNameLeft = serializedObject.FindProperty("needNameLeft");
-        needNameRight = serializedObject.FindProperty("needNameRight");
-        needIconLeft = serializedObject.FindProperty("needIconLeft");
-        needIconRight = serializedObject.FindProperty("needIconRight");
-        levelFullLeft = serializedObject.FindProperty("levelFullLeft");
-        levelFullRight = serializedObject.FindProperty("levelFullRight");
-        defaultChangeRateLeft = serializedObject.FindProperty("defaultChangeRateLeft");
-        defaultChangeRateRight = serializedObject.FindProperty("defaultChangeRateRight");
-        thresholdElatedLeft = serializedObject.FindProperty("thresholdElatedLeft");
-        thresholdWarningLeft = serializedObject.FindProperty("thresholdWarningLeft");
-        thresholdCriticalLeft = serializedObject.FindProperty("thresholdCriticalLeft");
-        thresholdElatedRight = serializedObject.FindProperty("thresholdElatedRight");
-        thresholdWarningRight = serializedObject.FindProperty("thresholdWarningRight");
-        thresholdCriticalRight = serializedObject.FindProperty("thresholdCriticalRight");
+        UpdateSubneedSerializedObjects();
+    }
 
-        baseAIWeightingModulatedByLeft = serializedObject.FindProperty("baseAIWeightingModulatedByLeft");
-        baseChangeRateModulatedByLeft = serializedObject.FindProperty("baseChangeRateModulatedByLeft");
-        thresholdsModulatedByLeft = serializedObject.FindProperty("thresholdsModulatedByLeft");
-        baseAIWeightingModulatedByRight = serializedObject.FindProperty("baseAIWeightingModulatedByRight");
-        baseChangeRateModulatedByRight = serializedObject.FindProperty("baseChangeRateModulatedByRight");
-        thresholdsModulatedByRight = serializedObject.FindProperty("thresholdsModulatedByRight");
+    private void UpdateSubneedSerializedObjects()
+    {
+        if (leftNeedSO.objectReferenceValue != null)
+        {
+            leftSerializedObject = new SerializedObject(leftNeedSO.objectReferenceValue);
+
+            needNameLeft = leftSerializedObject.FindProperty("needName");
+            needIconLeft = leftSerializedObject.FindProperty("needIcon");
+            aiPriorityWeightingLeft = leftSerializedObject.FindProperty("aiPriorityWeighting");
+            levelFullLeft = leftSerializedObject.FindProperty("levelFull");
+            defaultChangeRateLeft = leftSerializedObject.FindProperty("defaultChangeRate");
+            thresholdElatedLeft = leftSerializedObject.FindProperty("thresholdElated");
+            thresholdWarningLeft = leftSerializedObject.FindProperty("thresholdWarning");
+            thresholdCriticalLeft = leftSerializedObject.FindProperty("thresholdCritical");
+            baseAIWeightingModulatedByLeft = leftSerializedObject.FindProperty("baseAIWeightingModulatedBy");
+            baseChangeRateModulatedByLeft = leftSerializedObject.FindProperty("baseChangeRateModulatedBy");
+            thresholdsModulatedByLeft = leftSerializedObject.FindProperty("thresholdsModulatedBy");
+        }
+        else
+        {
+            leftSerializedObject = null;
+
+            needNameLeft = null;
+            needIconLeft = null;
+            aiPriorityWeightingLeft = null;
+            levelFullLeft = null;
+            defaultChangeRateLeft = null;
+            thresholdElatedLeft = null;
+            thresholdWarningLeft = null;
+            thresholdCriticalLeft = null;
+            baseAIWeightingModulatedByLeft = null;
+            baseChangeRateModulatedByLeft = null;
+            thresholdsModulatedByLeft = null;
+        }
+
+        if (rightNeedSO.objectReferenceValue != null)
+        {
+            rightSerializedObject = new SerializedObject(rightNeedSO.objectReferenceValue);
+
+            needNameRight = rightSerializedObject.FindProperty("needName");
+            needIconRight = rightSerializedObject.FindProperty("needIcon");
+            aiPriorityWeightingRight = rightSerializedObject.FindProperty("aiPriorityWeighting");
+            levelFullRight = rightSerializedObject.FindProperty("levelFull");
+            defaultChangeRateRight = rightSerializedObject.FindProperty("defaultChangeRate");
+            thresholdElatedRight = rightSerializedObject.FindProperty("thresholdElated");
+            thresholdWarningRight = rightSerializedObject.FindProperty("thresholdWarning");
+            thresholdCriticalRight = rightSerializedObject.FindProperty("thresholdCritical");
+            baseAIWeightingModulatedByRight = rightSerializedObject.FindProperty("baseAIWeightingModulatedBy");
+            baseChangeRateModulatedByRight = rightSerializedObject.FindProperty("baseChangeRateModulatedBy");
+            thresholdsModulatedByRight = rightSerializedObject.FindProperty("thresholdsModulatedBy");
+        }
+        else
+        {
+            leftSerializedObject = null;
+
+            needNameRight = null;
+            needIconRight = null;
+            aiPriorityWeightingRight = null;
+            levelFullRight = null;
+            defaultChangeRateRight = null;
+            thresholdElatedRight = null;
+            thresholdWarningRight = null;
+            thresholdCriticalRight = null;
+            baseAIWeightingModulatedByRight = null;
+            baseChangeRateModulatedByRight = null;
+            thresholdsModulatedByRight = null;
+        }
     }
 
     public override void OnInspectorGUI()
@@ -70,12 +127,11 @@ public class SubjectiveNeedSOEditor : Editor
         using (new EditorGUI.DisabledScope(true))
             EditorGUILayout.PropertyField(scriptProperty);
 
-        // Draw generic properties.
+        // Draw general name field.
         EditorGUILayout.PropertyField(needName);
-        EditorGUILayout.PropertyField(aiPriorityWeighting);
 
         // Draw side labels.
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
+        GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Left", EditorStyles.boldLabel);
         GUILayout.FlexibleSpace();
@@ -83,18 +139,68 @@ public class SubjectiveNeedSOEditor : Editor
         EditorGUILayout.EndHorizontal();
 
         // Draw the paired properties.
-        EditorUtilities.drawAmbidextrousProperty(needNameLeft, needNameRight);
-        EditorUtilities.drawAmbidextrousProperty(needIconLeft, needIconRight);
-        EditorUtilities.drawAmbidextrousProperty(levelFullLeft, levelFullRight);
-        EditorUtilities.drawAmbidextrousProperty(defaultChangeRateLeft, defaultChangeRateRight);
-        EditorUtilities.drawAmbidextrousProperty(thresholdElatedLeft, thresholdElatedRight);
-        EditorUtilities.drawAmbidextrousProperty(thresholdWarningLeft, thresholdWarningRight);
-        EditorUtilities.drawAmbidextrousProperty(thresholdCriticalLeft, thresholdCriticalRight);
-
+        EditorUtilities.drawAmbidextrousProperty(leftNeedSO, rightNeedSO, drawLabels: false);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-        EditorUtilities.drawAmbidextrousProperty(baseAIWeightingModulatedByLeft, baseAIWeightingModulatedByRight);
-        EditorUtilities.drawAmbidextrousProperty(baseChangeRateModulatedByLeft, baseChangeRateModulatedByRight);
-        EditorUtilities.drawAmbidextrousProperty(thresholdsModulatedByLeft, thresholdsModulatedByRight);
+
+        if (serializedObject.ApplyModifiedProperties())
+        {
+            UpdateSubneedSerializedObjects();
+        }
+
+        if (leftSerializedObject != null && rightSerializedObject != null)
+        {
+            leftSerializedObject.Update();
+            rightSerializedObject.Update();
+
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.BeginVertical("HelpBox");
+            EditorUtilities.drawLabelAndProperty(needNameLeft);
+            EditorUtilities.drawLabelAndProperty(needIconLeft);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
+            //EditorUtilities.drawLabelAndProperty(levelFullLeft);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(thresholdElatedLeft);
+            EditorUtilities.drawLabelAndProperty(thresholdWarningLeft);
+            EditorUtilities.drawLabelAndProperty(thresholdCriticalLeft);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByLeft);
+            EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByLeft);
+            EditorUtilities.drawLabelAndProperty(thresholdsModulatedByLeft);
+            EditorGUILayout.EndVertical();
+
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+
+            EditorGUILayout.BeginVertical("HelpBox");
+            EditorUtilities.drawLabelAndProperty(needNameRight);
+            EditorUtilities.drawLabelAndProperty(needIconRight);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
+            //EditorUtilities.drawLabelAndProperty(levelFullRight);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(thresholdElatedRight);
+            EditorUtilities.drawLabelAndProperty(thresholdWarningRight);
+            EditorUtilities.drawLabelAndProperty(thresholdCriticalRight);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+            EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByRight);
+            EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByRight);
+            EditorUtilities.drawLabelAndProperty(thresholdsModulatedByRight);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
+
+            leftSerializedObject.ApplyModifiedProperties();
+            rightSerializedObject.ApplyModifiedProperties();
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("Two subneeds should be selected.", MessageType.Error);
+        }
 
         serializedObject.ApplyModifiedProperties();
     }
