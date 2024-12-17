@@ -85,7 +85,7 @@ namespace QuilleUI
                 isExlcudedByCurrentFilter = false;
             }
 
-            HandleFiltering();
+            SetActiveFromStates();
         }
 
 
@@ -108,16 +108,14 @@ namespace QuilleUI
         public virtual void Forbid()
         {
             isForbidden = true;
-            myButton.interactable = false;
-            myCaption.gameObject.SetActive(false);
+            SetActiveFromStates();
         }
         public virtual void Permit()
         {
             isForbidden = false;
-            myButton.interactable = true;
-            myCaption.gameObject.SetActive(true);
+            SetActiveFromStates();
         }
-        public virtual void UpdatePermissionAndDisplay(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
+        public virtual void PermitIfValid(Quille.Person theTargetPerson, bool selectionBoxAtCapacity)
         {
             if (isSelected || !selectionBoxAtCapacity)
             {
@@ -127,19 +125,27 @@ namespace QuilleUI
             {
                 Forbid();
             }
-
-            HandleFiltering();
         }
 
-        protected virtual void HandleFiltering()
+        public virtual void Activate()
         {
-            if (!isSelected & isExlcudedByCurrentFilter)
+            myButton.interactable = true;
+            myCaption.gameObject.SetActive(true);
+        }
+        public virtual void Deactivate()
+        {
+            myButton.interactable = false;
+            myCaption.gameObject.SetActive(false);
+        }
+        protected virtual void SetActiveFromStates()
+        {
+            if (!isSelected && (isForbidden || isExlcudedByCurrentFilter))
             {
-                gameObject.SetActive(false);
+                Deactivate();
             }
             else
             {
-                gameObject.SetActive(true);
+                Activate();
             }
         }
 

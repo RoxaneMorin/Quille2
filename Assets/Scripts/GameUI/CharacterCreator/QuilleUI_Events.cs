@@ -12,6 +12,7 @@ namespace QuilleUI
     // GENERIC TAB EVENTS
     public delegate void ActiveTabUpdate(CCUI_Tab newActiveTab);
 
+    public delegate void DomainButtonClicked(CCUI_DomainFilter theDomainFilter);
     public delegate void DomainFilterUpdate(CCUI_DomainFilter theDomainFilter);
     
 

@@ -2986,7 +2986,7 @@ MonoBehaviour:
   buttonSpacingBetweenRows: -140
   domainFilterPrefab: {fileID: 621000280225420517, guid: 8986c6a96f9048b4b85269efb03c68d6,
     type: 3}
-  domainFilterSpacing: 10
+  domainFilterSpacing: 5
   selectionBoxCapacity: 5
   selectedShift: -65
   selectedMaximumSpacing: 160
@@ -3119,7 +3119,7 @@ MonoBehaviour:
   buttonSpacingBetweenRows: -140
   domainFilterPrefab: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
     type: 3}
-  domainFilterSpacing: 10
+  domainFilterSpacing: 5
   selectionBoxCapacity: 5
   selectedShift: -65
   selectedMaximumSpacing: 160
@@ -3952,7 +3952,7 @@ PrefabInstance:
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}
@@ -7998,7 +7998,7 @@ PrefabInstance:
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}
@@ -8826,7 +8826,7 @@ MonoBehaviour:
   buttonSpacingBetweenRows: -140
   domainFilterPrefab: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
     type: 3}
-  domainFilterSpacing: 10
+  domainFilterSpacing: 5
   selectionBoxCapacity: 5
   selectedShift: -65
   selectedMaximumSpacing: 160
@@ -9523,7 +9523,7 @@ PrefabInstance:
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 8688430338999303059, guid: 03ac9f1f4586d6841b42bf82fc78ed39,
         type: 3}

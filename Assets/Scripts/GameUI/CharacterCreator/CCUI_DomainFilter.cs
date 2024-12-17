@@ -27,7 +27,7 @@ namespace QuilleUI
 
 
         // EVENTS
-        public event DomainFilterUpdate DomainFilterClicked;
+        public event DomainButtonClicked DomainFilterClicked;
 
 
         // METHODS
@@ -37,17 +37,37 @@ namespace QuilleUI
         {
             if (!isActive)
             {
-                isActive = true;
-                //myButtonsCaption.fontStyle = TMPro.FontStyles.UpperCase;
+                SetActive();
             }
             else
             {
-                isActive = false;
-                //myButtonsCaption.fontStyle = TMPro.FontStyles.LowerCase;
+                SetInactive();
             }
 
             DomainFilterClicked?.Invoke(this);
         }
+
+        public void OnActiveDomainFilterUpdated(CCUI_DomainFilter theNewDomainFilter)
+        {
+            if (this != theNewDomainFilter)
+            {
+                SetInactive();
+            }
+        }
+
+
+        // UTILITY
+        protected void SetActive()
+        {
+            isActive = true;
+            myButtonsCaption.fontStyle = TMPro.FontStyles.UpperCase;
+        }
+        protected void SetInactive()
+        {
+            isActive = false;
+            myButtonsCaption.fontStyle = TMPro.FontStyles.LowerCase;
+        }
+
 
         // INIT
         protected virtual void FetchComponents()

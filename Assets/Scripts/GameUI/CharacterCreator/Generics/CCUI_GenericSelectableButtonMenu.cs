@@ -86,12 +86,13 @@ namespace QuilleUI
             currentlyActiveFilter = currentlyActiveFilter == theDomainFilter ? null : theDomainFilter;
             DomainFilterUpdated?.Invoke(currentlyActiveFilter);
         }
+
         public virtual void OnTargetPersonModified(Person theTargetPerson)
         {
             // Does this happen too often?
             foreach (CCUI_GenericSelectableButton button in theButtons)
             {
-                button.UpdatePermissionAndDisplay(theTargetPerson, SelectionBoxAtCapacity);
+                button.PermitIfValid(theTargetPerson, SelectionBoxAtCapacity);
             }
         }
 
@@ -300,7 +301,8 @@ namespace QuilleUI
 
                     // Init & subscribe to events.
                     theDomainsFilters[i].Init(theDomainSOs[i], theButtonsDict);
-                    theDomainsFilters[i].DomainFilterClicked += OnDomainFilterUpdated; 
+                    theDomainsFilters[i].DomainFilterClicked += OnDomainFilterUpdated;
+                    DomainFilterUpdated += theDomainsFilters[i].OnActiveDomainFilterUpdated;
                 }
             }
         }
