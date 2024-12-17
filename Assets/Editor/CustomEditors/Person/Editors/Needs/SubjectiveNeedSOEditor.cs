@@ -159,7 +159,7 @@ public class SubjectiveNeedSOEditor : Editor
             EditorUtilities.drawLabelAndProperty(needIconLeft);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
             EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
-            //EditorUtilities.drawLabelAndProperty(levelFullLeft);
+            EditorUtilities.drawLabelAndProperty(levelFullLeft);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
             EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
@@ -179,7 +179,7 @@ public class SubjectiveNeedSOEditor : Editor
             EditorUtilities.drawLabelAndProperty(needIconRight);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
             EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
-            //EditorUtilities.drawLabelAndProperty(levelFullRight);
+            EditorUtilities.drawLabelAndProperty(levelFullRight);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
             EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
             GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);

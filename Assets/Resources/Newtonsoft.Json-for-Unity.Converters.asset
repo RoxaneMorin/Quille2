@@ -126,10 +126,6 @@ MonoBehaviour:
     converterAssembly: Newtonsoft.Json.UnityConverters
     settings: []
   - enabled: 1
-    converterName: Newtonsoft.Json.UnityConverters.Quille.PersonalityAxeSOConverter
-    converterAssembly: Assembly-CSharp
-    settings: []
-  - enabled: 1
     converterName: Newtonsoft.Json.UnityConverters.Random.RandomStateConverter
     converterAssembly: Newtonsoft.Json.UnityConverters
     settings: []
@@ -140,6 +136,134 @@ MonoBehaviour:
   - enabled: 1
     converterName: Newtonsoft.Json.UnityConverters.Scripting.RangeIntConverter
     converterAssembly: Newtonsoft.Json.UnityConverters
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Bool2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Bool3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Bool4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Double2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Double3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Double4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Float2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Float3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Float4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Half2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Half3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Half4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.HalfConverter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Int2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Int3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Int4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.QuaternionConverter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Uint2Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Uint3Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Mathematics.Uint4Converter
+    converterAssembly: Newtonsoft.Json.UnityConverters.Mathematics
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_BasicNeedSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_BasicNeedSOBasicNeedDict
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_DriveSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_InterestSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_PersonalityAxeSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_PersonalityTraitSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_SubjectiveNeedSO
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonConverter_SubjectiveNeedSOSubjectiveNeedDict
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonPartialConverter_DriveSOFloatDict
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonPartialConverter_InterestSOFloatDict
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonPartialConverter_PersonalityAxeSOFloatDict
+    converterAssembly: Assembly-CSharp
+    settings: []
+  - enabled: 1
+    converterName: Newtonsoft.Json.UnityConverters.Quille.JsonPartialConverter_PersonalityTraitSOFloatDict
+    converterAssembly: Assembly-CSharp
     settings: []
   useAllJsonNetConverters: 1
   jsonNetConverters:

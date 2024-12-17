@@ -80,7 +80,7 @@ namespace Quille
             // Even X seconds, verify if:
 
             //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
-            (BasicNeedSO, float) neediestBasicNeed = myBasePerson.MyNeedController.PerformBasicNeedCheck();
+            (BasicNeedSO, float) neediestBasicNeed = myNeedController.PerformBasicNeedCheck();
             if (neediestBasicNeed.Item2 <= noticeBasicNeed)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", neediestBasicNeed.Item1.NeedName));
@@ -90,10 +90,10 @@ namespace Quille
             // Else. Will it need to be an actual else clause?
 
             //-> Any subjective need is at or below notice. If so, do action unless otherwise occupied.
-            (SubjectiveNeedSO, bool, float) neediestSubjectiveNeed = myBasePerson.MyNeedController.PerformSubjectiveNeedCheck();
-            if (neediestSubjectiveNeed.Item3 <+ noticeSubjectiveNeed)
+            (SubjectiveNeedSO, BasicNeedSO, float) neediestSubjectiveNeed = myNeedController.PerformSubjectiveNeedCheck();
+            if (neediestSubjectiveNeed.Item3 <= noticeSubjectiveNeed)
             {
-                Debug.Log(string.Format("Something must be done about our {0} ({1}) need.", (neediestSubjectiveNeed.Item2 ? neediestSubjectiveNeed.Item1.NeedNameRight : neediestSubjectiveNeed.Item1.NeedNameLeft), neediestSubjectiveNeed.Item1.NeedName));
+                Debug.Log(string.Format("Something must be done about our {0} ({1}) need.", neediestSubjectiveNeed.Item2.NeedName, neediestSubjectiveNeed.Item1.NeedName));
 
                 // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }

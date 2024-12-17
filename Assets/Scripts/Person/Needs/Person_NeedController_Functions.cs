@@ -49,23 +49,23 @@ namespace Quille
             Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", needIdentity.NeedName, previousNeedState));
         }
 
-        private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
+        private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
-            Debug.Log(string.Format("{0} ({1}) threw a ReachedThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, needState));
+            Debug.Log(string.Format("{0} ({1}) threw a ReachedThreshold event ({2}).", subNeed.NeedName, needIdentity.NeedName, needState));
 
             // Throw the event upwards.
             OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, needState);
         }
-        private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed)
+        private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed)
         {
-            Debug.Log(string.Format("{0} ({1}) threw a Failure event.", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName));
+            Debug.Log(string.Format("{0} ({1}) threw a Failure event.", subNeed.NeedName, needIdentity.NeedName));
 
             // Throw the event upwards.
             OnSNFailure?.Invoke(needIdentity, subNeed);
         }
-        private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
+        private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
         {
-            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", (subNeed ? needIdentity.NeedNameRight : needIdentity.NeedNameLeft), needIdentity.NeedName, previousNeedState));
+            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", subNeed.NeedName, needIdentity.NeedName, previousNeedState));
         }
 
 
@@ -144,12 +144,12 @@ namespace Quille
 
             return (neediestNeed.NeedSO, neediestNeedLevel);
         }
-        public (SubjectiveNeedSO, bool, float) PerformSubjectiveNeedCheck()
+        public (SubjectiveNeedSO, BasicNeedSO, float) PerformSubjectiveNeedCheck()
         {
-            (SubjectiveNeed, bool) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds);
-            float neediestNeedLevel = neediestNeed.Item2 ? neediestNeed.Item1.LevelCurrentRightAsPercentage : neediestNeed.Item1.LevelCurrentLeftAsPercentage;
+            (SubjectiveNeed, BasicNeedSO) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds);
+            float neediestNeedLevel = neediestNeed.Item1.LevelCurrentAsPercentageFor(neediestNeed.Item2);
 
-            // The returned bool indicates which side is neediest, where Left = 0, Right = 1.
+            // Returns the neediest subneed's SO.
             return (neediestNeed.Item1.NeedSO, neediestNeed.Item2, neediestNeedLevel);
         }
 

@@ -24,6 +24,9 @@ namespace Quille
 
 
         // PROPERTIES
+        public BasicNeedSO NeedSOLeft { get { return leftNeedSO; } }
+        public BasicNeedSO NeedSORight { get { return rightNeedSO; } }
+
         public string NeedNameLeft { get { return leftNeedSO != null ? leftNeedSO.NeedName : "Undefined"; } }
         public string NeedNameRight { get { return rightNeedSO != null ? rightNeedSO.NeedName : "Undefined"; } }
 

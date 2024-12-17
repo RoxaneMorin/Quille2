@@ -32,13 +32,13 @@ namespace Quille
     // General update event for all values? Pass a reference to this object itself?
 
     //  A subjective need's Warning or Critical threshold is reached.
-    public delegate void SubjectiveNeedReachedThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needStates);
+    public delegate void SubjectiveNeedReachedThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needStates);
 
     // A subjective need is no longer in Failure, Critical or Warning state.
-    public delegate void SubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, bool subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates pastNeedState);
+    public delegate void SubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates pastNeedState);
 
     // A subjective need is failing.
-    public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity, bool subNeed); // Is the other information needed?
+    public delegate void SubjectiveNeedFailure(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed); // Is the other information needed?
 
 
 

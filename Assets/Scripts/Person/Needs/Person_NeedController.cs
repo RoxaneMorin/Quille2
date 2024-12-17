@@ -234,10 +234,10 @@ namespace Quille
         {
             // TODO: clear out when testing is done.
 
-            //if (Input.GetKeyDown(KeyCode.V))
-            //{
-            //    StartNeedDecay();
-            //}
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                StartNeedDecay();
+            }
 
             //if (Input.GetKeyDown(KeyCode.Space))
             //{

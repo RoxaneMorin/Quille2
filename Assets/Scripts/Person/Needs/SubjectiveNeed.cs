@@ -63,6 +63,9 @@ namespace Quille
 
         // PROPERTIES
         [JsonIgnore] public SubjectiveNeedSO NeedSO { get { return needSO; } }
+        [JsonIgnore] public BasicNeedSO NeedSOLeft { get { return needSO.NeedSORight; } }
+        [JsonIgnore] public BasicNeedSO NeedSORight { get { return needSO.NeedSORight; } }
+
         [JsonIgnore] public string NeedName { get { return needSO.NeedName; } }
         [JsonIgnore] public string NeedNameLeft { get { return needSO.NeedNameLeft; } }
         [JsonIgnore] public string NeedNameRight { get { return needSO.NeedNameRight; } }
@@ -163,10 +166,22 @@ namespace Quille
             get { return (levelFullLeft, levelFullRight); }
             set
             {
-                LevelFullLeft = value.Item1;
-                LevelFullRight = value.Item2;
+                levelFullLeft = value.Item1;
+                levelFullRight = value.Item2;
             }
         }
+        public float LevelFullFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return LevelFullRight;
+            }
+            else
+            {
+                return LevelFullLeft;
+            }
+        }
+
         [JsonIgnore] public float LevelCurrentLeft
         {
             get { return levelCurrentLeft; }
@@ -226,6 +241,28 @@ namespace Quille
         {
             get { return (levelCurrentLeft/levelFullLeft, levelCurrentRight/levelFullRight); }
         }
+        public float LevelCurrentFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return LevelCurrentRight;
+            }
+            else
+            {
+                return levelCurrentLeft;
+            }
+        }
+        public float LevelCurrentAsPercentageFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return LevelCurrentRight/ levelFullRight;
+            }
+            else
+            {
+                return levelCurrentLeft/ levelFullLeft;
+            }
+        }
 
         [JsonIgnore] public float DefaultChangeRateLeft
         {
@@ -238,6 +275,17 @@ namespace Quille
         [JsonIgnore] public (float, float) DefaultChangeRate
         {
             get { return (needSO.DefaultChangeRateLeft, needSO.DefaultChangeRateRight); }
+        }
+        public float DefaultChangeRateFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return DefaultChangeRateRight;
+            }
+            else
+            {
+                return DefaultChangeRateLeft;
+            }
         }
 
         [JsonIgnore] public float BaseChangeRateLeft
@@ -257,6 +305,17 @@ namespace Quille
             {
                 BaseChangeRateLeft = value.Item1;
                 BaseChangeRateRight = value.Item2;
+            }
+        }
+        public float BaseChangeRateFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return BaseChangeRateRight;
+            }
+            else
+            {
+                return BaseChangeRateLeft;
             }
         }
 
@@ -304,6 +363,17 @@ namespace Quille
                 currentChangeRateRightScaled = currentChangeRateRight / Constants_Quille.NEED_CHANGE_RATE_DIVIDER;
             }
         }
+        public float CurrentChangeRateFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return CurrentChangeRateRight;
+            }
+            else
+            {
+                return CurrentChangeRateLeft;
+            }
+        }
 
         [JsonIgnore] public float CurrentChangeRateLeftScaled
         {
@@ -316,6 +386,17 @@ namespace Quille
         [JsonIgnore] public (float, float) CurrentChangeRateScaled
         {
             get { return (currentChangeRateLeftScaled, currentChangeRateLeftScaled); }
+        }
+        public float CurrentChangeRateScaledFor(BasicNeedSO subNeed)
+        {
+            if (subNeed == NeedSORight)
+            {
+                return CurrentChangeRateRightScaled;
+            }
+            else
+            {
+                return CurrentChangeRateLeftScaled;
+            }
         }
 
         public void ResetCurrentChangeRateLeft()
@@ -618,9 +699,9 @@ namespace Quille
         }
 
         // Get other relevant information.
-        public bool GetNeediestSide(bool byPercentage = false) // Returns which side of the need is the least fulfilled, where Left = 0, Right = 1.
+        public BasicNeedSO GetNeediestSide(bool byPercentage = false) // Returns which side of the need is the least fulfilled.
         {
-            return GetLeftFulfillmentDelta(byPercentage) <= GetRightFulfillmentDelta(byPercentage);
+            return (GetLeftFulfillmentDelta(byPercentage) <= GetRightFulfillmentDelta(byPercentage)) ? NeedSORight : NeedSOLeft ;
         }
         public float GetFulfillmentDifference(bool byPercentage = false) // Get the absolute difference between the two subneeds' levels of fulfillment.
         {
@@ -651,17 +732,17 @@ namespace Quille
         }
 
         // Return neediest of the set. The returned bool indicates which side is neediest, where Left = 0, Right = 1.
-        public static (SubjectiveNeed, bool) ReturnNeediestbyNeediestDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        public static (SubjectiveNeed, BasicNeedSO) ReturnNeediestbyNeediestDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByFulfillmentDeltaofNeediest(subjectiveNeeds, usePriorityWeights, byPercentage);
             return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
-        public static (SubjectiveNeed, bool) ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        public static (SubjectiveNeed, BasicNeedSO) ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByTotalFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
             return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
-        public static (SubjectiveNeed, bool) ReturnNeediestbyAverageDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
+        public static (SubjectiveNeed, BasicNeedSO) ReturnNeediestbyAverageDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByAverageFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);
             return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
@@ -860,21 +941,21 @@ namespace Quille
                         this.NeedStateLeft = NeedStates.Critical;
                         Debug.Log(string.Format("{0} ({1}) is critically low ({1:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (this.LevelCurrentLeftAsPercentage <= this.ThresholdWarningLeft & this.NeedStateLeft > NeedStates.Warning)
                     {
                         this.NeedStateLeft = NeedStates.Warning;
                         Debug.Log(string.Format("{0} ({1}) is a little low ({2:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else if (this.LevelCurrentLeftAsPercentage >= this.ThresholdElatedLeft & this.NeedStateLeft != NeedStates.Elated)
                     {
                         this.NeedStateLeft = NeedStates.Elated;
                         Debug.Log(string.Format("{0} ({1}) is elated ({2:P2})...", this.NeedNameLeft, this.NeedName, 1 - GetLeftFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
@@ -883,21 +964,21 @@ namespace Quille
                             this.NeedStateLeft = NeedStates.Warning;
                             Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameLeft, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
                         if (this.NeedStateLeft == NeedStates.Warning & this.LevelCurrentLeft > this.ThresholdWarningLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameLeft, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
                         if (this.NeedStateLeft == NeedStates.Elated & this.LevelCurrentLeft < this.ThresholdElatedLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameLeft, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
                     }
                 }
@@ -908,7 +989,7 @@ namespace Quille
                         this.NeedStateLeft = NeedStates.Failure;
                         Debug.Log(string.Format("{0} ({1}) is now empty.", this.NeedNameLeft, this.NeedName));
 
-                        OnSNFailure?.Invoke(NeedSO, false);
+                        OnSNFailure?.Invoke(NeedSO, NeedSOLeft);
                     }
 
                     if (this.CurrentChangeRateLeftScaled > 0) // Only apply the change if it would increase it.
@@ -918,7 +999,7 @@ namespace Quille
                         this.NeedStateLeft = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameLeft, this.NeedName));
 
-                        OnSNLeftThreshold?.Invoke(NeedSO, false, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
+                        OnSNLeftThreshold?.Invoke(NeedSO, NeedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
                 }
 
@@ -934,21 +1015,21 @@ namespace Quille
                         this.NeedStateRight = NeedStates.Elated;
                         Debug.Log(string.Format("{0} ({1}) is elated ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                     }
                     else if (this.NeedStateRight > NeedStates.Critical & this.LevelCurrentRightAsPercentage <= this.ThresholdCriticalRight)
                     {
                         this.NeedStateRight = NeedStates.Critical;
                         Debug.Log(string.Format("{0} ({1}) is critically low ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                     }
                     else if (this.NeedStateRight > NeedStates.Warning & this.LevelCurrentRightAsPercentage <= this.ThresholdWarningRight)
                     {
                         this.NeedStateRight = NeedStates.Warning;
                         Debug.Log(string.Format("{0} ({1}) is a little low ({2:P2})...", this.NeedNameRight, this.NeedName, 1 - GetRightFulfillmentDelta(true)));
 
-                        ONSNReachedThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                        ONSNReachedThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
@@ -957,21 +1038,21 @@ namespace Quille
                             this.NeedStateRight = NeedStates.Warning;
                             Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameRight, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
                         if (this.NeedStateRight == NeedStates.Warning & this.LevelCurrentRight > this.ThresholdWarningRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameRight, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
                         if (this.NeedStateRight == NeedStates.Elated & this.LevelCurrentRight < this.ThresholdElatedRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameRight, this.NeedName));
 
-                            OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
+                            OnSNLeftThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Elated);
                         }
                     }
                 }
@@ -982,7 +1063,7 @@ namespace Quille
                         this.NeedStateRight = NeedStates.Failure;
                         Debug.Log(string.Format("{0} ({1}) is now empty.", this.NeedNameRight, this.NeedName));
 
-                        OnSNFailure?.Invoke(NeedSO, true);
+                        OnSNFailure?.Invoke(NeedSO, NeedSORight);
                     }
 
                     if (this.CurrentChangeRateRightScaled > 0) // Only apply the change if it would increase it.
@@ -992,7 +1073,7 @@ namespace Quille
                         this.NeedStateRight = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameRight, this.NeedName));
 
-                        OnSNLeftThreshold?.Invoke(NeedSO, true, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
+                        OnSNLeftThreshold?.Invoke(NeedSO, NeedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Failure);
                     }
                 }
 
