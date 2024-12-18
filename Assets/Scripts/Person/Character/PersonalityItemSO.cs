@@ -16,6 +16,9 @@ namespace Quille
         public string ItemName { get { return itemName; } }
         public Sprite ItemIcon { get { return itemIcon; } }
         public int MenuSortingIndex { get { return menuSortingIndex; } }
+
+
+        // TODO: Add Randomization Weights, what is favorable or defavorable to getting this item.
     }
 
     // As above, but may also be incompatible with certain checks.
