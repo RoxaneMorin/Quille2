@@ -19,7 +19,7 @@ public class TraitsMenuUtilities : MonoBehaviour
             List<Quille.PersonalityTraitDomainSO> validInDomains = PersonalityTrait.InTraitDomains.Where(domain => domain != null).Distinct().ToList();
 
             // Apply the new lists.
-            PersonalityTrait.InTraitDomains = validInDomains;
+            PersonalityTrait.InTraitDomains = validInDomains.ToArray();
 
             Debug.Log(string.Format("The PersonalityTrait '{0}' was checked for invalid references. Any found where removed.", PersonalityTrait.ItemName));
         }

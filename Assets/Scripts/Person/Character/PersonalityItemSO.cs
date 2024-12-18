@@ -21,6 +21,8 @@ namespace Quille
     // As above, but may also be incompatible with certain checks.
     public abstract class ForbiddablePersonalityItemSO : PersonalityItemSO
     {
+        // TODO: transform this into an interface?
+
         // VARIABLES/PARAMS 
         [SerializeField] protected ChecksAndMods.CheckArithmetic[] incompatiblePersonChecks;
 
@@ -36,7 +38,7 @@ namespace Quille
     {
         // PROPERTIES
         public string ItemName { get; }
-        public List<PersonalityItemDomainSO> InDomains { get; set; }
+        public PersonalityItemDomainSO[] InDomains { get; set; }
 
 
 

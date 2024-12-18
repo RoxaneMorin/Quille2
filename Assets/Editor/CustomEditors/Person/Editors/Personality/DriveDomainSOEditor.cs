@@ -70,7 +70,7 @@ public class DriveDomainSOEditor : Editor
     {
         foreach (Quille.DriveSO drive in domain.DrivesInThisDomain)
         {
-            if (drive && !drive.InDriveDomains.Contains(domain))
+            if (drive && !drive.InDomain(domain))
             {
                 drive.AddDomain(domain);
                 EditorUtility.SetDirty(drive);

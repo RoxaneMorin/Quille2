@@ -70,7 +70,7 @@ public class InterestDomainSOEditor : Editor
     {
         foreach (Quille.InterestSO interest in domain.InterestInThisDomain)
         {
-            if (interest && !interest.InInterestDomains.Contains(domain))
+            if (interest && !interest.InDomain(domain))
             {
                 interest.AddDomain(domain);
                 EditorUtility.SetDirty(interest);

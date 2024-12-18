@@ -61,7 +61,7 @@ public class DriveSOEditor : Editor
         // Draw inDomains, and handle potential warning message.
         EditorGUILayout.PropertyField(inDomains);
         Quille.DriveSO driveSO = (Quille.DriveSO)target;
-        if (driveSO.InDomains == null || driveSO.InDomains.Count == 0)
+        if (driveSO.InDomains == null || driveSO.InDomains.Length == 0)
         {
             EditorGUILayout.HelpBox("A drive should belong to one or more domains.", MessageType.Error);
         }

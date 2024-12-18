@@ -16,7 +16,7 @@ namespace Quille
         [SerializeField] [InspectorReadOnly] private float traitSpan = Constants_Quille.PERSONALITY_HALF_SPAN;
         [SerializeField] [InspectorReadOnly] private float trainMidpoint = Constants_Quille.PERSONALITY_HALF_SPAN / 2;
 
-        [SerializeField] private List<PersonalityTraitDomainSO> inDomains;
+        [SerializeField] private PersonalityTraitDomainSO[] inDomains;
 
         // Favorable and defavorable personaltiy scores?
         // Categories?
@@ -26,8 +26,8 @@ namespace Quille
         public float TraitSpan { get { return traitSpan; } }
         public float TrainMidpoint { get { return trainMidpoint; } }
 
-        public List<PersonalityTraitDomainSO> InTraitDomains { get { return inDomains; ; } set { inDomains = value; } }
-        public List<PersonalityItemDomainSO> InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToList(); ; } set { inDomains = value.Cast<PersonalityTraitDomainSO>().ToList(); } }
+        public PersonalityTraitDomainSO[] InTraitDomains { get { return inDomains; ; } set { inDomains = value; } }
+        public PersonalityItemDomainSO[] InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToArray(); ; } set { inDomains = value.Cast<PersonalityTraitDomainSO>().ToArray(); } }
 
 
 
@@ -38,7 +38,7 @@ namespace Quille
         }
         public void AddDomain(PersonalityItemDomainSO newDomain)
         {
-            inDomains.Add((PersonalityTraitDomainSO)newDomain);
+            inDomains.Append((PersonalityTraitDomainSO)newDomain);
         }
 
         public override bool IsCompatibleWithPerson(Person targetPerson)

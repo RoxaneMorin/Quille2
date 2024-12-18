@@ -70,7 +70,7 @@ public class PersonalityTraitDomainSOEditor : Editor
     {
         foreach (Quille.PersonalityTraitSO trait in domain.TraitsInThisDomain)
         {
-            if (trait && !trait.InTraitDomains.Contains(domain))
+            if (trait && !trait.InDomain(domain))
             {
                 trait.AddDomain(domain);
                 EditorUtility.SetDirty(trait);

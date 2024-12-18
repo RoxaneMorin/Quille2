@@ -55,7 +55,7 @@ public class InterestSOEditor : Editor
         // Draw inDomains, and handle potential warning message.
         EditorGUILayout.PropertyField(inDomains);
         Quille.InterestSO interestSO = (Quille.InterestSO)target;
-        if (interestSO.InDomains == null || interestSO.InDomains.Count == 0)
+        if (interestSO.InDomains == null || interestSO.InDomains.Length == 0)
         {
             EditorGUILayout.HelpBox("An interest should belong to one or more domains.", MessageType.Error);
         }
@@ -102,7 +102,7 @@ public class InterestSOEditor : Editor
         {
             if (otherInterest && !otherInterest.RelatedInterests.Contains(interest))
             {
-                otherInterest.RelatedInterests.Add(interest);
+                otherInterest.AddRelatedInterest(interest);
                 EditorUtility.SetDirty(otherInterest);
             }
         }

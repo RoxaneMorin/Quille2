@@ -17,8 +17,8 @@ namespace Quille
         [SerializeField] private floatPair interestSpan = (-Constants_Quille.INTEREST_HALF_SPAN, Constants_Quille.INTEREST_HALF_SPAN); // The span from hatred to passion for this interest.
         [EndInspectorReadOnlyGroup]
 
-        [SerializeField] private List<InterestDomainSO> inDomains; // TODO: how to ensure every interest is in at least one domain? Add UI warning if empty?
-        [SerializeField] private List<InterestSO> relatedInterests;
+        [SerializeField] private InterestDomainSO[] inDomains; // TODO: how to ensure every interest is in at least one domain? Add UI warning if empty?
+        [SerializeField] private InterestSO[] relatedInterests;
 
         // Should we have related personality axes or traits?
         // Where should related actions/interactions be handled?
@@ -26,9 +26,9 @@ namespace Quille
 
         // PROPERTIES
         public floatPair InterestSpan { get { return interestSpan; } }
-        public List<InterestDomainSO> InInterestDomains { get { return inDomains; ; } set { inDomains = value; } }
-        public List<PersonalityItemDomainSO> InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToList(); ; } set { inDomains = value.Cast<InterestDomainSO>().ToList(); } }
-        public List<InterestSO> RelatedInterests { get { return relatedInterests; } set { relatedInterests = value; } }
+        public InterestDomainSO[] InInterestDomains { get { return inDomains; ; } set { inDomains = value; } }
+        public PersonalityItemDomainSO[] InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToArray(); ; } set { inDomains = value.Cast<InterestDomainSO>().ToArray(); } }
+        public InterestSO[] RelatedInterests { get { return relatedInterests; } set { relatedInterests = value; } }
 
 
         // METHODS
@@ -38,7 +38,16 @@ namespace Quille
         }
         public void AddDomain(PersonalityItemDomainSO newDomain)
         {
-            inDomains.Add((InterestDomainSO) newDomain);
+            inDomains.Append((InterestDomainSO) newDomain);
+        }
+
+        public bool HasRelatedInterest(InterestSO interest)
+        {
+            return relatedInterests.Contains(interest);
+        }
+        public void AddRelatedInterest(InterestSO newInterest)
+        {
+            relatedInterests.Append(newInterest);
         }
     }
 }

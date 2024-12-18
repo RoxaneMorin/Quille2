@@ -61,7 +61,7 @@ public class PersonalityTraitSOEditor : Editor
         // Draw inDomains, and handle potential warning message.
         EditorGUILayout.PropertyField(inDomains);
         Quille.PersonalityTraitSO traitSO = (Quille.PersonalityTraitSO)target;
-        if (traitSO.InDomains == null || traitSO.InDomains.Count == 0)
+        if (traitSO.InDomains == null || traitSO.InDomains.Length == 0)
         {
             EditorGUILayout.HelpBox("A trait should belong to one or more domains.", MessageType.Error);
         }

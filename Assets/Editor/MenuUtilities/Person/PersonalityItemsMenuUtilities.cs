@@ -71,7 +71,7 @@ public class PersonalityItemsMenuUtilities : MonoBehaviour
                 }
             }
 
-            domain.ItemsInThisDomain = reciprocatedItemtInThisDomain;
+            domain.ItemsInThisDomain = reciprocatedItemtInThisDomain.ToArray();
         }
     }
 
@@ -99,7 +99,7 @@ public class PersonalityItemsMenuUtilities : MonoBehaviour
                 }
             }
 
-            item.InDomains = reciprocatedInDomains;
+            item.InDomains = reciprocatedInDomains.ToArray() ;
         }
     }
 
@@ -108,7 +108,7 @@ public class PersonalityItemsMenuUtilities : MonoBehaviour
         foreach (Quille.PersonalityItemDomainSO domain in domainSOs)
         {
             // Remove nulls and duplicates in ItemsInThisDomain.
-            domain.ItemsInThisDomain = domain.ItemsInThisDomain.Where(item => item).Distinct().ToList();
+            domain.ItemsInThisDomain = domain.ItemsInThisDomain.Where(item => item).Distinct().ToArray();
 
             Debug.Log(string.Format("The Domain '{0}' was checked for invalid references. Any found where removed.", domain.DomainName));
         }

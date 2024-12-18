@@ -17,7 +17,7 @@ namespace Quille
         [SerializeField] [InspectorReadOnly] private float driveSpan = Constants_Quille.DRIVE_SPAN;
         [SerializeField] [InspectorReadOnly] private float driveMidpoint = Constants_Quille.DRIVE_SPAN / 2;
 
-        [SerializeField] private List<DriveDomainSO> inDomains;
+        [SerializeField] private DriveDomainSO[] inDomains;
 
         // Favorable and defavorable personaltiy scores?
 
@@ -26,8 +26,8 @@ namespace Quille
         public float DriveSpan { get { return driveSpan; } }
         public float DriveMidpoint { get { return driveSpan; } }
 
-        public List<DriveDomainSO> InDriveDomains { get { return inDomains; ; } set { inDomains = value; } }
-        public List<PersonalityItemDomainSO> InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToList(); ; } set { inDomains = value.Cast<DriveDomainSO>().ToList(); } }
+        public DriveDomainSO[] InDriveDomains { get { return inDomains; ; } set { inDomains = value; } }
+        public PersonalityItemDomainSO[] InDomains { get { return inDomains.Cast<PersonalityItemDomainSO>().ToArray(); ; } set { inDomains = value.Cast<DriveDomainSO>().ToArray(); } }
 
 
 
@@ -38,7 +38,7 @@ namespace Quille
         }
         public void AddDomain(PersonalityItemDomainSO newDomain)
         {
-            inDomains.Add((DriveDomainSO)newDomain);
+            inDomains.Append((DriveDomainSO)newDomain);
         }
 
         public override bool IsCompatibleWithPerson(Person targetPerson)

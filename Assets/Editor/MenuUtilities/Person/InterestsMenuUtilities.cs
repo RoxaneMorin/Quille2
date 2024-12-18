@@ -24,7 +24,7 @@ public class InterestsMenuUtilities : MonoBehaviour
 
                 if (relatedInterest && !relatedInterest.RelatedInterests.Contains(interest))
                 {
-                    relatedInterest.RelatedInterests.Add(interest);
+                    relatedInterest.AddRelatedInterest(interest);
                     Debug.Log(string.Format("The Interest '{0}' now considers the Interest '{1}' to be related.", interest.ItemName, relatedInterest.ItemName));
                 }
             }
@@ -54,7 +54,7 @@ public class InterestsMenuUtilities : MonoBehaviour
                 }
             }
 
-            interest.RelatedInterests = reciprocatedRelatedInterest;
+            interest.RelatedInterests = reciprocatedRelatedInterest.ToArray();
         }
     }
 
@@ -67,8 +67,8 @@ public class InterestsMenuUtilities : MonoBehaviour
             List<Quille.InterestDomainSO> validInDomains = interest.InInterestDomains.Where(domain => domain != null).Distinct().ToList();
 
             // Apply the new lists.
-            interest.RelatedInterests = validRelatedInterests;
-            interest.InInterestDomains = validInDomains;
+            interest.RelatedInterests = validRelatedInterests.ToArray();
+            interest.InInterestDomains = validInDomains.ToArray();
 
             Debug.Log(string.Format("The Interest '{0}' was checked for invalid references. Any found where removed.", interest.ItemName));
         }

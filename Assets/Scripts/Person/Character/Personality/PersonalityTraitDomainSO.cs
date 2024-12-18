@@ -12,19 +12,19 @@ namespace Quille
     public class PersonalityTraitDomainSO : PersonalityItemDomainSO
     {
         // VARIABLES
-        [SerializeField] protected List<PersonalityTraitSO> itemsInThisDomain;
+        [SerializeField] protected PersonalityTraitSO[] itemsInThisDomain;
 
 
         // PROPERTIES
-        public List<PersonalityTraitSO> TraitsInThisDomain
+        public PersonalityTraitSO[] TraitsInThisDomain
         {
             get { return itemsInThisDomain; }
             set { itemsInThisDomain = value; }
         }
-        public override List<PersonalityItemSO> ItemsInThisDomain
+        public override PersonalityItemSO[] ItemsInThisDomain
         {
-            get { return itemsInThisDomain.Cast<PersonalityItemSO>().ToList(); }
-            set { itemsInThisDomain = value.Cast<PersonalityTraitSO>().ToList(); }
+            get { return itemsInThisDomain.Cast<PersonalityItemSO>().ToArray(); }
+            set { itemsInThisDomain = value.Cast<PersonalityTraitSO>().ToArray(); }
         }
 
         // Anything else?
@@ -38,7 +38,7 @@ namespace Quille
         }
         public override void AddToDomain(PersonalityItemSO itemToAdd)
         {
-            itemsInThisDomain.Add((PersonalityTraitSO)itemToAdd);
+            itemsInThisDomain.Append((PersonalityTraitSO)itemToAdd);
         }
     }
 

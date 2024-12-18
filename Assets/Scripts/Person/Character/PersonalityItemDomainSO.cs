@@ -20,7 +20,7 @@ namespace Quille
         public Sprite DomainIcon { get { return domainIcon; } }
         public int MenuSortingIndex { get { return menuSortingIndex; } }
 
-        public abstract List<PersonalityItemSO> ItemsInThisDomain { get; set; }
+        public abstract PersonalityItemSO[] ItemsInThisDomain { get; set; }
 
 
 

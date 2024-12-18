@@ -19,7 +19,7 @@ public class DrivesMenuUtilities : MonoBehaviour
             List<Quille.DriveDomainSO> validInDomains = Drive.InDriveDomains.Where(domain => domain != null).Distinct().ToList();
 
             // Apply the new lists.
-            Drive.InDriveDomains = validInDomains;
+            Drive.InDriveDomains = validInDomains.ToArray();
 
             Debug.Log(string.Format("The Drive '{0}' was checked for invalid references. Any found where removed.", Drive.ItemName));
         }

@@ -13,19 +13,19 @@ namespace Quille
     public class DriveDomainSO : PersonalityItemDomainSO
     {
         // VARIABLES
-        [SerializeField] protected List<DriveSO> itemsInThisDomain;
+        [SerializeField] protected DriveSO[] itemsInThisDomain;
 
 
         // PROPERTIES
-        public List<DriveSO> DrivesInThisDomain
+        public DriveSO[] DrivesInThisDomain
         {
             get { return itemsInThisDomain; }
             set { itemsInThisDomain = value; }
         }
-        public override List<PersonalityItemSO> ItemsInThisDomain
+        public override PersonalityItemSO[] ItemsInThisDomain
         {
-            get { return itemsInThisDomain.Cast<PersonalityItemSO>().ToList(); }
-            set { itemsInThisDomain = value.Cast<DriveSO>().ToList(); }
+            get { return itemsInThisDomain.Cast<PersonalityItemSO>().ToArray(); }
+            set { itemsInThisDomain = value.Cast<DriveSO>().ToArray(); }
         }
 
         // Anything else?
@@ -39,7 +39,7 @@ namespace Quille
         }
         public override void AddToDomain(PersonalityItemSO itemToAdd)
         {
-            itemsInThisDomain.Add((DriveSO)itemToAdd);
+            itemsInThisDomain.Append((DriveSO)itemToAdd);
         }
     }
 }
