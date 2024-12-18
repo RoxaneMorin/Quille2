@@ -20,7 +20,6 @@ So far, I've mostly worked on:
 
 My next steps will likely be:
 - Implementing a few more character data structures (long term needs, miscellaneous personality quirks).
-- Expanding the character creation UI for the above. Adding the ability to sort items by categories, such as general interest "domains".
 - Sketching out UI for needs.
 - Further modularizing character needs? (At the moment, personality elements' impact on a need are set in the need’s scriptableObject instance. This could be decoupled.)
 - Sketching out a basic data model for interactions, and logic for characters’ to choose the best fit for satisfying a specific need. Stress testing once that is done.
