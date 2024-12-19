@@ -6,6 +6,10 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.CheckBoolean))]
 public class CheckBooleanDrawer : PropertyDrawer
 {
+    SerializedProperty check;
+    SerializedProperty opIdx;
+    SerializedProperty compareTo;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -26,19 +30,24 @@ public class CheckBooleanDrawer : PropertyDrawer
             var targetObject = property.serializedObject.targetObject as Object;
             if (targetObject != null)
             {
-                var check = property.serializedObject.FindProperty(property.propertyPath);
+                check = property.FindPropertyRelative("check");
+                opIdx = property.FindPropertyRelative("opIdx");
+                compareTo = property.FindPropertyRelative("compareTo");
+
                 if (check != null)
                 {
                     // Build the string.
-                    int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
+                    string fetchedValue = check.objectReferenceValue ? check.objectReferenceValue.ToString() : "[Fetched Value]";
+                    int opIntIdx = opIdx.enumValueIndex;
 
-                    string labelText = string.Format("Is Fetched Value {0} {1} ?",
-                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[opIdx],
-                        check.FindPropertyRelative("compareTo").boolValue);
+                    string labelText = string.Format("Is {0} {1} {2} ?",
+                        fetchedValue,
+                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[opIntIdx],
+                        compareTo.boolValue);
 
                     // Handle special cases as needed.
-                    if (opIdx == 0) // Are we keeping the numerical value as is?
-                        labelText = "Is Fetched Value True?";
+                    if (opIntIdx == 0) // Are we keeping the numerical value as is?
+                        labelText = string.Format("Is {0} True?", fetchedValue);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

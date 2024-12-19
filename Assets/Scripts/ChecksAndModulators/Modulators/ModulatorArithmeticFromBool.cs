@@ -6,7 +6,7 @@ namespace ChecksAndMods
 {
     // Wrapper / instantiable class for use with modulator SOs.
     [System.Serializable]
-    public class ModulatorArithmeticFromBool
+    public class ModulatorArithmeticFromBool : ModulatorArithmetic
     {
         // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of ModulatorArithmeticFromBoolSO.
         // This type of modulator runs a boolean comparison on the fetched value. ("expectedParam" is only used in the Equal/Not Equal comparisons.)
@@ -16,22 +16,17 @@ namespace ChecksAndMods
 
         // VARIABLES/PARAM
         // sourceObj, target given by the handler.
-        [SerializeField]
-        ModulatorArithmeticFromBoolSO modulator;
+        [SerializeField] ModulatorArithmeticFromBoolSO modulator;
 
-        [SerializeField]
-        public ComparisonsBoolean checkOpIdx;
-        [SerializeField]
-        public OperationsArithmetic modOpIdx;
+        [SerializeField] public ComparisonsBoolean checkOpIdx;
+        //[SerializeField] public OperationsArithmetic modOpIdx;
 
-        [SerializeField]
-        [Tooltip("Comparative value used in the Equal/Not Equal operations.")] public bool compareTo;
-        [SerializeField]
-        public float modifier;
+        [SerializeField] [Tooltip("Comparative value used in the Equal/Not Equal operations.")] public bool compareTo;
+        //[SerializeField] public float modifier;
 
         // METHODS
         // Execute.
-        public float Execute(System.Object sourceObj, float target)
+        public override float Execute(System.Object sourceObj, float target)
         {
             return modulator.Modulate(sourceObj, target, compareTo, modifier, ((int)checkOpIdx), (int)modOpIdx);
         }

@@ -12,5 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a0a376a5a46f144a11d68fda10d3dd, type: 3}
   m_Name: Interaction
   m_EditorClassIdentifier: 
-  advertisedNeed: {fileID: 11400000, guid: b9229cdf0d11fdc429f3e995e398c7c7, type: 2}
-  advertisedNeeds: []
+  advertisedNeeds:
+  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+  viabilityChecks: []
+  scoringModulators: []
+  defaultNeedChangeRate: 0
+  defaultMaxNeedChange: 0
+  needChangeRateModulatedBy: []
+  maxNeedChangeModulatedBy: []
+  references:
+    version: 2
+    RefIds: []

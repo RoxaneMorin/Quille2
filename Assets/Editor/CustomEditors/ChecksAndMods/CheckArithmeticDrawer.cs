@@ -6,6 +6,10 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic))]
 public class CheckArithmeticDrawer : PropertyDrawer
 {
+    SerializedProperty check;
+    SerializedProperty opIdx;
+    SerializedProperty compareTo;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -26,15 +30,20 @@ public class CheckArithmeticDrawer : PropertyDrawer
             var targetObject = property.serializedObject.targetObject as Object;
             if (targetObject != null)
             {
-                var check = property.serializedObject.FindProperty(property.propertyPath);
+                check = property.FindPropertyRelative("check");
+                opIdx = property.FindPropertyRelative("opIdx");
+                compareTo = property.FindPropertyRelative("compareTo");
+
                 if (check != null)
                 {
                     // Build the string.
-                    int opIdx = check.FindPropertyRelative("opIdx").enumValueIndex;
+                    string fetchedValue = check.objectReferenceValue ? check.objectReferenceValue.ToString() : "[Fetched Value]";
+                    int opIntIdx = opIdx.enumValueIndex;
 
-                    string labelText = string.Format("Is Fetched Value {0} {1} ?",
-                        ChecksAndMods.Symbols.comparisonSymbolsArithmetic[opIdx],
-                        check.FindPropertyRelative("compareTo").floatValue);
+                    string labelText = string.Format("Is {0} {1} {2} ?",
+                        fetchedValue,
+                        ChecksAndMods.Symbols.comparisonSymbolsArithmetic[opIntIdx],
+                        compareTo.floatValue);
 
                     // Display the label proper.
                     EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);

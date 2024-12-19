@@ -6,3 +6,8 @@ public class PopulateCheckSubtypesAttribute : PropertyAttribute
 {
     public PopulateCheckSubtypesAttribute() {}
 }
+
+public class PopulateModulatorSubtypesAttribute : PropertyAttribute
+{
+    public PopulateModulatorSubtypesAttribute() { }
+}

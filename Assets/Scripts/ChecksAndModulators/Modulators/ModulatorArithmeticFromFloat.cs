@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class ModulatorArithmeticFromFloat
+    public class ModulatorArithmeticFromFloat : ModulatorArithmetic
     {
         // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of ModulatorArithmeticFromFloatSO.
         // This type of modulator runs an arithmetic operation on the target value using the fetched value and given parameters, and returns the result.
@@ -14,21 +14,17 @@ namespace ChecksAndMods
 
         // VARIABLES/PARAM
         // sourceObj, target given by the handler.
-        [SerializeField]
-        ModulatorArithmeticFromFloatSO modulator;
+        [SerializeField] ModulatorArithmeticFromFloatSO modulator;
         
-        [SerializeField]
-        public OperationsArithmetic mainOpIdx;
-        [SerializeField]
-        public OperationsArithmetic modOpIdx;
+        [SerializeField] public OperationsArithmetic mainOpIdx;
+        //[SerializeField] public OperationsArithmetic modOpIdx;
 
-        [SerializeField]
-        public float modifier;
+        //[SerializeField] public float modifier;
 
 
         // METHODS
         // Execute.
-        public float Execute(System.Object sourceObj, float target)
+        public override float Execute(System.Object sourceObj, float target)
         {
             return modulator.Modulate(sourceObj, target, modifier, ((int)mainOpIdx), (int)modOpIdx);
         }

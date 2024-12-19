@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using ChecksAndMods;
 
-[CustomPropertyDrawer(typeof(ChecksAndMods.ModulatorArithmeticFromBool))]
+[CustomPropertyDrawer(typeof(ModulatorArithmeticFromBool))]
 public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
 {
+    SerializedProperty modulator;
+    SerializedProperty checkOpIdx;
+    SerializedProperty modOpIdx;
+    SerializedProperty compareTo;
+    SerializedProperty modifier;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Begin the property
@@ -17,36 +24,53 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
         // If the foldout is open, draw everything else.
         if (property.isExpanded)
         {
-            // Draw the default property field
-            EditorGUI.PropertyField(position, property, GUIContent.none, true);
+            // Collect the subproperties.
+            modulator = property.FindPropertyRelative("modulator");
+            checkOpIdx = property.FindPropertyRelative("checkOpIdx");
+            modOpIdx = property.FindPropertyRelative("modOpIdx");
+            compareTo = property.FindPropertyRelative("compareTo");
+            modifier = property.FindPropertyRelative("modifier");
 
-            position.y += 6.8f * EditorGUIUtility.singleLineHeight;
+            // Draw the default property fields
+            Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(newPosition, modulator);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, checkOpIdx);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, modOpIdx);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, compareTo);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, modifier);
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.15f;
 
             // Get the target object
             var targetObject = property.serializedObject.targetObject as Object;
             if (targetObject != null)
             {
-                var modulator = property.serializedObject.FindProperty(property.propertyPath);
+                //var modulator = property.serializedObject.FindProperty(property.propertyPath);
                 if (modulator != null)
                 {
                     // Build the string.
-                    int mainOpIdx = modulator.FindPropertyRelative("checkOpIdx").enumValueIndex;
-                    int modOpIdx = modulator.FindPropertyRelative("modOpIdx").enumValueIndex;
+                    string fetchedValue = modulator.objectReferenceValue ? modulator.objectReferenceValue.ToString() : "[Fetched Value]";
+                    int checkOpIntIdx = checkOpIdx.enumValueIndex;
+                    int modOpIntIdx = modOpIdx.enumValueIndex;
 
-                    string labelText = string.Format("Result = (Fetched Value {0} {1}) ? (Target Value {2} {3}) : Target Value",
-                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[mainOpIdx],
-                        modulator.FindPropertyRelative("compareTo").boolValue,
-                        ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx],
-                        modulator.FindPropertyRelative("modifier").floatValue);
+                    string labelText = string.Format("Result = ({0} {1} {2}) ? (Target Value {3} {4}) : Target Value",
+                        fetchedValue,
+                        Symbols.comparisonSymbolsBoolean[checkOpIntIdx],
+                        compareTo.boolValue,
+                        Symbols.operationSymbolsArithmetic[modOpIntIdx],
+                        modifier.floatValue);
 
                     // Handle special cases as needed.
-                    if (modOpIdx == 0) // Are we keeping the numerical value as is?
+                    if (modOpIntIdx == 0) // Are we keeping the numerical value as is?
                         labelText = "Result = Target";
-                    else if (mainOpIdx == 0) // Are we checking the value of the modulator itself?
-                        labelText = string.Format("Result = Fetched Value ? (Target Value {0} {1}) : Target Value", ChecksAndMods.Symbols.operationSymbolsArithmetic[modOpIdx], modulator.FindPropertyRelative("modifier").floatValue);
+                    else if (checkOpIntIdx == 0) // Are we checking the value of the modulator itself?
+                        labelText = string.Format("Result = {0} ? (Target Value {1} {2}) : Target Value", fetchedValue, Symbols.operationSymbolsArithmetic[modOpIntIdx], modifier.floatValue);
 
                     // Display the label proper.
-                    EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);
+                    EditorGUI.LabelField(newPosition, labelText, EditorStyles.miniButton);
                 }
             }
         }
@@ -58,7 +82,7 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
     // Adjust property height.
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) + 1.5f * EditorGUIUtility.singleLineHeight;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) + EditorGUIUtility.singleLineHeight;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

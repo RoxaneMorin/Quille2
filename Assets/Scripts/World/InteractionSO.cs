@@ -21,10 +21,10 @@ namespace World
         // Other tags, such as advertised drives.
 
         // Viability checks.
-        [SerializeField] protected CheckBoolean viabilityChecks;
+        [SerializeReference] [PopulateCheckSubtypes] protected Check[] viabilityChecks;
 
         // Scoring weights.
-        [SerializeField] protected ModulatorArithmeticFromFloat scoringModulators;
+        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] scoringModulators;
 
         // Fancy scoring weights for stuff involving morality, conflicting drives, etc?
 
@@ -33,8 +33,8 @@ namespace World
         [SerializeField] protected float defaultNeedChangeRate;
         [SerializeField] protected float defaultMaxNeedChange;
 
-        [SerializeField] protected ModulatorArithmeticFromFloat needChangeRateModulatedBy;
-        [SerializeField] protected ModulatorArithmeticFromFloat maxNeedChangeModulatedBy;
+        [SerializeField] protected ModulatorArithmeticFromFloat[] needChangeRateModulatedBy;
+        [SerializeField] protected ModulatorArithmeticFromFloat[] maxNeedChangeModulatedBy;
 
 
 
