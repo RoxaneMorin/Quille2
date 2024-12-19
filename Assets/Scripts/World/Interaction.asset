@@ -14,12 +14,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   advertisedNeeds:
   - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
-  viabilityChecks: []
-  scoringModulators: []
+  viabilityChecks:
+  - rid: 7829407227335671843
+  - rid: 7829407227335671844
+  - rid: -2
+  scoringModulators:
+  - rid: 7829407227335671841
+  - rid: 7829407227335671842
+  - rid: -2
   defaultNeedChangeRate: 0
   defaultMaxNeedChange: 0
   needChangeRateModulatedBy: []
   maxNeedChangeModulatedBy: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7829407227335671841
+      type: {class: ModulatorArithmeticFromBool, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 2
+        modifier: 2
+        modulator: {fileID: 0}
+        checkOpIdx: 1
+        compareTo: 1
+    - rid: 7829407227335671842
+      type: {class: ModulatorArithmeticFromFloat, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.5
+        modulator: {fileID: 11400000, guid: 5d82c766a4923a24f828ac16befcfac2, type: 2}
+        mainOpIdx: 2
+    - rid: 7829407227335671843
+      type: {class: CheckBoolean, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        check: {fileID: 0}
+        opIdx: 0
+        compareTo: 0
+    - rid: 7829407227335671844
+      type: {class: CheckArithmetic, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        check: {fileID: 11400000, guid: 2b2af74b61e4f024d8faf8eeeb93dab4, type: 2}
+        opIdx: 5
+        compareTo: 0

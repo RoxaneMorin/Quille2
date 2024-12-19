@@ -22,8 +22,8 @@ MonoBehaviour:
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
   baseChangeRateModulatedBy:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 2
-    modOpIdx: 3
+  - modOpIdx: 3
     modifier: 0.25
+    modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 2
   thresholdsModulatedBy: []
