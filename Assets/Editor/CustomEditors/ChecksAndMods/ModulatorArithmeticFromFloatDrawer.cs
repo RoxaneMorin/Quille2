@@ -14,6 +14,34 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
+        // Collect the subproperties.
+        modulator = property.FindPropertyRelative("modulator");
+        mainOpIdx = property.FindPropertyRelative("mainOpIdx");
+        modOpIdx = property.FindPropertyRelative("modOpIdx");
+        modifier = property.FindPropertyRelative("modifier");
+        string equationString;
+
+
+        // Build the "equation" string.
+        string fetchedValue = modulator.objectReferenceValue ? modulator.objectReferenceValue.ToString() : "[Fetched Value]";
+        int mainOpIntIdx = mainOpIdx.enumValueIndex;
+        int modOpIntIdx = modOpIdx.enumValueIndex;
+
+        equationString = string.Format("\"Result = Target Value {0} ('{1}' {2} {3})\"",
+            Symbols.operationSymbolsArithmetic[mainOpIntIdx],
+            fetchedValue,
+            Symbols.operationSymbolsArithmetic[modOpIntIdx],
+            modifier.floatValue);
+
+        // Handle special cases as needed.
+        if (mainOpIntIdx == 0)
+            equationString = "\"Result = Target\"";
+        else if (modOpIntIdx == 0)
+            equationString = string.Format("\"Result = Target Value {0} '{1}'\"", Symbols.operationSymbolsArithmetic[mainOpIntIdx], fetchedValue);
+
+        label.text = string.Format("{0} : {1}", label.text, equationString);
+
+
         // Begin the property
         EditorGUI.BeginProperty(position, label, property);
 
@@ -23,12 +51,6 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
         // If the foldout is open, draw everything else.
         if (property.isExpanded)
         {
-            // Collect the subproperties.
-            modulator = property.FindPropertyRelative("modulator");
-            mainOpIdx = property.FindPropertyRelative("mainOpIdx");
-            modOpIdx = property.FindPropertyRelative("modOpIdx");
-            modifier = property.FindPropertyRelative("modifier");
-
             // Draw the default property fields
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.PropertyField(newPosition, modulator);
@@ -40,34 +62,11 @@ public class ModulatorArithmeticFromFloatDrawer : PropertyDrawer
             EditorGUI.PropertyField(newPosition, modifier);
             newPosition.y += EditorGUIUtility.singleLineHeight * 1.15f;
 
-            // Get the target object
-            var targetObject = property.serializedObject.targetObject as Object;
-            if (targetObject != null)
-            {
-                //var modulator = property.serializedObject.FindProperty(property.propertyPath);
-                if (modulator != null)
-                {
-                    // Build the string.
-                    string fetchedValue = modulator.objectReferenceValue ? modulator.objectReferenceValue.ToString() : "[Fetched Value]";
-                    int mainOpIntIdx = mainOpIdx.enumValueIndex;
-                    int modOpIntIdx = modOpIdx.enumValueIndex;
-
-                    string labelText = string.Format("Result = Target Value {0} ({1} {2} {3})",
-                        Symbols.operationSymbolsArithmetic[mainOpIntIdx],
-                        fetchedValue,
-                        Symbols.operationSymbolsArithmetic[modOpIntIdx],
-                        modifier.floatValue);
-
-                    // Handle special cases as needed.
-                    if (mainOpIntIdx == 0)
-                        labelText = "Result = Target";
-                    else if (modOpIntIdx == 0)
-                        labelText = string.Format("Result = Target Value {0} {1}", Symbols.operationSymbolsArithmetic[mainOpIntIdx], fetchedValue);
-
-                    // Display the label proper.
-                    EditorGUI.LabelField(newPosition, labelText, EditorStyles.miniButton);
-                }
-            }
+            // Display a preview of the "equation".
+            Rect equationRect = new Rect(position.x, newPosition.y, position.width, EditorGUIUtility.singleLineHeight);
+            GUIStyle centeredProgressBarBack = new GUIStyle("ProgressBarBack");
+            centeredProgressBarBack.alignment = TextAnchor.MiddleCenter;
+            EditorGUI.LabelField(equationRect, equationString, centeredProgressBarBack);
         }
 
         EditorGUI.EndFoldoutHeaderGroup();

@@ -12,6 +12,29 @@ public class CheckBooleanDrawer : PropertyDrawer
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
+        // Collect the subproperties.
+        check = property.FindPropertyRelative("check");
+        opIdx = property.FindPropertyRelative("opIdx");
+        compareTo = property.FindPropertyRelative("compareTo");
+        string equationString;
+
+
+        // Build the string.
+        string fetchedValue = check.objectReferenceValue ? check.objectReferenceValue.ToString() : "[Fetched Value]";
+        int opIntIdx = opIdx.enumValueIndex;
+
+        equationString = string.Format("\"Is '{0}' {1} {2} ?\"",
+            fetchedValue,
+            ChecksAndMods.Symbols.comparisonSymbolsBoolean[opIntIdx],
+            compareTo.boolValue);
+
+        // Handle special cases as needed.
+        if (opIntIdx == 0) // Are we keeping the numerical value as is?
+            equationString = string.Format("\"Is '{0}' True?\"", fetchedValue);
+
+        label.text = string.Format("{0} : {1}", label.text, equationString);
+
+
         // Begin the property
         EditorGUI.BeginProperty(position, label, property);
 
@@ -21,38 +44,20 @@ public class CheckBooleanDrawer : PropertyDrawer
         // If the foldout is open, draw everything else.
         if (property.isExpanded)
         {
-            // Draw the default property field
-            EditorGUI.PropertyField(position, property, GUIContent.none, true);
+            // Draw the default property fields
+            Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(newPosition, check);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, opIdx);
+            newPosition.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(newPosition, compareTo);
+            newPosition.y += EditorGUIUtility.singleLineHeight * 1.15f;
 
-            position.y += 4.5f * EditorGUIUtility.singleLineHeight;
-
-            // Get the target object
-            var targetObject = property.serializedObject.targetObject as Object;
-            if (targetObject != null)
-            {
-                check = property.FindPropertyRelative("check");
-                opIdx = property.FindPropertyRelative("opIdx");
-                compareTo = property.FindPropertyRelative("compareTo");
-
-                if (check != null)
-                {
-                    // Build the string.
-                    string fetchedValue = check.objectReferenceValue ? check.objectReferenceValue.ToString() : "[Fetched Value]";
-                    int opIntIdx = opIdx.enumValueIndex;
-
-                    string labelText = string.Format("Is {0} {1} {2} ?",
-                        fetchedValue,
-                        ChecksAndMods.Symbols.comparisonSymbolsBoolean[opIntIdx],
-                        compareTo.boolValue);
-
-                    // Handle special cases as needed.
-                    if (opIntIdx == 0) // Are we keeping the numerical value as is?
-                        labelText = string.Format("Is {0} True?", fetchedValue);
-
-                    // Display the label proper.
-                    EditorGUI.LabelField(position, labelText, EditorStyles.miniButton);
-                }
-            }
+            // Display a preview of the "equation".
+            Rect equationRect = new Rect(position.x, newPosition.y, position.width, EditorGUIUtility.singleLineHeight);
+            GUIStyle centeredProgressBarBack = new GUIStyle("ProgressBarBack");
+            centeredProgressBarBack.alignment = TextAnchor.MiddleCenter;
+            EditorGUI.LabelField(equationRect, equationString, centeredProgressBarBack);
         }
 
         EditorGUI.EndFoldoutHeaderGroup();
@@ -62,7 +67,7 @@ public class CheckBooleanDrawer : PropertyDrawer
     // Adjust property height.
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) + 1.5f * EditorGUIUtility.singleLineHeight;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) + EditorGUIUtility.singleLineHeight;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

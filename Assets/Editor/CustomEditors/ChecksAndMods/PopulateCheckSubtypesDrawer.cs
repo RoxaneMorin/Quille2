@@ -16,24 +16,40 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
         {
             // Calculate positions and values.
             float singleLineHeight = EditorGUIUtility.singleLineHeight;
-            float boxYShift = singleLineHeight * 1.5f + 6f;
-            float propertyYShift = singleLineHeight * 2f;
+            //float boxYShift = singleLineHeight * 1.5f + 6f;
+            //float propertyYShift = singleLineHeight * 2f;
 
-            Rect buttonDeleteRect = new Rect(position.x, position.y, singleLineHeight, singleLineHeight);
+            //Rect buttonDeleteRect = new Rect(position.x, position.y, singleLineHeight, singleLineHeight);
+            //if (GUI.Button(buttonDeleteRect, "X"))
+            //{
+            //    property.managedReferenceValue = null;
+            //    property.serializedObject.ApplyModifiedProperties();
+            //}
+
+            //if (property.isExpanded)
+            //{
+            //    Rect boxPositionRect = new Rect(position.x + boxYShift, position.y + singleLineHeight, position.width - boxYShift, position.height - singleLineHeight - 2f);
+            //    GUI.Box(boxPositionRect, GUIContent.none, EditorStyles.helpBox); 
+            //}
+
+            //Rect updatedPositionRect = new Rect(position.x + propertyYShift, position.y, position.width - propertyYShift - 4f, position.height);
+            //EditorGUI.PropertyField(updatedPositionRect, property);
+
+            if (property.isExpanded)
+            {
+                Rect boxPositionRect = new Rect(position.x - singleLineHeight, position.y + singleLineHeight, position.width + singleLineHeight, position.height - singleLineHeight);
+                GUI.Box(boxPositionRect, GUIContent.none, EditorStyles.helpBox);
+            }
+
+            Rect newPosition = new Rect(position.x, position.y, position.width - singleLineHeight, position.height);
+            EditorGUI.PropertyField(newPosition, property);
+
+            Rect buttonDeleteRect = new Rect(position.x + newPosition.width, position.y, singleLineHeight, singleLineHeight);
             if (GUI.Button(buttonDeleteRect, "X"))
             {
                 property.managedReferenceValue = null;
                 property.serializedObject.ApplyModifiedProperties();
             }
-
-            if (property.isExpanded)
-            {
-                Rect boxPositionRect = new Rect(position.x + boxYShift, position.y + singleLineHeight, position.width - boxYShift, position.height - singleLineHeight - 2f);
-                GUI.Box(boxPositionRect, GUIContent.none, EditorStyles.helpBox); 
-            }
-
-            Rect updatedPositionRect = new Rect(position.x + propertyYShift, position.y, position.width - propertyYShift - 4f, position.height);
-            EditorGUI.PropertyField(updatedPositionRect, property);
         }
         else
         {

@@ -31,7 +31,7 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return relevantPersonalityAxe.ItemName;
+            return string.Format("{0} vs {1}", relevantPersonalityAxe.AxeNameLeft, relevantPersonalityAxe.AxeNameRight);
         }
     }
 }
