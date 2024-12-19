@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class CheckBoolean
+    public class CheckBoolean : Check
     {
         // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of CheckBooleanSO.
         // This type of check runs an boolean comparison on the fetched value, and returns true or false depending on the result.
@@ -26,7 +26,7 @@ namespace ChecksAndMods
 
         // METHODS
         // Execute.
-        public bool Execute(System.Object sourceObj)
+        public override bool Execute(System.Object sourceObj)
         {
             return check.Check(sourceObj, compareTo, (int)opIdx);
         }
@@ -35,7 +35,14 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return string.Format("Is {0} {1} {2}?", check.ToString(), Symbols.comparisonSymbolsBoolean[(int)opIdx], compareTo);
+            if (opIdx == ComparisonsBoolean.IsTrue)
+            {
+                return string.Format("Is {0} True?", check ? check.ToString() : "[source value]");
+            }
+            else
+            {
+                return string.Format("Is {0} {1} {2}?", check ? check.ToString() : "[source value]", Symbols.comparisonSymbolsBoolean[(int)opIdx], compareTo);
+            }
         }
     }
 }
