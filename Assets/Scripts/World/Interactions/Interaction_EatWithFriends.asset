@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a0a376a5a46f144a11d68fda10d3dd, type: 3}
+  m_Name: Interaction_EatWithFriends
+  m_EditorClassIdentifier: 
+  interactionName: Eat With Friends
+  advertisedNeeds:
+  - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+  effectedNeeds:
+  - targetNeed: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
+    defaultNeedChangeRate: 0.01
+    defaultMaxNeedChange: 0.5
+    needChangeRateModulatedBy: []
+    maxNeedChangeModulatedBy: []
+  - targetNeed: {fileID: 11400000, guid: 7e933bb06896c324685a4c105eb4755f, type: 2}
+    defaultNeedChangeRate: 0.01
+    defaultMaxNeedChange: 0.3
+    needChangeRateModulatedBy: []
+    maxNeedChangeModulatedBy: []
+  viabilityChecks: []
+  scoringModulators:
+  - rid: 7829407244774539275
+  references:
+    version: 2
+    RefIds:
+    - rid: 7829407244774539275
+      type: {class: ModulatorArithmeticFromFloat, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.5
+        modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+        mainOpIdx: 1

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using Quille;
 
 namespace World
 {
@@ -41,10 +42,13 @@ namespace World
 
 
         // VARIABLES/PARAMS
-        [SerializeField] private string worldName = "Quilleland";
-        [SerializeField] private string safeWorldName; // Is this necessary?
+        [SerializeField] private string worldName;
+        private string safeWorldName; // Is this necessary?
+
         [SerializeField] private int highestCharID = -1;
 
+        // Keep a list of existing characters. Indices matching their IDs?
+        [SerializeField] private List<Person> worldCharacters;
 
 
         // PROPERTIES & THEIR HELPER METHODS
@@ -71,9 +75,9 @@ namespace World
 
         // CONSTRUCTORS
         private WorldData() : this(-1) { }
-        private WorldData(int startFromID)
+        private WorldData(int startFromID, string worldName = "Quilleland")
         {
-            //this.worldName = 
+            this.worldName = worldName;
             this.safeWorldName = worldName.StripComplexChars();
 
             this.highestCharID = startFromID;
