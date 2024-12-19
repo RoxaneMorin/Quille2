@@ -63,13 +63,13 @@ public class PopulateModulatorSubtypesDrawer : PropertyDrawer
             // Draw elements.
             EditorGUI.LabelField(labelRect, label.text + " : Create this Modulator as...", EditorStyles.boldLabel);
 
-            if (GUI.Button(buttonBoolRect, "Arithmetic Mod from Bool"))
+            if (GUI.Button(buttonBoolRect, "ArithmeticfromBoolean"))
             {
                 property.managedReferenceValue = new ModulatorArithmeticFromBool();
                 property.serializedObject.ApplyModifiedProperties();
                 property.isExpanded = true;
             }
-            if (GUI.Button(buttonArithRect, "Arithmetic Mod from Float"))
+            if (GUI.Button(buttonArithRect, "ArithmeticfromFloat"))
             {
                 property.managedReferenceValue = new ModulatorArithmeticFromFloat();
                 property.serializedObject.ApplyModifiedProperties();

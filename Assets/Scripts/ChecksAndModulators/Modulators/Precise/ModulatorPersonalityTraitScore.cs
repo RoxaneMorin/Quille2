@@ -31,7 +31,7 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return relevantPersonalityTrait.ItemName;
+            return string.Format("Personality Trait : {0}", relevantPersonalityTrait.ItemName);
         }
     }
 }

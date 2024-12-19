@@ -63,13 +63,13 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
             // Draw elements.
             EditorGUI.LabelField(labelRect, label.text + " : Create this Check as...", EditorStyles.boldLabel);
 
-            if (GUI.Button(buttonBoolRect, "Boolean Check"))
+            if (GUI.Button(buttonBoolRect, "fromBoolean"))
             {
                 property.managedReferenceValue = new CheckBoolean();
                 property.serializedObject.ApplyModifiedProperties();
                 property.isExpanded = true;
             }
-            if (GUI.Button(buttonArithRect, "Arithmetic Check"))
+            if (GUI.Button(buttonArithRect, "fromArithmetic"))
             {
                 property.managedReferenceValue = new CheckArithmetic();
                 property.serializedObject.ApplyModifiedProperties();

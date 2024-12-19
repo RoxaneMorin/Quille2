@@ -31,7 +31,7 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return relevantDrive.ItemName;
+            return string.Format("Drive : {0}", relevantDrive.ItemName);
         }
     }
 }
