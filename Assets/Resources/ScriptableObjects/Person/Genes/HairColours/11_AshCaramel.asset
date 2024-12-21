@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 11_AshCaramel
   m_EditorClassIdentifier: 
-  idNumber: 110
   colourName: Ash Caramel
-  colourFamily: 2
   colour: {r: 0.5754717, g: 0.46840018, b: 0.38274297, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 11
+  geneDominance: 2
+  colourFamily: 2

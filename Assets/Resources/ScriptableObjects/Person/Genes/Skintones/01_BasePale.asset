@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
   m_Name: 01_BasePale
   m_EditorClassIdentifier: 
-  idNumber: 10
   colourName: Base - Pale
-  colourFamily: 1
   colour: {r: 0.91764706, g: 0.8156863, b: 0.7921569, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 1
+  colourFamily: 1

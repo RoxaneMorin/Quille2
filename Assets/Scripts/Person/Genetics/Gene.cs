@@ -8,23 +8,29 @@ namespace Quille
 
 
     // BASE GENE TEMPLATE
-    //[System.Serializable]
     public abstract class Gene : ScriptableObject
     {
-        // LOCAL DEFINES
-        internal enum ColourFamily {none};
-
         // VARIABLES/PARAMS
-        [SerializeField]
-        internal int idNumber;
-        [SerializeField]
-        internal string colourName;
-        [SerializeField]
-        internal ColourFamily colourFamily;
-        // TODO: remove the colourFamily here to avoid having to replace it later on?
-        [SerializeField, ColorUsage(false, false)]
-        internal Color colour = Color.black;
-        [SerializeField, Range(-1, 3)] // '-1' is not inheritable.
-        internal int colourDominance;
+        [SerializeField] protected string colourName;
+        [SerializeField, ColorUsage(false, false)] protected Color colour = Color.black;
+        [SerializeField] protected int menuSortingIndex;
+
+
+        // PROPERTIES
+        public string ColourName { get { return colourName; } }
+        public Color Colour { get { return colour; } }
+
+        public int MenuSortingIndex { get { return menuSortingIndex; } }
+    }
+
+    public abstract class GeneWithDominance : Gene
+    {
+        // VARIABLES/PARAMS
+        [SerializeField, Range(-1, 3)] protected int geneDominance; // '-1' is not inheritable.
+
+
+        // PROPERTIES
+        public int GeneDominance { get { return geneDominance; } }
+        public bool DominanceInheritability { get { return geneDominance > -1; } }
     }
 }

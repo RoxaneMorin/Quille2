@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 05_LightBrown
   m_EditorClassIdentifier: 
-  idNumber: 50
   colourName: Light Brown
-  colourFamily: 1
   colour: {r: 0.4509804, g: 0.2784314, b: 0.06666667, a: 1}
-  colourDominance: 3
+  menuSortingIndex: 5
+  geneDominance: 3
+  colourFamily: 1

@@ -13,17 +13,11 @@ namespace Quille
     //[System.Serializable]
     class GeneSkintone : Gene
     {
-        // LOCAL DEFINES - OVERRIDES
-        new enum ColourFamily { none, Main, Warm, Cool, RedPurple, BlueGreen };
-
         // VARIABLES/PARAMS - OVERRIDES
-        new ColourFamily colourFamily;
-        new Color colour = Color.white;
-        // ! Potentially use colour dominance to weigth for or against supernatural colours? !
-        new int colourDominance = 1;
+        [SerializeField] private SkinColourFamily colourFamily;
 
-        // As skintones do not use dominance values, freeze the variable.
-        //[Tooltip("Warning : Unused"), Range(0,0)]
-        //new int colourDominance = 0;
+
+        // PROPERTIES
+        public SkinColourFamily ColourFamily { get { return colourFamily; } }
     }
 }

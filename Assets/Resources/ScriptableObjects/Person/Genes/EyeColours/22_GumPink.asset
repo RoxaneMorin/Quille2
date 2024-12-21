@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 22_GumPink
   m_EditorClassIdentifier: 
-  idNumber: 220
   colourName: Gum Pink
-  colourFamily: 3
   colour: {r: 0.9528302, g: 0.68765575, b: 0.8144978, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 26
+  geneDominance: 0
+  colourFamily: 3

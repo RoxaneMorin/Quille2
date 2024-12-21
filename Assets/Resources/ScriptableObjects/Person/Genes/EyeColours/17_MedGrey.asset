@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 17_MedGrey
   m_EditorClassIdentifier: 
-  idNumber: 170
   colourName: Med Grey
-  colourFamily: 2
   colour: {r: 0.53922915, g: 0.543, b: 0.543, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 19
+  geneDominance: 1
+  colourFamily: 2

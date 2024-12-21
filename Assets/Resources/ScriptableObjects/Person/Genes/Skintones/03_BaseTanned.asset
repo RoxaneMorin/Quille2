@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
   m_Name: 03_BaseTanned
   m_EditorClassIdentifier: 
-  idNumber: 30
   colourName: Base - Tanned
-  colourFamily: 1
   colour: {r: 0.8156863, g: 0.7060514, b: 0.67049414, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 3
+  colourFamily: 1

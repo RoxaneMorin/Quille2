@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 05b_Hazel
   m_EditorClassIdentifier: 
-  idNumber: 50
   colourName: Hazel
-  colourFamily: 1
   colour: {r: 0.5849056, g: 0.5460164, b: 0.32831967, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 6
+  geneDominance: 2
+  colourFamily: 1

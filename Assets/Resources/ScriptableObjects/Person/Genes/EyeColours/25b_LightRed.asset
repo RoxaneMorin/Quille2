@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 25b_LightRed
   m_EditorClassIdentifier: 
-  idNumber: 255
   colourName: Light Red
-  colourFamily: 3
   colour: {r: 0.9245283, g: 0.2920807, b: 0.23113208, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 30
+  geneDominance: 0
+  colourFamily: 3

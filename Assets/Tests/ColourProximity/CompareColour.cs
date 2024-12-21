@@ -45,10 +45,10 @@ public class CompareColour : MonoBehaviour
 
         foreach (Quille.GeneEyeColour eyeColour in eyeColours)
         {
-            if (eyeColour.colourName != "NONE")
+            if (eyeColour.ColourName != "NONE")
             {
-                canonicalColours.Add(getHSVofColour(eyeColour.colour), eyeColour.colourName);
-                Debug.Log(string.Format("Now adding the colour {0}, {1}.", eyeColour.colourName, eyeColour.colour));
+                canonicalColours.Add(getHSVofColour(eyeColour.Colour), eyeColour.ColourName);
+                Debug.Log(string.Format("Now adding the colour {0}, {1}.", eyeColour.ColourName, eyeColour.Colour));
 
                 currentIndex++;
             }

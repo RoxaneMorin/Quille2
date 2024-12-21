@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 19_Purple
   m_EditorClassIdentifier: 
-  idNumber: 190
   colourName: Purple
-  colourFamily: 3
   colour: {r: 0.3647059, g: 0.16470589, b: 0.5882353, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 23
+  geneDominance: 0
+  colourFamily: 3

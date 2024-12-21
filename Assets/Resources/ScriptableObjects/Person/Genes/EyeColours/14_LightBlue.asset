@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 14_LightBlue
   m_EditorClassIdentifier: 
-  idNumber: 140
   colourName: Light Blue
-  colourFamily: 2
   colour: {r: 0.5829477, g: 0.7893585, b: 0.9433962, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 16
+  geneDominance: 1
+  colourFamily: 2

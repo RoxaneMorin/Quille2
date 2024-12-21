@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 30_White
   m_EditorClassIdentifier: 
-  idNumber: 300
   colourName: White
-  colourFamily: 5
   colour: {r: 0.94509804, g: 0.9394937, b: 0.9356471, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 30
+  geneDominance: 0
+  colourFamily: 5

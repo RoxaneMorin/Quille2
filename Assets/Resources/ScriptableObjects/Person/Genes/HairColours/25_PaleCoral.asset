@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 25_PaleCoral
   m_EditorClassIdentifier: 
-  idNumber: 250
   colourName: Pale Coral
-  colourFamily: 4
   colour: {r: 0.8490566, g: 0.7761659, b: 0.76495194, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 25
+  geneDominance: 0
+  colourFamily: 4

@@ -24,36 +24,24 @@ namespace Quille
         // INSTANTIATED VARIABLES
 
         [Header("Parentage")]
-        [SerializeField]
-        Genome genomeParentA;
-        [SerializeField]
-        Genome genomeParentB;
+        [SerializeField] Genome genomeParentA;
+        [SerializeField] Genome genomeParentB;
 
         [Space(10)]
 
         [Header("Genotype")]
-        [SerializeField]
-        Color skintoneParentA;
-        [SerializeField]
-        Color skintoneParentB;
-        [SerializeField, Range(0f, 1f)]
-        float skintoneBlendWeight;
-        [SerializeField]
-        GeneEyeColour eyeColourAlleleA,
-                      eyeColourAlleleB;
-        [SerializeField]
-        GeneHairColour hairColourAlleleA,
-                       hairColourAlleleB;
+        [SerializeField] Color skintoneParentA;
+        [SerializeField] Color skintoneParentB;
+        [SerializeField, Range(0f, 1f)] float skintoneBlendWeight;
+        [SerializeField] GeneEyeColour eyeColourAlleleA, eyeColourAlleleB;
+        [SerializeField] GeneHairColour hairColourAlleleA, hairColourAlleleB;
 
         [Space(10)]
 
         [Header("Phenotype")]
-        [SerializeField]
-        public Color skintone;
-        [SerializeField]
-        public Color eyeColour;
-        [SerializeField]
-        public Color hairColour;
+        [SerializeField] public Color skintone;
+        [SerializeField] public Color eyeColour;
+        [SerializeField] public Color hairColour;
 
 
 
@@ -101,13 +89,13 @@ namespace Quille
             genome.hairColour = ExpressDominantAllele(genome.hairColourAlleleA, genome.hairColourAlleleB);
         }
 
-        static Color ExpressDominantAllele(Gene alleleA, Gene alleleB)
+        static Color ExpressDominantAllele(GeneWithDominance alleleA, GeneWithDominance alleleB)
         {
-            if (alleleA.colourDominance > alleleB.colourDominance) { return Color.Lerp(alleleA.colour, alleleB.colour, 0.1f); }
+            if (alleleA.GeneDominance > alleleB.GeneDominance) { return Color.Lerp(alleleA.Colour, alleleB.Colour, 0.1f); }
             else
-            if (alleleA.colourDominance < alleleB.colourDominance) { return Color.Lerp(alleleA.colour, alleleB.colour, 0.9f); }
+            if (alleleA.GeneDominance < alleleB.GeneDominance) { return Color.Lerp(alleleA.Colour, alleleB.Colour, 0.9f); }
 
-            else { return Color.Lerp(alleleA.colour, alleleB.colour, 0.5f); }
+            else { return Color.Lerp(alleleA.Colour, alleleB.Colour, 0.5f); }
         }
 
     }

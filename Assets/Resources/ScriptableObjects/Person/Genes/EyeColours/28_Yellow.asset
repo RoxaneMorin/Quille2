@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 28_Yellow
   m_EditorClassIdentifier: 
-  idNumber: 280
   colourName: Yellow
-  colourFamily: 3
   colour: {r: 1, g: 0.88235295, b: 0.4392157, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 33
+  geneDominance: 0
+  colourFamily: 3

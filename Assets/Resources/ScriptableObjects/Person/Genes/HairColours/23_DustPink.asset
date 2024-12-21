@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 23_DustPink
   m_EditorClassIdentifier: 
-  idNumber: 230
   colourName: Dust Pink
-  colourFamily: 4
   colour: {r: 0.6117647, g: 0.38039216, b: 0.38431373, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 23
+  geneDominance: 0
+  colourFamily: 4

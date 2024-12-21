@@ -3,6 +3,40 @@ namespace Quille
     // The enums and constants used through the Quille namespace.
     // They are regrouped here for ease of editability.
 
+
+    // ENUMS
+
+    // GENETICS
+    public enum SkinColourFamily
+    { 
+        none, 
+        Standard, 
+        Warm, 
+        Cool, 
+        RedPurple, 
+        BlueGreen
+    }
+
+    public enum HairColourFamily
+    {
+        none, 
+        Standard, 
+        Desat, 
+        Red, 
+        Supernatural, 
+        Grey
+    }
+
+    public enum EyeColourFamily 
+    { 
+        none, 
+        BrownHazelGreen, 
+        TealBlueGrey, 
+        Supernatural 
+    }
+
+
+    // NEEDS
     public enum NeedStates
     {
         Failure,
@@ -11,9 +45,9 @@ namespace Quille
         Normal,
         Elated
     }
-
-    // TODO: move gene colour familes enum heres.
     
+
+
     public static class Constants_Quille
     {
         // PERSONALITY

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 24_Coral
   m_EditorClassIdentifier: 
-  idNumber: 240
   colourName: Coral
-  colourFamily: 4
   colour: {r: 0.7924528, g: 0.64041746, b: 0.6167675, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 24
+  geneDominance: 0
+  colourFamily: 4

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 09_DarkTeal
   m_EditorClassIdentifier: 
-  idNumber: 90
   colourName: Teal
-  colourFamily: 2
   colour: {r: 0.02745098, g: 0.4117647, b: 0.41960785, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 11
+  geneDominance: 1
+  colourFamily: 2

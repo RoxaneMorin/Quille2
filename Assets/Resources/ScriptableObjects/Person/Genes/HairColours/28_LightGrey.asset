@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 28_LightGrey
   m_EditorClassIdentifier: 
-  idNumber: 280
   colourName: Light Grey
-  colourFamily: 5
   colour: {r: 0.5411765, g: 0.54664445, b: 0.54901963, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 28
+  geneDominance: 0
+  colourFamily: 5

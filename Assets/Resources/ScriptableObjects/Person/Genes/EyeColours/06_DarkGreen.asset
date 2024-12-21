@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 06_DarkGreen
   m_EditorClassIdentifier: 
-  idNumber: 60
   colourName: Dark Green
-  colourFamily: 1
   colour: {r: 0.019607844, g: 0.3764706, b: 0.17254902, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 7
+  geneDominance: 2
+  colourFamily: 1

@@ -28,9 +28,9 @@ namespace Quille
                 {
                     Transform swatch = Instantiate<Transform>(prefab, this.transform);
 
-                    if ((int)colour.colourFamily > previousColourFamily)
+                    if ((int)colour.ColourFamily > previousColourFamily)
                     {
-                        previousColourFamily = (int)colour.colourFamily;
+                        previousColourFamily = (int)colour.ColourFamily;
                         currentSpot.z = 0;
                         currentSpot.x += 1.5f;
                     }
@@ -38,8 +38,8 @@ namespace Quille
                     swatch.position = currentSpot;
                     currentSpot.z += 1.5f;
 
-                    swatch.name = colour.idNumber + colour.colourName;
-                    swatch.GetComponent<MeshRenderer>().material.color = colour.colour;
+                    swatch.name = colour.MenuSortingIndex + colour.ColourName;
+                    swatch.GetComponent<MeshRenderer>().material.color = colour.Colour;
 
                 }
             }

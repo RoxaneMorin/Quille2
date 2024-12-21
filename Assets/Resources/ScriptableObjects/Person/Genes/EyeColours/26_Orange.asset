@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 26_Orange
   m_EditorClassIdentifier: 
-  idNumber: 260
   colourName: Orange
-  colourFamily: 3
   colour: {r: 0.99215686, g: 0.5137255, b: 0.19215687, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 31
+  geneDominance: 0
+  colourFamily: 3

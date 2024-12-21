@@ -24,7 +24,7 @@ public class ColourSwatch : MonoBehaviour
     {
         if (mySprite = null) { mySprite = this.GetComponentInParent<Image>(); }
         myGeneSOReference = gene;
-        mySprite.color = gene.colour;
+        mySprite.color = gene.Colour;
     }
 
 
@@ -36,7 +36,7 @@ public class ColourSwatch : MonoBehaviour
     {
         if (mySprite == null) { mySprite = this.GetComponentInParent<Image>(); }
 
-        mySprite.color = myGeneSOReference.colour;
+        mySprite.color = myGeneSOReference.Colour;
     }
 
 
@@ -57,7 +57,7 @@ public class ColourSwatch : MonoBehaviour
     public void SetAllFromGene(Gene gene)
     {
         myGeneSOReference = gene;
-        mySprite.color = gene.colour;
+        mySprite.color = gene.Colour;
     }
 
 

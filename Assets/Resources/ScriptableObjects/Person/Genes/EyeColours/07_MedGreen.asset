@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 07_MedGreen
   m_EditorClassIdentifier: 
-  idNumber: 70
   colourName: Med Green
-  colourFamily: 1
   colour: {r: 0.30980393, g: 0.56078434, b: 0.36862746, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 8
+  geneDominance: 2
+  colourFamily: 1

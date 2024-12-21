@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 08_LightGreen
   m_EditorClassIdentifier: 
-  idNumber: 80
   colourName: Light Green
-  colourFamily: 1
   colour: {r: 0.49803922, g: 0.77254903, b: 0.4745098, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 9
+  geneDominance: 2
+  colourFamily: 1

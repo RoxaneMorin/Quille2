@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 15_WineRed
   m_EditorClassIdentifier: 
-  idNumber: 150
   colourName: Wine Red
-  colourFamily: 3
   colour: {r: 0.5188679, g: 0.1480948, b: 0.11992703, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 15
+  geneDominance: 1
+  colourFamily: 3

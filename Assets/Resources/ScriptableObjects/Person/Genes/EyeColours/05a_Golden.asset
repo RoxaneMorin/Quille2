@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 05a_Golden
   m_EditorClassIdentifier: 
-  idNumber: 45
   colourName: Gold
-  colourFamily: 1
   colour: {r: 0.6320754, g: 0.49030817, b: 0.14012992, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 5
+  geneDominance: 2
+  colourFamily: 1

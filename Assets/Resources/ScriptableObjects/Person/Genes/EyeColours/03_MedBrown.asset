@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 03_MedBrown
   m_EditorClassIdentifier: 
-  idNumber: 30
   colourName: Med Brown
-  colourFamily: 1
   colour: {r: 0.35, g: 0.18298592, b: 0.08050001, a: 1}
-  colourDominance: 3
+  menuSortingIndex: 3
+  geneDominance: 3
+  colourFamily: 1

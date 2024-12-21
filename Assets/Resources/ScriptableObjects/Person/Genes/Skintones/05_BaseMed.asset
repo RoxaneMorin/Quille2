@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
   m_Name: 05_BaseMed
   m_EditorClassIdentifier: 
-  idNumber: 50
   colourName: Base - Med
-  colourFamily: 1
   colour: {r: 0.5176471, g: 0.34509805, b: 0.28235295, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 5
+  colourFamily: 1

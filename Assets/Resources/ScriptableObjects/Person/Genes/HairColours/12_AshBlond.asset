@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 12_AshBlond
   m_EditorClassIdentifier: 
-  idNumber: 120
   colourName: Ash Blond
-  colourFamily: 2
   colour: {r: 0.8113208, g: 0.751499, b: 0.6850303, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 12
+  geneDominance: 2
+  colourFamily: 2

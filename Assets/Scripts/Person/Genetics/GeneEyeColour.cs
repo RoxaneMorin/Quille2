@@ -11,12 +11,13 @@ namespace Quille
     // EYE COLOUR GENE
     [CreateAssetMenu(fileName = "GeneEyeColour", menuName = "Quille/Genetics/EyeColour", order = 2)]
     //[System.Serializable]
-    class GeneEyeColour : Gene
+    class GeneEyeColour : GeneWithDominance
     {
-        // LOCAL DEFINES - OVERRIDES
-        new enum ColourFamily { none, BrownHazelGreen, TealBlueGrey, Supernatural };
+        // VARIABLES/PARAMS
+        [SerializeField] private EyeColourFamily colourFamily;
 
-        // VARIABLES/PARAMS - OVERRIDES
-        new ColourFamily colourFamily;
+
+        // PROPERTIES
+        public EyeColourFamily ColourFamily { get { return colourFamily; } }
     }
 }

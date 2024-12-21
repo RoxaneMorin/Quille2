@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 20_Mauve
   m_EditorClassIdentifier: 
-  idNumber: 200
   colourName: Mauve
-  colourFamily: 3
   colour: {r: 0.5882353, g: 0.3529412, b: 0.6509804, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 24
+  geneDominance: 0
+  colourFamily: 3

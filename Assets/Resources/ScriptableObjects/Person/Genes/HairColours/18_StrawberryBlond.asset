@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 18_StrawberryBlond
   m_EditorClassIdentifier: 
-  idNumber: 180
   colourName: Strawberry Blond
-  colourFamily: 3
   colour: {r: 0.8679245, g: 0.630235, b: 0.4462442, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 18
+  geneDominance: 2
+  colourFamily: 3

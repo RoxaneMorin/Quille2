@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 02_DarkBrown
   m_EditorClassIdentifier: 
-  idNumber: 20
   colourName: Dark Brown
-  colourFamily: 1
   colour: {r: 0.25100002, g: 0.109130435, b: 0.038195647, a: 1}
-  colourDominance: 3
+  menuSortingIndex: 2
+  geneDominance: 3
+  colourFamily: 1

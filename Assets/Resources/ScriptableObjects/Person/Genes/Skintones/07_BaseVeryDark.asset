@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
   m_Name: 07_BaseVeryDark
   m_EditorClassIdentifier: 
-  idNumber: 70
   colourName: Base - Very Dark
-  colourFamily: 1
   colour: {r: 0.22352941, g: 0.15294118, b: 0.15294118, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 7
+  colourFamily: 1

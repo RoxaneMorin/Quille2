@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 19_PitchBlue
   m_EditorClassIdentifier: 
-  idNumber: 190
   colourName: Pitch Blue
-  colourFamily: 4
   colour: {r: 0.011631923, g: 0.007520473, b: 0.122641504, a: 1}
-  colourDominance: 3
+  menuSortingIndex: 19
+  geneDominance: 0
+  colourFamily: 4

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 22_BrightRed
   m_EditorClassIdentifier: 
-  idNumber: 220
   colourName: Cherry Red
-  colourFamily: 4
   colour: {r: 0.6226415, g: 0.06755074, b: 0.15637417, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 22
+  geneDominance: 0
+  colourFamily: 4

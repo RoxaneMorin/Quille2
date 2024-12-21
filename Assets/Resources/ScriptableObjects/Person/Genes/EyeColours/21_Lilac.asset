@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 21_Lilac
   m_EditorClassIdentifier: 
-  idNumber: 210
   colourName: Lilac
-  colourFamily: 3
   colour: {r: 0.7529412, g: 0.64705884, b: 0.9098039, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 25
+  geneDominance: 0
+  colourFamily: 3

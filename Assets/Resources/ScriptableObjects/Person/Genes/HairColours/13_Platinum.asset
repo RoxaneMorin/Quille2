@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 13_Platinum
   m_EditorClassIdentifier: 
-  idNumber: 130
   colourName: Platinum Blond
-  colourFamily: 2
   colour: {r: 0.9245283, g: 0.9049039, b: 0.8591136, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 13
+  geneDominance: 2
+  colourFamily: 2

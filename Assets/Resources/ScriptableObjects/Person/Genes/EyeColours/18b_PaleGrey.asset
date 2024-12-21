@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 18b_PaleGrey
   m_EditorClassIdentifier: 
-  idNumber: 185
   colourName: Pale Grey
-  colourFamily: 2
   colour: {r: 0.827451, g: 0.8324994, b: 0.8352941, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 21
+  geneDominance: 1
+  colourFamily: 2

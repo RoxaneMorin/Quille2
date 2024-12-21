@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 06_Caramel
   m_EditorClassIdentifier: 
-  idNumber: 60
   colourName: Caramel
-  colourFamily: 1
   colour: {r: 0.6698113, g: 0.49784493, b: 0.26855642, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 6
+  geneDominance: 2
+  colourFamily: 1

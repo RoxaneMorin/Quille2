@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 11_SkyBlue
   m_EditorClassIdentifier: 
-  idNumber: 110
   colourName: Bright Blue
-  colourFamily: 2
   colour: {r: 0.31011927, g: 0.7791246, b: 0.9528302, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 13
+  geneDominance: 1
+  colourFamily: 2

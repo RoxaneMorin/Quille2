@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 01_Black
   m_EditorClassIdentifier: 
-  idNumber: 10
   colourName: Black
-  colourFamily: 1
   colour: {r: 0.015686275, g: 0.011764706, b: 0.007843138, a: 1}
-  colourDominance: 3
+  menuSortingIndex: 1
+  geneDominance: 3
+  colourFamily: 1

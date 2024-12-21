@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
   m_Name: 08_WarmPale
   m_EditorClassIdentifier: 
-  idNumber: 110
   colourName: Warm - Pale
-  colourFamily: 2
   colour: {r: 1, g: 1, b: 1, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 8
+  colourFamily: 2

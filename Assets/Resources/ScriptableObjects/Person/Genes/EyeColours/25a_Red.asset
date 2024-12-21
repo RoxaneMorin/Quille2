@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532bbece9be30494aa60103047aacdbe, type: 3}
   m_Name: 25a_Red
   m_EditorClassIdentifier: 
-  idNumber: 250
   colourName: Med Red
-  colourFamily: 3
   colour: {r: 0.764151, g: 0.1477839, b: 0.15231594, a: 1}
-  colourDominance: 0
+  menuSortingIndex: 29
+  geneDominance: 0
+  colourFamily: 3

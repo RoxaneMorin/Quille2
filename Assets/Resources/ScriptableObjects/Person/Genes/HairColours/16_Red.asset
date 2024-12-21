@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 16_Red
   m_EditorClassIdentifier: 
-  idNumber: 160
   colourName: Natural Red
-  colourFamily: 3
   colour: {r: 0.6509434, g: 0.23358311, b: 0.06448024, a: 1}
-  colourDominance: 1
+  menuSortingIndex: 16
+  geneDominance: 1
+  colourFamily: 3

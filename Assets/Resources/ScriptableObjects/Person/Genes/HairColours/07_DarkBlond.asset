@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6880cced8fe044f8f0ca1fc108c351, type: 3}
   m_Name: 07_DarkBlond
   m_EditorClassIdentifier: 
-  idNumber: 70
   colourName: Dark Blond
-  colourFamily: 1
   colour: {r: 0.7924528, g: 0.65075314, b: 0.42986828, a: 1}
-  colourDominance: 2
+  menuSortingIndex: 7
+  geneDominance: 2
+  colourFamily: 1
