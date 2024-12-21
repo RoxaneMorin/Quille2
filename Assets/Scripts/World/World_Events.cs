@@ -10,5 +10,6 @@ namespace World
 
     // AREA EVENTS
     public delegate void InteractionNeedAdvertisement(BasicNeedSO theNeed, LocalInteraction theInteraction);
+    public delegate void InteractionNeedDeletion(BasicNeedSO theNeed, LocalInteraction theInteraction);
 }
 

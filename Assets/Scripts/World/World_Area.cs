@@ -11,17 +11,25 @@ namespace World
     public class World_Area : MonoBehaviour
     {
         // The representation of the space that physically exists in the world, containing people and objects.
-        // 
+        // Keeps track of interactions, rooms, and the like for ease of access.
 
 
         // VARIABLES/PARAMS
         [SerializeField] [SerializedDictionary("Target Need", "Interactions")] protected SerializedDictionary<BasicNeedSO, List<LocalInteraction>> localInteractions;
 
+        
+        // PROPERTIES
+        public SerializedDictionary<BasicNeedSO, List<LocalInteraction>> LocalInteractions { get { return localInteractions; } }
+        public List<LocalInteraction> LocalInteractionsFor(BasicNeedSO thisNeed)
+        {
+            return localInteractions[thisNeed];
+        }
+
 
 
         // METHODS
 
-        // UTILITY
+        // EVENT LISTENERS
         protected void RegisterLocalInteraction(BasicNeedSO theNeed, LocalInteraction theInteraction)
         {
             // Create the dictionary if it does not already exist.
@@ -39,12 +47,48 @@ namespace World
             // Add the interaction to the relevant list.
             localInteractions[theNeed].Add(theInteraction);
         }
+        protected void UnregisterLocalInteraction(BasicNeedSO theNeed, LocalInteraction theInteraction)
+        {
+            if (localInteractions != null && localInteractions.ContainsKey(theNeed))
+            {
+                if (localInteractions[theNeed].Contains(theInteraction))
+                {
+                    localInteractions[theNeed].Remove(theInteraction);
+                }
+            }
+        }
 
 
         // BUILT IN
         private void Start()
         {
             LocalInteraction.SendInteractionNeedAdvertisement += RegisterLocalInteraction;
+            LocalInteraction.SendInteractionNeedDeletion += UnregisterLocalInteraction;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                TempScoreEachInteractionFor(tempPerson);
+            }
+        }
+
+
+
+        // TEMPORARY TEST STUFF
+        [SerializeField] private Person tempPerson;
+        protected void TempScoreEachInteractionFor(Person thisPerson)
+        {
+            foreach (List<LocalInteraction> listOfInteractions in localInteractions.Values)
+            {
+                foreach (LocalInteraction interaction in listOfInteractions)
+                {
+                    float score = interaction.ScoreFor(thisPerson);
+
+                    Debug.Log(string.Format("{0}'s score for the {1}: {2}", thisPerson.MyPersonCharacter.FirstAndLastName, interaction, score));
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using World;
 
 namespace Quille
 {
@@ -24,9 +25,17 @@ namespace Quille
         [SerializeField] private float noticeBasicNeed = Constants_Quille.DEFAULT_NOTICE_BASIC_NEED;
         [SerializeField] private float noticeSubjectiveNeed = Constants_Quille.DEFAULT_NOTICE_SUBJECTIVE_NEED;
 
+        // TODO: modulate notices based on personality.
+
         // Checks/bools.
         [SerializeField] private bool inAction; // Is the character currently absorbed in something? 
-        // Info about the  action: reference, potentially its interuptability level.
+        // Current interaction;
+        // TODO: keep this in the interaction instead?
+        // TODO: set on the basis of need/interaction type?
+        [SerializeField] private bool reactToNotice;
+        [SerializeField] private bool reactToWarning;
+        [SerializeField] private bool reactToCritical;
+
 
         // PROPERTIES
         public float NoticeBasicNeed
@@ -73,11 +82,17 @@ namespace Quille
         // METHODS
 
         // AI Logic
-        void NeedMonitorLoop()
+        protected void NeedMonitorLoop()
         {
             //Debug.Log("In NeedMonitorLoop");
 
             // Even X seconds, verify if:
+            // TODO: return all above the given notice ? So we can move on to the next one if no viable interaction is found.
+            // TODO: else, make the need check more efficient by removing the sorting.
+
+            // TODO: how will a person know the area they are in?
+
+            // TODO: how will a person know they are too busy to notice a new need?
 
             //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
             (BasicNeedSO, float) neediestBasicNeed = myNeedController.PerformBasicNeedCheck();
@@ -105,6 +120,32 @@ namespace Quille
         }
 
 
+        // UTILITY
+        protected LocalInteraction FindBestLocalInteractionFor(BasicNeedSO thisNeed, World_Area currentArea)
+        {
+            List<LocalInteraction> relevantInteractions = currentArea.LocalInteractionsFor(thisNeed);
+            LocalInteraction currentBestInteraction = null;
+            float currentBestInteractionScore = float.MinValue;
+
+            foreach (LocalInteraction interaction in relevantInteractions)
+            {
+                if (interaction != null && interaction.ValidateFor(myBasePerson))
+                {
+                    float interactionScore = interaction.ScoreFor(myBasePerson);
+
+                    if (interactionScore > currentBestInteractionScore)
+                    {
+                        currentBestInteractionScore = interactionScore;
+                        currentBestInteraction = interaction;
+                    }
+                }
+            }
+
+            return currentBestInteraction;
+        }
+
+
+
         // INIT
         public void Init()
         {
@@ -120,7 +161,7 @@ namespace Quille
             Init();
 
             InvokeRepeating("NeedMonitorLoop", 5f, 5f);
-            // TODO: do as a coroutine instead?
+            // TODO: do as a coroutine instead? Call it from itself/after an interaction is done?
         }
 
         void Update()

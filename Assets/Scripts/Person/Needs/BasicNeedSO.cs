@@ -43,6 +43,7 @@ namespace Quille
         // MODULATORS
         //Default values modulated by ? (List of functions/references)
         [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseAIWeightingModulatedBy;
+        // TODO: should AI weighting be done on the basis of general need type instead? Should it be "sacrified" in favor of the generic notice levels?
         public ChecksAndMods.ModulatorArithmeticFromFloat[] BaseAIWeightingModulatedBy  { get { return baseAIWeightingModulatedBy; } }
 
         [SerializeField] private ChecksAndMods.ModulatorArithmeticFromFloat[] baseChangeRateModulatedBy;

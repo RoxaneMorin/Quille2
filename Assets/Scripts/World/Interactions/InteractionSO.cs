@@ -22,6 +22,12 @@ namespace World
         [SerializeField] protected InteractionNeedEffectSettings[] effectedNeeds;
         // TODO: display a warning box in editor when either are empty.
 
+        // TODO: should interactions have different base scores?
+
+        // TODO: whether to interup based on notice, warning, critical?
+
+        // TODO: how to get/pass on room info when necessary?
+
         // Other tags, such as advertised drives.
 
         // Viability checks.
@@ -31,6 +37,7 @@ namespace World
         [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] scoringModulators;
 
         // Fancy scoring weights for stuff involving morality, conflicting drives, etc?
+
 
 
         // PROPERTIES

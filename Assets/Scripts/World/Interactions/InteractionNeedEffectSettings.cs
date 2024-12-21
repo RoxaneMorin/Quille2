@@ -18,6 +18,8 @@ namespace World
         [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] needChangeRateModulatedBy;
         [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] maxNeedChangeModulatedBy;
 
+        // TODO: should interactions have different base scores?
+
 
         // PROPERTIES
         public BasicNeedSO TargetNeed { get { return targetNeed; } }

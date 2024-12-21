@@ -21,6 +21,9 @@ namespace World
         [SerializeField] [SerializedDictionary("Target Need", "Ratio (0-1) of Original")] SerializedDictionary<BasicNeedSO, float> localMaxNeedChanges;
         // 
 
+        // TODO: should interactions have different base scores?
+        // TODO: how to get/pass on room info when necessary?
+
 
         // PROPERTIES
         public string InteractionName { get { return myInteractionSO.InteractionName; } }
@@ -36,14 +39,10 @@ namespace World
 
         // EVENTS
         public static event InteractionNeedAdvertisement SendInteractionNeedAdvertisement;
-
+        public static event InteractionNeedDeletion SendInteractionNeedDeletion;
 
 
         // METHODS
-
-        // - Score for person?
-        // - Calculate situational need change rate?
-        // - Calculate situational max need change?
 
         // INIT
         protected void Init()
@@ -58,15 +57,36 @@ namespace World
                 SendInteractionNeedAdvertisement?.Invoke(advertisedNeed, this);
             }
         }
-
-
-        // TODO: Unregister upon deletion.
+        protected void SendOutNeedAdvertisementDeletions()
+        {
+            foreach (BasicNeedSO advertisedNeed in AdvertisedNeeds)
+            {
+                SendInteractionNeedDeletion?.Invoke(advertisedNeed, this);
+            }
+        }
 
 
         // UTILITY
+        public bool ValidateFor(Person thisPerson)
+        {
+            foreach (Check check in ViabilityChecks)
+            {
+                if (check != null)
+                {
+                    // Return false as soon as a validity check fails.
+                    if (!check.Execute(thisPerson))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public float ScoreFor(Person thisPerson)
         {
-            float score = 0; // TODO: determine the base score?
+            float score = 0;
 
             foreach (ModulatorArithmetic modulator in ScoringModulators)
             {
@@ -134,10 +154,15 @@ namespace World
             Init();
         }
 
+        private void OnDestroy()
+        {
+            SendOutNeedAdvertisementDeletions();
+        }
+
 
         public override string ToString()
         {
-            return string.Format("Interaction '{0}' on {1}.", myInteractionSO.InteractionName, gameObject.name);
+            return string.Format("Interaction '{0}' on {1}", myInteractionSO.InteractionName, gameObject.name);
         }
     }
 }
