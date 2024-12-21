@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
-  m_Name: 08_WarmPale
+  m_Name: 14_Skintone_WarmVeryDark
   m_EditorClassIdentifier: 
-  colourName: Warm - Pale
-  colour: {r: 1, g: 1, b: 1, a: 1}
-  menuSortingIndex: 8
+  colourName: Warm - Very Dark
+  colour: {r: 0.29411766, g: 0.18039216, b: 0.03137255, a: 1}
+  menuSortingIndex: 14
   colourFamily: 2

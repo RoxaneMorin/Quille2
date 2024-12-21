@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
-  m_Name: 02_BaseLight
+  m_Name: 17_Skintone_CoolTanned
   m_EditorClassIdentifier: 
-  colourName: Base - Light
-  colour: {r: 0.85882354, g: 0.78001386, b: 0.7557647, a: 1}
-  menuSortingIndex: 2
-  colourFamily: 1
+  colourName: Cool - Tanned
+  colour: {r: 0.8117648, g: 0.7372549, b: 0.7176471, a: 1}
+  menuSortingIndex: 17
+  colourFamily: 3
