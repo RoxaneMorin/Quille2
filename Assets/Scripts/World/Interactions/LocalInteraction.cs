@@ -19,17 +19,16 @@ namespace World
 
         [SerializeField] [SerializedDictionary("Target Need", "Ratio (0-1) of Original")] SerializedDictionary<BasicNeedSO, float> localNeedChangeRates;
         [SerializeField] [SerializedDictionary("Target Need", "Ratio (0-1) of Original")] SerializedDictionary<BasicNeedSO, float> localMaxNeedChanges;
-        // 
 
-        // TODO: should interactions have different base scores?
         // TODO: how to get/pass on room info when necessary?
 
 
         // PROPERTIES
         public string InteractionName { get { return myInteractionSO.InteractionName; } }
+        public float InteractionBaseScore { get { return myInteractionSO.DefaultBaseScore; } }
 
         public BasicNeedSO[] AdvertisedNeeds { get { return myInteractionSO.AdvertisedNeeds; } }
-        public InteractionNeedEffectSettings[] EffectedNeeds { get { return myInteractionSO.EffectedNeeds; } }
+        public InteractionNeedEffect[] EffectedNeeds { get { return myInteractionSO.EffectedNeeds; } }
         public SerializedDictionary<BasicNeedSO, float> LocalNeedChangeRates { get { return localNeedChangeRates; } }
         public SerializedDictionary<BasicNeedSO, float> LocalMaxNeedChanges { get { return localMaxNeedChanges; } }
 
@@ -86,7 +85,7 @@ namespace World
 
         public float ScoreFor(Person thisPerson)
         {
-            float score = 0;
+            float score = InteractionBaseScore;
 
             foreach (ModulatorArithmetic modulator in ScoringModulators)
             {
@@ -103,7 +102,7 @@ namespace World
         {
             SerializedDictionary<BasicNeedSO, float> situationalNeedChangeRates = new SerializedDictionary<BasicNeedSO, float>();
 
-            foreach (InteractionNeedEffectSettings needEffect in EffectedNeeds)
+            foreach (InteractionNeedEffect needEffect in EffectedNeeds)
             {
                 float currentNeedChangeRate = needEffect.DefaultNeedChangeRate;
 
@@ -127,7 +126,7 @@ namespace World
         {
             SerializedDictionary<BasicNeedSO, float> situationalMaxNeedChanges = new SerializedDictionary<BasicNeedSO, float>();
 
-            foreach (InteractionNeedEffectSettings needEffect in EffectedNeeds)
+            foreach (InteractionNeedEffect needEffect in EffectedNeeds)
             {
                 float currentMaxNeedChange = needEffect.DefaultMaxNeedChange;
 

@@ -16,16 +16,14 @@ namespace World
         // VARIABLES/PARAMS
 
         [SerializeField] protected string interactionName;
+        [SerializeField] protected float defaultBaseScore = 0;
 
         // Targeted needs.
         [SerializeField] protected BasicNeedSO[] advertisedNeeds;
-        [SerializeField] protected InteractionNeedEffectSettings[] effectedNeeds;
+        [SerializeField] protected InteractionNeedEffect[] effectedNeeds;
         // TODO: display a warning box in editor when either are empty.
 
-        // TODO: should interactions have different base scores?
-
         // TODO: whether to interup based on notice, warning, critical?
-
         // TODO: how to get/pass on room info when necessary?
 
         // Other tags, such as advertised drives.
@@ -42,9 +40,10 @@ namespace World
 
         // PROPERTIES
         public string InteractionName { get { return interactionName; } }
+        public float DefaultBaseScore { get { return defaultBaseScore; } }
 
         public BasicNeedSO[] AdvertisedNeeds { get { return advertisedNeeds; } }
-        public InteractionNeedEffectSettings[] EffectedNeeds { get { return effectedNeeds; } }
+        public InteractionNeedEffect[] EffectedNeeds { get { return effectedNeeds; } }
 
         public Check[] ViabilityChecks { get { return viabilityChecks; } }
         public ModulatorArithmetic[] ScoringModulators { get { return scoringModulators; } }

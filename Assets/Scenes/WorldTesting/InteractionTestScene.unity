@@ -144,6 +144,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3027416774607700952, guid: b55c8aefc9be69c468e02f442a7d0275,
         type: 3}
+      propertyPath: myPersonCharacter.myInterests._serializedList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3027416774607700952, guid: b55c8aefc9be69c468e02f442a7d0275,
+        type: 3}
       propertyPath: myPersonCharacter.myPersonalityAxes._serializedList.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -180,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 3027416774607700952, guid: b55c8aefc9be69c468e02f442a7d0275,
         type: 3}
       propertyPath: myPersonCharacter.myPersonalityAxes._serializedList.Array.data[3].Value
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5765194513728661664, guid: b55c8aefc9be69c468e02f442a7d0275,
         type: 3}

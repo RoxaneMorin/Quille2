@@ -10,20 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9a0a376a5a46f144a11d68fda10d3dd, type: 3}
-  m_Name: Interaction_EatWithFriends
+  m_Name: TestInteraction_EatAlone
   m_EditorClassIdentifier: 
-  interactionName: Eat With Friends
+  interactionName: Eat Alone
+  defaultBaseScore: 0.25
   advertisedNeeds:
   - {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
   effectedNeeds:
   - targetNeed: {fileID: 11400000, guid: aa47b9d2d35243d40a589901ec116804, type: 2}
     defaultNeedChangeRate: 0.01
     defaultMaxNeedChange: 0.5
-    needChangeRateModulatedBy: []
-    maxNeedChangeModulatedBy: []
-  - targetNeed: {fileID: 11400000, guid: 7e933bb06896c324685a4c105eb4755f, type: 2}
-    defaultNeedChangeRate: 0.01
-    defaultMaxNeedChange: 0.3
     needChangeRateModulatedBy: []
     maxNeedChangeModulatedBy: []
   viabilityChecks: []
@@ -36,6 +32,6 @@ MonoBehaviour:
       type: {class: ModulatorArithmeticFromFloat, ns: ChecksAndMods, asm: Assembly-CSharp}
       data:
         modOpIdx: 3
-        modifier: 0.5
+        modifier: 0.3
         modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-        mainOpIdx: 1
+        mainOpIdx: 2

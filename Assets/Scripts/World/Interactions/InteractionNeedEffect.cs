@@ -7,18 +7,16 @@ using Quille;
 namespace World
 {
     [System.Serializable]
-    public class InteractionNeedEffectSettings
+    public class InteractionNeedEffect
     {
         // VARIABLES/PARAMS
         [SerializeField] protected BasicNeedSO targetNeed;
-
+        
         [SerializeField] protected float defaultNeedChangeRate;
         [SerializeField] protected float defaultMaxNeedChange;
-
+        [Space]
         [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] needChangeRateModulatedBy;
-        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] maxNeedChangeModulatedBy;
-
-        // TODO: should interactions have different base scores?
+        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] maxNeedChangeModulatedBy;     
 
 
         // PROPERTIES

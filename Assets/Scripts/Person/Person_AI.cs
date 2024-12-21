@@ -124,9 +124,18 @@ namespace Quille
         protected LocalInteraction FindBestLocalInteractionFor(BasicNeedSO thisNeed, World_Area currentArea)
         {
             List<LocalInteraction> relevantInteractions = currentArea.LocalInteractionsFor(thisNeed);
+
+            if (relevantInteractions.Count == 0)
+            {
+                return null;
+            }
+            else if (relevantInteractions.Count == 1)
+            {
+                return relevantInteractions[0];
+            }
+
             LocalInteraction currentBestInteraction = null;
             float currentBestInteractionScore = float.MinValue;
-
             foreach (LocalInteraction interaction in relevantInteractions)
             {
                 if (interaction != null && interaction.ValidateFor(myBasePerson))
