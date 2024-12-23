@@ -26,13 +26,30 @@ namespace proceduralGrid
 
         [Header("Components")]
         [SerializeField] protected RenderParams myInstancedRenderParams;
-        [SerializeField] [SerializeReference] protected Matrix4x4[] myInstancedMeshData; // Is SerializeReference actually working?
+        protected Matrix4x4[] myInstancedMeshData;
 
         //[Header("State")]
         //[SerializeField] protected Vector3 myPreviousPosition;
         //[SerializeField] protected Quaternion myPreviousRotation;
         //[SerializeField] protected Vector3 myPreviousScale;
 
+        // SEARCH VARIABLES
+        private readonly object lockObject = new object();
+        private bool isBusy;
+
+        float halfTileLength;
+        int currentLengthX;
+        int currentLengthZ;
+
+        int searchDepth;
+        int totalPointsLookedAt;
+
+        (int, int)[] itemsIndices = new (int, int)[4];
+
+        Grid_ItemPure currentGridItem;
+        float distanceFromCursor;
+        (float, Corners, Grid_ItemPure) currentMinDistance;
+        (float, Corners, Grid_ItemPure) currentMinDistanceSub;
 
 
         // EVENTS
@@ -79,7 +96,8 @@ namespace proceduralGrid
                     Vector3 itemPosition = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
                     itemPosition.y *= relativeSize;
                     Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
-                    Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, initialItemScale);
+                    Vector3 itemScale = initialItemScale * relativeSize;
+                    Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, itemScale);
 
                     // Apply ancestor matrices.
                     itemTransformMatrix = gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
@@ -125,7 +143,8 @@ namespace proceduralGrid
             Vector3 itemPosition = new Vector3(gridItem.MyGridCoordinates.x * myRelativeSize, 0, gridItem.MyGridCoordinates.z * myRelativeSize) + myItemOffset;
             itemPosition.y *= myRelativeSize;
             Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
-            Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, initialItemScale);
+            Vector3 itemScale = initialItemScale * myRelativeSize;
+            Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, itemScale);
 
             // Apply ancestor matrices and return.
             return gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
@@ -144,13 +163,12 @@ namespace proceduralGrid
                 i++;
             }
         }
+        
 
-
+        // ITEM SEARCH
         // Entry function searching for the closest of our grid items to the clicked location.
         protected void SearchForClickedItem(Vector3 mousePosition)
         {
-            // TODO: remove logging?
-
             RaycastHit cursorHit;
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
@@ -158,42 +176,46 @@ namespace proceduralGrid
             if (Physics.Raycast(ray, out cursorHit))
             {
                 // Initial dimensions and the like.
-                float halfTileLength = myRelativeSize / 2 + 0.05f;
-                int halfLengthX = myLengthX;
-                int halfLengthZ = myLengthZ;
+                halfTileLength = myRelativeSize / 2 + 0.05f;
+                currentLengthX = myLengthX;
+                currentLengthZ = myLengthZ;
 
-                int searchDepth = 1;
-                int totalPointsLookedAt = 0;
+                searchDepth = 0;
+                totalPointsLookedAt = 0;
 
                 // bottomLeft, bottomRight, topLeft, topRight
-                (int, int)[] itemsIndices = { (0, 0), (myLengthX, 0), (0, myLengthZ), (myLengthX, myLengthZ) };
+                itemsIndices[0] = (0, 0);
+                itemsIndices[1] = (myLengthX, 0);
+                itemsIndices[2] = (0, myLengthZ);
+                itemsIndices[3] = (myLengthX, myLengthZ);
 
                 // Holder variables.
-                Grid_ItemPure currentGridItem = null;
-                float distanceFromCursor = float.PositiveInfinity;
-                (float, Corners, Grid_ItemPure) currentMinDistance = (float.PositiveInfinity, Corners.none, null);
+                currentGridItem = null;
+                distanceFromCursor = float.PositiveInfinity;
+                currentMinDistance = (float.PositiveInfinity, Corners.none, null);
 
                 // not sure it's the right loop condition if they have different lenght
-                while (halfLengthX >= 1 || halfLengthZ >= 1)
+                while (currentLengthX > 0 || currentLengthZ > 0)
                 {
-                    currentMinDistance = SearchedForClickedItemSub(cursorHit.point, itemsIndices, currentMinDistance, ref currentGridItem, ref distanceFromCursor, searchDepth, ref totalPointsLookedAt);
+                    //Debug.Log(string.Format("Dimensions of the current search area: {0} x {1}", currentLengthX + 1, currentLengthZ + 1));
+                    Debug.Log(string.Format("Corner points of the current search area: {0}, {1}, {2}, {3}", itemsIndices[0], itemsIndices[1], itemsIndices[2], itemsIndices[3]));
+
+                    currentMinDistance = SearchedForClickedItemSub(cursorHit.point, currentMinDistance, ref searchDepth, ref totalPointsLookedAt);
 
                     // Return this closest point if it's less than half a tile away.
                     if (currentMinDistance.Item1 < halfTileLength)
                     {
-                        Debug.Log(string.Format("Final closest point: {0} at {1}, distance of {2}. Looked at {3} points in total.", currentMinDistance.Item3, currentMinDistance.Item3.MyPostion, currentMinDistance.Item1, totalPointsLookedAt));
+                        Debug.Log(string.Format("Final closest point: {0} at {1}, distance of {2}. Looked at a total of {3} points out of {4}.", currentMinDistance.Item3, currentMinDistance.Item3.MyPostion, currentMinDistance.Item1, totalPointsLookedAt, ((myLengthX + 1) * (myLengthZ + 1))));
 
                         // Do Event.
                         OnItemClicked?.Invoke(currentMinDistance.Item3);
 
-                        // TODO: return the actual thing?
                         return;
                     }
                     else
                     {
-                        searchDepth++;
-                        halfLengthX = halfLengthX > 1 ? halfLengthX / 2 : 1;
-                        halfLengthZ = halfLengthZ > 1 ? halfLengthZ / 2 : 1;
+                        currentLengthX = Mathf.Max(currentLengthX / 2, 0);
+                        currentLengthZ = Mathf.Max(currentLengthZ / 2, 0);
 
                         switch (currentMinDistance.Item2)
                         {
@@ -201,36 +223,36 @@ namespace proceduralGrid
                                 {
                                     // bottom left: we want { (0, 0), (myLengthX/2, 0), (0, myLengthZ/2), (myLengthX/2, myLengthZ/2) };
                                     itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple;
-                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, 0));
-                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, halfLengthZ));
-                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, halfLengthZ));
+                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((currentLengthX, 0));
+                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, currentLengthZ));
+                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((currentLengthX, currentLengthZ));
                                     break;
                                 }
 
                             case Corners.bottomRight:
                                 {
                                     // bottom right: we want { (myLengthX/2, 0), (myLengthX, 0), (myLengthX/2, myLengthZ/2), (myLengthX, myLengthZ/2) };
-                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, 0));
+                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-currentLengthX, 0));
                                     itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple;
-                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, halfLengthZ));
-                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, halfLengthZ));
+                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-currentLengthX, currentLengthZ));
+                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, currentLengthZ));
                                     break;
                                 }
                             case Corners.topLeft:
                                 {
                                     // top left: we want { (0, myLengthZ/2), (myLengthX/2, myLengthZ/2), (0, myLengthZ), (myLengthX/2, myLengthZ) };
-                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -halfLengthZ));
-                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, -halfLengthZ));
+                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -currentLengthZ));
+                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((currentLengthX, -currentLengthZ));
                                     itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple;
-                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((halfLengthX, 0));
+                                    itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((currentLengthX, 0));
                                     break;
                                 }
                             case Corners.topRight:
                                 {
                                     // top right: we want { (myLengthX/2, myLengthZ/2), (myLengthX, myLengthZ/2), (myLengthX/2, myLengthZ), (myLengthX, myLengthZ) };
-                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, -halfLengthZ));
-                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -halfLengthZ));
-                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-halfLengthX, 0));
+                                    itemsIndices[0] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-currentLengthX, -currentLengthZ));
+                                    itemsIndices[1] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((0, -currentLengthZ));
+                                    itemsIndices[2] = currentMinDistance.Item3.MyGridCoordinates.AsTuple.Add((-currentLengthX, 0));
                                     itemsIndices[3] = currentMinDistance.Item3.MyGridCoordinates.AsTuple;
                                     break;
                                 }
@@ -239,41 +261,43 @@ namespace proceduralGrid
                                     Debug.LogWarning(string.Format("The ItemPureManager {0} was clicked, but the search for the closest point failed.", gameObject.name));
                                     return;
                                 }
-                            }
                         }
                     }
                 }
+            }
             else
             {
                 Debug.LogWarning(string.Format("The ItemPureManager {0} was clicked, but the raycast did not hit anything.", gameObject.name));
                 return;
             }
         }
-        protected (float, Corners, Grid_ItemPure) SearchedForClickedItemSub(Vector3 cursorPosition, (int, int)[] itemsIndices, (float, Corners, Grid_ItemPure) previousMinDistance, ref Grid_ItemPure currentGridItem, ref float distanceFromCursor, int searchDepth, ref int totalPointsLookedAt)
+
+        protected (float, Corners, Grid_ItemPure) SearchedForClickedItemSub(Vector3 cursorPosition, (float, Corners, Grid_ItemPure) previousMinDistance, ref int searchDepth, ref int totalPointsLookedAt)
         {
-            (float, Corners, Grid_ItemPure) minDistance = (previousMinDistance.Item1, previousMinDistance.Item2, previousMinDistance.Item3);
+            currentMinDistanceSub = (previousMinDistance.Item1, previousMinDistance.Item2, previousMinDistance.Item3);
 
-            // TODO: keep array2d of distances to avoid having to recalculate them? Are they event recalculated at times?
-
+            searchDepth++;
             for (int i = 0; i < 4; i++)
             {
                 if ((Corners)i != previousMinDistance.Item2)
                 {
-                    currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
-                    distanceFromCursor = Vector3.Distance(cursorPosition, currentGridItem.MyPostion);
-                    
-                    //Debug.Log(string.Format("Depth {0}. Currently looking at point: {1} at {2}, {3} of the current search points, distance of {4}.", searchDepth, currentGridItem, currentGridItem.MyPostion, (Corners)i, distanceFromCursor));
                     totalPointsLookedAt++;
 
-                    if (distanceFromCursor < minDistance.Item1)
+                    currentGridItem = myGridItems[itemsIndices[i].Item1, itemsIndices[i].Item2];
+                    distanceFromCursor = Vector3.Distance(cursorPosition, currentGridItem.MyPostion);
+                    // TODO: keep array2d of distances to avoid having to recalculate them? Are they event recalculated at times?
+
+                    if (distanceFromCursor < currentMinDistanceSub.Item1)
                     {
-                        minDistance = (distanceFromCursor, (Corners)i, currentGridItem);
+                        currentMinDistanceSub = (distanceFromCursor, (Corners)i, currentGridItem);
                     }
+
+                    //Debug.Log(string.Format("Depth {0}. Currently looking at point: {1} at {2}, {3} of the current search points, distance of {4}.", searchDepth, currentGridItem, currentGridItem.MyPostion, (Corners)i, distanceFromCursor));
                 }
             }
 
-            Debug.Log(string.Format("Depth {0}. Closest point: {1} at {2}, {3} of the current search points, distance of {4}.", searchDepth, minDistance.Item3, minDistance.Item3.MyPostion, minDistance.Item2, minDistance.Item1));
-            return minDistance;
+            Debug.Log(string.Format("Depth {0}. Closest point: {1} at {2}, {3} of the current search points, distance of {4}.", searchDepth, currentMinDistanceSub.Item3, currentMinDistanceSub.Item3.MyPostion, currentMinDistanceSub.Item2, currentMinDistanceSub.Item1));
+            return currentMinDistanceSub;
         }
 
 
@@ -331,9 +355,16 @@ namespace proceduralGrid
 
         protected void OnMouseDown()
         {
-            Debug.Log(string.Format("Mouse down on {0} at {1}.", gameObject, Input.mousePosition));
-
-            SearchForClickedItem(Input.mousePosition);
+            lock (lockObject)
+            {
+                if (!isBusy)
+                {
+                    isBusy = true;
+                    Debug.Log(string.Format("Mouse down on {0} at {1}.", gameObject, Input.mousePosition));
+                    SearchForClickedItem(Input.mousePosition);
+                    isBusy = false;
+                }
+            }
         }
     }
 

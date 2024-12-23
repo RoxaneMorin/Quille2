@@ -59,7 +59,7 @@ namespace proceduralGrid
             myCollider = GetComponent<MeshCollider>();
             myMeshRenderer = GetComponent<MeshRenderer>();
         }
-        public void SetParameters(Grid_Base parentGrid, Grid_ItemGOManager parentGridItemManager, CoordPair gridCoordinates, Vector3 relativePosition, float relativeSize = 1f, bool useVisuals = true)
+        public void SetParameters(Grid_Base parentGrid, Grid_ItemGOManager parentGridItemManager, CoordPair gridCoordinates, Vector3 relativePosition, float relativeSize, bool useVisuals = true)
         {
             if (!useVisuals)
                 DeactivateVisualsAndCollider();
@@ -72,6 +72,7 @@ namespace proceduralGrid
             myGridCoordinates = gridCoordinates;
             transform.localPosition = relativePosition;
             myRelativeSize = relativeSize;
+            transform.localScale *= myRelativeSize;
 
             gameObject.name = this.ToString();
 

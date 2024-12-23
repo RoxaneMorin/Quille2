@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -181,7 +180,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.0001
-  far clip plane: 1000
+  far clip plane: 30
   field of view: 60
   orthographic: 1
   orthographic size: 5
@@ -209,7 +208,7 @@ Transform:
   m_GameObject: {fileID: 500601807}
   serializedVersion: 2
   m_LocalRotation: {x: 0.31598538, y: 0.3596048, z: -0.13088542, w: 0.8681629}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: -3, y: 10, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -340,9 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4802713381b6e364fa3d88fe77716f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 1
-  gridLengthX: 10
-  gridLengthZ: 10
+  tileSize: 0.5
+  gridLengthX: 20
+  gridLengthZ: 20
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
   gridPointManagerPrefab: {fileID: 8247751758100528916, guid: 950a9a7d1aa5f674f9205dc0d13563eb,
     type: 3}

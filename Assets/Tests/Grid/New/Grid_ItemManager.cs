@@ -53,7 +53,7 @@ namespace proceduralGrid
             myLengthX = gridLengthX;
             myLengthZ = gridLengthZ;
             myRelativeSize = relativeSize;
-            myItemOffset = offset;
+            myItemOffset = new Vector3 (offset.x * myRelativeSize, offset.y, offset.z * myRelativeSize);
 
             if (useCollider)
             {
@@ -61,13 +61,9 @@ namespace proceduralGrid
             }
         }
 
-        // Separated submethods for ease of overriding.
-        protected virtual void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset) { }
-        protected virtual void PopulateBoundsGizmoPoints() { }
-
-        // TODO: Mark virtual and redo in subclasses?
         protected void CreateCollider(bool lengthPlusOne = true) 
         {
+            // TODO: Mark virtual and redo in subclasses?
             myCollider = gameObject.AddComponent<BoxCollider>();
 
             // Calculate and set collider center.
@@ -78,11 +74,14 @@ namespace proceduralGrid
             // Calculate and set collider size.
             float sizeX = lengthPlusOne ? myLengthX + 1 : myLengthX;
             float sizeZ = lengthPlusOne ? myLengthZ + 1 : myLengthZ;
-            myCollider.size = new Vector3(sizeX, colliderHeight, sizeZ);
+            myCollider.size = new Vector3(sizeX * myRelativeSize, colliderHeight, sizeZ * myRelativeSize);
         }
+
+        protected virtual void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset) { }
 
 
         // UTILITY
+        protected virtual void PopulateBoundsGizmoPoints() { }
 
 
         // BUILT IN
