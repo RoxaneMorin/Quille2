@@ -107,6 +107,13 @@ namespace Newtonsoft.Json.UnityConverters.Quille
             try
             {
                 BasicNeedSO theSO = Resources.Load<BasicNeedSO>(path);
+
+                if (theSO == null)
+                {
+                    path = Constants_PathResources.SO_PATH_NEEDSSUBJECTIVEHALVES + nameString;
+                    theSO = Resources.Load<BasicNeedSO>(path);
+                }
+
                 return theSO;
             }
             catch

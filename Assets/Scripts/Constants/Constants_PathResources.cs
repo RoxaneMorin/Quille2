@@ -38,7 +38,7 @@ public static class Constants_PathResources
     // Needs
     public const string SO_PATH_NEEDSBASIC = "ScriptableObjects/Person/Needs/Basic/";
     public const string SO_PATH_NEEDSSUBJECTIVE = "ScriptableObjects/Person/Needs/Subjective/";
-    public const string SO_PATH_NEEDSSUBJECTIVEHALVES = "ScriptableObjects/Person/Needs/Subjective/SubjectiveHalves/";
+    public const string SO_PATH_NEEDSSUBJECTIVEHALVES = "ScriptableObjects/Person/Needs/SubjectiveHalves/";
 
     // Genes
     public const string SO_PATH_EYECOLOURS = "ScriptableObjects/Person/Genes/EyeColours/";

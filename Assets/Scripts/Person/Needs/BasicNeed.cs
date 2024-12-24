@@ -205,7 +205,7 @@ namespace Quille
             ThresholdCritical = DefaultThresholdCritical;
         }
 
-        [JsonIgnore] public NeedStates NeedState { get { return needState; } private set { needState = value; } }
+        [JsonIgnore] public NeedStates NeedState { get { return needState; } set { needState = value; } }
 
 
 

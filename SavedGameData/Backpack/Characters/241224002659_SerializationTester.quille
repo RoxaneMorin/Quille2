@@ -1,0 +1,174 @@
+{
+  "charID": 0,
+  "PersonCharacter": {
+    "firstName": "SerializationTester",
+    "lastName": "",
+    "nickName": "",
+    "secondaryNames": [],
+    "myPersonalityAxes": {
+      "PA_Reactivity": -0.75,
+      "PA_Mentality": 0.0,
+      "PA_Temperament": 0.125,
+      "PA_Responsibleness": 0.75,
+      "PA_Sociability": -0.125
+    },
+    "myPersonalityTraits": {
+      "PT_Childish": 0.5,
+      "PT_Neurotic": 0.5
+    },
+    "myDrives": {
+      "Drive_Mastery": 0.5,
+      "Drive_Learning": 1.0,
+      "Drive_Creation": 0.5
+    },
+    "myInterests": {}
+  },
+  "NeedController": {
+    "myBasicNeeds": [
+      {
+        "needSO": "BN_Nourishment",
+        "localAiPriorityWeighting": 1.25,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.03,
+        "currentChangeRate": -0.03,
+        "currentChangeRateScaled": -0.000299999985,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_Rest",
+        "localAiPriorityWeighting": 1.0,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.01,
+        "currentChangeRate": -0.01,
+        "currentChangeRateScaled": -0.0001,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_Sanitation",
+        "localAiPriorityWeighting": 0.75,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.01,
+        "currentChangeRate": -0.01,
+        "currentChangeRateScaled": -0.0001,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      },
+      {
+        "needSO": "BN_StressRelief",
+        "localAiPriorityWeighting": 0.9,
+        "levelFull": 1.0,
+        "levelCurrent": 1.0,
+        "baseChangeRate": -0.05,
+        "currentChangeRate": -0.05,
+        "currentChangeRateScaled": -0.0005,
+        "thresholdElated": 0.9,
+        "thresholdWarning": 0.25,
+        "thresholdCritical": 0.1,
+        "needState": "Normal"
+      }
+    ],
+    "mySubjectiveNeeds": [
+      {
+        "needSO": "SN_ChallengevsIndulgence",
+        "subneedLeft": {
+          "needSO": "HalfNeed_Challenge",
+          "localAiPriorityWeighting": 0.85,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.045,
+          "currentChangeRate": -0.045,
+          "currentChangeRateScaled": -0.000450000021,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "subneedRight": {
+          "needSO": "HalfNeed_Indulgence",
+          "localAiPriorityWeighting": 0.85,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.05,
+          "currentChangeRate": -0.05,
+          "currentChangeRateScaled": -0.0005,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "localAiPriorityWeighting": 0.85
+      },
+      {
+        "needSO": "SN_SensoryvsCognitive",
+        "subneedLeft": {
+          "needSO": "HalfNeed_MetalStimulation",
+          "localAiPriorityWeighting": 1.0,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.1,
+          "currentChangeRate": -0.1,
+          "currentChangeRateScaled": -0.001,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "subneedRight": {
+          "needSO": "HalfNeed_SensoryStimulation",
+          "localAiPriorityWeighting": 1.0,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.075,
+          "currentChangeRate": -0.075,
+          "currentChangeRateScaled": -0.00075,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "localAiPriorityWeighting": 1.0
+      },
+      {
+        "needSO": "SN_SocializationvsTimeAlone",
+        "subneedLeft": {
+          "needSO": "HalfNeed_TimeAlone",
+          "localAiPriorityWeighting": 1.0,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.075,
+          "currentChangeRate": -0.075,
+          "currentChangeRateScaled": -0.00075,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "subneedRight": {
+          "needSO": "HalfNeed_Socialization",
+          "localAiPriorityWeighting": 1.0,
+          "levelFull": 1.0,
+          "levelCurrent": 1.0,
+          "baseChangeRate": -0.1,
+          "currentChangeRate": -0.1,
+          "currentChangeRateScaled": -0.001,
+          "thresholdElated": 0.9,
+          "thresholdWarning": 0.25,
+          "thresholdCritical": 0.1,
+          "needState": "Normal"
+        },
+        "localAiPriorityWeighting": 1.0
+      }
+    ]
+  }
+}

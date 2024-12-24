@@ -87,9 +87,6 @@ namespace Quille
             //Debug.Log("In NeedMonitorLoop");
 
             // Even X seconds, verify if:
-            // TODO: return all above the given notice ? So we can move on to the next one if no viable interaction is found.
-            // TODO: else, make the need check more efficient by removing the sorting.
-
             // TODO: how will a person know the area they are in?
 
             // TODO: how will a person know they are too busy to notice a new need?
