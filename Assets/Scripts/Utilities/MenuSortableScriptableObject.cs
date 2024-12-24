@@ -7,7 +7,7 @@ public class MenuSortableScriptableObject : ScriptableObject, IComparable
 {
     // VARIALBE & PROPERTY
     [SerializeField] protected int menuSortingIndex;
-    public int MenuSortingIndex { get { return menuSortingIndex; } }
+    public int MenuSortingIndex { get { return menuSortingIndex; } set { menuSortingIndex = value; } }
 
 
     // METHODS
