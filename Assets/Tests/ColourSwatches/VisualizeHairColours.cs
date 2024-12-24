@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +13,13 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            hairColours = Resources.LoadAll<GeneHairColourSO>(Constants_PathResources.SO_PATH_HAIRCOLOURS);
+            hairColours = Resources.LoadAll<GeneHairColourSO>(Constants_PathResources.SO_PATH_HAIRCOLOURS).OrderBy(so => so.MenuSortingIndex).ToArray();
         }
 
 
         private void Update()
         {
-            int previousColourFamily = 1;
+            int previousColourFamily = 0;
 
             if (Input.GetKeyDown("space"))
             {

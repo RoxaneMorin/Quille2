@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
-  m_Name: Skintone_PaleGreen
+  m_Name: Skintone_LightGreen
   m_EditorClassIdentifier: 
   menuSortingIndex: 30
-  colourName: Pale Green
+  colourName: Light Green
   colour: {r: 0.54067284, g: 0.8490566, b: 0.6631623, a: 1}
   colourFamily: 5

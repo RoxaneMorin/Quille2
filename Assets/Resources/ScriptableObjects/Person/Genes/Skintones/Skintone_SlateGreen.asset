@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb2890e150863c04a9cf433ac84cbc8e, type: 3}
+  m_Name: Skintone_SlateGreen
+  m_EditorClassIdentifier: 
+  menuSortingIndex: 31
+  colourName: Slate Green
+  colour: {r: 0.43173727, g: 0.6226415, b: 0.5417803, a: 1}
+  colourFamily: 5
