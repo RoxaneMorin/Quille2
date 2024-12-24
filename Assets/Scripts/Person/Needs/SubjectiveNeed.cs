@@ -176,7 +176,7 @@ namespace Quille
         }
         [JsonIgnore] public float LevelCurrentLeftAsPercentage
         {
-            get { return LevelCurrentLeft/LevelFullLeft; }
+            get { return LevelCurrentLeft / LevelFullLeft; }
         }
         [JsonIgnore] public float LevelCurrentRight
         {
@@ -212,7 +212,7 @@ namespace Quille
         }
         [JsonIgnore] public (float, float) LevelCurrentAsPercentage
         {
-            get { return (LevelCurrentLeft/LevelFullLeft, LevelCurrentRight/LevelFullRight); }
+            get { return (LevelCurrentLeft / LevelFullLeft, LevelCurrentRight / LevelFullRight); }
         }
         public float LevelCurrentFor(BasicNeedSO subNeed)
         {
@@ -229,11 +229,11 @@ namespace Quille
         {
             if (subNeed == NeedSORight)
             {
-                return LevelCurrentRight/ LevelFullRight;
+                return LevelCurrentRight / LevelFullRight;
             }
             else
             {
-                return LevelCurrentLeft/ LevelFullLeft;
+                return LevelCurrentLeft / LevelFullLeft;
             }
         }
 
@@ -536,6 +536,8 @@ namespace Quille
         [JsonIgnore] public NeedStates NeedStateLeft { get { return subneedLeft.NeedState; } private set { subneedLeft.NeedState = value; } }
         [JsonIgnore] public NeedStates NeedStateRight { get { return subneedRight.NeedState; } private set { subneedRight.NeedState = value; } }
         [JsonIgnore] public (NeedStates, NeedStates) NeedState { get { return (NeedStateLeft, NeedStateRight); } }
+
+        [JsonIgnore] public IEnumerator[] AlterSubneedLevelsByChangeRate { get { return new IEnumerator[] { subneedLeft.AlterLevelByChangeRate(), subneedRight.AlterLevelByChangeRate() }; } }
 
 
 

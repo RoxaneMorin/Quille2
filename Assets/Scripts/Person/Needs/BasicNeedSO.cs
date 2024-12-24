@@ -16,7 +16,7 @@ namespace Quille
         [SerializeField] private string needName = "Undefined";
 
         // NEED GRAPHICS
-        [SerializeField]private Sprite needIcon;
+        [SerializeField] private Sprite needIcon;
         public Sprite NeedIcon { get { return needIcon; } }
 
 
