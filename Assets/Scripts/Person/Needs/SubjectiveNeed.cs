@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -737,6 +738,18 @@ namespace Quille
             SortByFulfillmentDeltaofNeediest(subjectiveNeeds, usePriorityWeights, byPercentage);
             return (subjectiveNeeds[0], subjectiveNeeds[0].GetNeediestSide());
         }
+
+        // Returns an array of all needs below a certain threshold.
+        public static BasicNeedSO[] ReturnNeedy(SubjectiveNeed[] subjectiveNeeds, float needinessThreshold, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            IEnumerable<BasicNeedSO> needyNeedsLeft = subjectiveNeeds.Where(need => (byPercentage ? need.LevelCurrentLeftAsPercentage : need.LevelCurrentLeft) <= needinessThreshold).Select(need => need.NeedSOLeft);
+            IEnumerable<BasicNeedSO> needyNeedsRight = subjectiveNeeds.Where(need => (byPercentage ? need.LevelCurrentRightAsPercentage : need.LevelCurrentRight) <= needinessThreshold).Select(need => need.NeedSORight);
+
+            //SortByFulfillmentDelta(needyNeeds, usePriorityWeights, byPercentage);
+
+            return needyNeedsLeft.Concat(needyNeedsRight).ToArray();
+        }
+
         public static (SubjectiveNeed, BasicNeedSO) ReturnNeediestbyTotalDelta(SubjectiveNeed[] subjectiveNeeds, bool usePriorityWeights = true, bool byPercentage = false)
         {
             SortByTotalFulfillmentDelta(subjectiveNeeds, usePriorityWeights, byPercentage);

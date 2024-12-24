@@ -144,6 +144,10 @@ namespace Quille
 
             return (neediestNeed.NeedSO, neediestNeedLevel);
         }
+        public BasicNeedSO[] PerformBasicNeedCheck(float needinessThreshold)
+        {
+            return BasicNeed.ReturnNeedy(myBasicNeeds, needinessThreshold);
+        }
         public (SubjectiveNeedSO, BasicNeedSO, float) PerformSubjectiveNeedCheck()
         {
             (SubjectiveNeed, BasicNeedSO) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds);
@@ -151,6 +155,10 @@ namespace Quille
 
             // Returns the neediest subneed's SO.
             return (neediestNeed.Item1.NeedSO, neediestNeed.Item2, neediestNeedLevel);
+        }
+        public BasicNeedSO[] PerformSubjectiveNeedCheck(float needinessThreshold)
+        {
+            return SubjectiveNeed.ReturnNeedy(mySubjectiveNeeds, needinessThreshold);
         }
 
 

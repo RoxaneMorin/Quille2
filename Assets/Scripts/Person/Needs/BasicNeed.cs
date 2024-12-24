@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -311,6 +312,16 @@ namespace Quille
             SortByFulfillmentDelta(basicNeeds, usePriorityWeights, byPercentage);
             return basicNeeds[0];
         }
+
+        // Returns a sorted array of all needs below a certain threshold.
+        public static BasicNeedSO[] ReturnNeedy(BasicNeed[] basicNeeds, float needinessThreshold, bool usePriorityWeights = true, bool byPercentage = false)
+        {
+            BasicNeed[] needyNeeds = basicNeeds.Where(need => (byPercentage ? need.LevelCurrentAsPercentage : need.LevelCurrent) <= needinessThreshold).ToArray();
+            SortByFulfillmentDelta(needyNeeds, usePriorityWeights, byPercentage);
+
+            return needyNeeds.Select(need => need.NeedSO).ToArray();
+        }
+
 
         // COMPARISON HELPERS
         class SortHelper_BasicNeedsbyDelta : IComparer

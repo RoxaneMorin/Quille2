@@ -95,20 +95,22 @@ namespace Quille
             // TODO: how will a person know they are too busy to notice a new need?
 
             //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
-            (BasicNeedSO, float) neediestBasicNeed = myNeedController.PerformBasicNeedCheck();
-            if (neediestBasicNeed.Item2 <= noticeBasicNeed)
+            BasicNeedSO[] needyBasicNeeds = myNeedController.PerformBasicNeedCheck(noticeBasicNeed);
+            // TODO: Take care of the first need possible.
+            foreach(BasicNeedSO need in needyBasicNeeds)
             {
-                Debug.Log(string.Format("Something must be done about our {0} need.", neediestBasicNeed.Item1.NeedName));
+                Debug.Log(string.Format("Something must be done about our {0} need.", need.NeedName));
 
                 // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }
             // Else. Will it need to be an actual else clause?
 
             //-> Any subjective need is at or below notice. If so, do action unless otherwise occupied.
-            (SubjectiveNeedSO, BasicNeedSO, float) neediestSubjectiveNeed = myNeedController.PerformSubjectiveNeedCheck();
-            if (neediestSubjectiveNeed.Item3 <= noticeSubjectiveNeed)
+            BasicNeedSO[] needySubjectiveNeeds = myNeedController.PerformSubjectiveNeedCheck(noticeSubjectiveNeed);
+            // TODO: Take care of the first need possible.
+            foreach (BasicNeedSO need in needySubjectiveNeeds)
             {
-                Debug.Log(string.Format("Something must be done about our {0} ({1}) need.", neediestSubjectiveNeed.Item2.NeedName, neediestSubjectiveNeed.Item1.NeedName));
+                Debug.Log(string.Format("Something must be done about our {0} need.", need.NeedName));
 
                 // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
             }
