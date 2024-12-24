@@ -8,22 +8,19 @@ namespace Quille
 
 
     // BASE GENE TEMPLATE
-    public abstract class Gene : ScriptableObject
+    public abstract class GeneSO : MenuSortableScriptableObject
     {
         // VARIABLES/PARAMS
         [SerializeField] protected string colourName;
         [SerializeField, ColorUsage(false, false)] protected Color colour = Color.black;
-        [SerializeField] protected int menuSortingIndex;
 
 
         // PROPERTIES
         public string ColourName { get { return colourName; } }
         public Color Colour { get { return colour; } }
-
-        public int MenuSortingIndex { get { return menuSortingIndex; } }
     }
 
-    public abstract class GeneWithDominance : Gene
+    public abstract class GeneWithDominanceSO : GeneSO
     {
         // VARIABLES/PARAMS
         [SerializeField, Range(-1, 3)] protected int geneDominance; // '-1' is not inheritable.

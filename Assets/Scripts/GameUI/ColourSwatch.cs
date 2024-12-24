@@ -14,13 +14,13 @@ public class ColourSwatch : MonoBehaviour
 
     // INSTANTIATED VARIABLES
     public Image mySprite;
-    public Gene myGeneSOReference;
+    public GeneSO myGeneSOReference;
 
 
     // CONSTRUCTOR
 
     // Create swatch for given Gene object.
-    public ColourSwatch(Gene gene)
+    public ColourSwatch(GeneSO gene)
     {
         if (mySprite = null) { mySprite = this.GetComponentInParent<Image>(); }
         myGeneSOReference = gene;
@@ -48,13 +48,13 @@ public class ColourSwatch : MonoBehaviour
     }
 
     // Update SO reference from SO input.
-    public void SetSORef(Gene geneSOReference)
+    public void SetSORef(GeneSO geneSOReference)
     {
         myGeneSOReference = geneSOReference;
     }
 
     // Update all from Gene input.
-    public void SetAllFromGene(Gene gene)
+    public void SetAllFromGene(GeneSO gene)
     {
         myGeneSOReference = gene;
         mySprite.color = gene.Colour;

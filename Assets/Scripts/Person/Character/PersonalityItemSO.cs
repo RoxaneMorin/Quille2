@@ -5,17 +5,15 @@ using UnityEngine;
 namespace Quille
 {
     // A base class for specific types of personality elements to inherit from.
-    public abstract class PersonalityItemSO : ScriptableObject
+    public abstract class PersonalityItemSO : MenuSortableScriptableObject
     {
         // VARIABLES/PARAMS 
         [SerializeField] protected string itemName = "Undefined";
         [SerializeField] protected Sprite itemIcon;
-        [SerializeField] protected int menuSortingIndex;
 
         // PROPERTIES
         public string ItemName { get { return itemName; } }
         public Sprite ItemIcon { get { return itemIcon; } }
-        public int MenuSortingIndex { get { return menuSortingIndex; } }
 
 
         // TODO: Add Randomization Weights, what is favorable or defavorable to getting this item.

@@ -16,9 +16,9 @@ namespace Quille
     {
         // STATIC VARIABLES
 
-        static GeneSkintone[] defaultSkintones;
-        static GeneEyeColour[] possibleEyeColours;
-        static GeneHairColour[] possibleHairColours;
+        static GeneSkintoneSO[] defaultSkintones;
+        static GeneEyeColourSO[] possibleEyeColours;
+        static GeneHairColourSO[] possibleHairColours;
 
 
         // INSTANTIATED VARIABLES
@@ -33,8 +33,8 @@ namespace Quille
         [SerializeField] Color skintoneParentA;
         [SerializeField] Color skintoneParentB;
         [SerializeField, Range(0f, 1f)] float skintoneBlendWeight;
-        [SerializeField] GeneEyeColour eyeColourAlleleA, eyeColourAlleleB;
-        [SerializeField] GeneHairColour hairColourAlleleA, hairColourAlleleB;
+        [SerializeField] GeneEyeColourSO eyeColourAlleleA, eyeColourAlleleB;
+        [SerializeField] GeneHairColourSO hairColourAlleleA, hairColourAlleleB;
 
         [Space(10)]
 
@@ -67,13 +67,13 @@ namespace Quille
             child.hairColourAlleleB = GetRandomHairAllele(parentB);
         }
 
-        static GeneEyeColour GetRandomEyeAllele(Genome genome)
+        static GeneEyeColourSO GetRandomEyeAllele(Genome genome)
         {
             if (Random.value > 0.5) { return genome.eyeColourAlleleA; }
             else return genome.eyeColourAlleleB;
         }
 
-        static GeneHairColour GetRandomHairAllele(Genome genome)
+        static GeneHairColourSO GetRandomHairAllele(Genome genome)
         {
             if (Random.value > 0.5) { return genome.hairColourAlleleA; }
             else return genome.hairColourAlleleB;
@@ -89,7 +89,7 @@ namespace Quille
             genome.hairColour = ExpressDominantAllele(genome.hairColourAlleleA, genome.hairColourAlleleB);
         }
 
-        static Color ExpressDominantAllele(GeneWithDominance alleleA, GeneWithDominance alleleB)
+        static Color ExpressDominantAllele(GeneWithDominanceSO alleleA, GeneWithDominanceSO alleleB)
         {
             if (alleleA.GeneDominance > alleleB.GeneDominance) { return Color.Lerp(alleleA.Colour, alleleB.Colour, 0.1f); }
             else

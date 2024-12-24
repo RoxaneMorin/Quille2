@@ -5,20 +5,18 @@ using UnityEngine;
 namespace Quille
 {
     // Base class for specific personality item domains to inherit from.
-    public abstract class PersonalityItemDomainSO : ScriptableObject
+    public abstract class PersonalityItemDomainSO : MenuSortableScriptableObject
     {
         // VARIABLES/PARAMS
         [SerializeField] protected string domainName = "Undefined";
         [SerializeField] protected Color domainColour;
         [SerializeField] protected Sprite domainIcon;
-        [SerializeField] protected int menuSortingIndex;
 
 
         // PROPERTIES
         public string DomainName { get { return domainName; } }
         public Color DomainColour { get { return domainColour; } }
         public Sprite DomainIcon { get { return domainIcon; } }
-        public int MenuSortingIndex { get { return menuSortingIndex; } }
 
         public abstract PersonalityItemSO[] ItemsInThisDomain { get; set; }
 

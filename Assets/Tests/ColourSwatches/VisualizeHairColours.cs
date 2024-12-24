@@ -7,12 +7,12 @@ namespace Quille
     public class VisualizeHairColours : MonoBehaviour
     {
         public Transform prefab;
-        GeneHairColour[] hairColours;
+        GeneHairColourSO[] hairColours;
 
         // Start is called before the first frame update
         void Start()
         {
-            hairColours = Resources.LoadAll<GeneHairColour>(Constants_PathResources.SO_PATH_HAIRCOLOURS);
+            hairColours = Resources.LoadAll<GeneHairColourSO>(Constants_PathResources.SO_PATH_HAIRCOLOURS);
         }
 
 
@@ -24,7 +24,7 @@ namespace Quille
             {
                 Vector3 currentSpot = this.transform.position;
 
-                foreach (GeneHairColour colour in hairColours)
+                foreach (GeneHairColourSO colour in hairColours)
                 {
                     Transform swatch = Instantiate<Transform>(prefab, this.transform);
 

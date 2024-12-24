@@ -10,8 +10,7 @@ namespace Quille
 
     // HAIR COLOUR GENE
     [CreateAssetMenu(fileName = "GeneHairColour", menuName = "Quille/Genetics/HairColour", order = 1)]
-    //[System.Serializable]
-    class GeneHairColour : GeneWithDominance
+    class GeneHairColourSO : GeneWithDominanceSO
     {
         // VARIABLES/PARAMS - OVERRIDES
         [SerializeField] private HairColourFamily colourFamily;

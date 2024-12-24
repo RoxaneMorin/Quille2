@@ -10,8 +10,7 @@ namespace Quille
 
     // EYE COLOUR GENE
     [CreateAssetMenu(fileName = "GeneEyeColour", menuName = "Quille/Genetics/EyeColour", order = 2)]
-    //[System.Serializable]
-    class GeneEyeColour : GeneWithDominance
+    class GeneEyeColourSO : GeneWithDominanceSO
     {
         // VARIABLES/PARAMS
         [SerializeField] private EyeColourFamily colourFamily;

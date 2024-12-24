@@ -7,12 +7,12 @@ namespace Quille
     public class VisualizeEyeColours : MonoBehaviour
     {
         public Transform prefab;
-        GeneEyeColour[] eyeColours;
+        GeneEyeColourSO[] eyeColours;
 
         // Start is called before the first frame update
         void Start()
         {
-            eyeColours = Resources.LoadAll<GeneEyeColour>(Constants_PathResources.SO_PATH_EYECOLOURS);
+            eyeColours = Resources.LoadAll<GeneEyeColourSO>(Constants_PathResources.SO_PATH_EYECOLOURS);
         }
 
 
@@ -24,7 +24,7 @@ namespace Quille
             {
                 Vector3 currentSpot = this.transform.position;
 
-                foreach (GeneEyeColour colour in eyeColours)
+                foreach (GeneEyeColourSO colour in eyeColours)
                 {
                     Transform swatch = Instantiate<Transform>(prefab, this.transform);
 

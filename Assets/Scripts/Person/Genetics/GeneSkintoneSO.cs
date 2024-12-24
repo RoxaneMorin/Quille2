@@ -11,7 +11,7 @@ namespace Quille
     // SKINTONE DEFAULTS
     [CreateAssetMenu(fileName = "DefaultSkintone", menuName = "Quille/Genetics/Skintone", order = 0)]
     //[System.Serializable]
-    class GeneSkintone : Gene
+    class GeneSkintoneSO : GeneSO
     {
         // VARIABLES/PARAMS - OVERRIDES
         [SerializeField] private SkinColourFamily colourFamily;
