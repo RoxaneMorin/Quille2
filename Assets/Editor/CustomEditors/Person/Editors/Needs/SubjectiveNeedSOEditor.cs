@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.SubjectiveNeedSO))]
+[CustomEditor(typeof(Quille.SubjectiveNeedSO)), CanEditMultipleObjects]
 public class SubjectiveNeedSOEditor : Editor
 {
     private SerializedProperty scriptProperty;
@@ -147,59 +147,66 @@ public class SubjectiveNeedSOEditor : Editor
             UpdateSubneedSerializedObjects();
         }
 
-        if (leftSerializedObject != null && rightSerializedObject != null)
+        if (targets.Length == 1)
         {
-            leftSerializedObject.Update();
-            rightSerializedObject.Update();
+            if (leftSerializedObject != null && rightSerializedObject != null)
+            {
+                leftSerializedObject.Update();
+                rightSerializedObject.Update();
 
-            EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.BeginVertical("HelpBox");
-            EditorUtilities.drawLabelAndProperty(needNameLeft);
-            EditorUtilities.drawLabelAndProperty(needIconLeft);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
-            EditorUtilities.drawLabelAndProperty(levelFullLeft);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(thresholdElatedLeft);
-            EditorUtilities.drawLabelAndProperty(thresholdWarningLeft);
-            EditorUtilities.drawLabelAndProperty(thresholdCriticalLeft);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByLeft);
-            EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByLeft);
-            EditorUtilities.drawLabelAndProperty(thresholdsModulatedByLeft);
-            EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginVertical("HelpBox");
+                EditorUtilities.drawLabelAndProperty(needNameLeft);
+                EditorUtilities.drawLabelAndProperty(needIconLeft);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
+                EditorUtilities.drawLabelAndProperty(levelFullLeft);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(thresholdElatedLeft);
+                EditorUtilities.drawLabelAndProperty(thresholdWarningLeft);
+                EditorUtilities.drawLabelAndProperty(thresholdCriticalLeft);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByLeft);
+                EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByLeft);
+                EditorUtilities.drawLabelAndProperty(thresholdsModulatedByLeft);
+                EditorGUILayout.EndVertical();
 
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-            EditorGUILayout.BeginVertical("HelpBox");
-            EditorUtilities.drawLabelAndProperty(needNameRight);
-            EditorUtilities.drawLabelAndProperty(needIconRight);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
-            EditorUtilities.drawLabelAndProperty(levelFullRight);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(thresholdElatedRight);
-            EditorUtilities.drawLabelAndProperty(thresholdWarningRight);
-            EditorUtilities.drawLabelAndProperty(thresholdCriticalRight);
-            GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-            EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByRight);
-            EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByRight);
-            EditorUtilities.drawLabelAndProperty(thresholdsModulatedByRight);
-            EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginVertical("HelpBox");
+                EditorUtilities.drawLabelAndProperty(needNameRight);
+                EditorUtilities.drawLabelAndProperty(needIconRight);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
+                EditorUtilities.drawLabelAndProperty(levelFullRight);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(thresholdElatedRight);
+                EditorUtilities.drawLabelAndProperty(thresholdWarningRight);
+                EditorUtilities.drawLabelAndProperty(thresholdCriticalRight);
+                GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
+                EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByRight);
+                EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByRight);
+                EditorUtilities.drawLabelAndProperty(thresholdsModulatedByRight);
+                EditorGUILayout.EndVertical();
 
-            EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
 
-            leftSerializedObject.ApplyModifiedProperties();
-            rightSerializedObject.ApplyModifiedProperties();
+                leftSerializedObject.ApplyModifiedProperties();
+                rightSerializedObject.ApplyModifiedProperties();
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("Two subneeds should be selected.", MessageType.Error);
+            }
         }
         else
         {
-            EditorGUILayout.HelpBox("Two subneeds should be selected.", MessageType.Error);
+            EditorGUILayout.HelpBox("Subneeds are only displayed when a single SubjectiveNeedSO is selected.", MessageType.Info);
         }
 
         serializedObject.ApplyModifiedProperties();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.InterestDomainSO))]
+[CustomEditor(typeof(Quille.InterestDomainSO)), CanEditMultipleObjects]
 public class InterestDomainSOEditor : Editor
 {
     private SerializedProperty scriptProperty;

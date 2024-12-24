@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using World;
 
-[CustomEditor(typeof(InteractionSO))]
+[CustomEditor(typeof(InteractionSO)), CanEditMultipleObjects]
 public class InteractionSOEditor : Editor
 {
     private SerializedProperty scriptProperty;

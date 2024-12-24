@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.DriveDomainSO))]
+[CustomEditor(typeof(Quille.DriveDomainSO)), CanEditMultipleObjects]
 public class DriveDomainSOEditor : Editor
 {
     private SerializedProperty scriptProperty;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.InterestSO))]
+[CustomEditor(typeof(Quille.InterestSO)), CanEditMultipleObjects]
 public class InterestSOEditor : Editor
 {
     private SerializedProperty scriptProperty;

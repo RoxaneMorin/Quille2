@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.Person_NeedController))]
+[CustomEditor(typeof(Quille.Person_NeedController)), CanEditMultipleObjects]
 public class NeedControllerEditor : Editor
 {
     private SerializedProperty scriptProperty;

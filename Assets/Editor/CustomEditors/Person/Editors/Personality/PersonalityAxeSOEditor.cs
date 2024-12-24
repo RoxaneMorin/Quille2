@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Quille.PersonalityAxeSO))]
+[CustomEditor(typeof(Quille.PersonalityAxeSO)), CanEditMultipleObjects]
 public class PersonalityAxeSOEditor : Editor
 {
     private SerializedProperty scriptProperty;
