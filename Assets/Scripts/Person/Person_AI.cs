@@ -20,12 +20,14 @@ namespace Quille
         [SerializeField, InspectorReadOnly] private Person_NeedController myNeedController;
         // Do we need additional controller references here?
 
+
         // Values.
         // Percentile thresholds at which the character AI will consider a need to require its attention.
         [SerializeField] private float noticeBasicNeed = Constants_Quille.DEFAULT_NOTICE_BASIC_NEED;
         [SerializeField] private float noticeSubjectiveNeed = Constants_Quille.DEFAULT_NOTICE_SUBJECTIVE_NEED;
 
         // TODO: modulate notices based on personality.
+
 
         // Checks/bools.
         [SerializeField] private bool inAction; // Is the character currently absorbed in something? 
@@ -35,6 +37,12 @@ namespace Quille
         [SerializeField] private bool reactToNotice;
         [SerializeField] private bool reactToWarning;
         [SerializeField] private bool reactToCritical;
+
+
+        // Temp
+        [SerializeField] private World_Area currentArea;
+        // TODO: how will a person know the area they are in?
+
 
 
         // PROPERTIES
@@ -81,48 +89,59 @@ namespace Quille
 
         // METHODS
 
+        // TODO: how will a person know they are too busy to notice a new need?
+        // Should notice be able to interupt any interaction at all?
+
+        // Once an action is done, check again in case multiple needs were at or below notice.
+        // Should the loop reinvoke itself here, or run as a coroutine?
+
+        // Receiving a need Warning, Critical or Failure event can overwrite other actions depending on the importance of said need.
+
+
+
         // AI Logic
         protected void NeedMonitorLoop()
         {
-            //Debug.Log("In NeedMonitorLoop");
+            // Even X seconds,
 
-            // Even X seconds, verify if:
-            // TODO: how will a person know the area they are in?
-
-            // TODO: how will a person know they are too busy to notice a new need?
-
-            //-> Any basic need is at or below notice. If so, do action unless otherwise occupied.
+            //-> Collect basic needs at or below notice. 
             BasicNeedSO[] needyBasicNeeds = myNeedController.PerformBasicNeedCheck(noticeBasicNeed);
-            // TODO: Take care of the first need possible.
+            // If any were found,
             foreach(BasicNeedSO need in needyBasicNeeds)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", need.NeedName));
 
-                // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
-            }
-            // Else. Will it need to be an actual else clause?
+                // Look for a fitting interaction to fulfill this need, or the next in line.
+                FindBestLocalInteractionFor(need, currentArea);
 
-            //-> Any subjective need is at or below notice. If so, do action unless otherwise occupied.
+                // Break away toward the interaction.
+            }
+            // Else...
+
+
+            //-> Collect subjective needs at or below notice. 
             BasicNeedSO[] needySubjectiveNeeds = myNeedController.PerformSubjectiveNeedCheck(noticeSubjectiveNeed);
-            // TODO: Take care of the first need possible.
+            // If any were found,
             foreach (BasicNeedSO need in needySubjectiveNeeds)
             {
                 Debug.Log(string.Format("Something must be done about our {0} need.", need.NeedName));
 
-                // Try to fullfil the need, unless the character is engaged in an action nuninterrupted by Notice.
+                // Look for a fitting interaction to fulfill this need, or the next in line.
+                FindBestLocalInteractionFor(need, currentArea);
+
+                // Break away toward the interaction.
             }
+            // Else...
 
-            // Once the action is done, check again in case multiple needs were at or below notice.
-            // Should it reinvoke itself here, or run as a coroutine?
 
-            // Receiving a need Warning, Critical or Failure event can overwrite other actions depending on the importance of said need.
+            // Look for an interaction that fulfills a drive, etc.
         }
 
 
         // UTILITY
-        protected LocalInteraction FindBestLocalInteractionFor(BasicNeedSO thisNeed, World_Area currentArea)
+        protected LocalInteraction FindBestLocalInteractionFor(BasicNeedSO thisNeed, World_Area inThisArea)
         {
-            List<LocalInteraction> relevantInteractions = currentArea.LocalInteractionsFor(thisNeed);
+            List<LocalInteraction> relevantInteractions = inThisArea.LocalInteractionsFor(thisNeed);
 
             if (relevantInteractions.Count == 0)
             {
@@ -140,6 +159,7 @@ namespace Quille
                 if (interaction != null && interaction.ValidateFor(myBasePerson))
                 {
                     float interactionScore = interaction.ScoreFor(myBasePerson);
+                    Debug.Log(string.Format("{0}'s score for the {1}: {2}", myBasePerson.MyPersonCharacter.FirstAndLastName, interaction, interactionScore));
 
                     if (interactionScore > currentBestInteractionScore)
                     {
@@ -149,6 +169,7 @@ namespace Quille
                 }
             }
 
+            Debug.Log(string.Format("The best match found for {0}'s {1} need is the {2}.", myBasePerson.MyPersonCharacter.FirstAndLastName, thisNeed.NeedName, currentBestInteraction));
             return currentBestInteraction;
         }
 

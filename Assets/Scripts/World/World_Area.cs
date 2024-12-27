@@ -68,28 +68,28 @@ namespace World
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                TempScoreEachInteractionFor(tempPerson);
-            }
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    TempScoreEachInteractionFor(tempPerson);
+            //}
         }
 
 
 
         // TEMPORARY TEST STUFF
-        [SerializeField] private Person tempPerson;
-        protected void TempScoreEachInteractionFor(Person thisPerson)
-        {
-            foreach (List<LocalInteraction> listOfInteractions in localInteractions.Values)
-            {
-                foreach (LocalInteraction interaction in listOfInteractions)
-                {
-                    float score = interaction.ScoreFor(thisPerson);
+        //[SerializeField] private Person tempPerson;
+        //protected void TempScoreEachInteractionFor(Person thisPerson)
+        //{
+        //    foreach (List<LocalInteraction> listOfInteractions in localInteractions.Values)
+        //    {
+        //        foreach (LocalInteraction interaction in listOfInteractions)
+        //        {
+        //            float score = interaction.ScoreFor(thisPerson);
 
-                    Debug.Log(string.Format("{0}'s score for the {1}: {2}", thisPerson.MyPersonCharacter.FirstAndLastName, interaction, score));
-                }
-            }
-        }
+        //            Debug.Log(string.Format("{0}'s score for the {1}: {2}", thisPerson.MyPersonCharacter.FirstAndLastName, interaction, score));
+        //        }
+        //    }
+        //}
     }
 }
 

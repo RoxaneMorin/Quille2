@@ -120,6 +120,74 @@ namespace ChecksAndMods
 
 
         // TODO: fetch need levels and the like.
+
+        public static float? FetchBasicNeedLevel(System.Object sourceObj, Quille.BasicNeedSO relevantNeed, bool asPercentage = false)
+        {
+            Quille.Person_NeedController sourceNeedController;
+
+            if (sourceObj is Quille.Person)
+            {
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
+                sourceNeedController = sourceQuille.MyNeedController;
+                return FetchBasicNeedLevelFromPersonNeedController(sourceNeedController, relevantNeed, asPercentage);
+            }
+            else if (sourceObj is Quille.Person_NeedController)
+            {
+                return FetchBasicNeedLevelFromPersonNeedController((Quille.Person_NeedController)sourceObj, relevantNeed, asPercentage);
+            }
+            else
+            {
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a BasicNeed modulator.\nThis modulator or check will return null.", sourceObj.ToString()));
+                return null;
+            }
+        }
+        public static float? FetchBasicNeedLevelFromPersonNeedController(Quille.Person_NeedController sourceNeedController, Quille.BasicNeedSO relevantNeed, bool asPercentage = false)
+        {
+            Quille.BasicNeed theBasicNeed = sourceNeedController.GetBasicNeed(relevantNeed);
+
+            if (theBasicNeed != null)
+            {
+                return (asPercentage ? theBasicNeed.LevelCurrentAsPercentage : theBasicNeed.LevelCurrent);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static float? FetchSubjectiveNeedLevel(System.Object sourceObj, Quille.SubjectiveNeedSO relevantNeed, Quille.BasicNeedSO relevantSubneed, bool asPercentage = false)
+        {
+            Quille.Person_NeedController sourceNeedController;
+
+            if (sourceObj is Quille.Person)
+            {
+                Quille.Person sourceQuille = (Quille.Person)sourceObj;
+                sourceNeedController = sourceQuille.MyNeedController;
+                return FetchSubjectiveNeedLevelFromPersonNeedController(sourceNeedController, relevantNeed, relevantSubneed, asPercentage);
+            }
+            else if (sourceObj is Quille.Person_NeedController)
+            {
+                return FetchSubjectiveNeedLevelFromPersonNeedController((Quille.Person_NeedController)sourceObj, relevantNeed, relevantSubneed, asPercentage);
+            }
+            else
+            {
+                Debug.LogError(string.Format("The input object '{0}' is of the wrong type and cannot be used in a BasicNeed modulator.\nThis modulator or check will return null.", sourceObj.ToString()));
+                return null;
+            }
+        }
+        public static float? FetchSubjectiveNeedLevelFromPersonNeedController(Quille.Person_NeedController sourceNeedController, Quille.SubjectiveNeedSO relevantNeed, Quille.BasicNeedSO relevantSubneed, bool asPercentage = false)
+        {
+            Quille.SubjectiveNeed theSubjectiveNeed = sourceNeedController.GetSubjectiveNeed(relevantNeed);
+
+            if (theSubjectiveNeed != null)
+            {
+                return (asPercentage ? theSubjectiveNeed.LevelCurrentAsPercentageFor(relevantSubneed) : theSubjectiveNeed.LevelCurrentFor(relevantSubneed));
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
 

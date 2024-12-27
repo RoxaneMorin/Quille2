@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: HalfNeed_MetalStimulation
   m_EditorClassIdentifier: 
   needName: Mental Stimulation
+  isHalfNeed: 1
   needIcon: {fileID: 21300000, guid: eb52f472bd405714d832b720a56ff273, type: 3}
   aiPriorityWeighting: 1
   levelFull: 1
-  defaultChangeRate: -0.1
+  defaultChangeRate: -0.05
   thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1

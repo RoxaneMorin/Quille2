@@ -12,8 +12,12 @@ namespace Quille
     public class BasicNeedSO : ScriptableObject
     {
         // VARIABLES/PARAMS   
-        public string NeedName { get { return needName; } }
         [SerializeField] private string needName = "Undefined";
+        public string NeedName { get { return needName; } }
+
+        [SerializeField] private bool isHalfNeed = false;
+        public bool IsHalfNeed { get { return isHalfNeed; } }
+
 
         // NEED GRAPHICS
         [SerializeField] private Sprite needIcon;

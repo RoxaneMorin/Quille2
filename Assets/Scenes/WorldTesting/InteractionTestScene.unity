@@ -122,18 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &333635914 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3027416774607700952, guid: b55c8aefc9be69c468e02f442a7d0275,
-    type: 3}
-  m_PrefabInstance: {fileID: 343650627}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &343650627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187,6 +175,11 @@ PrefabInstance:
       propertyPath: myPersonCharacter.myPersonalityAxes._serializedList.Array.data[3].Value
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5381605543664747764, guid: b55c8aefc9be69c468e02f442a7d0275,
+        type: 3}
+      propertyPath: currentArea
+      value: 
+      objectReference: {fileID: 2018340344}
     - target: {fileID: 5765194513728661664, guid: b55c8aefc9be69c468e02f442a7d0275,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -479,7 +472,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localInteractions:
     _serializedList: []
-  tempPerson: {fileID: 333635914}
 --- !u!1 &2068310455
 GameObject:
   m_ObjectHideFlags: 0

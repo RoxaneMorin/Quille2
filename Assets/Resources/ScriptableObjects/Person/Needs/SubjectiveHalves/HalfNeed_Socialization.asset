@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: HalfNeed_Socialization
   m_EditorClassIdentifier: 
   needName: Socialization
+  isHalfNeed: 1
   needIcon: {fileID: 21300000, guid: 5adfd28db80f4514985ce1089bef391b, type: 3}
   aiPriorityWeighting: 1
   levelFull: 1
-  defaultChangeRate: -0.1
+  defaultChangeRate: -0.05
   thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
   baseChangeRateModulatedBy:
-  - modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 1
-    modOpIdx: 3
+  - modOpIdx: 3
     modifier: 0.25
+    modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
+    mainOpIdx: 1
   thresholdsModulatedBy: []

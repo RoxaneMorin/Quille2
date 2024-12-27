@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: HalfNeed_SensoryStimulation
   m_EditorClassIdentifier: 
   needName: Sensory Stimulation
+  isHalfNeed: 1
   needIcon: {fileID: 21300000, guid: 727fe75804c1017438e04cf6695de795, type: 3}
   aiPriorityWeighting: 1
   levelFull: 1
-  defaultChangeRate: -0.075
+  defaultChangeRate: -0.05
   thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1

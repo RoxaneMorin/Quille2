@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: HalfNeed_Indulgence
   m_EditorClassIdentifier: 
   needName: Indulgence
+  isHalfNeed: 1
   needIcon: {fileID: 21300000, guid: fa23ea57c71c3084aa1f558427bef8b5, type: 3}
   aiPriorityWeighting: 0.85
   levelFull: 1
-  defaultChangeRate: -0.05
+  defaultChangeRate: -0.025
   thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1

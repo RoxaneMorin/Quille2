@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: HalfNeed_Challenge
   m_EditorClassIdentifier: 
   needName: Challenge
+  isHalfNeed: 1
   needIcon: {fileID: 21300000, guid: 00c1913565851604b93972b2584d5ef8, type: 3}
   aiPriorityWeighting: 0.85
   levelFull: 1
-  defaultChangeRate: -0.045
+  defaultChangeRate: -0.025
   thresholdElated: 0.9
   thresholdWarning: 0.25
   thresholdCritical: 0.1
