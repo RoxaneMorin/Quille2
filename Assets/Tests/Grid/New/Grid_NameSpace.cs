@@ -1,6 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
+using static Unity.Mathematics.math;
 
 namespace proceduralGrid
 {
@@ -9,10 +17,12 @@ namespace proceduralGrid
     public enum Adjacencies { bl, br, tl, tr, b, t, l, r }; // Useless?
 
 
+
     // EVENTS
     public delegate void GridItemGOClicked(Grid_ItemGO theItem);
     public delegate void GridItemPureClicked(Grid_ItemPure theItem);
     public delegate void HandleClicked(Grid_Handle theHandle);
+
 
 
     // STRUCTS

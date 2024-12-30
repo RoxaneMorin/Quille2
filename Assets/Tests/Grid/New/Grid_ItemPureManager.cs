@@ -147,7 +147,8 @@ namespace proceduralGrid
             Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, itemScale);
 
             // Apply ancestor matrices and return.
-            return gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
+            //return gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
+            return gridTransformMatrix * itemTransformMatrix;
         }
         protected void RegenerateItemTransforms()
         {
@@ -361,7 +362,12 @@ namespace proceduralGrid
                 {
                     isBusy = true;
                     Debug.Log(string.Format("Mouse down on {0} at {1}.", gameObject, Input.mousePosition));
+
+                    //System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
                     SearchForClickedItem(Input.mousePosition);
+                    //stopwatch.Stop();
+                    //Debug.Log($"Time elapsed: {stopwatch.Elapsed}");
+
                     isBusy = false;
                 }
             }
