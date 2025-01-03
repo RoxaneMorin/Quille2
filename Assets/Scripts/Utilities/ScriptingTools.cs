@@ -10,6 +10,17 @@ public static class ExtensionMethods
 {
     // Various extension methods.
 
+    // FLOAT
+    public static float NormalizeRadAngle(this float angle)
+    {
+        float piTimesTwo = Mathf.PI * 2;
+        return (angle + piTimesTwo) % piTimesTwo;
+    }
+    public static float NormalizeDegAndle(this float angle)
+    {
+        return (angle + 360f) % 360f;
+    }
+
 
     // ARRAY
     public static void InvertedSort(this Array array)

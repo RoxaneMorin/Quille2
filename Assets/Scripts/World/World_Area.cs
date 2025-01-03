@@ -22,6 +22,8 @@ namespace World
         public SerializedDictionary<BasicNeedSO, List<LocalInteraction>> LocalInteractions { get { return localInteractions; } }
         public List<LocalInteraction> LocalInteractionsFor(BasicNeedSO thisNeed)
         {
+            // TODO: what to return if no interactions are found for the need?
+
             return localInteractions[thisNeed];
         }
 
