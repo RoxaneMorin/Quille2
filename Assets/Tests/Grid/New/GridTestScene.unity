@@ -345,8 +345,7 @@ MonoBehaviour:
   tileSize: 1
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
   gridPointManagerPrefab: {fileID: 0}
-  gridTileManagerPrefab: {fileID: 4426721992602055434, guid: 1963e23a7b8562e4d8e6065cae34b60b,
-    type: 3}
+  gridTileManagerPrefab: {fileID: 0}
   myGridPointManager: {fileID: 0}
   myGridTileManager: {fileID: 0}
 --- !u!23 &1814107587

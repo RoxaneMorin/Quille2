@@ -342,6 +342,8 @@ namespace proceduralGrid
             // Have we moved?
             if (transform.hasChanged)
             {
+                Debug.Log("ItemPureManager's transform has changed.");
+
                 RegenerateItemTransforms();
                 PopulateBoundsGizmoPoints();
 

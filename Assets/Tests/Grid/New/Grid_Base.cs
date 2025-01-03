@@ -36,6 +36,8 @@ namespace proceduralGrid
         [SerializeField, Range(1, 100)] protected int resolutionZ = 10;
         [SerializeField, Range(0.1f, 2f)] protected float tileSize = 1f;
 
+        [SerializeField] protected GridItemPositioning gridItemPositions;
+
         [Header("Grid Parameters - Components")]
         [SerializeField] protected Material gridMaterial;
         [SerializeField] protected GameObject gridPointManagerPrefab;
@@ -52,8 +54,7 @@ namespace proceduralGrid
         protected bool cursorBusy;
         public bool CursorBusy { get { return cursorBusy; } set { cursorBusy = value; } }
 
-
-        public NativeArray<GridItem> testCenteredGridItems;
+        public NativeArray<GridItem> testGridItems;
 
 
         // METHODS
@@ -80,29 +81,32 @@ namespace proceduralGrid
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, myMesh);
         }
 
-        protected void TestCenteredItemCreationJob()
+        protected void TestItemCreationJob()
         {
-            if (testCenteredGridItems.IsCreated)
+            if (testGridItems.IsCreated)
             {
-                testCenteredGridItems.Dispose();
+                testGridItems.Dispose();
             }
-            testCenteredGridItems = new NativeArray<GridItem>(resolutionX * resolutionZ, Allocator.Persistent);
+
+            int2 resolution = gridItemPositions == GridItemPositioning.AtCenter ? new int2(resolutionX, resolutionZ) : new int2(resolutionX + 1, resolutionZ + 1);
+            float4x4 baseTransformMatrix = (float4x4)Matrix4x4.TRS(gameObject.transform.localPosition, gameObject.transform.localRotation, gameObject.transform.localScale);
+
+            testGridItems = new NativeArray<GridItem>(resolution.x * resolution.y, Allocator.Persistent);
 
             // Do the job proper.
-            var generateCenteredItemsJob = new GridCenterItemGenerationJob
-            {
-                GridItems = testCenteredGridItems,
+            GridItemGenerationJob.Schedule(testGridItems, gridItemPositions, resolution, tileSize, baseTransformMatrix, default).Complete();
+        }
 
-                Resolution = new int2(resolutionX, resolutionZ),
-                TileSize = tileSize,
-                ParentTransformMatrix = (float4x4)Matrix4x4.TRS(gameObject.transform.localPosition, gameObject.transform.localRotation, gameObject.transform.localScale)
-        };
-            var generateCenteredItemsHandle = generateCenteredItemsJob.Schedule(testCenteredGridItems.Length, 64);
-            generateCenteredItemsHandle.Complete();
+        protected void TestMatrixUpdateJob()
+        {
+            if (testGridItems.IsCreated)
+            {
+                float4x4 baseTransformMatrix = (float4x4)Matrix4x4.TRS(gameObject.transform.localPosition, gameObject.transform.localRotation, gameObject.transform.localScale);
+                GridItemWorldMatrixUpdateJob.Schedule(testGridItems, baseTransformMatrix, default).Complete();
+            }
         }
 
         // TODO: move this to the item manager?
-        // TODO: update matrix when the base object is moved/rotated/scaled.
 
 
         protected void Populate()
@@ -176,32 +180,46 @@ namespace proceduralGrid
 
         void OnValidate()
         {
+            if (transform.hasChanged)
+            {
+                Debug.Log("GridBase's transform has changed OnValidate.");
+                //TestMatrixUpdateJob();
+                transform.hasChanged = false;
+            }
+
             enabled = true;
         }
 
         void Update()
         {
             GenerateMesh();
-            TestCenteredItemCreationJob();
+            TestItemCreationJob();
+
+            if (transform.hasChanged)
+            {
+                Debug.Log("GridBase's transform has changed Update.");
+                //TestMatrixUpdateJob();
+                transform.hasChanged = false;
+            }
 
             enabled = false;
         }
 
         void OnDestroy()
         {
-            if (testCenteredGridItems.IsCreated)
+            if (testGridItems.IsCreated)
             {
-                testCenteredGridItems.Dispose();
+                testGridItems.Dispose();
             }
         }
 
         void OnDrawGizmos()
         {
             // Draw the component items.
-            if (testCenteredGridItems != null)
+            if (testGridItems != null)
             {
                 Gizmos.color = Color.red;
-                foreach (GridItem item in testCenteredGridItems)
+                foreach (GridItem item in testGridItems)
                 {
                     Gizmos.DrawSphere(item.WorldPosition, 0.1f * tileSize);
                 }

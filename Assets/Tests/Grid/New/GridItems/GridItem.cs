@@ -27,6 +27,10 @@ namespace proceduralGrid
 
 
         // METHODS
+        public void UpdateWorldTransformMatrix(float4x4 NewParentTransformMatrix)
+        {
+            WorldTransformMatrix = math.mul(NewParentTransformMatrix, LocalTransformMatrix);
+        }
     }
 }
 

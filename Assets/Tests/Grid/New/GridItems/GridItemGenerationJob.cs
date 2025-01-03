@@ -10,16 +10,17 @@ using static Unity.Mathematics.math;
 namespace proceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
-    public struct GridCenterItemGenerationJob : IJobParallelFor
+    public struct GridItemGenerationJob : IJobParallelFor
     {
         // PROPERTIES
         public NativeArray<GridItem> GridItems;
+        public GridItemPositioning ItemPositioning;
 
         [ReadOnly] public int2 Resolution;
         [ReadOnly] public float TileSize;
         [ReadOnly] public float4x4 ParentTransformMatrix;
 
-        public GridItemPositioning ItemPositioning { get { return GridItemPositioning.AtCenter; } }
+        public int JobLength { get { return GridItems.Length; } }
 
 
 
@@ -30,14 +31,11 @@ namespace proceduralGrid
             int z = index / Resolution.x;
 
             // Determine item position,
-            float posX = (0.5f + x) * TileSize;
-            float posZ = (0.5f + z) * TileSize;
+            float posX = (ItemPositioning == GridItemPositioning.AtCenter ? (0.5f + x) * TileSize : x * TileSize);
+            float posZ = (ItemPositioning == GridItemPositioning.AtCenter ? (0.5f + z) * TileSize : z * TileSize);
 
             // Build local matrix
             float4x4 localMatrix = new float4x4(Unity.Mathematics.float3x3.identity, new float3(posX, 0.01f, posZ));
-
-            // Build world matrix
-            float4x4 worldMatrix = math.mul(ParentTransformMatrix, localMatrix);
 
             // Create the item at index.
             GridItems[index] = new GridItem
@@ -49,12 +47,21 @@ namespace proceduralGrid
                 HeightOffset = 0f,
 
                 LocalTransformMatrix = localMatrix,
-                WorldTransformMatrix = worldMatrix
+                WorldTransformMatrix = math.mul(ParentTransformMatrix, localMatrix)
             };
         }
+
+        public static JobHandle Schedule(NativeArray<GridItem> gridItems, GridItemPositioning itemPositioning, int2 resolution, float tileSize, float4x4 parentTransformMatrix, JobHandle dependency)
+        {
+            var job = new GridItemGenerationJob();
+            job.GridItems = gridItems;
+            job.ItemPositioning = itemPositioning;
+            job.Resolution = resolution;
+            job.TileSize = tileSize;
+            job.ParentTransformMatrix = parentTransformMatrix;
+
+            return job.Schedule(job.JobLength, 64, dependency);
+        }
     }
-
-
-    // Also have a job to edit the item's transform matrix & other info.
 }
 
