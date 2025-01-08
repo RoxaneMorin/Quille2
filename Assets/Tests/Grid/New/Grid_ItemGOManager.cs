@@ -29,12 +29,12 @@ namespace proceduralGrid
         // METHODS
 
         // SET UP
-        public override void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
+        public override void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float tileSize, float itemSize, Vector3 offset)
         {
-            base.Init(parentGrid, gridLengthX, gridLengthZ, relativeSize, offset);
+            base.Init(parentGrid, gridLengthX, gridLengthZ, tileSize, itemSize, offset);
 
             // Create internal items.
-            CreateInternalItems(parentGrid, gridLengthX, gridLengthZ, relativeSize, offset);
+            GenerateItems();
 
             // Populate boundsGizmoPoints.
             boundsGizmoVertexPos = new Vector3[4];
@@ -45,18 +45,18 @@ namespace proceduralGrid
         }
 
         // Separated submethods for ease of overriding.
-        protected override void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
+        protected override void GenerateItems()
         {
-            myGridItems = new Grid_ItemGO[gridLengthX + 1, gridLengthZ + 1];
-            for (int x = 0; x <= gridLengthX; x++)
+            myGridItems = new Grid_ItemGO[myResolutionX + 1, myResolutionZ + 1];
+            for (int x = 0; x <= myResolutionX; x++)
             {
-                for (int z = 0; z <= gridLengthZ; z++)
+                for (int z = 0; z <= myResolutionZ; z++)
                 {
-                    Vector3 relativePosition = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
-                    relativePosition.y *= relativeSize;
+                    Vector3 relativePosition = new Vector3(x * myTileSize, 0, z * myTileSize) + myItemOffset;
+                    relativePosition.y *= myTileSize;
 
                     myGridItems[x, z] = Instantiate(itemPrefab, transform).GetComponent<Grid_ItemGO>();
-                    myGridItems[x, z].SetParameters(parentGrid, this, new CoordPair(x, z), relativePosition, relativeSize);
+                    myGridItems[x, z].SetParameters(myParentGrid, this, new CoordPair(x, z), relativePosition, myItemSize);
                     myGridItems[x, z].OnItemClicked += OnMyItemClicked;
                 }
             }
@@ -64,9 +64,9 @@ namespace proceduralGrid
         protected override void PopulateBoundsGizmoPoints()
         {
             boundsGizmoVertexPos[0] = myGridItems[0, 0].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[1] = myGridItems[myLengthX, 0].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[2] = myGridItems[myLengthX, myLengthZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[3] = myGridItems[0, myLengthZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[1] = myGridItems[myResolutionX, 0].transform.position + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[2] = myGridItems[myResolutionX, myResolutionZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[3] = myGridItems[0, myResolutionZ].transform.position + new Vector3(0, boundsGizmoHeight, 0);
         }
 
         public void CreateHandles(Grid_ItemGO centerItem, int doBeyond)
@@ -90,7 +90,7 @@ namespace proceduralGrid
                     int currentZCoord = centerItem.MyGridCoordinates.z + z;
 
                     // Don't generate a handle if the target point is out of range.
-                    if (currentXCoord >= 0 && currentXCoord <= myLengthX && currentZCoord >= 0 && currentZCoord <= myLengthZ)
+                    if (currentXCoord >= 0 && currentXCoord <= myResolutionX && currentZCoord >= 0 && currentZCoord <= myResolutionZ)
                     {
                         if (myHandles[x + doBeyond, z + doBeyond] == null)
                         {

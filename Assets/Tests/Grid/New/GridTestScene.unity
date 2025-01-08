@@ -340,12 +340,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridMeshType: 1
-  resolutionX: 10
-  resolutionZ: 10
+  resolutionX: 6
+  resolutionZ: 6
   tileSize: 1
   gridMaterial: {fileID: 2100000, guid: 518b43497da652b4d9032d5a99534384, type: 2}
   gridPointManagerPrefab: {fileID: 0}
-  gridTileManagerPrefab: {fileID: 0}
+  gridTileManagerPrefab: {fileID: 4426721992602055434, guid: 60e2c1f125e73764a932f2b503fc7c26,
+    type: 3}
   myGridPointManager: {fileID: 0}
   myGridTileManager: {fileID: 0}
 --- !u!23 &1814107587

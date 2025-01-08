@@ -23,7 +23,20 @@ namespace proceduralGrid
         // METHODS
         public void Execute(int index)
         {
-            GridItems[index].UpdateWorldTransformMatrix(ParentTransformMatrix);
+            // Is there a way to do this without recreating the item?
+
+            GridItem previousGridItem = GridItems[index];
+            GridItems[index] = new GridItem
+            {
+                Positioning = previousGridItem.Positioning,
+
+                GridCoordinates = previousGridItem.GridCoordinates,
+                ItemSize = previousGridItem.ItemSize,
+                HeightOffset = previousGridItem.HeightOffset,
+
+                LocalTransformMatrix = previousGridItem.LocalTransformMatrix,
+                WorldTransformMatrix = math.mul(ParentTransformMatrix, previousGridItem.LocalTransformMatrix)
+            };
         }
 
         public static JobHandle Schedule(NativeArray<GridItem> gridItems, float4x4 parentTransformMatrix, JobHandle dependency)

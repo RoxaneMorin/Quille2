@@ -9,57 +9,105 @@ using static Unity.Mathematics.math;
 
 namespace proceduralGrid
 {
-    public struct GridMeshGenerator_SeparateQuadsFromItems : IGridMeshGenerator
+    [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
+    public struct GridMeshGenerator_SeparateQuadsFromItems<S> : IJobParallelFor
+        where S : struct, IMeshStreams
     {
         // PROPERTIES
         public NativeArray<GridItem> GridItems;
-
-        public int2 Resolution { get; set; }
         public float TileSize { get; set; }
+        public float ItemSize { get; set; }
 
-        public int VertexCount { get { return 4 * Resolution.x * Resolution.y; } }
-        public int IndexCount { get { return 6 * Resolution.x * Resolution.y; } }
-        public Bounds Bounds { get { return new Bounds(new Vector3(Resolution.x * TileSize / 2f, 0f, Resolution.y * TileSize / 2f), new Vector3(Resolution.x * TileSize, 0f, Resolution.y * TileSize)); } }
+        [WriteOnly] S streams;
+        public int VertexCount { get { return GridItems.Length * 4; } }
+        public int IndexCount { get { return GridItems.Length * 6; } }
+        public Bounds Bounds
+        {
+            // TODO: find a better way of calculating the bounds. Is it worth doing it here?
+            get
+            {
+                {
+                    int lastIndex = GridItems.Length - 1;
+                    float highestX = GridItems[lastIndex].GridCoordinates.x + 1;
+                    float highestZ = GridItems[lastIndex].GridCoordinates.y + 1;
 
-        public int JobLength { get { return Resolution.y; } }
+                    float sizeX = highestX * TileSize;
+                    float sizeZ = highestZ * TileSize;
+
+                    float centerX = sizeX / 2f;
+                    float centerZ = sizeZ / 2f;
+
+                    if (GridItems[lastIndex].Positioning == GridItemPositioning.AtCorner)
+                    {
+                        centerX -= (TileSize / 2f);
+                        centerZ -= (TileSize / 2f);
+                    }
+
+                    return new Bounds(new Vector3(centerX, GridItems[lastIndex].HeightOffset, centerZ), new Vector3(sizeX, 0, sizeZ));
+                }
+            }
+        }
+
+        public int JobLength { get { return GridItems.Length; } }
 
 
 
         // METHODS
-        public void Execute<S>(int z, S streams) where S : struct, IMeshStreams
+        public void Execute(int index)
         {
-            int vi = 4 * Resolution.x * z;
-            int ti = 2 * Resolution.x * z;
+            float posY = GridItems[index].LocalPosition.y;
+            float centeredPosX = GridItems[index].LocalPosition.x;
+            float centeredPosZ = GridItems[index].LocalPosition.z;
 
-            for (int x = 0; x < Resolution.x; x++, vi += 4, ti += 2)
-            {
-                var xCoordinates = float2(x, x + 1f) * TileSize;
-                var zCoordinates = float2(z, z + 1f) * TileSize;
+            float halfWidth = ItemSize / 2f;
+            float negPosX = centeredPosX - halfWidth;
+            float posPosX = centeredPosX + halfWidth;
 
-                var vertex = new Vertex();
-                vertex.normal.y = 1f;
-                vertex.tangent.xw = float2(1f, -1f);
+            int vi = index * 4;
+            int ti = index * 2;
 
-                vertex.position.x = xCoordinates.x;
-                vertex.position.z = zCoordinates.x;
-                streams.SetVertex(vi + 0, vertex);
+            // Create the base vertex.
+            var vertex = new Vertex();
+            vertex.position.y = posY;
+            vertex.normal.y = 1f;
+            vertex.tangent.xw = float2(1f, -1f);
 
-                vertex.position.x = xCoordinates.y;
-                vertex.texCoord0 = float2(1f, 0f);
-                streams.SetVertex(vi + 1, vertex);
+            // Bottom left.
+            vertex.position.x = negPosX;
+            vertex.position.z = centeredPosZ - halfWidth;
+            streams.SetVertex(vi + 0, vertex);
 
-                vertex.position.x = xCoordinates.x;
-                vertex.position.z = zCoordinates.y;
-                vertex.texCoord0 = float2(0f, 1f);
-                streams.SetVertex(vi + 2, vertex);
+            // Bottom right.
+            vertex.position.x = posPosX;
+            vertex.texCoord0 = float2(1f, 0f);
+            streams.SetVertex(vi + 1, vertex);
 
-                vertex.position.x = xCoordinates.y;
-                vertex.texCoord0 = 1f;
-                streams.SetVertex(vi + 3, vertex);
+            // Top left.
+            vertex.position.x = negPosX;
+            vertex.position.z = centeredPosZ + halfWidth;
+            vertex.texCoord0 = float2(0f, 1f);
+            streams.SetVertex(vi + 2, vertex);
 
-                streams.SetTriangle(ti + 0, vi + int3(0, 2, 1));
-                streams.SetTriangle(ti + 1, vi + int3(1, 2, 3));
-            }
+            // Top right.
+            vertex.position.x = posPosX;
+            vertex.texCoord0 = 1f;
+            streams.SetVertex(vi + 3, vertex);
+
+            // Triangles.
+            streams.SetTriangle(ti + 0, vi + int3(0, 2, 1));
+            streams.SetTriangle(ti + 1, vi + int3(1, 2, 3));
+        }
+
+        public static JobHandle Schedule(Mesh mesh, Mesh.MeshData meshData, NativeArray<GridItem> gridItems, float tileSize, float itemSize, JobHandle dependency)
+        {
+            var job = new GridMeshGenerator_SeparateQuadsFromItems<S>();
+            job.GridItems = gridItems;
+            job.TileSize = tileSize;
+            job.ItemSize = itemSize;
+
+            job.streams.Setup(meshData, mesh.bounds = job.Bounds, job.VertexCount, job.IndexCount);
+
+            return job.Schedule(job.JobLength, 1, dependency);
         }
     }
 }

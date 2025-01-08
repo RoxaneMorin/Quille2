@@ -65,7 +65,7 @@ namespace proceduralGrid
             meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount) { bounds = bounds, vertexCount = vertexCount }, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
 
             stream0 = meshData.GetVertexData<SingleStreamVertex>();
-            triangles = meshData.GetIndexData<ushort>().Reinterpret<int3>(2);
+            triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);
         }
     }
 
@@ -116,7 +116,7 @@ namespace proceduralGrid
             stream1 = meshData.GetVertexData<float3>(1);
             stream2 = meshData.GetVertexData<float4>(2);
             stream3 = meshData.GetVertexData<float2>(3);
-            triangles = meshData.GetIndexData<ushort>().Reinterpret<int3>(2);
+            triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);
         }
     }
 }

@@ -60,12 +60,12 @@ namespace proceduralGrid
         // METHODS
 
         // SET UP
-        public override void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
+        public override void Init(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float tileSize, float itemSize, Vector3 offset)
         {
-            base.Init(parentGrid, gridLengthX, gridLengthZ, relativeSize, offset);
+            base.Init(parentGrid, gridLengthX, gridLengthZ, tileSize, itemSize, offset);
 
             // Create internal items.
-            CreateInternalItems(parentGrid, gridLengthX, gridLengthZ, relativeSize, offset);
+            GenerateItems();
 
             // Populate boundsGizmoPoints.
             boundsGizmoVertexPos = new Vector3[4];
@@ -76,33 +76,33 @@ namespace proceduralGrid
         }
 
         // Separated submethods for ease of overriding.
-        protected override void CreateInternalItems(Grid_Base parentGrid, int gridLengthX, int gridLengthZ, float relativeSize, Vector3 offset)
+        protected override void GenerateItems()
         {
             // Prepare arrays and rendering parameters.
-            myGridItems = new Grid_ItemPure[gridLengthX + 1, gridLengthZ + 1];
+            myGridItems = new Grid_ItemPure[myResolutionX + 1, myResolutionZ + 1];
             myInstancedRenderParams = new RenderParams(useThisMaterial);
-            myInstancedMeshData = new Matrix4x4[(gridLengthX + 1) * (gridLengthZ + 1)];
+            myInstancedMeshData = new Matrix4x4[(myResolutionX + 1) * (myResolutionZ + 1)];
             int i = 0;
 
             // Make transform matrices from this manager and the parent grid.
             Matrix4x4 managerTransformMatrix = Matrix4x4.TRS(transform.localPosition, transform.localRotation, transform.localScale);
-            Matrix4x4 gridTransformMatrix = Matrix4x4.TRS(parentGrid.transform.position, parentGrid.transform.rotation, parentGrid.transform.lossyScale);
+            Matrix4x4 gridTransformMatrix = Matrix4x4.TRS(myParentGrid.transform.position, myParentGrid.transform.rotation, myParentGrid.transform.lossyScale);
 
-            for (int x = 0; x <= gridLengthX; x++)
+            for (int x = 0; x <= myResolutionX; x++)
             {
-                for (int z = 0; z <= gridLengthZ; z++)
+                for (int z = 0; z <= myResolutionZ; z++)
                 {
                     // Make transform matrix from parameters.
-                    Vector3 itemPosition = new Vector3(x * relativeSize, 0, z * relativeSize) + offset;
-                    itemPosition.y *= relativeSize;
+                    Vector3 itemPosition = new Vector3(x * myTileSize, 0, z * myTileSize) + myItemOffset;
+                    itemPosition.y *= myTileSize;
                     Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
-                    Vector3 itemScale = initialItemScale * relativeSize;
+                    Vector3 itemScale = initialItemScale * myItemSize * myTileSize;
                     Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, itemScale);
 
                     // Apply ancestor matrices.
                     itemTransformMatrix = gridTransformMatrix * managerTransformMatrix * itemTransformMatrix;
 
-                    myGridItems[x, z] = new Grid_ItemPure(myParentGrid, this, new CoordPair(x, z), itemTransformMatrix, relativeSize);
+                    myGridItems[x, z] = new Grid_ItemPure(myParentGrid, this, new CoordPair(x, z), itemTransformMatrix, myItemSize);
                     myGridItems[x, z].OnItemClicked += OnMyItemClicked;
 
                     myInstancedMeshData[i] = itemTransformMatrix;
@@ -126,9 +126,9 @@ namespace proceduralGrid
         protected override void PopulateBoundsGizmoPoints()
         {
             boundsGizmoVertexPos[0] = myGridItems[0, 0].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[1] = myGridItems[myLengthX, 0].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[2] = myGridItems[myLengthX, myLengthZ].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
-            boundsGizmoVertexPos[3] = myGridItems[0, myLengthZ].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[1] = myGridItems[myResolutionX, 0].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[2] = myGridItems[myResolutionX, myResolutionZ].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
+            boundsGizmoVertexPos[3] = myGridItems[0, myResolutionZ].MyPostion + new Vector3(0, boundsGizmoHeight, 0);
         }
 
         public void CreateHandles(Grid_ItemPure centerItem, int doBeyond)
@@ -140,10 +140,10 @@ namespace proceduralGrid
         protected Matrix4x4 GenerateGridItemMatrix(Grid_ItemPure gridItem, Matrix4x4 managerTransformMatrix, Matrix4x4 gridTransformMatrix)
         {
             // Make transform matrix from parameters.
-            Vector3 itemPosition = new Vector3(gridItem.MyGridCoordinates.x * myRelativeSize, 0, gridItem.MyGridCoordinates.z * myRelativeSize) + myItemOffset;
-            itemPosition.y *= myRelativeSize;
+            Vector3 itemPosition = new Vector3(gridItem.MyGridCoordinates.x * myItemSize, 0, gridItem.MyGridCoordinates.z * myItemSize) + myItemOffset;
+            itemPosition.y *= myItemSize;
             Quaternion itemRotation = Quaternion.Euler(initialItemRotation);
-            Vector3 itemScale = initialItemScale * myRelativeSize;
+            Vector3 itemScale = initialItemScale * myItemSize;
             Matrix4x4 itemTransformMatrix = Matrix4x4.TRS(itemPosition, itemRotation, itemScale);
 
             // Apply ancestor matrices and return.
@@ -177,18 +177,18 @@ namespace proceduralGrid
             if (Physics.Raycast(ray, out cursorHit))
             {
                 // Initial dimensions and the like.
-                halfTileLength = myRelativeSize / 2 + 0.05f;
-                currentLengthX = myLengthX;
-                currentLengthZ = myLengthZ;
+                halfTileLength = myItemSize / 2 + 0.05f;
+                currentLengthX = myResolutionX;
+                currentLengthZ = myResolutionZ;
 
                 searchDepth = 0;
                 totalPointsLookedAt = 0;
 
                 // bottomLeft, bottomRight, topLeft, topRight
                 itemsIndices[0] = (0, 0);
-                itemsIndices[1] = (myLengthX, 0);
-                itemsIndices[2] = (0, myLengthZ);
-                itemsIndices[3] = (myLengthX, myLengthZ);
+                itemsIndices[1] = (myResolutionX, 0);
+                itemsIndices[2] = (0, myResolutionZ);
+                itemsIndices[3] = (myResolutionX, myResolutionZ);
 
                 // Holder variables.
                 currentGridItem = null;
@@ -206,7 +206,7 @@ namespace proceduralGrid
                     // Return this closest point if it's less than half a tile away.
                     if (currentMinDistance.Item1 < halfTileLength)
                     {
-                        Debug.Log(string.Format("Final closest point: {0} at {1}, distance of {2}. Looked at a total of {3} points out of {4}.", currentMinDistance.Item3, currentMinDistance.Item3.MyPostion, currentMinDistance.Item1, totalPointsLookedAt, ((myLengthX + 1) * (myLengthZ + 1))));
+                        Debug.Log(string.Format("Final closest point: {0} at {1}, distance of {2}. Looked at a total of {3} points out of {4}.", currentMinDistance.Item3, currentMinDistance.Item3.MyPostion, currentMinDistance.Item1, totalPointsLookedAt, ((myResolutionX + 1) * (myResolutionZ + 1))));
 
                         // Do Event.
                         OnItemClicked?.Invoke(currentMinDistance.Item3);
@@ -325,7 +325,7 @@ namespace proceduralGrid
                 Gizmos.color = itemGizmoColour;
                 foreach (Grid_ItemPure item in myGridItems)
                 {
-                    Gizmos.DrawSphere(item.MyPostion, itemGizmoRadius * myRelativeSize);
+                    Gizmos.DrawSphere(item.MyPostion, itemGizmoRadius * myItemSize);
                 }
             }
         }

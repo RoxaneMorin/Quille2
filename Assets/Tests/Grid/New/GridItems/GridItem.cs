@@ -14,7 +14,7 @@ namespace proceduralGrid
         public GridItemPositioning Positioning;
 
         public int2 GridCoordinates;
-        public float TileSize;
+        public float ItemSize;
         public float HeightOffset;
 
         public float4x4 LocalTransformMatrix;
@@ -27,10 +27,6 @@ namespace proceduralGrid
 
 
         // METHODS
-        public void UpdateWorldTransformMatrix(float4x4 NewParentTransformMatrix)
-        {
-            WorldTransformMatrix = math.mul(NewParentTransformMatrix, LocalTransformMatrix);
-        }
     }
 }
 

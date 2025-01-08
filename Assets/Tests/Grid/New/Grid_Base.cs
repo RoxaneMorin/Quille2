@@ -36,8 +36,6 @@ namespace proceduralGrid
         [SerializeField, Range(1, 100)] protected int resolutionZ = 10;
         [SerializeField, Range(0.1f, 2f)] protected float tileSize = 1f;
 
-        [SerializeField] protected GridItemPositioning gridItemPositions;
-
         [Header("Grid Parameters - Components")]
         [SerializeField] protected Material gridMaterial;
         [SerializeField] protected GameObject gridPointManagerPrefab;
@@ -54,7 +52,6 @@ namespace proceduralGrid
         protected bool cursorBusy;
         public bool CursorBusy { get { return cursorBusy; } set { cursorBusy = value; } }
 
-        public NativeArray<GridItem> testGridItems;
 
 
         // METHODS
@@ -68,7 +65,7 @@ namespace proceduralGrid
             myMeshFilter = this.GetComponent<MeshFilter>();
             myMesh = myMeshFilter.mesh;
 
-            //GenerateMesh();
+            GenerateMesh();
             Populate();
         }
         protected void GenerateMesh()
@@ -81,50 +78,24 @@ namespace proceduralGrid
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, myMesh);
         }
 
-        protected void TestItemCreationJob()
-        {
-            if (testGridItems.IsCreated)
-            {
-                testGridItems.Dispose();
-            }
-
-            int2 resolution = gridItemPositions == GridItemPositioning.AtCenter ? new int2(resolutionX, resolutionZ) : new int2(resolutionX + 1, resolutionZ + 1);
-            float4x4 baseTransformMatrix = (float4x4)Matrix4x4.TRS(gameObject.transform.localPosition, gameObject.transform.localRotation, gameObject.transform.localScale);
-
-            testGridItems = new NativeArray<GridItem>(resolution.x * resolution.y, Allocator.Persistent);
-
-            // Do the job proper.
-            GridItemGenerationJob.Schedule(testGridItems, gridItemPositions, resolution, tileSize, baseTransformMatrix, default).Complete();
-        }
-
-        protected void TestMatrixUpdateJob()
-        {
-            if (testGridItems.IsCreated)
-            {
-                float4x4 baseTransformMatrix = (float4x4)Matrix4x4.TRS(gameObject.transform.localPosition, gameObject.transform.localRotation, gameObject.transform.localScale);
-                GridItemWorldMatrixUpdateJob.Schedule(testGridItems, baseTransformMatrix, default).Complete();
-            }
-        }
-
-        // TODO: move this to the item manager?
-
-
         protected void Populate()
         {
+            // TODO: place these manually instead of instantiating them from prefabs?
+
             // Create grid points.
             if (gridPointManagerPrefab)
             {
                 myGridPointManager = Instantiate(gridPointManagerPrefab, transform).GetComponent<Grid_ItemManager>();
-                myGridPointManager.Init(this, resolutionX, resolutionZ, tileSize, Vector3.zero);
-                myGridPointManager.name = "GridPoints";
+                myGridPointManager.Init(this, resolutionX, resolutionZ, tileSize, tileSize, Vector3.zero);
+                myGridPointManager.name = "Grid_PointManager";
             }
 
             // Create grid tiles.
             if (gridTileManagerPrefab)
             {
                 myGridTileManager = Instantiate(gridTileManagerPrefab, transform).GetComponent<Grid_ItemManager>();
-                myGridTileManager.Init(this, resolutionX - 1, resolutionZ - 1, tileSize, new Vector3(0.5f, 0.01f, 0.5f));
-                myGridTileManager.name = "GridTiles";
+                myGridTileManager.Init(this, resolutionX, resolutionZ, tileSize, tileSize * 0.95f, new Vector3(0f, 0.01f, 0f));
+                myGridTileManager.name = "Grid_TileManager";
             }
 
             // TODO: subscribe to events.
@@ -177,55 +148,6 @@ namespace proceduralGrid
         {
             Init();
         }
-
-        void OnValidate()
-        {
-            if (transform.hasChanged)
-            {
-                Debug.Log("GridBase's transform has changed OnValidate.");
-                //TestMatrixUpdateJob();
-                transform.hasChanged = false;
-            }
-
-            enabled = true;
-        }
-
-        void Update()
-        {
-            GenerateMesh();
-            TestItemCreationJob();
-
-            if (transform.hasChanged)
-            {
-                Debug.Log("GridBase's transform has changed Update.");
-                //TestMatrixUpdateJob();
-                transform.hasChanged = false;
-            }
-
-            enabled = false;
-        }
-
-        void OnDestroy()
-        {
-            if (testGridItems.IsCreated)
-            {
-                testGridItems.Dispose();
-            }
-        }
-
-        void OnDrawGizmos()
-        {
-            // Draw the component items.
-            if (testGridItems != null)
-            {
-                Gizmos.color = Color.red;
-                foreach (GridItem item in testGridItems)
-                {
-                    Gizmos.DrawSphere(item.WorldPosition, 0.1f * tileSize);
-                }
-            }
-        }
-
     }
 
 }
