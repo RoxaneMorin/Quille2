@@ -7,7 +7,7 @@ using UnityEngine;
 namespace proceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
-    public struct GridMeshJob<G, S> : IJobFor
+    public struct GridGenerationJob<G, S> : IJobFor
         where G : struct, IGridMeshGenerator
         where S : struct, IMeshStreams
     {
@@ -18,7 +18,7 @@ namespace proceduralGrid
 
         public static JobHandle ScheduleParallel(Mesh mesh, Mesh.MeshData meshData, int2 resolution, float tileSize, JobHandle dependency)
         {
-            var job = new GridMeshJob<G, S>();
+            var job = new GridGenerationJob<G, S>();
             job.generator.Resolution = resolution;
             job.generator.TileSize = tileSize;
 

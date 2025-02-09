@@ -50,11 +50,7 @@ namespace proceduralGrid
 
         public void Setup(Mesh.MeshData meshData, Bounds bounds, int vertexCount, int indexCount)
         {
-            var vertexAttributeDescriptor = new NativeArray<VertexAttributeDescriptor>(4, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-            vertexAttributeDescriptor[0] = new VertexAttributeDescriptor(VertexAttribute.Position, dimension: 3);
-            vertexAttributeDescriptor[1] = new VertexAttributeDescriptor(VertexAttribute.Normal, dimension: 3);
-            vertexAttributeDescriptor[2] = new VertexAttributeDescriptor(VertexAttribute.Tangent, dimension: 4);
-            vertexAttributeDescriptor[3] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, dimension: 2);
+            var vertexAttributeDescriptor = GetVertexAttributeDescriptor();
 
             meshData.SetVertexBufferParams(vertexCount, vertexAttributeDescriptor);
             vertexAttributeDescriptor.Dispose();
@@ -66,6 +62,17 @@ namespace proceduralGrid
 
             stream0 = meshData.GetVertexData<SingleStreamVertex>();
             triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);
+        }
+
+        public static NativeArray<VertexAttributeDescriptor> GetVertexAttributeDescriptor()
+        {
+            var vertexAttributeDescriptor = new NativeArray<VertexAttributeDescriptor>(4, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+            vertexAttributeDescriptor[0] = new VertexAttributeDescriptor(VertexAttribute.Position, dimension: 3);
+            vertexAttributeDescriptor[1] = new VertexAttributeDescriptor(VertexAttribute.Normal, dimension: 3);
+            vertexAttributeDescriptor[2] = new VertexAttributeDescriptor(VertexAttribute.Tangent, dimension: 4);
+            vertexAttributeDescriptor[3] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, dimension: 2);
+
+            return vertexAttributeDescriptor;
         }
     }
 
@@ -98,11 +105,7 @@ namespace proceduralGrid
 
         public void Setup(Mesh.MeshData meshData, Bounds bounds, int vertexCount, int indexCount)
         {
-            var vertexAttributeDescriptor = new NativeArray<VertexAttributeDescriptor>(4, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-            vertexAttributeDescriptor[0] = new VertexAttributeDescriptor(VertexAttribute.Position, dimension: 3, stream: 0);
-            vertexAttributeDescriptor[1] = new VertexAttributeDescriptor(VertexAttribute.Normal, dimension: 3, stream: 1);
-            vertexAttributeDescriptor[2] = new VertexAttributeDescriptor(VertexAttribute.Tangent, dimension: 4, stream: 2);
-            vertexAttributeDescriptor[3] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, dimension: 2, stream: 3);
+            var vertexAttributeDescriptor = GetVertexAttributeDescriptor();
 
             meshData.SetVertexBufferParams(vertexCount, vertexAttributeDescriptor);
             vertexAttributeDescriptor.Dispose();
@@ -117,6 +120,17 @@ namespace proceduralGrid
             stream2 = meshData.GetVertexData<float4>(2);
             stream3 = meshData.GetVertexData<float2>(3);
             triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);
+        }
+
+        public static NativeArray<VertexAttributeDescriptor> GetVertexAttributeDescriptor()
+        {
+            var vertexAttributeDescriptor = new NativeArray<VertexAttributeDescriptor>(4, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+            vertexAttributeDescriptor[0] = new VertexAttributeDescriptor(VertexAttribute.Position, dimension: 3, stream: 0);
+            vertexAttributeDescriptor[1] = new VertexAttributeDescriptor(VertexAttribute.Normal, dimension: 3, stream: 1);
+            vertexAttributeDescriptor[2] = new VertexAttributeDescriptor(VertexAttribute.Tangent, dimension: 4, stream: 2);
+            vertexAttributeDescriptor[3] = new VertexAttributeDescriptor(VertexAttribute.TexCoord0, dimension: 2, stream: 3);
+
+            return vertexAttributeDescriptor;
         }
     }
 }

@@ -43,7 +43,7 @@ Shader "Hidden/Test_Smudge"
          
         float3 screen = lerp(screenOriginal, screenNew, _SmudgeOpacity);
         return screen;
-}
+    }
     ENDHLSL
 
     SubShader

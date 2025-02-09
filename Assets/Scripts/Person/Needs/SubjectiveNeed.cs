@@ -217,7 +217,7 @@ namespace Quille
         {
             get { return (LevelCurrentLeft / LevelFullLeft, LevelCurrentRight / LevelFullRight); }
         }
-        public float LevelCurrentFor(BasicNeedSO subNeed)
+        public float? LevelCurrentFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -226,10 +226,10 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
-        public float LevelCurrentAsPercentageFor(BasicNeedSO subNeed)
+        public float? LevelCurrentAsPercentageFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -238,7 +238,7 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
 
@@ -254,7 +254,7 @@ namespace Quille
         {
             get { return (needSO.DefaultChangeRateLeft, needSO.DefaultChangeRateRight); }
         }
-        public float DefaultChangeRateFor(BasicNeedSO subNeed)
+        public float? DefaultChangeRateFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -263,7 +263,7 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
 
@@ -286,7 +286,7 @@ namespace Quille
                 BaseChangeRateRight = value.Item2;
             }
         }
-        public float BaseChangeRateFor(BasicNeedSO subNeed)
+        public float? BaseChangeRateFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -295,7 +295,7 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
 
@@ -338,7 +338,7 @@ namespace Quille
                 CurrentChangeRateRight = value.Item2;
             }
         }
-        public float CurrentChangeRateFor(BasicNeedSO subNeed)
+        public float? CurrentChangeRateFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -347,7 +347,7 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
 
@@ -363,7 +363,7 @@ namespace Quille
         {
             get { return (CurrentChangeRateLeftScaled, CurrentChangeRateLeftScaled); }
         }
-        public float CurrentChangeRateScaledFor(BasicNeedSO subNeed)
+        public float? CurrentChangeRateScaledFor(BasicNeedSO subNeed)
         {
             try
             {
@@ -372,7 +372,7 @@ namespace Quille
             catch (Exception e)
             {
                 Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
+                return null;
             }
         }
 

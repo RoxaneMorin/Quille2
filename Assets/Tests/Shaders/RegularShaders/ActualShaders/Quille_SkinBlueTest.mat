@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Quille_SkinBlueTest
+  m_Shader: {fileID: 4800000, guid: 0d85b1da158721041b404b19539bdcc9, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _SHADOWS_USE_COLOUR
+  m_InvalidKeywords:
+  - _SPECULAR_SETUP
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailBumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseRamp:
+        m_Texture: {fileID: 2800000, guid: 273591248df99d644b8ba63b6d7d7487, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramp:
+        m_Texture: {fileID: 2800000, guid: b8bf6d5720ea95940a4a959c38723be1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _BumpScale: 1
+    - _DetailBumpScale: 1
+    - _DetailUVs: 0
+    - _DiffuseWrap: 0.5
+    - _DstBlend: 0
+    - _Glossiness: 0.25
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _OcclusionStrength: 1
+    - _RimlightBias: 0
+    - _RimlightPower: 10
+    - _RimlightScale: 25
+    - _ScatterPower: 1.5
+    - _ScatterScale: 0.45
+    - _ShadowColourFraction: 0.1
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _SubsurfaceColourPower: 2.5
+    - _SubsurfaceDistortionBack: 0.35
+    - _SubsurfaceDistortionFront: 0.9
+    - _SubsurfaceFrontIntensity: 0.2
+    - _ToonHLIntensity: 1.8
+    - _ToonHLPower: 63
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 0.42239228, g: 0.56166065, b: 0.7924528, a: 1}
+    - _Emission: {r: 0, g: 0, b: 0, a: 1}
+    - _RimlightColour: {r: 0.44246173, g: 0.5111141, b: 0.5754717, a: 1}
+    - _ShadowColour: {r: 0.3584906, g: 0, b: 0, a: 1}
+    - _SpecularColor: {r: 0.39248842, g: 0.68182194, b: 0.7924528, a: 1}
+    - _SubsurfaceColour: {r: 0.55, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

@@ -6,7 +6,8 @@ using UnityEngine;
 public class WallAnchor : MonoBehaviour
 {
     // VARIABLES/PARAMETERS
-    [SerializeField] private List<WallAnchor> connectedAnchors;
+    [SerializeField] private List<WallAnchor> connectedAnchors; // All wallAnchors connected to this one.
+    [SerializeField] private List<WallAnchor> outgoingAnchors; // Only the wallAnchors this one points toward.
 
 
     // PROPERTIES
