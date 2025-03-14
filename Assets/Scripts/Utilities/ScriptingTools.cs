@@ -218,4 +218,17 @@ public static class RandomExtended
         }
         return randomString;    
     }
+
+
+
+
+    // TODO: weigthed random from a list/array of indices?
+
+    // From a percentage? Or raw weights?
+    // functions for both probably
+
+    // sum all weights
+    // find a way to determine their "bins"/"boxes"/"spaces"
+    // randomize in the final range
+    // check & return the value of the bin the results falls in
 }
