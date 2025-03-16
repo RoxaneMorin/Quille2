@@ -80,6 +80,8 @@ namespace Building
         // UTILITY
         public void InverseWallDirection()
         {
+            // TODO: should we change smt inside the wall anchors too?
+
             WallAnchor tempAnchor = anchorA;
             anchorA = anchorB;
             anchorB = tempAnchor;

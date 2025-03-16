@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Building
 {
@@ -10,5 +11,7 @@ namespace Building
 
     // WALL EVENTS
     // A wall anchor has been clicked.
-    public delegate void WallAnchorClicked(WallAnchor targetAnchor);
+    public delegate void WallAnchorClicked(WallAnchor targetAnchor, PointerEventData.InputButton clickType);
+    // A new wall anchor has been selected by the wall manager.
+    public delegate void WallAnchorSelected(WallAnchor selectedAnchor);
 }

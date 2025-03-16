@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.EventSystems;
 
 namespace Building
 {
@@ -9,11 +10,10 @@ namespace Building
     {
         // VARIABLES/PARAMETERS
         [Header("Data and References")]
-        [SerializeField] private List<WallAnchor> sceneWallAnchors;
-        [SerializeField] private List<WallSegment> sceneWallSegments;
+        [SerializeField] private List<WallAnchor> areaWallAnchors;
+        [SerializeField] private List<WallSegment> areaWallSegments;
 
         [SerializeField] private WallAnchor selectedAnchor;
-
 
 
         [Header("Resources")]
@@ -21,21 +21,14 @@ namespace Building
 
 
 
+        // EVENTS
+        public event WallAnchorSelected OnWallAnchorSelected;
 
 
 
         // TODO:
-        // click on an anchor to select it, click it again to unselect
-
-
-
-        // How to detect intersections between wall segments?
-
+        // Upon the creation of a wall segment, use a job to check for intersections with all existing walls.
         // Upon detection, break the wall in two, create a new anchor.
-
-
-
-
 
 
 
@@ -44,61 +37,92 @@ namespace Building
         // INIT
         public void Init()
         {
-            sceneWallAnchors = new List<WallAnchor>();
-            sceneWallSegments = new List<WallSegment>();
+            areaWallAnchors = new List<WallAnchor>();
+            areaWallSegments = new List<WallSegment>();
         }
 
 
-        //
+         // EVENT LISTENERS
+         private void OnWallAnchorClicked(WallAnchor targetAnchor, PointerEventData.InputButton clickType)
+        {
+            if (clickType == PointerEventData.InputButton.Left)
+            {
+                if (targetAnchor != selectedAnchor)
+                {
+                    SelectWallAnchor(targetAnchor);
+                }
+                else
+                {
+                    SelectWallAnchor(null);
+                }
+            }
+            else if (clickType == PointerEventData.InputButton.Right)
+            {
+                if (targetAnchor != selectedAnchor && selectedAnchor != null)
+                {
+                    CreateWallSegment(targetAnchor, selectedAnchor);
+                }
+            }
+        }
+
+
+        // UTILITY
+        private void SelectWallAnchor(WallAnchor targetAnchor)
+        {
+            OnWallAnchorSelected?.Invoke(targetAnchor);
+            selectedAnchor = targetAnchor;
+        }
+
         private void CreateWallAnchor(Vector3 location)
         {
             WallAnchor newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor>();
             newAnchor.Init();
 
-            // TODO: other stuff
+            newAnchor.OnWallAnchorClicked += this.OnWallAnchorClicked;
+            this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
+            areaWallAnchors.Add(newAnchor);
 
             if (selectedAnchor != null)
             {
-                WallSegment newSegment = new WallSegment(selectedAnchor, newAnchor);
-                selectedAnchor.AddConnection(newSegment);
-                newAnchor.AddConnection(newSegment);
-                sceneWallSegments.Add(newSegment);
+                CreateWallSegment(selectedAnchor, newAnchor);
             }
+        }
 
-            sceneWallAnchors.Add(newAnchor);
-            selectedAnchor = newAnchor;
+        private void CreateWallSegment(WallAnchor anchorA, WallAnchor anchorB)
+        {
+            WallSegment newSegment = new WallSegment(anchorA, anchorB);
+            
+            anchorA.AddConnection(newSegment);
+            anchorB.AddConnection(newSegment);
+
+            areaWallSegments.Add(newSegment);
         }
 
 
-
         // BUILT IN
-
         private void Start()
         {
             Init();
         }
 
 
-
         private void OnMouseDown()
         {
+            // TODO: use OnPointerDown instead?
+
             RaycastHit cursorHit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out cursorHit))
             {
-                Debug.Log(string.Format("The WallManager was clicked at the point {0}.", cursorHit.point));
-
                 CreateWallAnchor(cursorHit.point);
             }
         }
 
 
-
-
 #if DEBUG
         private void OnDrawGizmos()
         {
-            foreach (WallSegment segment in sceneWallSegments)
+            foreach (WallSegment segment in areaWallSegments)
             {
                 if (segment.AnchorA && segment.AnchorB)
                 {
