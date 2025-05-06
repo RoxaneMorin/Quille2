@@ -30,7 +30,8 @@ namespace Building
 
 
         // TODO:
-        // Actual logic for splitting an existing wall segment.
+        // Option to split a wall segment by clicking on it? Will wall segments have physical objects anyways?
+        // Room detection!
 
 
         // METHODS
@@ -59,11 +60,8 @@ namespace Building
             }
             else if (clickType == PointerEventData.InputButton.Right)
             {
-                if (targetAnchor != selectedAnchor && selectedAnchor != null)
+                if (targetAnchor != selectedAnchor && selectedAnchor != null && !targetAnchor.IsConnectedTo(selectedAnchor))
                 {
-                    // TODO: check whether this segment already exists.
-
-
                     CreateWallSegment(targetAnchor, selectedAnchor);
                 }
             }
@@ -112,9 +110,9 @@ namespace Building
                     WallAnchor newAnchor = CreateWallAnchor(intersection.Item2, false);
                     CreateSingleWallSegment(anchorA, newAnchor);
 
-                    anchorA = newAnchor;
+                    SplitWallSegment(intersection.Item1, newAnchor);
 
-                    // Split existing walls
+                    anchorA = newAnchor;
                 }
             }
             // Else, just create the one segment.
@@ -132,7 +130,30 @@ namespace Building
 
             areaWallSegments.Add(newSegment);
         }
-        
+
+        private void SplitWallSegment(WallSegment targetSegment, WallAnchor centralAnchor)
+        {
+            WallSegment newSegmentA = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
+            newSegmentA.Init(targetSegment.AnchorA, centralAnchor);
+           
+            WallSegment newSegmentB = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
+            newSegmentB.Init(centralAnchor, targetSegment.AnchorB);
+
+            targetSegment.AnchorA.ReplaceConnection(targetSegment, centralAnchor, newSegmentA);
+            targetSegment.AnchorB.ReplaceConnection(targetSegment, centralAnchor, newSegmentB);
+
+            centralAnchor.AddConnection(newSegmentA);
+            centralAnchor.AddConnection(newSegmentB);
+
+            areaWallSegments.Add(newSegmentA);
+            areaWallSegments.Add(newSegmentB);
+
+            areaWallSegments.Remove(targetSegment);
+            Destroy(targetSegment.gameObject);
+        }
+
+
+
 
         private List<(WallSegment, Vector3, float)> ListIntersectingWallSegments(WallAnchor anchorA, WallAnchor anchorB)
         {

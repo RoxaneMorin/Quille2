@@ -43,8 +43,8 @@ namespace Building
         // Store height per wall instead?
 
         [SerializeField] private List<WallConnection> connections;
-        [SerializeField, SerializedDictionary("Other Anchor", "Connection")] private SerializedDictionary<WallAnchor, WallConnection> connectionsFromAnchorsDict;
-        [SerializeField, SerializedDictionary("Segment", "Connection")] private SerializedDictionary<WallSegment, WallConnection> connectionsFromSegmentsDict;
+        [SerializeField] private Dictionary<WallAnchor, WallConnection> connectionsFromAnchorsDict;
+        [SerializeField] private Dictionary<WallSegment, WallConnection> connectionsFromSegmentsDict;
         // TODO: these don't need to be serialized, switch that around once testing is done.
         
 
@@ -101,6 +101,8 @@ namespace Building
             UpdateGameObjectHeight();
 
             this.connections = new List<WallConnection>();
+            this.connectionsFromAnchorsDict = new Dictionary<WallAnchor, WallConnection>();
+            this.connectionsFromSegmentsDict = new Dictionary<WallSegment, WallConnection>();
         }
 
 
@@ -119,6 +121,8 @@ namespace Building
 
 
         // UTILITY
+
+        // -> CONNECTIONS
         public void AddConnection(WallSegment connectedSegment)
         {
             WallAnchor connectedAnchor = connectedSegment.OtherAnchor(this);
@@ -126,7 +130,6 @@ namespace Building
             //Debug.Log(string.Format("{0}'s angle around {1}: {2}.", connectedAnchor, this, angle));
 
             WallConnection newConnection = new WallConnection(connectedSegment, connectedAnchor, newConnectionsAngle);
-
             connections.SortedInsert(newConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
             connectionsFromAnchorsDict.Add(connectedAnchor, newConnection);
             connectionsFromSegmentsDict.Add(connectedSegment, newConnection);
@@ -154,39 +157,60 @@ namespace Building
                 DeleteConnection(targetConnection);
             }
         }
-        
 
-        
-        public void UpdateConnection()
+        private void EditConnection(WallConnection targetConnection, WallAnchor newAnchor, WallSegment newSegment, bool recalculateAngle = false)
         {
+            connectionsFromAnchorsDict.Remove(targetConnection.ConnectedAnchor);
+            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedWallSegment);
 
+            targetConnection.ConnectedAnchor = newAnchor;
+            targetConnection.ConnectedWallSegment = newSegment;
+
+            connectionsFromAnchorsDict.Add(newAnchor, targetConnection);
+            connectionsFromSegmentsDict.Add(newSegment, targetConnection);
+
+            if (recalculateAngle)
+            {
+                connections.Remove(targetConnection);
+
+                float newConnectionsAngle = Building_MathHelpers.GetNormalizedAngleBetween(transform.position, newAnchor.transform.position);
+                connections.SortedInsert(targetConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
+            }
+        }
+        public void ReplaceConnection(WallAnchor targetAnchor, WallAnchor newAnchor, WallSegment newSegment, bool recalculateAngle = false)
+        {
+            WallConnection targetConnection = connectionsFromAnchorsDict[targetAnchor];
+            if (targetConnection != null)
+            {
+                EditConnection(targetConnection, newAnchor, newSegment, recalculateAngle);
+            }
+        }
+        public void ReplaceConnection(WallSegment targetSegment, WallAnchor newAnchor, WallSegment newSegment, bool recalculateAngle = false)
+        {
+            WallConnection targetConnection = connectionsFromSegmentsDict[targetSegment];
+            if (targetConnection != null)
+            {
+                EditConnection(targetConnection, newAnchor, newSegment, recalculateAngle);
+            }
         }
 
-
-        // TODO: replace/update connection
-
-        // TODO: find connection/verify connection exists
-
-
-        public bool VerifyConnection(WallAnchor targetAnchor)
+        public bool IsConnectedTo(WallAnchor targetAnchor)
         {
             return connectionsFromAnchorsDict.ContainsKey(targetAnchor);
         }
-        public bool VerifyConnection(WallSegment targetSegment)
+        public bool IsConnectedTo(WallSegment targetSegment)
         {
-            return connectionsFromSegmentsDict. ContainsKey(targetSegment);
+            return connectionsFromSegmentsDict.ContainsKey(targetSegment);
         }
 
 
-
-
+        // -> OTHER
         private void UpdateGameObjectHeight()
         {
             Vector3 anchorScale = gameObject.transform.localScale;
             anchorScale.y = height;
             gameObject.transform.localScale = anchorScale;
         }
-
 
 
         // BUILT IN
