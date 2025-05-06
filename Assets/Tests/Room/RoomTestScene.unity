@@ -352,10 +352,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c515f97626fd1b4187769eb2ef6cdd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneWallAnchors: []
-  sceneWallSegments: []
+  areaWallAnchors: []
+  areaWallSegments: []
   selectedAnchor: {fileID: 0}
   wallAnchorPrefab: {fileID: 1964239970475636204, guid: b65216333a5ba934da94520bd9e6cb41,
+    type: 3}
+  wallSegmentPrefab: {fileID: 7096292235776928402, guid: 1729d6d6eb503ea43a7e12c7981b5128,
     type: 3}
 --- !u!114 &717887575
 MonoBehaviour:

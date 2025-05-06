@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 public static class ExtensionMethods
@@ -55,6 +54,51 @@ public static class ExtensionMethods
     public static (int, int) Add(this (int, int) tupleA, (int, int) tupleB)
     {
         return (tupleA.Item1 + tupleB.Item1, tupleA.Item2 + tupleB.Item2);
+    }
+
+
+    // LISTS
+    public static void SortedInsert<T>(this List<T> list, T newItem, Func<T, T, bool> sortingCondition)
+    {
+        // We assume the list is already/always sorted, and the sorting condition is in the format "existingValue > newValue ?".
+
+        if (list.Count > 1) // Only bother with the search if the list contains multiple elements. 
+        {
+            int leftIdx = 0;
+            int rightIdx = list.Count - 1;
+
+            while (leftIdx <= rightIdx)
+            {
+                int midIdx = leftIdx + (rightIdx - leftIdx) / 2;
+
+                //if (list[midIdx].Equals(newItem)) // Not sure this is necessary.
+                //{
+                //    list.Insert(midIdx, newItem);
+                //    return;
+                //}
+                if (sortingCondition(list[midIdx], newItem))
+                {
+                    rightIdx = midIdx - 1;
+                }
+                else
+                {
+                    leftIdx = midIdx + 1;
+                }
+            }
+
+            list.Insert(leftIdx, newItem);
+            return;
+        }
+        else if (list.Count == 1)
+        {
+            if (sortingCondition(list[0], newItem))
+            {
+                list.Insert(0, newItem);
+                return;
+            }
+        }
+        // Else, just add the item at the end of the list.
+        list.Add(newItem);
     }
 
 
@@ -134,12 +178,22 @@ public static class ExtensionMethods
             action(item);
         }
     }
+
+
+
+
+
+
+
+
+    
+
 }
 
 
 public static class RandomExtended
 {
-    // Random cannot receive extention methods, cue this helper class.
+    // Random cannot receive extension methods, cue this helper class.
 
 
     // Unity style wrapper for an existing System.Random operation.

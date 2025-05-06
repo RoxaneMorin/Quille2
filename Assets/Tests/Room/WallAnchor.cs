@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,14 @@ namespace Building
     {
         // INTERNAL CLASSES
         [System.Serializable]
-        private class WallConnection
+        public class WallConnection
         {
-            // TODO: make a UI for this class.
+            // TODO: move this class to its own file?
 
             // VARIABLES/PARAMETERS
-            private WallSegment connectedWallSegment;
-            private WallAnchor connectedAnchor;
-            private float angle;
+            [SerializeField] private WallSegment connectedWallSegment;
+            [SerializeField] private WallAnchor connectedAnchor;
+            [SerializeField] private float angle;
             // TODO: should we also track whether this is anchor A or B?
 
             // PROPERTIES
@@ -42,16 +43,16 @@ namespace Building
         // Store height per wall instead?
 
         [SerializeField] private List<WallConnection> connections;
+        [SerializeField, SerializedDictionary("Other Anchor", "Connection")] private SerializedDictionary<WallAnchor, WallConnection> connectionsFromAnchorsDict;
+        [SerializeField, SerializedDictionary("Segment", "Connection")] private SerializedDictionary<WallSegment, WallConnection> connectionsFromSegmentsDict;
+        // TODO: these don't need to be serialized, switch that around once testing is done.
         
-
-
 
         [SerializeField] private Renderer myRenderer;
         [SerializeField] private Material myMaterial;
 
         [SerializeField] private Color colourDefault = Color.black;
         [SerializeField] private Color colourSelected = Color.blue;
-
 
 
 
@@ -72,8 +73,6 @@ namespace Building
                 UpdateGameObjectHeight();
             }
         }
-
-
         // return pos at height?
 
 
@@ -119,35 +118,68 @@ namespace Building
         }
 
 
-        // ADDITIONAL SETTERS AND ACCESSORS
+        // UTILITY
         public void AddConnection(WallSegment connectedSegment)
         {
             WallAnchor connectedAnchor = connectedSegment.OtherAnchor(this);
-            float angle = GetNormalizedAngleBetween(transform, connectedAnchor.transform);
+            float newConnectionsAngle = Building_MathHelpers.GetNormalizedAngleBetween(transform.position, connectedAnchor.transform.position);
+            //Debug.Log(string.Format("{0}'s angle around {1}: {2}.", connectedAnchor, this, angle));
 
-            Debug.Log(string.Format("{0}'s angle around {1}: {2}.", connectedAnchor, this, angle));
+            WallConnection newConnection = new WallConnection(connectedSegment, connectedAnchor, newConnectionsAngle);
 
-            WallConnection newConnection = new WallConnection(connectedSegment, connectedAnchor, angle);
+            connections.SortedInsert(newConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
+            connectionsFromAnchorsDict.Add(connectedAnchor, newConnection);
+            connectionsFromSegmentsDict.Add(connectedSegment, newConnection);
+        }
 
-
-            // TODO: move the sorting to its own function?
-
-            for (int i = 0; i < connections.Count; i++)
+        private void DeleteConnection(WallConnection targetConnection)
+        {
+            connectionsFromAnchorsDict.Remove(targetConnection.ConnectedAnchor);
+            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedWallSegment);
+            connections.Remove(targetConnection);
+        }
+        public void DeleteConnection(WallAnchor targetAnchor)
+        {
+            WallConnection targetConnection = connectionsFromAnchorsDict[targetAnchor];
+            if (targetConnection != null)
             {
-                Debug.Log(string.Format("Existing connection {0}, angle {1}.", i, connections[i].Angle));
-
-                if (connections[i].Angle > angle)
-                {
-                    connections.Insert(i, newConnection);
-                    return;
-                }
+                DeleteConnection(targetConnection);
             }
-            // Else, add to the end of the list.
-            connections.Add(newConnection);
+        }
+        public void DeleteConnection(WallSegment targetSegment)
+        {
+            WallConnection targetConnection = connectionsFromSegmentsDict[targetSegment];
+            if (targetConnection != null)
+            {
+                DeleteConnection(targetConnection);
+            }
+        }
+        
+
+        
+        public void UpdateConnection()
+        {
+
         }
 
 
-        // UTILITY
+        // TODO: replace/update connection
+
+        // TODO: find connection/verify connection exists
+
+
+        public bool VerifyConnection(WallAnchor targetAnchor)
+        {
+            return connectionsFromAnchorsDict.ContainsKey(targetAnchor);
+        }
+        public bool VerifyConnection(WallSegment targetSegment)
+        {
+            return connectionsFromSegmentsDict. ContainsKey(targetSegment);
+        }
+
+
+
+
         private void UpdateGameObjectHeight()
         {
             Vector3 anchorScale = gameObject.transform.localScale;
@@ -157,80 +189,11 @@ namespace Building
 
 
 
-
-
-
-
-
-
-        // TODO: move this to some utility or extention class instead?
-        private float GetNormalizedAngleBetween(Transform centerTransform, Transform otherTransform)
-        {
-            Vector3 otherPoint = otherTransform.position - centerTransform.position;
-            return Mathf.Atan2(otherPoint.z, otherPoint.x).NormalizeRadAngle();
-        }
-
-
-
-
-        //private void SortConnectionList()
-        //{
-        //    connectedAnchors.Sort
-        //    (
-        //        (a, b) =>
-        //        {
-        //            float angleA = GetNormalizedAngleBetween(transform, a.transform);
-        //            float angleB = GetNormalizedAngleBetween(transform, b.transform);
-
-        //            return angleA.CompareTo(angleB);
-        //        }
-        //    );
-        //}
-
-        //private void InsertIntoConnectionList(WallAnchor newAnchor)
-        //{
-        //    float newAnchorsAngle = GetNormalizedAngleBetween(transform, newAnchor.transform);
-
-        //    // Look for the right index using a binary search.
-        //    int min = 0;
-        //    int max = connectedAnchors.Count;
-
-        //    while (min < max)
-        //    {
-        //        int mid = (min + max) / 2;
-        //        float midAngle = GetNormalizedAngleBetween(transform, connectedAnchors[mid].transform);
-
-        //        if (newAnchorsAngle > midAngle)
-        //        {
-        //            min = mid + 1;
-        //        }
-        //        else
-        //        {
-        //            max = mid;
-        //        }
-        //    }
-
-        //    connectedAnchors.Insert(min, newAnchor);
-        //}
-
-
-
         // BUILT IN
         public void OnPointerDown(PointerEventData eventData)
         {
             OnWallAnchorClicked?.Invoke(this, eventData.button);
         }
-
-
-        //private void OnDrawGizmos()
-        //{
-        //    foreach (WallAnchor anchor in connectedAnchors)
-        //    {
-                  // TODO: display the number of connections in order around the item?
-        //        Gizmos.color = Color.black;
-        //        GizmosExtended.DrawArrow(transform.position, anchor.transform.position);
-        //    }
-        //}
-        }
+    }
 
 }

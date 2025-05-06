@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using System;
+using UnityEditor.MemoryProfiler;
+using UnityEngine.UIElements;
 
 namespace Building
 {
@@ -18,7 +21,7 @@ namespace Building
 
         [Header("Resources")]
         [SerializeField] protected GameObject wallAnchorPrefab;
-
+        [SerializeField] protected GameObject wallSegmentPrefab;
 
 
         // EVENTS
@@ -27,9 +30,7 @@ namespace Building
 
 
         // TODO:
-        // Upon the creation of a wall segment, use a job to check for intersections with all existing walls.
-        // Upon detection, break the wall in two, create a new anchor.
-
+        // Actual logic for splitting an existing wall segment.
 
 
         // METHODS
@@ -60,6 +61,9 @@ namespace Building
             {
                 if (targetAnchor != selectedAnchor && selectedAnchor != null)
                 {
+                    // TODO: check whether this segment already exists.
+
+
                     CreateWallSegment(targetAnchor, selectedAnchor);
                 }
             }
@@ -73,7 +77,7 @@ namespace Building
             selectedAnchor = targetAnchor;
         }
 
-        private void CreateWallAnchor(Vector3 location)
+        private WallAnchor CreateWallAnchor(Vector3 location, bool doSegment = true)
         {
             WallAnchor newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor>();
             newAnchor.Init();
@@ -82,21 +86,89 @@ namespace Building
             this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
             areaWallAnchors.Add(newAnchor);
 
-            if (selectedAnchor != null)
+            // TODO: can we toggle whether the wall gets selected after its creation?
+            // Atm, it "gets clicked" which throws the event.
+
+            //Debug.Log(String.Format("Created a new wall anchor: {0}", newAnchor));
+
+            if (doSegment && selectedAnchor != null)
             {
                 CreateWallSegment(selectedAnchor, newAnchor);
             }
+
+            return newAnchor;
         }
 
         private void CreateWallSegment(WallAnchor anchorA, WallAnchor anchorB)
         {
-            WallSegment newSegment = new WallSegment(anchorA, anchorB);
-            
+            // Collect potential intersections with other segments.
+            List<(WallSegment, Vector3, float)> intersectingSegments = ListIntersectingWallSegments(anchorA, anchorB);
+
+            if (intersectingSegments.Count > 0)
+            {
+                // If there are any, split this new segment in consequence.
+                foreach ((WallSegment, Vector3, float) intersection in intersectingSegments)
+                {
+                    WallAnchor newAnchor = CreateWallAnchor(intersection.Item2, false);
+                    CreateSingleWallSegment(anchorA, newAnchor);
+
+                    anchorA = newAnchor;
+
+                    // Split existing walls
+                }
+            }
+            // Else, just create the one segment.
+
+            CreateSingleWallSegment(anchorA, anchorB);
+        }
+
+        private void CreateSingleWallSegment(WallAnchor anchorA, WallAnchor anchorB)
+        {
+            WallSegment newSegment = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
+            newSegment.Init(anchorA, anchorB);
+
             anchorA.AddConnection(newSegment);
             anchorB.AddConnection(newSegment);
 
             areaWallSegments.Add(newSegment);
         }
+        
+
+        private List<(WallSegment, Vector3, float)> ListIntersectingWallSegments(WallAnchor anchorA, WallAnchor anchorB)
+        {
+            List<(WallSegment, Vector3, float)> intersectingSegments = new List<(WallSegment, Vector3, float)>();
+
+            foreach (WallSegment otherSegment in areaWallSegments)
+            {
+                // TODO: Further skip segments we know won't intersect.
+
+                // Skip segments connected to the same anchors.
+                if (anchorA == otherSegment.AnchorA || anchorA == otherSegment.AnchorB || anchorB == otherSegment.AnchorA || anchorB == otherSegment.AnchorB)
+                {
+                    continue;
+                }
+
+                Vector3? intersectionPoint = Building_MathHelpers.CalculatePotentialIntersectionPointXZ(anchorA.transform.position, anchorB.transform.position, otherSegment.AnchorA.transform.position, otherSegment.AnchorB.transform.position);
+                if (intersectionPoint.HasValue)
+                {
+                    float distanceFromAnchorA = Vector3.Distance(anchorA.transform.position, intersectionPoint.Value);
+                    intersectingSegments.SortedInsert((otherSegment, intersectionPoint.Value, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
+                }
+            }
+
+            return intersectingSegments;
+        }
+
+        
+
+        
+
+        
+
+
+        
+
+
 
 
         // BUILT IN
