@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.EventSystems;
-using System;
-using UnityEditor.MemoryProfiler;
-using UnityEngine.UIElements;
+using JetBrains.Annotations;
 
 namespace Building
 {
@@ -13,6 +12,9 @@ namespace Building
     {
         // VARIABLES/PARAMETERS
         [Header("Data and References")]
+        [SerializeField] private int highestAnchorID = -1;
+        [SerializeField] private int highestSegmentID = -1;
+
         [SerializeField] private List<WallAnchor> areaWallAnchors;
         [SerializeField] private List<WallSegment> areaWallSegments;
 
@@ -30,6 +32,7 @@ namespace Building
 
 
         // TODO:
+        // Rework anchorID, add segmentID to the actual segments.
         // Option to split a wall segment by clicking on it? Will wall segments have physical objects anyways?
         // Room detection!
 
@@ -73,12 +76,22 @@ namespace Building
         {
             OnWallAnchorSelected?.Invoke(targetAnchor);
             selectedAnchor = targetAnchor;
+
+            // Test finding new cycles
+            if (selectedAnchor != null)
+            {
+                FindCirclesRoot(selectedAnchor);
+            }
         }
 
+
+        // -> ANCHOR AND SEGMENT CREATION
         private WallAnchor CreateWallAnchor(Vector3 location, bool doSegment = true)
         {
+            highestAnchorID++;
+
             WallAnchor newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor>();
-            newAnchor.Init();
+            newAnchor.Init(highestAnchorID);
 
             newAnchor.OnWallAnchorClicked += this.OnWallAnchorClicked;
             this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
@@ -152,9 +165,6 @@ namespace Building
             Destroy(targetSegment.gameObject);
         }
 
-
-
-
         private List<(WallSegment, Vector3, float)> ListIntersectingWallSegments(WallAnchor anchorA, WallAnchor anchorB)
         {
             List<(WallSegment, Vector3, float)> intersectingSegments = new List<(WallSegment, Vector3, float)>();
@@ -180,14 +190,210 @@ namespace Building
             return intersectingSegments;
         }
 
-        
+
+
+
+        // Find rooms/cycles
+
+        // https://www.geeksforgeeks.org/print-all-the-cycles-in-an-undirected-graph/
+
+        // Cycles are a list of lists of nodes
+
+        // For each edge,
+        // For each node in the edge:
+
+        // FindNewCycles (List<node> path, graph information, cycles):
+        //*
+        // If path.count == zero, return
+
+        // startNode = path[0]
+
+        // for each edge in the graph,
+        // node1 = edge[0], node2 = edge[1]
+
+        // if the startNode is either node1 or node2,
+        // nextNode = the other node in that edge
+
+        // if this nextNode has not yet been visited,
+        // sub = a new list containing nextNode
+        // add the current path to sub
+        // FindNewCycles(sub, graph, cycles)
+
+        // Else, if path.Count > 2 and the nextNode == path.Last(),
+        // p = RotateToSmallest(new list from path)
+        // inv = Invert(new list from p)
+
+        // if IsNew(p, cycles) and IsNew(inv, cycles)
+        // add p to cycles
+        //*
+
+
+
+        //void FindNewCycles(List<WallAnchor> path, List<List<WallAnchor>> cycles)
+        //{
+        //    if (path.Count == 0)
+        //    {
+        //        return;
+        //    }
+
+        //    WallAnchor startNode = path[0];
+
+
+
+        //    // for each edge in the graph,
+        //    // node1 = edge[0], node2 = edge[1]
+
+        //    // if the startNode is either node1 or node2,
+        //    // nextNode = the other node in that edge
+
+        //    // if this nextNode has not yet been visited,
+        //    // sub = a new list containing nextNode
+        //    // add the current path to sub
+        //    // FindNewCycles(sub, graph, cycles)
+
+        //    // Else, if path.Count > 2 and the nextNode == path.Last(),
+        //    // p = RotateToSmallest(new list from path)
+        //    // inv = Invert(new list from p)
+
+        //    // if IsNew(p, cycles) and IsNew(inv, cycles)
+        //    // add p to cycles
+
+        //}
+
+
+
+
+        // Visited: does the given path contain the given node?
+
+        // RotateToSmallest(path): change the path's first node to start with the lowest index
+
+        // Invert(path): invert the list, and do RotateToSmallest
+
+        // IsNew: !cycles.Any(c => c.SequenceEqual(path))
+
+
+        static List<WallAnchor> RotatePathToSmallest(List<WallAnchor> path)
+        {
+            if (path.Count == 0)
+            {
+                return path;
+            }
+
+            int minIndex = path.IndexOf(path.Min());
+            return path.Skip(minIndex).Concat(path.Take(minIndex)).ToList();
+        }
+
+        static List<WallAnchor> InvertPath(List<WallAnchor> path)
+        {
+            if (path.Count == 0)
+            {
+                return path;
+            }
+
+            path.Reverse();
+            return RotatePathToSmallest(path);
+        }
+
+        static bool IsPathNew(List<List<WallAnchor>> cycles, List<WallAnchor> path)
+        {
+            return !cycles.Any(cycle => cycle.SequenceEqual(path));
+        }
+
+        static bool HasNodeBeenVisited(WallAnchor node, List<WallAnchor> path)
+        {
+            return path.Contains(node);
+        }
+
+
+
+        /// Trying to rewrite it to use my data structure
+
+        //currentPath
+
+        //initialNode of this path
+        //currentNode we are looking at
+        //previousNode we came from (track as visited instead?)
+
+        //for each connection of the currentNode (but the one we came from),
+
+        // if its otherNode is the initialNode,
+        //   We found a cycle!
+        //   rotatedPath = path starting from the node with the lowest id
+        //  invertedpath = path inverted, starting from the node with the lowest id
+        //  if both of these aren't already present in cycles,
+        //            add rotatedPath to cycles
+
+        // else,
+        //        add otherNode to the currentPath,
+        //        call this function recursively using a copy of currentPath
+
+
+        private void FindCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode, WallAnchor previousNode)
+        {
+            Debug.Log(string.Format("Current Node: {0}\nPrevious Node: {1}", currentNode, previousNode));
+
+
+            foreach (WallAnchor.WallConnection connection in currentNode.Connections)
+            {
+                if (HasNodeBeenVisited(connection.ConnectedAnchor, path))
+                {
+                    Debug.Log(string.Format("The node {0} has supposedly already been visited", connection.ConnectedAnchor));
+                    continue;
+                }
+
+                else if (connection.ConnectedAnchor == path[0])
+                {
+                    // We found a cycle!
+                    List<WallAnchor> rotatedPath = RotatePathToSmallest(path);
+                    List<WallAnchor> invertedPath = InvertPath(path);
+
+                    if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
+                    {
+                        cycles.Add(rotatedPath);
+                    }
+                }
+
+                else
+                {
+                    List<WallAnchor> updatedPath = new List<WallAnchor>(path);
+                    updatedPath.Add(connection.ConnectedAnchor);
+
+                    // Something seems to be going wrong with the list when an anchor has more than one connection?
+                    FindCyclesRecursive(cycles, updatedPath, connection.ConnectedAnchor, currentNode);
+                }
+            }
+        }
+
+
+        private void FindCirclesRoot(WallAnchor rootNode)
+        {
+            List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
+
+            List<WallAnchor> rootPath = new List<WallAnchor>();
+            rootPath.Add(rootNode);
+
+            FindCyclesRecursive(cycles, rootPath, rootNode, null);
+
+            if (cycles.Count > 0)
+            {
+                string infoString = string.Format("Cycles found for rootNode {0}:", rootNode.ID, cycles.Count);
+
+                foreach (List<WallAnchor> pathFound in cycles)
+                {
+                    infoString += "\n";
+                    foreach (WallAnchor node in pathFound)
+                    {
+                        infoString += node.ID + " ";
+                    }
+
+                    Debug.Log(infoString);
+                }
+            }
+            
+        }
 
         
 
-        
-
-
-        
 
 
 

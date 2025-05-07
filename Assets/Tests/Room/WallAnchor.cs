@@ -1,13 +1,15 @@
 using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Building
 {
-    public class WallAnchor : MonoBehaviour, IPointerDownHandler
+    public class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler
     {
         // INTERNAL CLASSES
         [System.Serializable]
@@ -39,6 +41,8 @@ namespace Building
 
 
         // VARIABLES/PARAMETERS
+        [SerializeField] private int id; 
+
         [SerializeField] private float height = 1f;
         // Store height per wall instead?
 
@@ -57,6 +61,8 @@ namespace Building
 
 
         // PROPERTIES
+        public int ID { get { return id; } }
+
         public float Height
         {
             get { return height; }
@@ -75,6 +81,8 @@ namespace Building
         }
         // return pos at height?
 
+        public List<WallConnection> Connections { get { return connections; } }
+
 
 
         // EVENTS
@@ -85,10 +93,10 @@ namespace Building
         // METHODS
 
         // INIT
-        public void Init(float height = 1f)
+        public void Init(int id, float height = 1f)
         {
             // Name the game object.
-            gameObject.name = string.Format("WallAnchor {0}", transform.position);
+            gameObject.name = string.Format("WallAnchor {0} {1}", id, transform.position);
 
 
             // Fetch components.
@@ -97,6 +105,7 @@ namespace Building
 
 
             // Set parameters.
+            this.id = id;
             this.height = height;
             UpdateGameObjectHeight();
 
@@ -217,6 +226,26 @@ namespace Building
         public void OnPointerDown(PointerEventData eventData)
         {
             OnWallAnchorClicked?.Invoke(this, eventData.button);
+        }
+
+
+        // TODO: should be compare with something other than the ID?
+        public int CompareTo(object otherObject)
+        {
+            if (otherObject == null)
+            {
+                return 1;
+            }
+
+            WallAnchor otherWallAnchor = otherObject as WallAnchor;
+            if (otherWallAnchor != null)
+            {
+                return this.ID.CompareTo(otherWallAnchor.ID);
+            }
+            else
+            {
+                throw new ArgumentException("The otherObject is not a WallAnchor.");
+            }
         }
     }
 
