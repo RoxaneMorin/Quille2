@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -247,6 +248,17 @@ namespace Building
                 throw new ArgumentException("The otherObject is not a WallAnchor.");
             }
         }
+
+
+
+
+#if DEBUG
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.white;
+            Handles.Label(gameObject.transform.position, ID.ToString());
+        }
+#endif
     }
 
 }

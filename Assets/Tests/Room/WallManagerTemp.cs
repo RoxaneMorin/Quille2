@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.EventSystems;
 using JetBrains.Annotations;
+using AmplifyShaderEditor;
 
 namespace Building
 {
@@ -197,101 +198,29 @@ namespace Building
 
         // https://www.geeksforgeeks.org/print-all-the-cycles-in-an-undirected-graph/
 
-        // Cycles are a list of lists of nodes
+        // TODO: version for checking everything in one go, which will require rotating around the minID node instead.
 
-        // For each edge,
-        // For each node in the edge:
+        // TODO: rotate path to smallest ID
 
-        // FindNewCycles (List<node> path, graph information, cycles):
-        //*
-        // If path.count == zero, return
-
-        // startNode = path[0]
-
-        // for each edge in the graph,
-        // node1 = edge[0], node2 = edge[1]
-
-        // if the startNode is either node1 or node2,
-        // nextNode = the other node in that edge
-
-        // if this nextNode has not yet been visited,
-        // sub = a new list containing nextNode
-        // add the current path to sub
-        // FindNewCycles(sub, graph, cycles)
-
-        // Else, if path.Count > 2 and the nextNode == path.Last(),
-        // p = RotateToSmallest(new list from path)
-        // inv = Invert(new list from p)
-
-        // if IsNew(p, cycles) and IsNew(inv, cycles)
-        // add p to cycles
-        //*
-
-
-
-        //void FindNewCycles(List<WallAnchor> path, List<List<WallAnchor>> cycles)
-        //{
-        //    if (path.Count == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    WallAnchor startNode = path[0];
-
-
-
-        //    // for each edge in the graph,
-        //    // node1 = edge[0], node2 = edge[1]
-
-        //    // if the startNode is either node1 or node2,
-        //    // nextNode = the other node in that edge
-
-        //    // if this nextNode has not yet been visited,
-        //    // sub = a new list containing nextNode
-        //    // add the current path to sub
-        //    // FindNewCycles(sub, graph, cycles)
-
-        //    // Else, if path.Count > 2 and the nextNode == path.Last(),
-        //    // p = RotateToSmallest(new list from path)
-        //    // inv = Invert(new list from p)
-
-        //    // if IsNew(p, cycles) and IsNew(inv, cycles)
-        //    // add p to cycles
-
-        //}
-
-
-
-
-        // Visited: does the given path contain the given node?
-
-        // RotateToSmallest(path): change the path's first node to start with the lowest index
-
-        // Invert(path): invert the list, and do RotateToSmallest
-
-        // IsNew: !cycles.Any(c => c.SequenceEqual(path))
-
-
-        static List<WallAnchor> RotatePathToSmallest(List<WallAnchor> path)
+        static List<WallAnchor> RotatePathToRootNode(List<WallAnchor> path, WallAnchor rootNode)
         {
             if (path.Count == 0)
             {
                 return path;
             }
 
-            int minIndex = path.IndexOf(path.Min());
-            return path.Skip(minIndex).Concat(path.Take(minIndex)).ToList();
+            int rootIndex = path.IndexOf(rootNode);
+            return path.Skip(rootIndex).Concat(path.Take(rootIndex)).ToList();
         }
 
-        static List<WallAnchor> InvertPath(List<WallAnchor> path)
+        static List<WallAnchor> InvertPath(List<WallAnchor> path, WallAnchor rootNode)
         {
             if (path.Count == 0)
             {
                 return path;
             }
 
-            path.Reverse();
-            return RotatePathToSmallest(path);
+            return RotatePathToRootNode(Enumerable.Reverse(path).ToList(), rootNode);
         }
 
         static bool IsPathNew(List<List<WallAnchor>> cycles, List<WallAnchor> path)
@@ -305,61 +234,28 @@ namespace Building
         }
 
 
-
-        /// Trying to rewrite it to use my data structure
-
-        //currentPath
-
-        //initialNode of this path
-        //currentNode we are looking at
-        //previousNode we came from (track as visited instead?)
-
-        //for each connection of the currentNode (but the one we came from),
-
-        // if its otherNode is the initialNode,
-        //   We found a cycle!
-        //   rotatedPath = path starting from the node with the lowest id
-        //  invertedpath = path inverted, starting from the node with the lowest id
-        //  if both of these aren't already present in cycles,
-        //            add rotatedPath to cycles
-
-        // else,
-        //        add otherNode to the currentPath,
-        //        call this function recursively using a copy of currentPath
-
-
-        private void FindCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode, WallAnchor previousNode)
+        private void FindCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode)
         {
-            Debug.Log(string.Format("Current Node: {0}\nPrevious Node: {1}", currentNode, previousNode));
-
+            List<WallAnchor> updatedPath = path.Concat(new[] { currentNode }).ToList();
+            //Debug.Log(string.Format("The path so far: {0}", string.Join(", ", updatedPath.Select(node => node.ID))));
 
             foreach (WallAnchor.WallConnection connection in currentNode.Connections)
             {
-                if (HasNodeBeenVisited(connection.ConnectedAnchor, path))
+                if (!HasNodeBeenVisited(connection.ConnectedAnchor, path))
                 {
-                    Debug.Log(string.Format("The node {0} has supposedly already been visited", connection.ConnectedAnchor));
-                    continue;
+                    FindCyclesRecursive(cycles, updatedPath, connection.ConnectedAnchor);
                 }
-
-                else if (connection.ConnectedAnchor == path[0])
+                else if (updatedPath.Count > 2 && connection.ConnectedAnchor == updatedPath[0])
                 {
                     // We found a cycle!
-                    List<WallAnchor> rotatedPath = RotatePathToSmallest(path);
-                    List<WallAnchor> invertedPath = InvertPath(path);
 
-                    if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
+                    // TODO: Rotate path to the smallest ID too if we search all nodes instead of node by node.
+                    List<WallAnchor> invertedPath = InvertPath(updatedPath, connection.ConnectedAnchor);
+
+                    if (IsPathNew(cycles, updatedPath) && IsPathNew(cycles, invertedPath))
                     {
-                        cycles.Add(rotatedPath);
+                        cycles.Add(updatedPath);
                     }
-                }
-
-                else
-                {
-                    List<WallAnchor> updatedPath = new List<WallAnchor>(path);
-                    updatedPath.Add(connection.ConnectedAnchor);
-
-                    // Something seems to be going wrong with the list when an anchor has more than one connection?
-                    FindCyclesRecursive(cycles, updatedPath, connection.ConnectedAnchor, currentNode);
                 }
             }
         }
@@ -368,11 +264,9 @@ namespace Building
         private void FindCirclesRoot(WallAnchor rootNode)
         {
             List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
+            List<WallAnchor> path = new List<WallAnchor>();
 
-            List<WallAnchor> rootPath = new List<WallAnchor>();
-            rootPath.Add(rootNode);
-
-            FindCyclesRecursive(cycles, rootPath, rootNode, null);
+            FindCyclesRecursive(cycles, path, rootNode);
 
             if (cycles.Count > 0)
             {
@@ -380,16 +274,11 @@ namespace Building
 
                 foreach (List<WallAnchor> pathFound in cycles)
                 {
-                    infoString += "\n";
-                    foreach (WallAnchor node in pathFound)
-                    {
-                        infoString += node.ID + " ";
-                    }
-
-                    Debug.Log(infoString);
+                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
                 }
+
+                Debug.Log(infoString);
             }
-            
         }
 
         
@@ -418,31 +307,31 @@ namespace Building
         }
 
 
-#if DEBUG
-        private void OnDrawGizmos()
-        {
-            foreach (WallSegment segment in areaWallSegments)
-            {
-                if (segment.AnchorA && segment.AnchorB)
-                {
-                    // Draw a line representing this wall.
-                    Gizmos.color = Color.white;
-                    Gizmos.DrawLine(segment.AnchorA.transform.position, segment.AnchorB.transform.position);
+//#if DEBUG
+//        private void OnDrawGizmos()
+//        {
+//            foreach (WallSegment segment in areaWallSegments)
+//            {
+//                if (segment.AnchorA && segment.AnchorB)
+//                {
+//                    // Draw a line representing this wall.
+//                    Gizmos.color = Color.white;
+//                    Gizmos.DrawLine(segment.AnchorA.transform.position, segment.AnchorB.transform.position);
 
 
-                    // Draw captions for anchors A and B.
-                    Vector3 dirAtoB = (segment.AnchorB.transform.position - segment.AnchorA.transform.position).normalized;
-                    Vector3 dirBtoA = (segment.AnchorA.transform.position - segment.AnchorB.transform.position).normalized;
+//                    // Draw captions for anchors A and B.
+//                    Vector3 dirAtoB = (segment.AnchorB.transform.position - segment.AnchorA.transform.position).normalized;
+//                    Vector3 dirBtoA = (segment.AnchorA.transform.position - segment.AnchorB.transform.position).normalized;
 
-                    Vector3 shiftedPosA = segment.AnchorA.transform.position + dirAtoB * 0.3f;
-                    Vector3 shiftedPosB = segment.AnchorB.transform.position + dirBtoA * 0.3f;
+//                    Vector3 shiftedPosA = segment.AnchorA.transform.position + dirAtoB * 0.3f;
+//                    Vector3 shiftedPosB = segment.AnchorB.transform.position + dirBtoA * 0.3f;
 
-                    Handles.Label(shiftedPosA, "A");
-                    Handles.Label(shiftedPosB, "B");
-                }
-            }
-        }
-#endif
+//                    Handles.Label(shiftedPosA, "A");
+//                    Handles.Label(shiftedPosB, "B");
+//                }
+//            }
+//        }
+//#endif
     }
 
 }
