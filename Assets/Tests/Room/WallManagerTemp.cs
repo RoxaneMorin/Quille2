@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine.EventSystems;
 using JetBrains.Annotations;
 using AmplifyShaderEditor;
+using System.IO;
 
 namespace Building
 {
@@ -270,9 +271,16 @@ namespace Building
 
             if (cycles.Count > 0)
             {
-                string infoString = string.Format("Cycles found for rootNode {0}:", rootNode.ID, cycles.Count);
+                List<List<WallAnchor>> prunedCycles = PruneCordedCycles(cycles);
 
+                string infoString = string.Format("Cycles found for rootNode {0}:", rootNode.ID);
                 foreach (List<WallAnchor> pathFound in cycles)
+                {
+                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
+                }
+
+                infoString += string.Format("\nCordless cycles found for rootNode {0}:", rootNode.ID);
+                foreach (List<WallAnchor> pathFound in prunedCycles)
                 {
                     infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
                 }
@@ -281,7 +289,34 @@ namespace Building
             }
         }
 
-        
+
+        private List<List<WallAnchor>> PruneCordedCycles(List<List<WallAnchor>> cycles)
+        {
+            List<List<WallAnchor>> prunedCycles = new List<List<WallAnchor>>();
+
+            foreach (List<WallAnchor> cycle in cycles)
+            {
+                if (!IsCycleCorded(cycle))
+                {
+                    prunedCycles.Add(cycle);
+                }
+            }
+
+            return prunedCycles;
+        }
+
+        private bool IsCycleCorded(List<WallAnchor> cycle)
+        {
+            foreach (WallAnchor node in cycle)
+            {
+                if (node.Connections.Count(connection => cycle.Contains(connection.ConnectedAnchor)) > 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
 
 
