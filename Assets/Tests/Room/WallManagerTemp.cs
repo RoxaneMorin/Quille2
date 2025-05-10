@@ -7,6 +7,11 @@ using UnityEngine.EventSystems;
 using JetBrains.Annotations;
 using AmplifyShaderEditor;
 using System.IO;
+using static UnityEditor.ShaderData;
+using Unity.Burst.Intrinsics;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
+using UnityEngine.Rendering;
 
 namespace Building
 {
@@ -82,7 +87,8 @@ namespace Building
             // Test finding new cycles
             if (selectedAnchor != null)
             {
-                FindCirclesRoot(selectedAnchor);
+                //FindCirclesRoot(selectedAnchor);
+                FindCordlessCycles();
             }
         }
 
@@ -317,6 +323,95 @@ namespace Building
 
             return false;
         }
+
+
+
+
+        // http://richard.baltensp.home.hefr.ch/Publications/20.pdf
+        // 1. Adjacency matrix
+
+        // 2. Add a first vertex Vstart to an empty path. (Do until all vertices are handled)
+
+        private void FindCordlessCycles()
+        {
+            List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
+            List<WallAnchor> path = new List<WallAnchor>();
+
+            foreach (WallAnchor node in areaWallAnchors)
+            {
+                FindCordlessCyclesRecursive(cycles, path, node);
+            }
+
+            if (cycles.Count > 0)
+            {
+                List<List<WallAnchor>> prunedCycles = PruneCordedCycles(cycles);
+
+                string infoString = string.Format("Cycles found:");
+                foreach (List<WallAnchor> pathFound in cycles)
+                {
+                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
+                }
+
+                Debug.Log(infoString);
+            }
+        }
+
+        // 3. Select first adjacent vertex Vj of the last vertex Vend in path (Vstart the first time around).
+        // It must not exist in P already, and be bigger than Vstart.
+        // If no Vj exists, delete the last vertex of path and redo this step.
+        // When all the adjacent vertices Vj of Vs have been handled, go to step two and do it with Vstart+1
+
+        // 4. If path.Count = 2, go to step 3
+
+        // 5. If path.Count = 3, check if Vend and Vstart are connected.
+        // If they are not, go to step 3 in search of expansion. 
+        // If they are connected, we have a cycle. Output. Delete the last vertex in path and go back to 3.
+
+        // 6. If path.Count > 3, check if any two non-adjacent vertices are connected ignoring Vstart.
+        // If any, delete the last vertex in path and go back to 3.
+        // Else, see if Vend and Vstart are connected.
+        // If we have a cycle, output. Output. Delete the last vertex in path and go back to 3.
+        // Else, just continue from step 3.
+
+        // 7. Do for the whole list.
+
+        private void FindCordlessCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode)
+        {
+            List<WallAnchor> updatedPath = path.Concat(new[] { currentNode }).ToList();
+
+            foreach (WallAnchor.WallConnection connection in currentNode.Connections)
+            {
+                WallAnchor adjacentNode = connection.ConnectedAnchor;
+
+
+                Debug.Log(adjacentNode.Connections.Any(nextNode => path.Skip(1).Take(path.Count - 2).Contains(nextNode.ConnectedAnchor)));
+
+
+                if (adjacentNode.ID > updatedPath[0].ID && !updatedPath.Contains(adjacentNode))
+                {
+                    FindCordlessCyclesRecursive(cycles, updatedPath, adjacentNode);
+                }
+                else if (updatedPath.Count == 3  && adjacentNode == updatedPath[0])
+                {
+                    cycles.Add(updatedPath);
+                }
+                else if (updatedPath.Count > 3)
+                {
+                    // are we connecting to something that's already in path?
+                    // yes -> continue
+
+                    // else, are we connecting to the final node?
+                    
+
+
+                    //  && !nextNode.Connections.Any(adjacent => path.Skip(1).Take(path.Count - 2).Contains(adjacent.ConnectedAnchor))
+
+                    Debug.Log("Long path");
+                }
+            }
+        }
+         
+
 
 
 
