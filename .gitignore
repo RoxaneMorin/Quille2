@@ -74,3 +74,4 @@ crashlytics-build.properties
 # Third Party Tools and PlugIns
 /[Aa]ssets/AmplifyShaderEditor*
 /[Aa]ssets/Plugins/AmplifyShaderEditor*
+/[Pp]ackages/[Aa]ssets/AmplifyShaderEditor*
