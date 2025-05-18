@@ -88,7 +88,7 @@ namespace Building
             // Test finding new cycles
             if (selectedAnchor != null)
             {
-                //FindCirclesRoot(selectedAnchor);
+                //FindCycles(selectedAnchor);
                 FindCordlessCycles();
             }
         }
@@ -284,7 +284,7 @@ namespace Building
 
 
         // https://www.geeksforgeeks.org/print-all-the-cycles-in-an-undirected-graph/
-        private void FindCircles(WallAnchor rootNode)
+        private void FindCycles(WallAnchor rootNode)
         {
             List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
             List<WallAnchor> path = new List<WallAnchor>();
@@ -425,8 +425,8 @@ namespace Building
             }
         }
 
-        // TODO: so far, chords are not detected is they don't connect two nodes directly.
-        // How might we solve this?
+        // TODO: clean up function to remove cycles cut through by indirect connections.
+        // Aparently these aren't considered cords.
 
 
 
