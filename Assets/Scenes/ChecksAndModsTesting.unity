@@ -337,30 +337,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f781f5c573b53944aad9cf9be104646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testModArithmeticFromFloat:
-    modOpIdx: 0
-    modifier: 0
-    modulator: {fileID: 0}
-    mainOpIdx: 0
-  testModArithmeticFromBool:
-    modOpIdx: 0
-    modifier: 0
-    modulator: {fileID: 0}
-    checkOpIdx: 0
-    compareTo: 0
-  testCheckArithmetic:
-    rid: -2
-  testCheckBoolean:
-    rid: -2
-  testDriveScore:
-    opIdx: 4
-    compareTo: 0.5
-    targetItem: {fileID: 11400000, guid: 170f2d83c35c62e45805c0b538c1f78a, type: 2}
+  testChecks:
+  - rid: 6557061185266515976
+  - rid: 6557061185266515980
+  - rid: -2
+  - rid: -2
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 6557061185266515976
+      type: {class: CheckArithmeticDriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        opIdx: 4
+        compareTo: 0.5
+        targetElement: {fileID: 11400000, guid: a34a8381d45747048930e0465118a118,
+          type: 2}
+    - rid: 6557061185266515980
+      type: {class: CheckArithmeticDriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        opIdx: 5
+        compareTo: 1
+        targetElement: {fileID: 11400000, guid: bb3fcab76aca0294287478a8d662c2f9,
+          type: 2}
 --- !u!4 &2044971975
 Transform:
   m_ObjectHideFlags: 0

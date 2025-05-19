@@ -8,7 +8,7 @@ namespace ChecksAndMods
     public class CheckArithmeticDriveScore : CheckArithmetic
     {
         // VARIABLES/PARAM
-        [SerializeField] [Tooltip("The target Drive to consult.")] public Quille.DriveSO targetItem;
+        [SerializeField] [Tooltip("The target Drive to consult.")] public Quille.DriveSO targetElement;
 
 
 
@@ -16,7 +16,7 @@ namespace ChecksAndMods
         // Fetch the value of the revelant drive.
         protected override float? FetchParam(System.Object sourceObj)
         {
-            return Fetchers.FetchDriveScore(sourceObj, targetItem);
+            return Fetchers.FetchDriveScore(sourceObj, targetElement);
         }
 
         // Check defined in parent class.
@@ -25,7 +25,7 @@ namespace ChecksAndMods
         // OVERRIDES
         public override string ToString()
         {
-            return string.Format("Is Drive : {0} {1} {2}?", targetItem ? targetItem.ItemName : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
+            return string.Format("Is Drive : {0} {1} {2}?", targetElement ? targetElement.ItemName : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
         }
     }
 }

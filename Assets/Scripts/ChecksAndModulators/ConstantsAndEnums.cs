@@ -9,11 +9,6 @@ namespace ChecksAndMods
     // Order is important! Enums and Funcs reflect each others' indices.
 
 
-    static class Constants
-    {
-        public const float THRESHOLD_ROUGHLY_EQUAL = 0.5f;
-    }
-
     static class Operators
     {
         public static Func<float, float, float>[] operationsArithmetic = {
@@ -38,7 +33,7 @@ namespace ChecksAndMods
         {
             ((a, b) => a == b),
             ((a, b) => a != b),
-            ((a, b) => MathF.Abs(a - b) <= Constants.THRESHOLD_ROUGHLY_EQUAL),
+            ((a, b) => Mathf.Approximately(a, b)),
             ((a, b) => a > b),
             ((a, b) => a >= b),
             ((a, b) => a < b),
@@ -99,4 +94,24 @@ namespace ChecksAndMods
         Equal,
         NotEqual
     }
+
+
+
+    // TODO: simplify comparison booleans to just IsTrue/IsFalse?
+
+
+
+
+    public enum SubtypeNames
+    {
+        DriveScore,
+
+    }
+
+    public static class Subtypes
+    {
+        public static readonly Type[] subtypesCheck = { typeof(CheckArithmeticDriveScore) };
+    }
+
+    // DOTO: probably need both enum & list of types for it.
 }

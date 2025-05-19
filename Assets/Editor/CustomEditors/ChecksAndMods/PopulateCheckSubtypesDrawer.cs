@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ChecksAndMods;
+using System;
 
 [CustomPropertyDrawer(typeof(PopulateCheckSubtypesAttribute))]
 public class PopulateCheckSubtypesDrawer : PropertyDrawer
 {
+    SubtypeNames targetCheckType;
+
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
@@ -36,26 +40,24 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
         else
         {
             // Calculate positions and values.
-            float labelWidth = EditorGUIUtility.labelWidth;
-            float buttonWidth = (position.width - labelWidth) / 2f;
-            Rect labelRect = new Rect(position.x, position.y, labelWidth, position.height);
-            Rect buttonBoolRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, buttonWidth, position.height);
-            Rect buttonArithRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, buttonWidth, position.height);
+            float buttonWidth = (position.width - EditorGUIUtility.labelWidth) / 2f;
+
+            Rect labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, position.height);
+
+            Rect enumPopupRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, buttonWidth, position.height);
+
+            Rect buttonRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, buttonWidth, position.height);
 
             // Draw elements.
-            EditorGUI.LabelField(labelRect, label.text + " : Create this Check as...", EditorStyles.boldLabel);
+            EditorGUI.LabelField(labelRect, "Null. Create:", EditorStyles.boldLabel);
 
-            if (GUI.Button(buttonBoolRect, "fromBoolean"))
+            EditorGUI.EnumPopup(enumPopupRect, targetCheckType);
+
+            if (GUI.Button(buttonRect, "Create"))
             {
-                //property.managedReferenceValue = new CheckBoolean();
-                //property.serializedObject.ApplyModifiedProperties();
-                //property.isExpanded = true;
-            }
-            if (GUI.Button(buttonArithRect, "fromArithmetic"))
-            {
-                //property.managedReferenceValue = new CheckArithmetic();
-                //property.serializedObject.ApplyModifiedProperties();
-                //property.isExpanded = true;
+                property.managedReferenceValue = Activator.CreateInstance(Subtypes.subtypesCheck[0]);
+                property.serializedObject.ApplyModifiedProperties();
+                property.isExpanded = true;
             }
         }
 

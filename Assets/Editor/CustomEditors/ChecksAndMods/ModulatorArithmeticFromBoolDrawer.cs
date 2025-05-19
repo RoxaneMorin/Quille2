@@ -60,9 +60,13 @@ public class ModulatorArithmeticFromBoolDrawer : PropertyDrawer
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, checkOpIdx);
             newPosition.y += EditorGUIUtility.singleLineHeight;
+            if (checkOpIdx.intValue > 0)
+            {
+                EditorGUI.PropertyField(newPosition, compareTo);
+                newPosition.y += EditorGUIUtility.singleLineHeight;
+
+            }
             EditorGUI.PropertyField(newPosition, modOpIdx);
-            newPosition.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(newPosition, compareTo);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, modifier);
             newPosition.y += EditorGUIUtility.singleLineHeight * 1.15f;

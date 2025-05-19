@@ -6,21 +6,21 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic), true)]
 public class CheckArithmeticDrawer : PropertyDrawer
 {
-    SerializedProperty targetItem;
+    SerializedProperty targetElement;
     SerializedProperty opIdx;
     SerializedProperty compareTo;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Collect the subproperties.
-        targetItem = property.FindPropertyRelative("targetItem");
+        targetElement = property.FindPropertyRelative("targetElement");
         opIdx = property.FindPropertyRelative("opIdx");
         compareTo = property.FindPropertyRelative("compareTo");
         string equationString;
 
 
         // Build the string.
-        string fetchedValue = targetItem.objectReferenceValue ? targetItem.objectReferenceValue.name : "[Fetched Value]";
+        string fetchedValue = targetElement.objectReferenceValue ? targetElement.objectReferenceValue.name : "[Fetched Value]";
         int opIntIdx = opIdx.enumValueIndex;
 
         equationString = string.Format("\"Is '{0}' {1} {2} ?\"",
@@ -40,9 +40,11 @@ public class CheckArithmeticDrawer : PropertyDrawer
         // If the foldout is open, draw everything else.
         if (property.isExpanded)
         {
+            // TODO: figue out how to display a custom name for "targetElement" depending on its subclass.
+
             // Draw the default property fields
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(newPosition, targetItem);
+            EditorGUI.PropertyField(newPosition, targetElement);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, opIdx);
             newPosition.y += EditorGUIUtility.singleLineHeight;
