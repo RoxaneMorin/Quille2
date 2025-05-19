@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic))]
+[CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic), true)]
 public class CheckArithmeticDrawer : PropertyDrawer
 {
-    SerializedProperty check;
+    SerializedProperty targetItem;
     SerializedProperty opIdx;
     SerializedProperty compareTo;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Collect the subproperties.
-        check = property.FindPropertyRelative("check");
+        targetItem = property.FindPropertyRelative("targetItem");
         opIdx = property.FindPropertyRelative("opIdx");
         compareTo = property.FindPropertyRelative("compareTo");
         string equationString;
 
 
         // Build the string.
-        string fetchedValue = check.objectReferenceValue ? check.objectReferenceValue.ToString() : "[Fetched Value]";
+        string fetchedValue = targetItem.objectReferenceValue ? targetItem.objectReferenceValue.name : "[Fetched Value]";
         int opIntIdx = opIdx.enumValueIndex;
 
         equationString = string.Format("\"Is '{0}' {1} {2} ?\"",
@@ -42,7 +42,7 @@ public class CheckArithmeticDrawer : PropertyDrawer
         {
             // Draw the default property fields
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(newPosition, check);
+            EditorGUI.PropertyField(newPosition, targetItem);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, opIdx);
             newPosition.y += EditorGUIUtility.singleLineHeight;

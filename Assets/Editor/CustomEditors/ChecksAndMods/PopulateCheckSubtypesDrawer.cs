@@ -16,24 +16,6 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
         {
             // Calculate positions and values.
             float singleLineHeight = EditorGUIUtility.singleLineHeight;
-            //float boxYShift = singleLineHeight * 1.5f + 6f;
-            //float propertyYShift = singleLineHeight * 2f;
-
-            //Rect buttonDeleteRect = new Rect(position.x, position.y, singleLineHeight, singleLineHeight);
-            //if (GUI.Button(buttonDeleteRect, "X"))
-            //{
-            //    property.managedReferenceValue = null;
-            //    property.serializedObject.ApplyModifiedProperties();
-            //}
-
-            //if (property.isExpanded)
-            //{
-            //    Rect boxPositionRect = new Rect(position.x + boxYShift, position.y + singleLineHeight, position.width - boxYShift, position.height - singleLineHeight - 2f);
-            //    GUI.Box(boxPositionRect, GUIContent.none, EditorStyles.helpBox); 
-            //}
-
-            //Rect updatedPositionRect = new Rect(position.x + propertyYShift, position.y, position.width - propertyYShift - 4f, position.height);
-            //EditorGUI.PropertyField(updatedPositionRect, property);
 
             if (property.isExpanded)
             {
@@ -65,15 +47,15 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
 
             if (GUI.Button(buttonBoolRect, "fromBoolean"))
             {
-                property.managedReferenceValue = new CheckBoolean();
-                property.serializedObject.ApplyModifiedProperties();
-                property.isExpanded = true;
+                //property.managedReferenceValue = new CheckBoolean();
+                //property.serializedObject.ApplyModifiedProperties();
+                //property.isExpanded = true;
             }
             if (GUI.Button(buttonArithRect, "fromArithmetic"))
             {
-                property.managedReferenceValue = new CheckArithmetic();
-                property.serializedObject.ApplyModifiedProperties();
-                property.isExpanded = true;
+                //property.managedReferenceValue = new CheckArithmetic();
+                //property.serializedObject.ApplyModifiedProperties();
+                //property.isExpanded = true;
             }
         }
 

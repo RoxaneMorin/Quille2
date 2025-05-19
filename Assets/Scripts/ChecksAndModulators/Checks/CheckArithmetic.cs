@@ -5,36 +5,49 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class CheckArithmetic : Check
+    public abstract class CheckArithmetic : Check
     {
-        // Wrapper / instantiable class for use by other scripts and assets at runtime, differentiated by its associated instance of CheckArithmeticSO.
+        // Parent class for specificed arithmetic checks to inherit from.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
-        // The specific value to fetch and check is handled by the CheckArithmeticSO object.
+        // The specific value to fetch and check is elaborated upon by child classes and their instances.
 
 
         // VARIABLES/PARAM
-        // sourceObj, target given by the handler.
-        [SerializeField]
-        CheckArithmeticSO check;
+        [SerializeField] public ComparisonsArithmetic opIdx;
+        [SerializeField] public float compareTo;
+        // Target item defined in child classes.
 
-        [SerializeField]
-        public ComparisonsArithmetic opIdx;
-        [SerializeField]
-        public float compareTo;
 
 
         // METHODS
-        // Execute.
+        protected abstract float? FetchParam(System.Object sourceObj);
+
         public override bool Execute(System.Object sourceObj)
         {
-            return check.Check(sourceObj, compareTo, (int)opIdx);
+            // Will need to be cleaned up/refined to ensure safety and efficiency.
+            try
+            {
+                float? param = FetchParam(sourceObj);
+                if (param == null)
+                {
+                    // Return false. See if we should return null instead?
+                    return false;
+                }
+
+                return Operators.comparisonsArithmetic[((int)opIdx)]((float)param, compareTo);
+            }
+            catch
+            {
+                Debug.LogError("Modulate operation failed. The check will return false.");
+                return false;
+            }
         }
 
 
         // OVERRIDES
-        public override string ToString()
-        {
-            return string.Format("Is {0} {1} {2}?", check ? check.ToString() : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
-        }
+        //public override string ToString()
+        //{
+        //    return string.Format("Is {0} {1} {2}?", check ? check.ToString() : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
+        //}
     }
 }
