@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [CreateAssetMenu(fileName = "Check_Interest_", menuName = "Checks&dModulators/Check/Interest", order = 10)]
-    public class CheckInterestScore : CheckArithmeticSO
+    public class CheckInterestScoreSO : CheckArithmeticSO
     {
         // ScriptableObject template for the instantiation of Interest arithmetic checks.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.

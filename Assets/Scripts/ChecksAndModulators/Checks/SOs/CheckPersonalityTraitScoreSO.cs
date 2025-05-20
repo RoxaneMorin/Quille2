@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [CreateAssetMenu(fileName = "Check_PersonalityTrait_", menuName = "Checks&dModulators/Check/Personality Trait", order = 10)]
-    public class CheckPersonalityTraitScore : CheckArithmeticSO
+    public class CheckPersonalityTraitScoreSO : CheckArithmeticSO
     {
         // ScriptableObject template for the instantiation of PersonalityTrait arithmetic checks.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.

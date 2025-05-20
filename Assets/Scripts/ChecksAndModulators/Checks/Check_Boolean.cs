@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public abstract class CheckBoolean : Check
+    public abstract class Check_Boolean : Check
     {
         // Parent class for specificed boolean checks to inherit from.
         // This type of check runs an boolean comparison on the fetched value, and returns true or false depending on the result.

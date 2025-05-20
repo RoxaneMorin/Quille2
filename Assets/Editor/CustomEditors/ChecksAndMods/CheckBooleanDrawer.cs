@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ChecksAndMods.CheckBoolean))]
+[CustomPropertyDrawer(typeof(ChecksAndMods.Check_Boolean))]
 public class CheckBooleanDrawer : PropertyDrawer
 {
     SerializedProperty check;

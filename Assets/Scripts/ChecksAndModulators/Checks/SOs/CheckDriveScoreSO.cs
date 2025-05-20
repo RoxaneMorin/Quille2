@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [CreateAssetMenu(fileName = "Check_Drive_", menuName = "Checks&dModulators/Check/Drive", order = 15)]
-    public class CheckDriveScore : CheckArithmeticSO
+    public class CheckDriveScoreSO : CheckArithmeticSO
     {
         // ScriptableObject template for the instantiation of Drive arithmetic checks.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.

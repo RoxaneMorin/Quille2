@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ChecksAndMods.CheckArithmetic), true)]
+[CustomPropertyDrawer(typeof(ChecksAndMods.Check_Arithmetic), true)]
 public class CheckArithmeticDrawer : PropertyDrawer
 {
     SerializedProperty targetElement;

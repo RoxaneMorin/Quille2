@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public abstract class CheckArithmetic : Check
+    public abstract class Check_Arithmetic : Check
     {
         // Parent class for specificed arithmetic checks to inherit from.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class CheckArithmeticDriveScore : CheckArithmetic
+    public class Check_DriveScore : Check_Arithmetic
     {
         // VARIABLES/PARAM
         [SerializeField] [Tooltip("The target Drive to consult.")] public Quille.DriveSO targetElement;

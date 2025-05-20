@@ -44,7 +44,7 @@ namespace Quille
         public override bool IsCompatibleWithPerson(Person targetPerson)
         {
             // Check whether this SO is incompatible with any relevant aspect of the given person.
-            foreach (ChecksAndMods.CheckArithmetic check in incompatiblePersonChecks)
+            foreach (ChecksAndMods.Check_Arithmetic check in incompatiblePersonChecks)
             {
                 if (check.Execute(targetPerson))
                 {

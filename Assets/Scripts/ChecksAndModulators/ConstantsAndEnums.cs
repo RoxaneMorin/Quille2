@@ -110,7 +110,7 @@ namespace ChecksAndMods
 
     public static class Subtypes
     {
-        public static readonly Type[] subtypesCheck = { typeof(CheckArithmeticDriveScore) };
+        public static readonly Type[] subtypesCheck = { typeof(Check_DriveScore) };
     }
 
     // DOTO: probably need both enum & list of types for it.
