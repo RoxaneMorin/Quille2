@@ -33,7 +33,7 @@ namespace ChecksAndMods
         {
             ((a, b) => a == b),
             ((a, b) => a != b),
-            ((a, b) => Mathf.Approximately(a, b)),
+            ((a, b) => Mathf.Approximately(a, b)), // TODO: restore to how I did it previously, allowing to set the epsilon manually?
             ((a, b) => a > b),
             ((a, b) => a >= b),
             ((a, b) => a < b),
@@ -94,24 +94,26 @@ namespace ChecksAndMods
         Equal,
         NotEqual
     }
-
-
-
     // TODO: simplify comparison booleans to just IsTrue/IsFalse?
 
 
-
-
+    // The mapping of subtype's names to their actual classes, used in the editor UI.
     public enum SubtypeNames
     {
+        PersonalityAxeScore,
+        PersonalityTraitScore,
         DriveScore,
-
+        InterestScore
     }
 
     public static class Subtypes
     {
-        public static readonly Type[] subtypesCheck = { typeof(Check_DriveScore) };
+        public static readonly Type[] subtypesCheck = 
+        { 
+            typeof(Check_PersonalityAxeScore),
+            typeof(Check_PersonalityTraitScore),
+            typeof(Check_DriveScore),
+            typeof(Check_InterestScore)
+        };
     }
-
-    // DOTO: probably need both enum & list of types for it.
 }

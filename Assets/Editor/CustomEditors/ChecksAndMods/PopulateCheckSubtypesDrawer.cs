@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -40,22 +40,17 @@ public class PopulateCheckSubtypesDrawer : PropertyDrawer
         else
         {
             // Calculate positions and values.
-            float buttonWidth = (position.width - EditorGUIUtility.labelWidth) / 2f;
-
+            float buttonWidth = (position.width - EditorGUIUtility.labelWidth) - EditorGUIUtility.singleLineHeight;
             Rect labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, position.height);
-
             Rect enumPopupRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, buttonWidth, position.height);
-
-            Rect buttonRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, buttonWidth, position.height);
+            Rect buttonRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, EditorGUIUtility.singleLineHeight, position.height);
 
             // Draw elements.
             EditorGUI.LabelField(labelRect, "Null. Create:", EditorStyles.boldLabel);
-
-            EditorGUI.EnumPopup(enumPopupRect, targetCheckType);
-
-            if (GUI.Button(buttonRect, "Create"))
+            targetCheckType = (SubtypeNames)EditorGUI.EnumPopup(enumPopupRect, targetCheckType);
+            if (GUI.Button(buttonRect, "✓"))
             {
-                property.managedReferenceValue = Activator.CreateInstance(Subtypes.subtypesCheck[0]);
+                property.managedReferenceValue = Activator.CreateInstance(Subtypes.subtypesCheck[(int)targetCheckType]);
                 property.serializedObject.ApplyModifiedProperties();
                 property.isExpanded = true;
             }

@@ -22,6 +22,7 @@ namespace Quille
 
 
         // PROPERITES
+        public string ItemAndAxeNames { get { return string.Format("{0} ({1} vs {2})", ItemName, AxeNameLeft, AxeNameRight); } }
         public string AxeNameLeft { get { return axeNameLeft; } }
         public string AxeNameRight { get { return axeNameRight; } }
         public Sprite AxeIconLeft { get { return axeIconLeft; } }

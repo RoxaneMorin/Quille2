@@ -338,29 +338,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testChecks:
-  - rid: 6557061185266515976
-  - rid: 6557061185266515980
-  - rid: -2
+  - rid: 141020534138994688
+  - rid: 141020534138994692
+  - rid: 141020533433565185
+  - rid: 141020534138994693
   - rid: -2
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6557061185266515976
-      type: {class: CheckArithmeticDriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+    - rid: 141020533433565185
+      type: {class: Check_DriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
       data:
         opIdx: 4
         compareTo: 0.5
-        targetElement: {fileID: 11400000, guid: a34a8381d45747048930e0465118a118,
-          type: 2}
-    - rid: 6557061185266515980
-      type: {class: CheckArithmeticDriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+        target: {fileID: 11400000, guid: 5df8f791394c4554c8b3d9b7be498649, type: 2}
+    - rid: 141020534138994688
+      type: {class: Check_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
       data:
-        opIdx: 5
+        opIdx: 6
+        compareTo: 0.25
+        target: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
+    - rid: 141020534138994692
+      type: {class: Check_PersonalityTraitScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        opIdx: 3
+        compareTo: 0
+        target: {fileID: 11400000, guid: 6392ad27cdfd3934ba2f7971a0330110, type: 2}
+    - rid: 141020534138994693
+      type: {class: Check_InterestScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        opIdx: 2
         compareTo: 1
-        targetElement: {fileID: 11400000, guid: bb3fcab76aca0294287478a8d662c2f9,
-          type: 2}
+        target: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
 --- !u!4 &2044971975
 Transform:
   m_ObjectHideFlags: 0
