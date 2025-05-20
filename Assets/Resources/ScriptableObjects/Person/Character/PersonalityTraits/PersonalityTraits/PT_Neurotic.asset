@@ -12,14 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65b2f4dd92689840b0e0ebd0aa92eb5, type: 3}
   m_Name: PT_Neurotic
   m_EditorClassIdentifier: 
+  menuSortingIndex: 0
   itemName: Neurotic
   itemIcon: {fileID: 21300000, guid: 36f8decff81b28f48b9a49315ae04a3a, type: 3}
-  menuSortingIndex: 0
   incompatiblePersonChecks:
-  - check: {fileID: 11400000, guid: a83b25aa3b2750448a6b1446c9132544, type: 2}
-    opIdx: 6
-    compareTo: -0.5
+  - rid: 141020535755898884
   traitSpan: 1
   trainMidpoint: 0.5
   inDomains:
   - {fileID: 11400000, guid: b307824ac1f49ee4aab51018d791af46, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 141020535755898884
+      type: {class: Check_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        opIdx: 6
+        compareTo: -0.5
+        target: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}

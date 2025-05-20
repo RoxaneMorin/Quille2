@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BN_Sanitation
   m_EditorClassIdentifier: 
   needName: Sanitation
+  isHalfNeed: 0
   needIcon: {fileID: 21300000, guid: 6719d23cb27c6484dbf322f04a4db33d, type: 3}
   aiPriorityWeighting: 0.75
   levelFull: 1
@@ -23,3 +24,6 @@ MonoBehaviour:
   baseAIWeightingModulatedBy: []
   baseChangeRateModulatedBy: []
   thresholdsModulatedBy: []
+  references:
+    version: 2
+    RefIds: []

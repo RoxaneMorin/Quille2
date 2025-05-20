@@ -53,28 +53,28 @@ namespace Quille
 
 
         // MODULATORS
-        public ChecksAndMods.Modulator_FromFloat[] BaseAIWeightingModulatedByLeft
+        public ChecksAndMods.Modulator[] BaseAIWeightingModulatedByLeft
         {
             get { return leftNeedSO != null ? leftNeedSO.BaseAIWeightingModulatedBy : null; }
         }
-        public ChecksAndMods.Modulator_FromFloat[] BaseChangeRateModulatedByLeft
+        public ChecksAndMods.Modulator[] BaseChangeRateModulatedByLeft
         {
             get { return leftNeedSO != null ? leftNeedSO.BaseChangeRateModulatedBy : null; }
         }
-        public ChecksAndMods.Modulator_FromFloat[] ThresholdsModulatedByLeft
+        public ChecksAndMods.Modulator[] ThresholdsModulatedByLeft
         {
             get { return leftNeedSO != null ? leftNeedSO.ThresholdsModulatedBy : null; }
         }
 
-        public ChecksAndMods.Modulator_FromFloat[] BaseAIWeightingModulatedByRight
+        public ChecksAndMods.Modulator[] BaseAIWeightingModulatedByRight
         {
             get { return rightNeedSO != null ? rightNeedSO.BaseAIWeightingModulatedBy : null; }
         }
-        public ChecksAndMods.Modulator_FromFloat[] BaseChangeRateModulatedByRight
+        public ChecksAndMods.Modulator[] BaseChangeRateModulatedByRight
         {
             get { return rightNeedSO != null ? rightNeedSO.BaseChangeRateModulatedBy : null; }
         }
-        public ChecksAndMods.Modulator_FromFloat[] ThresholdsModulatedByRight
+        public ChecksAndMods.Modulator  [] ThresholdsModulatedByRight
         {
             get { return rightNeedSO != null ? rightNeedSO.ThresholdsModulatedBy : null; }
         }

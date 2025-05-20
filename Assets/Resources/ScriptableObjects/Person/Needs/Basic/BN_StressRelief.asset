@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BN_StressRelief
   m_EditorClassIdentifier: 
   needName: Stress Relief
+  isHalfNeed: 0
   needIcon: {fileID: 21300000, guid: c4e138d4f2ad7844e956661ee4ea32d7, type: 3}
   aiPriorityWeighting: 0.9
   levelFull: 1
@@ -22,8 +23,15 @@ MonoBehaviour:
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
   baseChangeRateModulatedBy:
-  - modulator: {fileID: 11400000, guid: 05e16bf82ca3d684f8bdf12d3b151543, type: 2}
-    mainOpIdx: 2
-    modOpIdx: 3
-    modifier: 0.15
+  - rid: 141020535755898883
   thresholdsModulatedBy: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 141020535755898883
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.15
+        mainOpIdx: 2
+        target: {fileID: 11400000, guid: 32e2121e4db27754aa8f4662495527ed, type: 2}

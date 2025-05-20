@@ -23,8 +23,15 @@ MonoBehaviour:
   thresholdCritical: 0.1
   baseAIWeightingModulatedBy: []
   baseChangeRateModulatedBy:
-  - modOpIdx: 3
-    modifier: 0.25
-    modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
-    mainOpIdx: 2
+  - rid: 141020535755898880
   thresholdsModulatedBy: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 141020535755898880
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.25
+        mainOpIdx: 2
+        target: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}

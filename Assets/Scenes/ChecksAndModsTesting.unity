@@ -337,6 +337,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f781f5c573b53944aad9cf9be104646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testMods:
+  - rid: 141020534138994696
+  - rid: 141020534138994697
+  - rid: 141020534138994698
+  - rid: 141020534138994699
+  - rid: -2
   testChecks:
   - rid: 141020534138994688
   - rid: 141020534138994692
@@ -372,6 +378,34 @@ MonoBehaviour:
         opIdx: 2
         compareTo: 1
         target: {fileID: 11400000, guid: cf8d298461edb4f42ac98e7e87cd5781, type: 2}
+    - rid: 141020534138994696
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.5
+        mainOpIdx: 1
+        target: {fileID: 11400000, guid: e771b483ef734df4091f97e046289c92, type: 2}
+    - rid: 141020534138994697
+      type: {class: Modulator_PersonalityTraitScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 0
+        modifier: 0
+        mainOpIdx: 2
+        target: {fileID: 11400000, guid: 6392ad27cdfd3934ba2f7971a0330110, type: 2}
+    - rid: 141020534138994698
+      type: {class: Modulator_DriveScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.5
+        mainOpIdx: 2
+        target: {fileID: 11400000, guid: bfad6fb4d7a6b4643883659053320365, type: 2}
+    - rid: 141020534138994699
+      type: {class: Modulator_InterestScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 1
+        modifier: 2
+        mainOpIdx: 3
+        target: {fileID: 11400000, guid: f014211123aa6024b880c5afdbd6ba4c, type: 2}
 --- !u!4 &2044971975
 Transform:
   m_ObjectHideFlags: 0

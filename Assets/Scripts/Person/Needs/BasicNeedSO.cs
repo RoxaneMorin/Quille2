@@ -46,15 +46,15 @@ namespace Quille
 
         // MODULATORS
         //Default values modulated by ? (List of functions/references)
-        [SerializeField] private ChecksAndMods.Modulator_FromFloat[] baseAIWeightingModulatedBy;
+        [SerializeReference][PopulateModulatorSubtypes] private ChecksAndMods.Modulator[] baseAIWeightingModulatedBy;
         // TODO: should AI weighting be done on the basis of general need type instead? Should it be "sacrified" in favor of the generic notice levels?
-        public ChecksAndMods.Modulator_FromFloat[] BaseAIWeightingModulatedBy  { get { return baseAIWeightingModulatedBy; } }
+        public ChecksAndMods.Modulator[] BaseAIWeightingModulatedBy  { get { return baseAIWeightingModulatedBy; } }
 
-        [SerializeField] private ChecksAndMods.Modulator_FromFloat[] baseChangeRateModulatedBy;
-        public ChecksAndMods.Modulator_FromFloat[] BaseChangeRateModulatedBy { get { return baseChangeRateModulatedBy; } }
+        [SerializeReference][PopulateModulatorSubtypes] private ChecksAndMods.Modulator[] baseChangeRateModulatedBy;
+        public ChecksAndMods.Modulator[] BaseChangeRateModulatedBy { get { return baseChangeRateModulatedBy; } }
 
-        [SerializeField] private ChecksAndMods.Modulator_FromFloat[] thresholdsModulatedBy;
-        public ChecksAndMods.Modulator_FromFloat[] ThresholdsModulatedBy { get { return thresholdsModulatedBy; } }
+        [SerializeReference][PopulateModulatorSubtypes] private ChecksAndMods.Modulator[] thresholdsModulatedBy;
+        public ChecksAndMods.Modulator[] ThresholdsModulatedBy { get { return thresholdsModulatedBy; } }
         // TODO: how are individual thresholds modulated?
     }
 }

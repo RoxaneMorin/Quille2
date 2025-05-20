@@ -25,7 +25,7 @@ namespace Quille
         // TODO: transform this into an interface?
 
         // VARIABLES/PARAMS 
-        [SerializeField] protected ChecksAndMods.Check_Arithmetic[] incompatiblePersonChecks;
+        [SerializeReference][PopulateCheckSubtypes] protected ChecksAndMods.Check[] incompatiblePersonChecks;
 
 
 

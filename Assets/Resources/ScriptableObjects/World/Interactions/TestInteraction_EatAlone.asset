@@ -24,14 +24,14 @@ MonoBehaviour:
     maxNeedChangeModulatedBy: []
   viabilityChecks: []
   scoringModulators:
-  - rid: 7829407244774539275
+  - rid: 141020535755898885
   references:
     version: 2
     RefIds:
-    - rid: 7829407244774539275
-      type: {class: ModulatorArithmeticFromFloat, ns: ChecksAndMods, asm: Assembly-CSharp}
+    - rid: 141020535755898885
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
       data:
         modOpIdx: 3
         modifier: 0.3
-        modulator: {fileID: 11400000, guid: 31f1a6142219213479e5a40ae08fe46c, type: 2}
         mainOpIdx: 2
+        target: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
