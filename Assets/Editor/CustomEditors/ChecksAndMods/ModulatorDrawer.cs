@@ -3,39 +3,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public abstract class CheckDrawer : PropertyDrawer
+public abstract class ModulatorDrawer : PropertyDrawer
 {
     protected SerializedProperty target;
-    protected SerializedProperty opIdx;
-    protected SerializedProperty compareTo;
+    protected SerializedProperty modOpIdx;
+    protected SerializedProperty modifier;
 
     protected virtual void CollectSubproperties(SerializedProperty property)
     {
         target = property.FindPropertyRelative("target");
-        opIdx = property.FindPropertyRelative("opIdx");
-        compareTo = property.FindPropertyRelative("compareTo");
+        modOpIdx = property.FindPropertyRelative("modOpIdx");
+        modifier = property.FindPropertyRelative("modifier");
     }
 
 
     protected abstract string BuildEquationString(GUIContent label);
-
-    protected virtual void DrawCheckProperties(Rect position, string equationString)
-    {
-        // Draw the default property fields
-        Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-        EditorGUI.PropertyField(newPosition, target);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, opIdx);
-        newPosition.y += EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(newPosition, compareTo);
-        newPosition.y += EditorGUIUtility.singleLineHeight * 1.15f;
-
-        // Display a preview of the "equation".
-        Rect equationRect = new Rect(position.x, newPosition.y, position.width, EditorGUIUtility.singleLineHeight);
-        GUIStyle centeredProgressBarBack = new GUIStyle("ProgressBarBack");
-        centeredProgressBarBack.alignment = TextAnchor.MiddleCenter;
-        EditorGUI.LabelField(equationRect, equationString, centeredProgressBarBack);
-    }
+    protected abstract void DrawCheckProperties(Rect position, string equationString);
 
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

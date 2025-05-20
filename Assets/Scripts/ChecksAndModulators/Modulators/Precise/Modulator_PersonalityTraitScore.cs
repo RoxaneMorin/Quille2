@@ -5,9 +5,9 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class Check_PersonalityTraitScore : Check_Arithmetic
+    public class Modulator_PersonalityTraitScore : Modulator_FromFloat
     {
-        // The specific type of check used for PersonalityTrait scores.
+        // The specific type of modulator used for PersonalityTrait scores.
 
 
         // VARIABLES/PARAM

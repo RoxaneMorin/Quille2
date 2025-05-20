@@ -13,8 +13,8 @@ namespace ChecksAndMods
 
 
         // VARIABLES/PARAM
-        [SerializeField] public ComparisonsBoolean opIdx;
-        [SerializeField] [Tooltip("Comparative value used in the Equal/Not Equal operations.")] public bool compareTo;
+        [SerializeField] protected ComparisonsBoolean opIdx;
+        [SerializeField] [Tooltip("Comparative value used in the Equal/Not Equal operations.")] protected bool compareTo;
         // Target item defined in child classes.
 
 

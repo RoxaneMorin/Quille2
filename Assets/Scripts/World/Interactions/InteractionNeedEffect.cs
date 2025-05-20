@@ -15,8 +15,8 @@ namespace World
         [SerializeField] protected float defaultNeedChangeRate;
         [SerializeField] protected float defaultMaxNeedChange;
         [Space]
-        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] needChangeRateModulatedBy;
-        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] maxNeedChangeModulatedBy;     
+        [SerializeReference] [PopulateModulatorSubtypes] protected Modulator[] needChangeRateModulatedBy;
+        [SerializeReference] [PopulateModulatorSubtypes] protected Modulator[] maxNeedChangeModulatedBy;     
 
 
         // PROPERTIES
@@ -25,8 +25,8 @@ namespace World
         public float DefaultNeedChangeRate { get { return defaultNeedChangeRate; } }
         public float DefaultMaxNeedChange { get { return defaultMaxNeedChange; } }
 
-        public ModulatorArithmetic[] NeedChangeRateModulatedBy { get { return needChangeRateModulatedBy; } }
-        public ModulatorArithmetic[] MaxNeedChangeModulatedBy { get { return maxNeedChangeModulatedBy; } }
+        public Modulator[] NeedChangeRateModulatedBy { get { return needChangeRateModulatedBy; } }
+        public Modulator[] MaxNeedChangeModulatedBy { get { return maxNeedChangeModulatedBy; } }
     }
 }
 

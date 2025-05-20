@@ -33,7 +33,7 @@ namespace World
         public SerializedDictionary<BasicNeedSO, float> LocalMaxNeedChanges { get { return localMaxNeedChanges; } }
 
         public Check[] ViabilityChecks { get { return myInteractionSO.ViabilityChecks; } }
-        public ModulatorArithmetic[] ScoringModulators { get { return myInteractionSO.ScoringModulators; } }
+        public Modulator[] ScoringModulators { get { return myInteractionSO.ScoringModulators; } }
 
 
         // EVENTS
@@ -87,7 +87,7 @@ namespace World
         {
             float score = InteractionBaseScore;
 
-            foreach (ModulatorArithmetic modulator in ScoringModulators)
+            foreach (Modulator modulator in ScoringModulators)
             {
                 if (modulator != null)
                 {
@@ -111,7 +111,7 @@ namespace World
                     currentNeedChangeRate *= localNeedChangeRates[needEffect.TargetNeed];
                 }
 
-                foreach (ModulatorArithmetic modulator in needEffect.NeedChangeRateModulatedBy)
+                foreach (Modulator modulator in needEffect.NeedChangeRateModulatedBy)
                 {
                     currentNeedChangeRate = modulator.Execute(thisPerson, currentNeedChangeRate);
                 }
@@ -135,7 +135,7 @@ namespace World
                     currentMaxNeedChange *= localNeedChangeRates[needEffect.TargetNeed];
                 }
 
-                foreach (ModulatorArithmetic modulator in needEffect.MaxNeedChangeModulatedBy)
+                foreach (Modulator modulator in needEffect.MaxNeedChangeModulatedBy)
                 {
                     currentMaxNeedChange = modulator.Execute(thisPerson, currentMaxNeedChange);
                 }

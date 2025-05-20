@@ -10,20 +10,11 @@ namespace ChecksAndMods
 
 
         // VARIABLES/PARAM
-        //[Header("Modulators")]
+        [Header("Modulators")]
+        [SerializeReference][PopulateModulatorSubtypes] private Modulator[] testMods;
 
-        //[SerializeField] private ModulatorArithmeticFromFloat testModArithmeticFromFloat;
-        //[SerializeReference][PopulateModulatorSubtypes] private ModulatorArithmeticFromBool testModArithmeticFromBool;
-
-        //[Header("Checks")]
-
+        [Header("Checks")]
         [SerializeReference][PopulateCheckSubtypes] private Check[] testChecks;
-        //[SerializeReference][PopulateCheckSubtypes] private CheckArithmetic testCheckArithmetic;
-        //[SerializeReference][PopulateCheckSubtypes] private CheckBoolean testCheckBoolean;
-
-        //[Space]
-
-        //[SerializeField] private CheckArithmeticDriveScore testDriveScore;
 
 
         // METHODS

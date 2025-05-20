@@ -5,14 +5,14 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public abstract class ModulatorArithmetic
+    public abstract class Modulator
     {
-        // Abstract parent class to ModulatorArithmeticFromBool and ModulatorArithmeticFromFloat.
+        // Abstract parent class to modulators from both boolean and arithmetic operations.
 
 
         // VARIABLES/PARAMS
-        [SerializeField] public OperationsArithmetic modOpIdx;
-        [SerializeField] public float modifier;
+        [SerializeField] protected OperationsArithmetic modOpIdx;
+        [SerializeField] protected float modifier;
 
 
 

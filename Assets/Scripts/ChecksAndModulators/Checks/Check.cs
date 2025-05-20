@@ -9,6 +9,7 @@ namespace ChecksAndMods
     {
         // Abstract parent class to both boolean and arithmetic checks.
 
+
         // METHODS
         public abstract bool Execute(System.Object sourceObj);
     }

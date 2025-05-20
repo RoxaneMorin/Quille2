@@ -1,12 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ChecksAndMods;
+using System;
 
 [CustomPropertyDrawer(typeof(PopulateModulatorSubtypesAttribute))]
 public class PopulateModulatorSubtypesDrawer : PropertyDrawer
 {
+    SubtypeNames targetModType;
+
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
@@ -16,24 +20,6 @@ public class PopulateModulatorSubtypesDrawer : PropertyDrawer
         {
             // Calculate positions and values.
             float singleLineHeight = EditorGUIUtility.singleLineHeight;
-            //float boxYShift = singleLineHeight * 1.5f + 6f;
-            //float propertyYShift = singleLineHeight * 2f;
-
-            //Rect buttonDeleteRect = new Rect(position.x, position.y, singleLineHeight, singleLineHeight);
-            //if (GUI.Button(buttonDeleteRect, "X"))
-            //{
-            //    property.managedReferenceValue = null;
-            //    property.serializedObject.ApplyModifiedProperties();
-            //}
-
-            //if (property.isExpanded)
-            //{
-            //    Rect boxPositionRect = new Rect(position.x + boxYShift, position.y + singleLineHeight, position.width - boxYShift, position.height - singleLineHeight - 2f);
-            //    GUI.Box(boxPositionRect, GUIContent.none, EditorStyles.helpBox);
-            //}
-
-            //Rect updatedPositionRect = new Rect(position.x + propertyYShift, position.y, position.width - propertyYShift - 4f, position.height);
-            //EditorGUI.PropertyField(updatedPositionRect, property);
 
             if (property.isExpanded)
             {
@@ -54,24 +40,17 @@ public class PopulateModulatorSubtypesDrawer : PropertyDrawer
         else
         {
             // Calculate positions and values.
-            float labelWidth = EditorGUIUtility.labelWidth;
-            float buttonWidth = (position.width - labelWidth) / 2f;
-            Rect labelRect = new Rect(position.x, position.y, labelWidth, position.height);
-            Rect buttonBoolRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, buttonWidth, position.height);
-            Rect buttonArithRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, buttonWidth, position.height);
+            float buttonWidth = (position.width - EditorGUIUtility.labelWidth) - EditorGUIUtility.singleLineHeight;
+            Rect labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, position.height);
+            Rect enumPopupRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, buttonWidth, position.height);
+            Rect buttonRect = new Rect(position.x + EditorGUIUtility.labelWidth + buttonWidth, position.y, EditorGUIUtility.singleLineHeight, position.height);
 
             // Draw elements.
-            EditorGUI.LabelField(labelRect, label.text + " : Create this Modulator as...", EditorStyles.boldLabel);
-
-            if (GUI.Button(buttonBoolRect, "ArithmeticfromBoolean"))
+            EditorGUI.LabelField(labelRect, "Null. Create:", EditorStyles.boldLabel);
+            targetModType = (SubtypeNames)EditorGUI.EnumPopup(enumPopupRect, targetModType);
+            if (GUI.Button(buttonRect, "✓"))
             {
-                property.managedReferenceValue = new ModulatorArithmeticFromBool();
-                property.serializedObject.ApplyModifiedProperties();
-                property.isExpanded = true;
-            }
-            if (GUI.Button(buttonArithRect, "ArithmeticfromFloat"))
-            {
-                property.managedReferenceValue = new ModulatorArithmeticFromFloat();
+                property.managedReferenceValue = Activator.CreateInstance(Subtypes.subtypesModulator[(int)targetModType]);
                 property.serializedObject.ApplyModifiedProperties();
                 property.isExpanded = true;
             }

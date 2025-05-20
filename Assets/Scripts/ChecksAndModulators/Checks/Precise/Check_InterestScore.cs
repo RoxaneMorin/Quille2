@@ -17,16 +17,14 @@ namespace ChecksAndMods
 
 
         // METHODS
+        protected override string GetTargetName()
+        {
+            return target ? target.ItemName : "[source value]";
+        }
+
         protected override float? FetchParam(System.Object sourceObj)
         {
             return Fetchers.FetchInterestScore(sourceObj, target);
-        }
-
-
-        // OVERRIDES
-        public override string ToString()
-        {
-            return string.Format("Is Interest : {0} {1} {2}?", target ? target.ItemName : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
         }
     }
 }

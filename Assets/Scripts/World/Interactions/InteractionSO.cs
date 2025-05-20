@@ -32,7 +32,7 @@ namespace World
         [SerializeReference] [PopulateCheckSubtypes] protected Check[] viabilityChecks;
 
         // Scoring weights.
-        [SerializeReference] [PopulateModulatorSubtypes] protected ModulatorArithmetic[] scoringModulators;
+        [SerializeReference] [PopulateModulatorSubtypes] protected Modulator[] scoringModulators;
 
         // Fancy scoring weights for stuff involving morality, conflicting drives, etc?
 
@@ -46,6 +46,6 @@ namespace World
         public InteractionNeedEffect[] EffectedNeeds { get { return effectedNeeds; } }
 
         public Check[] ViabilityChecks { get { return viabilityChecks; } }
-        public ModulatorArithmetic[] ScoringModulators { get { return scoringModulators; } }
+        public Modulator[] ScoringModulators { get { return scoringModulators; } }
     }
 }

@@ -7,19 +7,20 @@ namespace ChecksAndMods
     [System.Serializable]
     public abstract class Check_Arithmetic : Check
     {
-        // Parent class for specificed arithmetic checks to inherit from.
+        // Parent class for specific arithmetic checks to inherit from.
         // This type of check runs an arithmetic comparison on the fetched value, and returns true or false depending on the result.
         // The specific value to fetch and check is elaborated upon by child classes and their instances.
 
 
         // VARIABLES/PARAM
-        [SerializeField] public ComparisonsArithmetic opIdx;
-        [SerializeField] public float compareTo;
+        [SerializeField] protected ComparisonsArithmetic opIdx;
+        [SerializeField] protected float compareTo;
         // Target item defined in child classes.
 
 
 
         // METHODS
+        protected abstract string GetTargetName();
         protected abstract float? FetchParam(System.Object sourceObj);
 
         public override bool Execute(System.Object sourceObj)
@@ -45,9 +46,9 @@ namespace ChecksAndMods
 
 
         // OVERRIDES
-        //public override string ToString()
-        //{
-        //    return string.Format("Is {0} {1} {2}?", check ? check.ToString() : "[source value]", Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
-        //}
+        public override string ToString()
+        {
+            return string.Format("Is {0} {1} {2}?", GetTargetName(), Symbols.comparisonSymbolsArithmetic[(int)opIdx], compareTo);
+        }
     }
 }

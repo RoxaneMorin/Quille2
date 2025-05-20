@@ -5,13 +5,13 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class Check_PersonalityAxeScore : Check_Arithmetic
+    public class Modulator_PersonalityAxeScore : Modulator_FromFloat
     {
-        // The specific type of check used for PersonalityAxe scores.
+        // The specific type of modulator used for PersonalityAxe scores.
 
 
         // VARIABLES/PARAM
-        [SerializeField] [Tooltip("The target PersonalityAxe to consult.")] public Quille.PersonalityAxeSO target;
+        [SerializeField][Tooltip("The target PersonalityAxe to consult.")] public Quille.PersonalityAxeSO target;
         public Quille.PersonalityAxeSO RelevantPersonalityAxe { get { return target; } set { target = value; } }
 
 

@@ -369,13 +369,13 @@ namespace Quille
             // Will we need to add arithmetic from bool?
 
             // AI weighting.
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedBy)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseAIWeightingModulatedBy)
             {
                 LocalAiPriorityWeighting = modulator.Execute(sourceBasePerson, LocalAiPriorityWeighting);
             }
 
             // Base change rates.
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedBy)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseChangeRateModulatedBy)
             {
                 BaseChangeRate = modulator.Execute(sourceBasePerson, BaseChangeRate);
             }
@@ -395,7 +395,7 @@ namespace Quille
             CurrentChangeRate = BaseChangeRate;
 
             // Thresholds.
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedBy)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.ThresholdsModulatedBy)
             {
                 // TODO: how to integrate ThresholdElated?
                 ThresholdWarning = modulator.Execute(sourceBasePerson, ThresholdWarning);

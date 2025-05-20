@@ -115,5 +115,14 @@ namespace ChecksAndMods
             typeof(Check_DriveScore),
             typeof(Check_InterestScore)
         };
+
+        public static readonly Type[] subtypesModulator =
+        {
+            typeof(Modulator_PersonalityAxeScore),
+            typeof(Modulator_PersonalityTraitScore),
+            typeof(Modulator_DriveScore),
+            typeof(Modulator_InterestScore),
+
+        };
     }
 }

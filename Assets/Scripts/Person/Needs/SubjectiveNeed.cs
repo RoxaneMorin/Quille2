@@ -867,22 +867,22 @@ namespace Quille
             // Will we need to add arithmetic from bool?
 
             // AI weighting.
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedByLeft)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseAIWeightingModulatedByLeft)
             {
                 LocalAiPriorityWeightingLeft = modulator.Execute(sourceBasePerson, LocalAiPriorityWeightingLeft);
             }
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseAIWeightingModulatedByRight)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseAIWeightingModulatedByRight)
             {
                 LocalAiPriorityWeightingRight = modulator.Execute(sourceBasePerson, LocalAiPriorityWeightingRight);
             }
 
             // Base change rates.
             // TO DO: disallow static base change rates?
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedByLeft)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseChangeRateModulatedByLeft)
             {
                 BaseChangeRateLeft = modulator.Execute(sourceBasePerson, BaseChangeRateLeft);
             }
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.BaseChangeRateModulatedByRight)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.BaseChangeRateModulatedByRight)
             {
                 BaseChangeRateRight = modulator.Execute(sourceBasePerson, BaseChangeRateRight);
             }
@@ -911,12 +911,12 @@ namespace Quille
             CurrentChangeRate = (BaseChangeRateLeft, BaseChangeRateRight);
 
             // Thresholds.
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedByLeft)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.ThresholdsModulatedByLeft)
             {
                 ThresholdWarningLeft = modulator.Execute(sourceBasePerson, ThresholdWarningLeft);
                 ThresholdCriticalLeft = modulator.Execute(sourceBasePerson, ThresholdCriticalLeft);
             }
-            foreach (ChecksAndMods.ModulatorArithmeticFromFloat modulator in needSO.ThresholdsModulatedByRight)
+            foreach (ChecksAndMods.Modulator_FromFloat modulator in needSO.ThresholdsModulatedByRight)
             {
                 ThresholdWarningRight = modulator.Execute(sourceBasePerson, ThresholdWarningRight);
                 ThresholdCriticalRight = modulator.Execute(sourceBasePerson, ThresholdWarningRight);

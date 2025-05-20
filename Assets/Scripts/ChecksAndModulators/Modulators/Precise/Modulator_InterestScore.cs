@@ -5,14 +5,14 @@ using UnityEngine;
 namespace ChecksAndMods
 {
     [System.Serializable]
-    public class Check_DriveScore : Check_Arithmetic
+    public class Modulator_InterestScore : Modulator_FromFloat
     {
-        // The specific type of check used for Drive scores.
+        // The specific type of modulator used for Interest scores.
 
 
         // VARIABLES/PARAM
-        [SerializeField] [Tooltip("The target Drive to consult.")] public Quille.DriveSO target;
-        public Quille.DriveSO RelevantDrive { get { return target; } set { target = value; } }
+        [SerializeField][Tooltip("The target Interest to consult.")] public Quille.InterestSO target;
+        public Quille.InterestSO RelevantInterest { get { return target; } set { target = value; } }
 
 
 
@@ -24,8 +24,7 @@ namespace ChecksAndMods
 
         protected override float? FetchParam(System.Object sourceObj)
         {
-            return Fetchers.FetchDriveScore(sourceObj, target);
+            return Fetchers.FetchInterestScore(sourceObj, target);
         }
     }
 }
-
