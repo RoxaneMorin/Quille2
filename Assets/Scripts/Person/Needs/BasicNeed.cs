@@ -149,9 +149,9 @@ namespace Quille
             get { return thresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL)
+                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
                 {
-                    thresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL;
+                    thresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
                     return;
                 }
                 else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)

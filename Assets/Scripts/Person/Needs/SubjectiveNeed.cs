@@ -402,9 +402,9 @@ namespace Quille
             get { return subneedLeft.ThresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL)
+                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
                 {
-                    subneedLeft.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL;
+                    subneedLeft.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
                     return;
                 }
                 else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
@@ -456,9 +456,9 @@ namespace Quille
             get { return subneedRight.ThresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL)
+                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
                 {
-                    subneedRight.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL;
+                    subneedRight.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
                     return;
                 }
                 else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
