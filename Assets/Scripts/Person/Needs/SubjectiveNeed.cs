@@ -266,6 +266,66 @@ namespace Quille
             ResetBaseChangeRateRight();
         }
 
+        public float PreviousChangeRateLeft
+        {
+            get { return subneedLeft.PreviousChangeRate; }
+            set { subneedLeft.PreviousChangeRate = value; }
+        }
+        public float PreviousChangeRateRight
+        {
+            get { return subneedRight.PreviousChangeRate; }
+            set { subneedRight.PreviousChangeRate = value; }
+        }
+        public (float, float) PreviousChangeRate
+        {
+            get { return (PreviousChangeRateLeft, PreviousChangeRateRight); }
+            set
+            {
+                PreviousChangeRateLeft = value.Item1;
+                PreviousChangeRateRight = value.Item2;
+            }
+        }
+        public float? PreviousChangeRateFor(BasicNeedSO subNeed)
+        {
+            try
+            {
+                return subneedsBySOs[subNeed].PreviousChangeRate;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
+                return null;
+            }
+        }
+
+        public void SetPreviousChangeRateFromCurrentLeft()
+        {
+            PreviousChangeRateLeft = CurrentChangeRateLeft;
+        }
+        public void SetPreviousChangeRateFromCurrentRight()
+        {
+            PreviousChangeRateRight = CurrentChangeRateRight;
+        }
+        public void SetPreviousChangeRateFromCurrent()
+        {
+            SetPreviousChangeRateFromCurrentLeft();
+            SetPreviousChangeRateFromCurrentRight();
+        }
+
+        public void ResetPreviousChangeRateLeft()
+        {
+            PreviousChangeRateLeft = NeedSO.DefaultChangeRateLeft;
+        }
+        public void ResetPreviousChangeRateRight()
+        {
+            PreviousChangeRateRight = NeedSO.DefaultChangeRateRight;
+        }
+        public void ResetPreviousChangeRate()
+        {
+            ResetPreviousChangeRateLeft();
+            ResetPreviousChangeRateRight();
+        }
+
         public float CurrentChangeRateLeft
         {
             get { return subneedLeft.CurrentChangeRate; }
@@ -511,21 +571,6 @@ namespace Quille
             };
 
             LocalAiPriorityWeighting = AiPriorityWeightingLeft;
-            //LocalAiPriorityWeightingLeft = AiPriorityWeightingLeft;
-            //LocalAiPriorityWeightingRight = AiPriorityWeightingLeft;
-
-            //LevelFull = (DefaultLevelFullLeft, DefaultLevelFullRight);
-            //LevelCurrent = (DefaultLevelFullLeft, DefaultLevelFullRight);
-
-            //BaseChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
-            //CurrentChangeRate = (DefaultChangeRateLeft, DefaultChangeRateRight);
-
-            //ThresholdElatedLeft = DefaultThresholdElatedLeft;
-            //ThresholdWarningLeft = DefaultThresholdWarningLeft;
-            //ThresholdCriticalLeft = DefaultThresholdCriticalLeft;
-            //ThresholdElatedRight = DefaultThresholdElatedRight;
-            //ThresholdWarningRight = DefaultThresholdWarningRight;
-            //ThresholdCriticalRight = DefaultThresholdCriticalRight;
 
             // Hacky UI shit.
             needNameForUI = NeedSO.NeedName;

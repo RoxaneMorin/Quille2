@@ -24,8 +24,9 @@ namespace Quille
         private float levelCurrent; // init this?
 
         [SerializeField]
-        private float baseChangeRate, // this need's base decay rate for its owner character.
-                      currentChangeRate; // rename variable to 'change rate'?
+        private float baseChangeRate, // the need's default change rate for its owner character.
+                      previousChangeRate, // previous (passive) change rate.
+                      currentChangeRate;
 
         [SerializeField]
         private float thresholdElated,
@@ -105,6 +106,20 @@ namespace Quille
         public void ResetBaseChangeRate()
         {
             baseChangeRate = needSO.DefaultChangeRate;
+        }
+
+        [JsonIgnore] public float PreviousChangeRate
+        {
+            get { return previousChangeRate; }
+            set { previousChangeRate = value; }
+        }
+        public void SetPreviousChangeRateFromCurrent()
+        {
+            PreviousChangeRate = currentChangeRate;
+        }
+        public void ResetPreviousChangeRate()
+        {
+            PreviousChangeRate = baseChangeRate;
         }
 
         [JsonIgnore] public float CurrentChangeRate
@@ -216,7 +231,8 @@ namespace Quille
             LevelCurrent = LevelFull;
 
             BaseChangeRate = DefaultChangeRate;
-            CurrentChangeRate = DefaultChangeRate;
+            PreviousChangeRate = BaseChangeRate;
+            CurrentChangeRate = BaseChangeRate;
 
             ThresholdElated = DefaultThresholdElated;
             ThresholdWarning = DefaultThresholdWarning;
@@ -227,7 +243,7 @@ namespace Quille
         }
 
         [JsonConstructor]
-        public BasicNeed(BasicNeedSO needSO, float localAiPriorityWeighting, float levelCurrent, float baseChangeRate, float currentChangeRate, float currentChangeRateScaled, float thresholdElated, float thresholdWarning, float thresholdCritical, NeedStates needState)
+        public BasicNeed(BasicNeedSO needSO, float localAiPriorityWeighting, float levelCurrent, float baseChangeRate, float previousChangeRate, float currentChangeRate, float currentChangeRateScaled, float thresholdElated, float thresholdWarning, float thresholdCritical, NeedStates needState)
         {
             this.needSO = needSO;
 
@@ -236,8 +252,8 @@ namespace Quille
             LevelCurrent = levelCurrent;
 
             BaseChangeRate = baseChangeRate;
+            PreviousChangeRate = previousChangeRate;
             CurrentChangeRate = currentChangeRate;
-            //this.currentChangeRateScaled = currentChangeRateScaled;
 
             ThresholdElated = thresholdElated;
             ThresholdWarning = thresholdWarning;
