@@ -25,22 +25,18 @@ namespace Quille
 
 
         // NEED'S DEFAULT VALUES
-        [SerializeField, Range(Constants_Quille.MIN_PRIORITY, Constants_Quille.MAX_PRIORITY)] // Priorize larger values? 
+        [SerializeField, Range(Constants_Quille.MINIMUM_NEED_PRIORITY, Constants_Quille.MAXIMUM_NEED_PRIORITY)] // Priorize larger values? 
         private float aiPriorityWeighting = 1; // Should this be static, since it'll likely by the same for all characters?
         public float AiPriorityWeighting { get { return aiPriorityWeighting; } }
-
-        [SerializeField] private float levelFull = Constants_Quille.DEFAULT_LEVEL_FULL;
-        public float LevelFull { get { return levelFull; } }
-        public float LevelEmpty { get { return Constants_Quille.DEFAULT_LEVEL_EMPTY; } }// Will always be 0?
 
         [SerializeField] private float defaultChangeRate = 0; // the need's universal default decay rate.
         public float DefaultChangeRate { get { return defaultChangeRate; } }
 
-        [SerializeField] private float thresholdElated = Constants_Quille.DEFAULT_THRESHOLD_ELATED;
+        [SerializeField] private float thresholdElated = Constants_Quille.DEFAULT_NEED_THRESHOLD_ELATED;
         public float ThresholdElated { get { return thresholdElated; } }
-        [SerializeField] private float thresholdWarning = Constants_Quille.DEFAULT_THRESHOLD_WARNING;
+        [SerializeField] private float thresholdWarning = Constants_Quille.DEFAULT_NEED_THRESHOLD_WARNING;
         public float ThresholdWarning { get { return thresholdWarning; } }
-        [SerializeField] private float thresholdCritical = Constants_Quille.DEFAULT_THRESHOLD_CRITICAL;
+        [SerializeField] private float thresholdCritical = Constants_Quille.DEFAULT_NEED_THRESHOLD_CRITICAL;
         public float ThresholdCritical { get { return thresholdCritical; } }
 
 

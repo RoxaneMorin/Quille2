@@ -1,3 +1,4 @@
+using Quille;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -7,11 +8,9 @@ using UnityEngine;
 public class BasicNeedDrawer : PropertyDrawer
 {
     SerializedProperty localAiPriorityWeighting;
-    SerializedProperty levelFull;
     SerializedProperty levelCurrent;
     SerializedProperty baseChangeRate;
     SerializedProperty currentChangeRate;
-    SerializedProperty currentChangeRateScaled;
     SerializedProperty thresholdElated;
     SerializedProperty thresholdWarning;
     SerializedProperty thresholdCritical;
@@ -46,11 +45,9 @@ public class BasicNeedDrawer : PropertyDrawer
 
             // Collect properties.
             localAiPriorityWeighting = property.FindPropertyRelative("localAiPriorityWeighting");
-            levelFull = property.FindPropertyRelative("levelFull");
             levelCurrent = property.FindPropertyRelative("levelCurrent");
             baseChangeRate = property.FindPropertyRelative("baseChangeRate");
             currentChangeRate = property.FindPropertyRelative("currentChangeRate");
-            currentChangeRateScaled = property.FindPropertyRelative("currentChangeRateScaled");
             thresholdElated = property.FindPropertyRelative("thresholdElated");
             thresholdWarning = property.FindPropertyRelative("thresholdWarning");
             thresholdCritical = property.FindPropertyRelative("thresholdCritical");
@@ -60,15 +57,14 @@ public class BasicNeedDrawer : PropertyDrawer
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, localAiPriorityWeighting);
             newPosition.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(newPosition, levelFull);
+            using (new EditorGUI.DisabledScope(true))
+                EditorGUI.FloatField(newPosition, "Level Full", Constants_Quille.DEFAULT_NEED_LEVEL_FULL);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, levelCurrent);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, baseChangeRate);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, currentChangeRate);
-            newPosition.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(newPosition, currentChangeRateScaled);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, thresholdElated);
             newPosition.y += EditorGUIUtility.singleLineHeight;
@@ -91,7 +87,7 @@ public class BasicNeedDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float foldoutHeight = EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight;
+        float foldoutHeight = EditorGUI.GetPropertyHeight(property) + EditorGUIUtility.singleLineHeight * 0.25F;
         return property.isExpanded ? foldoutHeight : EditorGUIUtility.singleLineHeight;
     }
 }

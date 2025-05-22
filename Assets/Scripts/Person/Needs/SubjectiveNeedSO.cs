@@ -36,17 +36,12 @@ namespace Quille
         public float AIPriorityWeightingLeft { get { return leftNeedSO != null ? leftNeedSO.AiPriorityWeighting : 0f; } }
         public float AIPriorityWeightingRight {get { return rightNeedSO != null ? rightNeedSO.AiPriorityWeighting : 0f; } }
 
-        public float LevelFullLeft { get { return leftNeedSO != null ? leftNeedSO.LevelFull : Constants_Quille.DEFAULT_LEVEL_FULL; } }
-        public float LevelEmptyLeft { get { return leftNeedSO != null ? leftNeedSO.LevelEmpty : Constants_Quille.DEFAULT_LEVEL_EMPTY; } }
-        public float LevelFullRight { get { return rightNeedSO != null ? rightNeedSO.LevelFull : Constants_Quille.DEFAULT_LEVEL_FULL; } }
-        public float LevelEmptyRight { get { return rightNeedSO != null ? rightNeedSO.LevelEmpty : Constants_Quille.DEFAULT_LEVEL_EMPTY; } }
-
-        public float ThresholdElatedLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdElated : Constants_Quille.DEFAULT_THRESHOLD_ELATED; } }
-        public float ThresholdWarningLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdWarning : Constants_Quille.DEFAULT_THRESHOLD_WARNING; } }
-        public float ThresholdCriticalLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdCritical : Constants_Quille.DEFAULT_THRESHOLD_CRITICAL; } }
-        public float ThresholdElatedRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdElated : Constants_Quille.DEFAULT_THRESHOLD_ELATED; } }
-        public float ThresholdWarningRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdWarning : Constants_Quille.DEFAULT_THRESHOLD_WARNING; } }
-        public float ThresholdCriticalRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdCritical : Constants_Quille.DEFAULT_THRESHOLD_CRITICAL; } }
+        public float ThresholdElatedLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdElated : Constants_Quille.DEFAULT_NEED_THRESHOLD_ELATED; } }
+        public float ThresholdWarningLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdWarning : Constants_Quille.DEFAULT_NEED_THRESHOLD_WARNING; } }
+        public float ThresholdCriticalLeft { get { return leftNeedSO != null ? leftNeedSO.ThresholdCritical : Constants_Quille.DEFAULT_NEED_THRESHOLD_CRITICAL; } }
+        public float ThresholdElatedRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdElated : Constants_Quille.DEFAULT_NEED_THRESHOLD_ELATED; } }
+        public float ThresholdWarningRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdWarning : Constants_Quille.DEFAULT_NEED_THRESHOLD_WARNING; } }
+        public float ThresholdCriticalRight { get { return rightNeedSO != null ? rightNeedSO.ThresholdCritical : Constants_Quille.DEFAULT_NEED_THRESHOLD_CRITICAL; } }
 
         public float DefaultChangeRateLeft { get { return leftNeedSO != null ? leftNeedSO.DefaultChangeRate : 0f; } }
         public float DefaultChangeRateRight { get { return rightNeedSO != null ? rightNeedSO.DefaultChangeRate : 0f; } }

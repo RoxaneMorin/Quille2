@@ -54,14 +54,14 @@ namespace Quille
             get { return localAiPriorityWeighting; }
             set
             {
-                if (value < Constants_Quille.MIN_PRIORITY)
+                if (value < Constants_Quille.MINIMUM_NEED_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants_Quille.MIN_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MINIMUM_NEED_PRIORITY;
                     return;
                 }
-                else if (value > Constants_Quille.MAX_PRIORITY)
+                else if (value > Constants_Quille.MAXIMUM_NEED_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants_Quille.MAX_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MAXIMUM_NEED_PRIORITY;
                     return;
                 }
                 else localAiPriorityWeighting = value;
@@ -72,14 +72,14 @@ namespace Quille
             get { return subneedLeft.LocalAiPriorityWeighting; }
             set
             {
-                if (value < Constants_Quille.MIN_PRIORITY)
+                if (value < Constants_Quille.MINIMUM_NEED_PRIORITY)
                 {
-                    subneedLeft.LocalAiPriorityWeighting = Constants_Quille.MIN_PRIORITY;
+                    subneedLeft.LocalAiPriorityWeighting = Constants_Quille.MINIMUM_NEED_PRIORITY;
                     return;
                 }
-                else if (value > Constants_Quille.MAX_PRIORITY)
+                else if (value > Constants_Quille.MAXIMUM_NEED_PRIORITY)
                 {
-                    subneedLeft.LocalAiPriorityWeighting = Constants_Quille.MAX_PRIORITY;
+                    subneedLeft.LocalAiPriorityWeighting = Constants_Quille.MAXIMUM_NEED_PRIORITY;
                     return;
                 }
                 else subneedLeft.LocalAiPriorityWeighting = value;
@@ -90,14 +90,14 @@ namespace Quille
             get { return subneedRight.LocalAiPriorityWeighting; }
             set
             {
-                if (value < Constants_Quille.MIN_PRIORITY)
+                if (value < Constants_Quille.MINIMUM_NEED_PRIORITY)
                 {
-                    subneedRight.LocalAiPriorityWeighting = Constants_Quille.MIN_PRIORITY;
+                    subneedRight.LocalAiPriorityWeighting = Constants_Quille.MINIMUM_NEED_PRIORITY;
                     return;
                 }
-                else if (value > Constants_Quille.MAX_PRIORITY)
+                else if (value > Constants_Quille.MAXIMUM_NEED_PRIORITY)
                 {
-                    subneedRight.LocalAiPriorityWeighting = Constants_Quille.MAX_PRIORITY;
+                    subneedRight.LocalAiPriorityWeighting = Constants_Quille.MAXIMUM_NEED_PRIORITY;
                     return;
                 }
                 else subneedRight.LocalAiPriorityWeighting = value;
@@ -108,69 +108,22 @@ namespace Quille
             LocalAiPriorityWeighting = (LocalAiPriorityWeightingLeft + LocalAiPriorityWeightingRight) / 2;
         }
 
-        public float LevelEmptyLeft { get { return needSO.LevelEmptyLeft; } }
-        public float LevelEmptyRight { get { return needSO.LevelEmptyRight; } }
-        public (float, float) LevelEmpty { get { return (needSO.LevelEmptyLeft, needSO.LevelEmptyRight); } }
-        public float DefaultLevelFullLeft { get { return needSO.LevelFullLeft; } }
-        public float DefaultLevelFullRight { get { return needSO.LevelFullRight; } }
-        public (float, float) DefaultLevelFull { get { return (needSO.LevelFullLeft, needSO.LevelFullRight); } }
-        public float LevelFullLeft
-        {
-            get { return subneedLeft.LevelFull; }
-            set
-            {
-                if (value > LevelEmptyLeft)
-                {
-                    subneedLeft.LevelFull = value;
-                }
-            }
-        }
-        public float LevelFullRight
-        {
-            get { return subneedRight.LevelFull; }
-            set
-            {
-                if (value > LevelEmptyRight)
-                {
-                    subneedRight.LevelFull = value;
-                }
-            }
-        }
-        public (float, float) LevelFull
-        {
-            get { return (LevelFullLeft, LevelFullRight); }
-            set
-            {
-                LevelFullLeft = value.Item1;
-                LevelFullRight = value.Item2;
-            }
-        }
-        public float LevelFullFor(BasicNeedSO subNeed)
-        {
-            try
-            {
-                return subneedsBySOs[subNeed].LevelFull;
-            }
-            catch(Exception e)
-            {
-                Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return 0;
-            }
-        }
+        public float LevelEmpty { get { return Constants_Quille.DEFAULT_NEED_LEVEL_EMPTY; } }
+        public float LevelFull { get { return Constants_Quille.DEFAULT_NEED_LEVEL_FULL; } }
 
         public float LevelCurrentLeft
         {
             get { return subneedLeft.LevelCurrent; }
             set
             {
-                if (value >= DefaultLevelFullLeft)
+                if (value >= LevelFull)
                 {
-                    subneedLeft.LevelCurrent = DefaultLevelFullLeft;
+                    subneedLeft.LevelCurrent = LevelFull;
                     return;
                 }
-                else if (value <= LevelEmptyLeft)
+                else if (value <= LevelEmpty)
                 {
-                    subneedLeft.LevelCurrent = LevelEmptyLeft;
+                    subneedLeft.LevelCurrent = LevelEmpty;
                     // Throw need failure event here?
                     return;
                 }
@@ -179,21 +132,21 @@ namespace Quille
         }
         public float LevelCurrentLeftAsPercentage
         {
-            get { return LevelCurrentLeft / LevelFullLeft; }
+            get { return LevelCurrentLeft / LevelFull; }
         }
         public float LevelCurrentRight
         {
             get { return subneedRight.LevelCurrent; }
             set
             {
-                if (value >= DefaultLevelFullRight)
+                if (value >= LevelFull)
                 {
-                    subneedRight.LevelCurrent = DefaultLevelFullRight;
+                    subneedRight.LevelCurrent = LevelFull;
                     return;
                 }
-                else if (value <= LevelEmptyRight)
+                else if (value <= LevelEmpty)
                 {
-                    subneedRight.LevelCurrent = LevelEmptyRight;
+                    subneedRight.LevelCurrent = LevelEmpty;
                     // Throw need failure event here?
                     return;
                 }
@@ -202,7 +155,7 @@ namespace Quille
         }
         public float LevelCurrentRightAsPercentage
         {
-            get { return LevelCurrentRight / LevelFullRight; }
+            get { return LevelCurrentRight / LevelFull; }
         }
         public (float, float) LevelCurrent
         {
@@ -215,7 +168,7 @@ namespace Quille
         }
         public (float, float) LevelCurrentAsPercentage
         {
-            get { return (LevelCurrentLeft / LevelFullLeft, LevelCurrentRight / LevelFullRight); }
+            get { return (LevelCurrentLeft / LevelFull, LevelCurrentRight / LevelFull); }
         }
         public float? LevelCurrentFor(BasicNeedSO subNeed)
         {
@@ -350,32 +303,6 @@ namespace Quille
                 return null;
             }
         }
-
-        public float CurrentChangeRateLeftScaled
-        {
-            get { return subneedLeft.CurrentChangeRateScaled; }
-        }
-        public float CurrentChangeRateRightScaled
-        {
-            get { return subneedRight.CurrentChangeRateScaled; }
-        }
-        public (float, float) CurrentChangeRateScaled
-        {
-            get { return (CurrentChangeRateLeftScaled, CurrentChangeRateLeftScaled); }
-        }
-        public float? CurrentChangeRateScaledFor(BasicNeedSO subNeed)
-        {
-            try
-            {
-                return subneedsBySOs[subNeed].CurrentChangeRateScaled;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(string.Format("{0} is not a valid subneed for {1}.", subNeed.NeedName, NeedSO.NeedName));
-                return null;
-            }
-        }
-
         public void ResetCurrentChangeRateLeft()
         {
             CurrentChangeRateLeft = BaseChangeRateLeft;
@@ -402,14 +329,14 @@ namespace Quille
             get { return subneedLeft.ThresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
+                if (value > Constants_Quille.DEFAULT_NEED_LEVEL_FULL - 0.05f)
                 {
-                    subneedLeft.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
+                    subneedLeft.ThresholdElated = Constants_Quille.DEFAULT_NEED_LEVEL_FULL - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + 0.05f)
                 {
-                    subneedLeft.ThresholdElated = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    subneedLeft.ThresholdElated = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
                 else subneedLeft.ThresholdElated = value;
@@ -420,12 +347,12 @@ namespace Quille
             get { return subneedLeft.ThresholdWarning; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE)
                 {
-                    subneedLeft.ThresholdWarning = Constants_Quille.MAX_THRESHOLD_NEGATIVE;
+                    subneedLeft.ThresholdWarning = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
                     subneedLeft.ThresholdWarning = 0;
                     return;
@@ -438,14 +365,14 @@ namespace Quille
             get { return subneedLeft.ThresholdCritical; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    subneedLeft.ThresholdCritical = Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f;
+                    subneedLeft.ThresholdCritical = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE)
                 {
-                    subneedLeft.ThresholdCritical = Constants_Quille.MIN_THRESHOLD_NEGATIVE;
+                    subneedLeft.ThresholdCritical = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else subneedLeft.ThresholdCritical = value;
@@ -456,14 +383,14 @@ namespace Quille
             get { return subneedRight.ThresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
+                if (value > Constants_Quille.DEFAULT_NEED_LEVEL_FULL - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    subneedRight.ThresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
+                    subneedRight.ThresholdElated = Constants_Quille.DEFAULT_NEED_LEVEL_FULL - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    subneedRight.ThresholdElated = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    subneedRight.ThresholdElated = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
                 else subneedRight.ThresholdElated = value;
@@ -474,14 +401,14 @@ namespace Quille
             get { return subneedRight.ThresholdWarning; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE)
                 {
-                    subneedRight.ThresholdWarning = Constants_Quille.MAX_THRESHOLD_NEGATIVE;
+                    subneedRight.ThresholdWarning = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    subneedRight.ThresholdWarning = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f;
+                    subneedRight.ThresholdWarning = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
                 else subneedRight.ThresholdWarning = value;
@@ -492,14 +419,14 @@ namespace Quille
             get { return subneedRight.ThresholdCritical; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    subneedRight.ThresholdCritical = Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f;
+                    subneedRight.ThresholdCritical = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE)
                 {
-                    subneedRight.ThresholdCritical = Constants_Quille.MIN_THRESHOLD_NEGATIVE;
+                    subneedRight.ThresholdCritical = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else subneedRight.ThresholdCritical = value;
@@ -670,18 +597,18 @@ namespace Quille
         // GetFullfilment*
         public float GetLeftFulfillmentDelta(bool asPercentage = false) // How 'far' are we from a fully fulfilled need? The higher the value, the needier the need.
         {
-            float delta = LevelFullLeft - LevelCurrentLeft;
-            return asPercentage ? (delta / LevelFullLeft) : delta;
+            float delta = LevelFull - LevelCurrentLeft;
+            return asPercentage ? (delta / LevelFull) : delta;
         }
         public float GetRightFulfillmentDelta(bool asPercentage = false)
         {
-            float delta = LevelFullRight - LevelCurrentRight;
-            return asPercentage ? (delta / LevelFullRight) : delta;
+            float delta = LevelFull - LevelCurrentRight;
+            return asPercentage ? (delta / LevelFull) : delta;
         }
         public float GetTotalFulfillmentDelta(bool byPercentage = false) // Return the sum of both subneeds' fulfillment deltas.
         {
             float delta = GetLeftFulfillmentDelta() + GetRightFulfillmentDelta();
-            return byPercentage ? (delta / (LevelFullLeft + LevelFullRight)) : delta;
+            return byPercentage ? (delta / (LevelFull * 2)) : delta;
         }
         public float GetAverageFulfillmentDelta(bool byPercentage = false) // Return the average fullfilment delta of the two subneeds.
         {
@@ -889,23 +816,23 @@ namespace Quille
 
             // TODO: clean this up
             // The BaseChangeRates cannot be higher than 0.5f
-            if (BaseChangeRateLeft > Constants_Quille.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRateLeft > Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRateLeft = Constants_Quille.MAX_BASE_CHANGE_RATE;
+                BaseChangeRateLeft = Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE;
             }
-            if (BaseChangeRateRight > Constants_Quille.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRateRight > Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRateRight = Constants_Quille.MAX_BASE_CHANGE_RATE;
+                BaseChangeRateRight = Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE;
             }
 
             // The BaseChangeRates cannot be lower than -0.5f
-            if (BaseChangeRateLeft < -Constants_Quille.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRateLeft < -Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRateLeft = -Constants_Quille.MAX_BASE_CHANGE_RATE;
+                BaseChangeRateLeft = -Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE;
             }
-            if (BaseChangeRateRight < -Constants_Quille.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRateRight < -Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRateRight = -Constants_Quille.MAX_BASE_CHANGE_RATE;
+                BaseChangeRateRight = -Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE;
             }
 
             CurrentChangeRate = (BaseChangeRateLeft, BaseChangeRateRight);
@@ -936,9 +863,9 @@ namespace Quille
             while (true)
             {
                 // Handle LeftSide subneed.
-                if (this.LevelCurrentLeft > this.LevelEmptyLeft) // The need is not empty.
+                if (this.LevelCurrentLeft > this.LevelEmpty) // The need is not empty.
                 {
-                    this.LevelCurrentLeft += this.CurrentChangeRateLeftScaled;
+                    this.LevelCurrentLeft += this.CurrentChangeRateLeft;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -965,21 +892,21 @@ namespace Quille
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
-                        if (this.NeedStateLeft == NeedStates.Critical & this.LevelCurrentLeft > this.ThresholdCriticalLeft)
+                        if (this.NeedStateLeft == NeedStates.Critical & this.LevelCurrentLeftAsPercentage > this.ThresholdCriticalLeft)
                         {
                             this.NeedStateLeft = NeedStates.Warning;
                             Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameLeft, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, SubneedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
-                        if (this.NeedStateLeft == NeedStates.Warning & this.LevelCurrentLeft > this.ThresholdWarningLeft)
+                        if (this.NeedStateLeft == NeedStates.Warning & this.LevelCurrentLeftAsPercentage > this.ThresholdWarningLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameLeft, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, SubneedSOLeft, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
-                        if (this.NeedStateLeft == NeedStates.Elated & this.LevelCurrentLeft < this.ThresholdElatedLeft)
+                        if (this.NeedStateLeft == NeedStates.Elated & this.LevelCurrentLeftAsPercentage < this.ThresholdElatedLeft)
                         {
                             this.NeedStateLeft = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameLeft, this.NeedName));
@@ -998,9 +925,9 @@ namespace Quille
                         OnSNFailure?.Invoke(NeedSO, SubneedSOLeft);
                     }
 
-                    if (this.CurrentChangeRateLeftScaled > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRateLeft > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrentLeft += this.CurrentChangeRateLeftScaled;
+                        this.LevelCurrentLeft += this.CurrentChangeRateLeft;
 
                         this.NeedStateLeft = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameLeft, this.NeedName));
@@ -1010,9 +937,9 @@ namespace Quille
                 }
 
                 // Handle RightSide subneed.
-                if (this.LevelCurrentRight > this.LevelEmptyRight) // The need is not empty.
+                if (this.LevelCurrentRight > this.LevelEmpty) // The need is not empty.
                 {
-                    this.LevelCurrentRight += this.CurrentChangeRateRightScaled;
+                    this.LevelCurrentRight += this.CurrentChangeRateRight;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -1039,21 +966,21 @@ namespace Quille
                     }
                     else // Unset the Warning and Critical booleans as needed.
                     {
-                        if (this.NeedStateRight == NeedStates.Critical & this.LevelCurrentRight > this.ThresholdCriticalRight)
+                        if (this.NeedStateRight == NeedStates.Critical & this.LevelCurrentRightAsPercentage > this.ThresholdCriticalRight)
                         {
                             this.NeedStateRight = NeedStates.Warning;
                             Debug.Log(string.Format("{0} ({1}) is no longer critically low.", this.NeedNameRight, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, SubneedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
-                        if (this.NeedStateRight == NeedStates.Warning & this.LevelCurrentRight > this.ThresholdWarningRight)
+                        if (this.NeedStateRight == NeedStates.Warning & this.LevelCurrentRightAsPercentage > this.ThresholdWarningRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer low.", this.NeedNameRight, this.NeedName));
 
                             OnSNLeftThreshold?.Invoke(NeedSO, SubneedSORight, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
-                        if (this.NeedStateRight == NeedStates.Elated & this.LevelCurrentRight < this.ThresholdElatedRight)
+                        if (this.NeedStateRight == NeedStates.Elated & this.LevelCurrentRightAsPercentage < this.ThresholdElatedRight)
                         {
                             this.NeedStateRight = NeedStates.Normal;
                             Debug.Log(string.Format("{0} ({1}) is no longer elated.", this.NeedNameRight, this.NeedName));
@@ -1072,9 +999,9 @@ namespace Quille
                         OnSNFailure?.Invoke(NeedSO, SubneedSORight);
                     }
 
-                    if (this.CurrentChangeRateRightScaled > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRateRight > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrentRight += this.CurrentChangeRateRightScaled;
+                        this.LevelCurrentRight += this.CurrentChangeRateRight;
 
                         this.NeedStateRight = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} ({1}) is no longer in need failure.", this.NeedNameRight, this.NeedName));

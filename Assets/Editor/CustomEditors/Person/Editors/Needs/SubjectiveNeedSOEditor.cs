@@ -21,8 +21,6 @@ public class SubjectiveNeedSOEditor : Editor
     private SerializedProperty needIconRight;
     private SerializedProperty aiPriorityWeightingLeft;
     private SerializedProperty aiPriorityWeightingRight;
-    private SerializedProperty levelFullLeft;
-    private SerializedProperty levelFullRight;
     private SerializedProperty defaultChangeRateLeft;
     private SerializedProperty defaultChangeRateRight;
     private SerializedProperty thresholdElatedLeft;
@@ -59,7 +57,6 @@ public class SubjectiveNeedSOEditor : Editor
             needNameLeft = leftSerializedObject.FindProperty("needName");
             needIconLeft = leftSerializedObject.FindProperty("needIcon");
             aiPriorityWeightingLeft = leftSerializedObject.FindProperty("aiPriorityWeighting");
-            levelFullLeft = leftSerializedObject.FindProperty("levelFull");
             defaultChangeRateLeft = leftSerializedObject.FindProperty("defaultChangeRate");
             thresholdElatedLeft = leftSerializedObject.FindProperty("thresholdElated");
             thresholdWarningLeft = leftSerializedObject.FindProperty("thresholdWarning");
@@ -75,7 +72,6 @@ public class SubjectiveNeedSOEditor : Editor
             needNameLeft = null;
             needIconLeft = null;
             aiPriorityWeightingLeft = null;
-            levelFullLeft = null;
             defaultChangeRateLeft = null;
             thresholdElatedLeft = null;
             thresholdWarningLeft = null;
@@ -92,7 +88,6 @@ public class SubjectiveNeedSOEditor : Editor
             needNameRight = rightSerializedObject.FindProperty("needName");
             needIconRight = rightSerializedObject.FindProperty("needIcon");
             aiPriorityWeightingRight = rightSerializedObject.FindProperty("aiPriorityWeighting");
-            levelFullRight = rightSerializedObject.FindProperty("levelFull");
             defaultChangeRateRight = rightSerializedObject.FindProperty("defaultChangeRate");
             thresholdElatedRight = rightSerializedObject.FindProperty("thresholdElated");
             thresholdWarningRight = rightSerializedObject.FindProperty("thresholdWarning");
@@ -108,7 +103,6 @@ public class SubjectiveNeedSOEditor : Editor
             needNameRight = null;
             needIconRight = null;
             aiPriorityWeightingRight = null;
-            levelFullRight = null;
             defaultChangeRateRight = null;
             thresholdElatedRight = null;
             thresholdWarningRight = null;
@@ -149,6 +143,8 @@ public class SubjectiveNeedSOEditor : Editor
 
         if (targets.Length == 1)
         {
+            // TODO: is there a way to automatize drawing these?
+
             if (leftSerializedObject != null && rightSerializedObject != null)
             {
                 leftSerializedObject.Update();
@@ -161,7 +157,6 @@ public class SubjectiveNeedSOEditor : Editor
                 EditorUtilities.drawLabelAndProperty(needIconLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
                 EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
-                EditorUtilities.drawLabelAndProperty(levelFullLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
                 EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
@@ -181,7 +176,6 @@ public class SubjectiveNeedSOEditor : Editor
                 EditorUtilities.drawLabelAndProperty(needIconRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
                 EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
-                EditorUtilities.drawLabelAndProperty(levelFullRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
                 EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);

@@ -21,15 +21,11 @@ namespace Quille
         private float localAiPriorityWeighting;
 
         [SerializeField]
-        private float levelFull,
-                      levelCurrent; // init this?
+        private float levelCurrent; // init this?
 
         [SerializeField]
         private float baseChangeRate, // this need's base decay rate for its owner character.
                       currentChangeRate; // rename variable to 'change rate'?
-
-        [JsonIgnore, SerializeField] //, InspectorReadOnly]
-        private float currentChangeRateScaled;
 
         [SerializeField]
         private float thresholdElated,
@@ -56,41 +52,30 @@ namespace Quille
             get { return localAiPriorityWeighting; }
             set
             {
-                if (value < Constants_Quille.MIN_PRIORITY)
+                if (value < Constants_Quille.MINIMUM_NEED_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants_Quille.MIN_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MINIMUM_NEED_PRIORITY;
                     return;
                 }
-                else if (value > Constants_Quille.MAX_PRIORITY)
+                else if (value > Constants_Quille.MAXIMUM_NEED_PRIORITY)
                 {
-                    localAiPriorityWeighting = Constants_Quille.MAX_PRIORITY;
+                    localAiPriorityWeighting = Constants_Quille.MAXIMUM_NEED_PRIORITY;
                     return;
                 }
                 else localAiPriorityWeighting = value;
             }
         }
 
-        [JsonIgnore] public float LevelEmpty { get { return needSO.LevelEmpty; } }
-        [JsonIgnore] public float DefaultLevelFull { get { return needSO.LevelFull; } }
-        [JsonIgnore] public float LevelFull
-        {
-            get { return levelFull; }
-            set
-            {
-                if (value > LevelEmpty)
-                {
-                    levelFull = value;
-                }
-            }
-        }
+        [JsonIgnore] public float LevelEmpty { get { return Constants_Quille.DEFAULT_NEED_LEVEL_EMPTY; } }
+        [JsonIgnore] public float LevelFull { get { return Constants_Quille.DEFAULT_NEED_LEVEL_FULL; } }
         [JsonIgnore] public float LevelCurrent
         {
             get { return levelCurrent; }
             set
             {
-                if (value >= DefaultLevelFull)
+                if (value >= LevelFull)
                 {
-                    levelCurrent = DefaultLevelFull;
+                    levelCurrent = LevelFull;
                     return;
                 }
                 else if (value <= LevelEmpty)
@@ -104,7 +89,7 @@ namespace Quille
         }
         [JsonIgnore] public float LevelCurrentAsPercentage
         {
-            get { return levelCurrent / levelFull; }
+            get { return levelCurrent / LevelFull; }
         }
 
         [JsonIgnore] public float DefaultChangeRate
@@ -125,15 +110,7 @@ namespace Quille
         [JsonIgnore] public float CurrentChangeRate
         {
             get { return currentChangeRate; }
-            set 
-            { 
-                currentChangeRate = value;
-                currentChangeRateScaled = currentChangeRate/Constants_Quille.NEED_CHANGE_RATE_DIVIDER;
-            }
-        }
-        [JsonIgnore] public float CurrentChangeRateScaled
-        {
-            get { return currentChangeRateScaled; }
+            set { currentChangeRate = value; }
         }
         public void ResetCurrentChangeRate()
         {
@@ -149,14 +126,14 @@ namespace Quille
             get { return thresholdElated; }
             set
             {
-                if (value > Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f)
+                if (value > Constants_Quille.DEFAULT_NEED_LEVEL_FULL - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    thresholdElated = Constants_Quille.DEFAULT_LEVEL_FULL - 0.05f;
+                    thresholdElated = Constants_Quille.DEFAULT_NEED_LEVEL_FULL - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    thresholdElated = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    thresholdElated = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
                 else thresholdElated = value;
@@ -167,14 +144,14 @@ namespace Quille
             get { return thresholdWarning; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE)
                 {
-                    thresholdWarning = Constants_Quille.MAX_THRESHOLD_NEGATIVE;
+                    thresholdWarning = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    thresholdWarning = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.05f;
+                    thresholdWarning = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
                 else thresholdWarning = value;
@@ -185,14 +162,14 @@ namespace Quille
             get { return thresholdCritical; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    thresholdCritical = Constants_Quille.MAX_THRESHOLD_NEGATIVE - 0.05f;
+                    thresholdCritical = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE - Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                     return;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE)
                 {
-                    thresholdCritical = Constants_Quille.MIN_THRESHOLD_NEGATIVE;
+                    thresholdCritical = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE;
                     return;
                 }
                 else thresholdCritical = value;
@@ -236,8 +213,7 @@ namespace Quille
         {
             LocalAiPriorityWeighting = AiPriorityWeighting;
 
-            LevelFull = DefaultLevelFull;
-            LevelCurrent = DefaultLevelFull;
+            LevelCurrent = LevelFull;
 
             BaseChangeRate = DefaultChangeRate;
             CurrentChangeRate = DefaultChangeRate;
@@ -251,13 +227,12 @@ namespace Quille
         }
 
         [JsonConstructor]
-        public BasicNeed(BasicNeedSO needSO, float localAiPriorityWeighting, float levelFull, float levelCurrent, float baseChangeRate, float currentChangeRate, float currentChangeRateScaled, float thresholdElated, float thresholdWarning, float thresholdCritical, NeedStates needState)
+        public BasicNeed(BasicNeedSO needSO, float localAiPriorityWeighting, float levelCurrent, float baseChangeRate, float currentChangeRate, float currentChangeRateScaled, float thresholdElated, float thresholdWarning, float thresholdCritical, NeedStates needState)
         {
             this.needSO = needSO;
 
             LocalAiPriorityWeighting = localAiPriorityWeighting;
 
-            LevelFull = levelFull;
             LevelCurrent = levelCurrent;
 
             BaseChangeRate = baseChangeRate;
@@ -382,14 +357,14 @@ namespace Quille
 
             // TODO: clean this up
             // The BaseChangeRate cannot be higher than -0.0001f
-            if (BaseChangeRate > -Constants_Quille.MIN_BASE_CHANGE_RATE)
+            if (BaseChangeRate > -Constants_Quille.MIN_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRate = -Constants_Quille.MIN_BASE_CHANGE_RATE;
+                BaseChangeRate = -Constants_Quille.MIN_NEED_PASSIVE_CHANGE_RATE;
             }
             // The BaseChangeRate cannot be lower than -0.5f
-            if (BaseChangeRate < - Constants_Quille.MAX_BASE_CHANGE_RATE)
+            if (BaseChangeRate < - Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE)
             {
-                BaseChangeRate = -Constants_Quille.MAX_BASE_CHANGE_RATE;
+                BaseChangeRate = -Constants_Quille.MAX_NEED_PASSIVE_CHANGE_RATE;
             }
 
             CurrentChangeRate = BaseChangeRate;
@@ -415,7 +390,7 @@ namespace Quille
             {
                 if (this.LevelCurrent > this.LevelEmpty) // The need is not empty.
                 {
-                    this.LevelCurrent += this.CurrentChangeRateScaled;
+                    this.LevelCurrent += this.CurrentChangeRate;
                     // Invoke need change event?
 
                     // Threshold detection.
@@ -442,21 +417,21 @@ namespace Quille
                     }
                     else // Unset the Elated, Warning and Critical booleans as needed.
                     {
-                        if (this.NeedState == NeedStates.Critical & this.LevelCurrent > this.ThresholdCritical)
+                        if (this.NeedState == NeedStates.Critical & this.LevelCurrentAsPercentage > this.ThresholdCritical)
                         {
                             this.NeedState = NeedStates.Warning;
                             Debug.Log(string.Format("{0} is no longer critically low.", this.NeedName));
 
                             OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Critical);
                         }
-                        if (this.NeedState == NeedStates.Warning & this.LevelCurrent > this.ThresholdWarning)
+                        if (this.NeedState == NeedStates.Warning & this.LevelCurrentAsPercentage > this.ThresholdWarning)
                         {
                             this.NeedState = NeedStates.Normal;
                             Debug.Log(string.Format("{0} is no longer low.", this.NeedName));
 
                             OnBNLeftThreshold?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage, NeedStates.Warning);
                         }
-                        if (this.NeedState == NeedStates.Elated & this.LevelCurrent < this.ThresholdElated)
+                        if (this.NeedState == NeedStates.Elated & this.LevelCurrentAsPercentage < this.ThresholdElated)
                         {
                             this.NeedState = NeedStates.Normal;
                             Debug.Log(string.Format("{0} is no longer elated.", this.NeedName));
@@ -475,9 +450,9 @@ namespace Quille
                         OnBNFailure?.Invoke(NeedSO);
                     }
 
-                    if (this.CurrentChangeRateScaled > 0) // Only apply the change if it would increase it.
+                    if (this.CurrentChangeRate > 0) // Only apply the change if it would increase it.
                     {
-                        this.LevelCurrent += this.CurrentChangeRateScaled;
+                        this.LevelCurrent += this.CurrentChangeRate;
 
                         this.NeedState = NeedStates.Critical; // Undo the need failure.
                         Debug.Log(string.Format("{0} is no longer in need failure.", this.NeedName));

@@ -139,18 +139,18 @@ namespace Quille
         // Return the neediest need of each type as well as its level.
         public (BasicNeedSO, float) PerformBasicNeedCheck()
         {
-            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(MyBasicNeeds);
+            BasicNeed neediestNeed = BasicNeed.ReturnNeediest(MyBasicNeeds, byPercentage: true);
             float neediestNeedLevel = neediestNeed.LevelCurrentAsPercentage;
 
             return (neediestNeed.NeedSO, neediestNeedLevel);
         }
         public BasicNeedSO[] PerformBasicNeedCheck(float needinessThreshold)
         {
-            return BasicNeed.ReturnNeedy(myBasicNeeds, needinessThreshold);
+            return BasicNeed.ReturnNeedy(myBasicNeeds, needinessThreshold, byPercentage: true);
         }
         public (SubjectiveNeedSO, BasicNeedSO, float?) PerformSubjectiveNeedCheck()
         {
-            (SubjectiveNeed, BasicNeedSO) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds);
+            (SubjectiveNeed, BasicNeedSO) neediestNeed = SubjectiveNeed.ReturnNeediestbyNeediestDelta(MySubjectiveNeeds, byPercentage: true);
             float? neediestNeedLevel = neediestNeed.Item1.LevelCurrentAsPercentageFor(neediestNeed.Item2);
 
             // Returns the neediest subneed's SO.
@@ -158,7 +158,7 @@ namespace Quille
         }
         public BasicNeedSO[] PerformSubjectiveNeedCheck(float needinessThreshold)
         {
-            return SubjectiveNeed.ReturnNeedy(mySubjectiveNeeds, needinessThreshold);
+            return SubjectiveNeed.ReturnNeedy(mySubjectiveNeeds, needinessThreshold, byPercentage: true);
         }
 
 

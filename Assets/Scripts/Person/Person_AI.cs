@@ -23,8 +23,8 @@ namespace Quille
 
         // Values.
         // Percentile thresholds at which the character AI will consider a need to require its attention.
-        [SerializeField] private float noticeBasicNeed = Constants_Quille.DEFAULT_NOTICE_BASIC_NEED;
-        [SerializeField] private float noticeSubjectiveNeed = Constants_Quille.DEFAULT_NOTICE_SUBJECTIVE_NEED;
+        [SerializeField] private float noticeBasicNeed = Constants_Quille.DEFAULT_BASIC_NEED_NOTICE;
+        [SerializeField] private float noticeSubjectiveNeed = Constants_Quille.DEFAULT_SUBJECTIVE_NEED_NOTICE;
 
         // TODO: modulate notices based on personality.
 
@@ -51,13 +51,13 @@ namespace Quille
             get { return noticeBasicNeed; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    noticeBasicNeed = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    noticeBasicNeed = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    noticeBasicNeed = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f;
+                    noticeBasicNeed = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                 }
                 else
                 {
@@ -70,13 +70,13 @@ namespace Quille
             get { return noticeSubjectiveNeed; }
             set
             {
-                if (value > Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f)
+                if (value > Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    noticeSubjectiveNeed = Constants_Quille.MAX_THRESHOLD_NEGATIVE + 0.05f;
+                    noticeSubjectiveNeed = Constants_Quille.MAX_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                 }
-                else if (value < Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f)
+                else if (value < Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA)
                 {
-                    noticeSubjectiveNeed = Constants_Quille.MIN_THRESHOLD_NEGATIVE + 0.1f;
+                    noticeSubjectiveNeed = Constants_Quille.MIN_NEED_THRESHOLD_NEGATIVE + Constants_Quille.NEED_THRESHOLD_BOUDING_DELTA;
                 }
                 else
                 {
@@ -141,6 +141,11 @@ namespace Quille
         // UTILITY
         protected LocalInteraction FindBestLocalInteractionFor(BasicNeedSO thisNeed, World_Area inThisArea)
         {
+            if (inThisArea == null)
+            {
+                return null;
+            }
+
             List<LocalInteraction> relevantInteractions = inThisArea.LocalInteractionsFor(thisNeed);
 
             if (relevantInteractions.Count == 0)

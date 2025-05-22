@@ -24,7 +24,15 @@ namespace World
         {
             // TODO: what to return if no interactions are found for the need?
 
-            return localInteractions[thisNeed];
+            //
+            if (localInteractions.ContainsKey(thisNeed))
+            {
+                return localInteractions[thisNeed];
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
