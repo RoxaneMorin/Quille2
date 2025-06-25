@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/PersonTesting/QuilleCreatorUI.unity
+    path: Assets/Scenes/QuilleCreatorUI.unity
     guid: 3383ed2f5d9a2dc45adecb7274ca4b3e
   m_configObjects: {}

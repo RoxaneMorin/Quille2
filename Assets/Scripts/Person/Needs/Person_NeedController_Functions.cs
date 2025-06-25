@@ -122,12 +122,12 @@ namespace Quille
         }
 
         // All needs in controller.
-        private void StartNeedDecay()
+        public void StartNeedDecay()
         {
             StartBasicNeedDecay(MyBasicNeeds);
             StartSubjectiveNeedDecay(MySubjectiveNeeds);
         }
-        private void StopNeedDecay()
+        public void StopNeedDecay()
         {
             StopBasicNeedDecay(MyBasicNeeds);
             StopSubjectiveNeedDecay(MySubjectiveNeeds);
@@ -165,6 +165,8 @@ namespace Quille
         // UTILITY
 
         // Modulation
+        // TODO: find how to quickly pass on the basePerson.
+
         public void ModulateBasicNeeds(Person sourceBasePerson)
         {
             foreach (BasicNeed need in MyBasicNeeds)
@@ -187,7 +189,7 @@ namespace Quille
 
 
         // TESTING
-        private void RandomizeNeedChangeRates(float min, float max)
+        public void RandomizeNeedChangeRates(float min, float max)
         {
             foreach (BasicNeed need in MyBasicNeeds)
             {
@@ -204,7 +206,7 @@ namespace Quille
                 need.AverageLocalAiPriorityWeighting();
             }
         }
-        private void SortAndPrintNeedInfo()
+        public void SortAndPrintNeedInfo()
         {
             BasicNeed.SortByFulfillmentDelta(MyBasicNeeds, true, true);
             SubjectiveNeed.SortByFulfillmentDeltaofNeediest(MySubjectiveNeeds, true, true);

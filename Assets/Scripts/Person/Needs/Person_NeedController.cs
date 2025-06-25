@@ -232,22 +232,6 @@ namespace Quille
         // Update is called once per frame
         void Update()
         {
-            // TODO: clear out when testing is done.
-
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                StartNeedDecay();
-            }
-
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-            //    RandomizeNeedChangeRates(-0.3f, 0.1f);
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.M))
-            //{
-            //    SortAndPrintNeedInfo();
-            //}
         }
     }
 }

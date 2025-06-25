@@ -36,6 +36,35 @@ public class NeedControllerEditor : Editor
         EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 
         // Draw need array properties.
+        EditorGUILayout.LabelField("Quick Controls", style: "ProfilerRightPane");
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Start Need Decay"))
+        {
+            Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
+            needController.StartNeedDecay();
+        }
+        if (GUILayout.Button("Stop Need Decay"))
+        {
+            Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
+            needController.StopNeedDecay();
+        }
+        EditorGUILayout.EndHorizontal();
+
+        //if (GUILayout.Button("Modulate Needs"))
+        //{
+        //    Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
+        //    needController.ModulateAllNeeds();
+        //}
+        if (GUILayout.Button("Randomize Need Change Rates"))
+        {
+            Quille.Person_NeedController needController = (Quille.Person_NeedController)target;
+            needController.RandomizeNeedChangeRates(-0.5f, 0.5f);
+        }
+
+        EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
+
+        // Draw need array properties.
         EditorGUILayout.LabelField("Need Arrays", style: "ProfilerRightPane");
         EditorGUILayout.PropertyField(myBasicNeeds);
         EditorGUILayout.PropertyField(mySubjectiveNeeds);
