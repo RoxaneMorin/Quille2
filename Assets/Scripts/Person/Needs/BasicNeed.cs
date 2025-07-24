@@ -404,6 +404,8 @@ namespace Quille
 
             while (true)
             {
+                OnBNLevelCurrentUpdate?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+
                 if (this.LevelCurrent > this.LevelEmpty) // The need is not empty.
                 {
                     this.LevelCurrent += this.CurrentChangeRate;

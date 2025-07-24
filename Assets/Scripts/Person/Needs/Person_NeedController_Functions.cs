@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Xml;
 
 namespace Quille
 {
@@ -17,11 +18,13 @@ namespace Quille
         // Basic needs.
         public event BasicNeedLevelCurrentUpdate OnBNLevelCurrentUpdate;
         public event BasicNeedReachedThreshold OnBNReachedThreshold;
+        public event BasicNeedLeftThreshold OnBNLeftThreshold;
         public event BasicNeedFailure OnBNFailure;
 
         // Subjective needs.
         public event SubjectiveNeedLevelCurrentUpdate OnSNLevelCurrentUpdate;
         public event SubjectiveNeedReachedThreshold OnSNReachedThreshold;
+        public event SubjectiveNeedLeftThreshold OnSNLeftThreshold;
         public event SubjectiveNeedFailure OnSNFailure;
 
 
@@ -30,12 +33,27 @@ namespace Quille
 
         // EVENT HANDLING
         // Basic needs.
+
+        private void OnBasicNeedCurrentLevelUpdated(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a LevelCurrentUpdate event.", needIdentity.NeedName));
+
+            // Throw the event upwards.
+            OnBNLevelCurrentUpdate?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
+        }
         private void OnBasicNeedReachedThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates needState)
         {
             Debug.Log(string.Format("{0} threw a ReachedThreshold event ({1}).", needIdentity.NeedName, needState));
 
             // Throw the event upwards.
             OnBNReachedThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, needState);
+        }
+        private void OnBasicNeedLeftThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates previousNeedState)
+        {
+            Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", needIdentity.NeedName, previousNeedState));
+
+            // Throw the event upwards.
+            OnBNLeftThreshold?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage, previousNeedState);
         }
         private void OnBasicNeedFailure(BasicNeedSO needIdentity)
         {
@@ -44,11 +62,14 @@ namespace Quille
             // Throw the event upwards.
             OnBNFailure?.Invoke(needIdentity);
         }
-        private void OnBasicNeedLeftThreshold(BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage, NeedStates previousNeedState)
-        {
-            Debug.Log(string.Format("{0} threw a LeftThreshold event ({1}).", needIdentity.NeedName, previousNeedState));
-        }
 
+        private void OnSubjectiveNeedCurrentLevelUpdated(SubjectiveNeedSO needIdentity, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage)
+        {
+            Debug.Log(string.Format("{0} threw a LevelCurrentUpdate event.", needIdentity.NeedName));
+
+            // Throw the event upwards.
+            OnSNLevelCurrentUpdate?.Invoke(needIdentity, needLevelCurrent, needLevelCurrentAsPercentage);
+        }
         private void OnSubjectiveNeedReachThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates needState)
         {
             Debug.Log(string.Format("{0} ({1}) threw a ReachedThreshold event ({2}).", subNeed.NeedName, needIdentity.NeedName, needState));
@@ -56,16 +77,19 @@ namespace Quille
             // Throw the event upwards.
             OnSNReachedThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, needState);
         }
+        private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
+        {
+            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", subNeed.NeedName, needIdentity.NeedName, previousNeedState));
+
+            // Throw the event upwards.
+            OnSNLeftThreshold?.Invoke(needIdentity, subNeed, needLevelCurrent, needLevelCurrentAsPercentage, previousNeedState);
+        }
         private void OnSubjectiveNeedFailure(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed)
         {
             Debug.Log(string.Format("{0} ({1}) threw a Failure event.", subNeed.NeedName, needIdentity.NeedName));
 
             // Throw the event upwards.
             OnSNFailure?.Invoke(needIdentity, subNeed);
-        }
-        private void OnSubjectiveNeedLeftThreshold(SubjectiveNeedSO needIdentity, BasicNeedSO subNeed, (float, float) needLevelCurrent, (float, float) needLevelCurrentAsPercentage, NeedStates previousNeedState)
-        {
-            Debug.Log(string.Format("{0} ({1}) threw a LeftThreshold event ({2}).", subNeed.NeedName, needIdentity.NeedName, previousNeedState));
         }
 
 

@@ -34,7 +34,7 @@ namespace Quille
 
         // PROPERTIES
         [JsonIgnore] public SubjectiveNeedSO NeedSO { get { return needSO; } }
-        [JsonIgnore] public BasicNeedSO SubneedSOLeft { get { return needSO.NeedSORight; } }
+        [JsonIgnore] public BasicNeedSO SubneedSOLeft { get { return needSO.NeedSOLeft; } }
         [JsonIgnore] public BasicNeedSO SubneedSORight { get { return needSO.NeedSORight; } }
 
         [JsonIgnore] public BasicNeed SubneedLeft { get { return subneedLeft; } }
@@ -907,6 +907,8 @@ namespace Quille
 
             while (true)
             {
+                OnSNLevelCurrentUpdate?.Invoke(NeedSO, LevelCurrent, LevelCurrentAsPercentage);
+
                 // Handle LeftSide subneed.
                 if (this.LevelCurrentLeft > this.LevelEmpty) // The need is not empty.
                 {

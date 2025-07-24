@@ -73,6 +73,8 @@ namespace Quille
             else
             {
                 BasicNeed tempNeed = new BasicNeed(basicNeedSO);
+
+                tempNeed.OnBNLevelCurrentUpdate += OnBasicNeedCurrentLevelUpdated;
                 tempNeed.OnBNReachedThreshold += OnBasicNeedReachedThreshold;
                 tempNeed.OnBNFailure += OnBasicNeedFailure;
                 tempNeed.OnBNLeftThreshold += OnBasicNeedLeftThreshold;
@@ -92,6 +94,8 @@ namespace Quille
             else
             {
                 SubjectiveNeed tempNeed = new SubjectiveNeed(subjectiveNeedSO);
+
+                tempNeed.OnSNLevelCurrentUpdate += OnSubjectiveNeedCurrentLevelUpdated;
                 tempNeed.ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
                 tempNeed.OnSNFailure += OnSubjectiveNeedFailure;
                 tempNeed.OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
@@ -109,6 +113,7 @@ namespace Quille
             if (myBasicNeedsMapped.ContainsKey(basicNeedSO))
             {
                 // Not sure if this is necessary.
+                myBasicNeedsMapped[basicNeedSO].OnBNLevelCurrentUpdate -= OnBasicNeedCurrentLevelUpdated;
                 myBasicNeedsMapped[basicNeedSO].OnBNReachedThreshold -= OnBasicNeedReachedThreshold;
                 myBasicNeedsMapped[basicNeedSO].OnBNFailure -= OnBasicNeedFailure;
                 myBasicNeedsMapped[basicNeedSO].OnBNLeftThreshold -= OnBasicNeedLeftThreshold;
@@ -126,6 +131,7 @@ namespace Quille
             if (mySubjectiveNeedsMapped.ContainsKey(subjectiveNeedSO))
             {
                 // Not sure if this is necessary.
+                mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNLevelCurrentUpdate -= OnSubjectiveNeedCurrentLevelUpdated;
                 mySubjectiveNeedsMapped[subjectiveNeedSO].ONSNReachedThreshold -= OnSubjectiveNeedReachThreshold;
                 mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNFailure -= OnSubjectiveNeedFailure;
                 mySubjectiveNeedsMapped[subjectiveNeedSO].OnSNLeftThreshold -= OnSubjectiveNeedLeftThreshold;
@@ -189,6 +195,7 @@ namespace Quille
                 myBasicNeeds[i] = new BasicNeed(basicNeedSOs[i]);
                 myBasicNeedsMapped.Add(basicNeedSOs[i], myBasicNeeds[i]);
 
+                myBasicNeeds[i].OnBNLevelCurrentUpdate += OnBasicNeedCurrentLevelUpdated;
                 myBasicNeeds[i].OnBNReachedThreshold += OnBasicNeedReachedThreshold;
                 myBasicNeeds[i].OnBNFailure += OnBasicNeedFailure;
                 myBasicNeeds[i].OnBNLeftThreshold += OnBasicNeedLeftThreshold;
@@ -209,6 +216,7 @@ namespace Quille
                 mySubjectiveNeeds[i] = new SubjectiveNeed(subjectiveNeedSOs[i]);
                 mySubjectiveNeedsMapped.Add(subjectiveNeedSOs[i], mySubjectiveNeeds[i]);
 
+                mySubjectiveNeeds[i].OnSNLevelCurrentUpdate += OnSubjectiveNeedCurrentLevelUpdated;
                 mySubjectiveNeeds[i].ONSNReachedThreshold += OnSubjectiveNeedReachThreshold;
                 mySubjectiveNeeds[i].OnSNFailure += OnSubjectiveNeedFailure;
                 mySubjectiveNeeds[i].OnSNLeftThreshold += OnSubjectiveNeedLeftThreshold;
