@@ -38,6 +38,10 @@ namespace QuilleUI
 
 
 
+        // TODO: methods to switch the targetNeedController, unsubscribing to one person's events and subscribing to a new one's.
+        // TODO: create without initializing the bars themselves?
+
+
         // METHODS
 
         // INIT
@@ -133,6 +137,7 @@ namespace QuilleUI
             mappedNeedBars[needIdentity.NeedSOLeft].UpdateFill(needLevelCurrent.Item1, needLevelCurrentAsPercentage.Item1);
             mappedNeedBars[needIdentity.NeedSORight].UpdateFill(needLevelCurrent.Item2, needLevelCurrentAsPercentage.Item2);
         }
+
 
 
 

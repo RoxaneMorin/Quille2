@@ -45,6 +45,9 @@ namespace Building
         // Room detection!
 
 
+        // https://cs.stackexchange.com/questions/118306/how-to-get-enclosed-spaces-from-a-series-of-connected-nodes
+
+
         // METHODS
 
         // INIT

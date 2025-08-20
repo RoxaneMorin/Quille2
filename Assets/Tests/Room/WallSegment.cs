@@ -13,13 +13,16 @@ namespace Building
         [SerializeField] private WallAnchor anchorB;
         // These should never be null.
 
-        // Wall thickness, height at both anchors?
+        [SerializeField] private float thickness;
+        // Height at both anchors?
         // Should those switch if we switch up the anchors?
         // Some info on both 'sides'?
         // Should it depend on the wall direction?
 
         [Header("Resources")]
         [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private MeshFilter meshFilter;
+        [SerializeField] private MeshRenderer meshRenderer;
 
 
 
@@ -44,6 +47,23 @@ namespace Building
                 {
                     anchorB = value;
                 }
+            }
+        }
+
+        public float Thickness
+        {
+            get { return thickness; }
+            set
+            {
+                if (value < 0)
+                {
+                    thickness = 0;
+                }
+                else
+                {
+                    thickness = value;
+                }
+                // TODO: update mesh thickness.
             }
         }
 
@@ -86,11 +106,17 @@ namespace Building
             this.anchorA = anchorA;
             this.anchorB = anchorB;
 
-            // Fetch lineRenderer and update its visuals.
-            lineRenderer = gameObject.GetComponent<LineRenderer>();
-            lineRenderer.widthMultiplier = 0.1f;
+            //// Fetch lineRenderer and update its visuals.
+            //lineRenderer = gameObject.GetComponent<LineRenderer>();
+            //lineRenderer.widthMultiplier = 0.1f;
 
-            UpdateSegmentVisual();
+            //UpdateSegmentVisual();
+
+            // Fetch the mesh components and generate the mesh.
+            meshFilter = gameObject.GetComponent<MeshFilter>();
+            meshRenderer = gameObject.GetComponent<MeshRenderer>();
+
+            GenerateWallMesh(anchorA.Position, anchorA.Height, anchorB.Position, anchorB.Height);
         }
 
         public void UpdateSegmentVisual()
@@ -112,6 +138,109 @@ namespace Building
             WallAnchor tempAnchor = anchorA;
             anchorA = anchorB;
             anchorB = tempAnchor;
+        }
+
+
+
+
+
+
+        // MESH GENERATION
+
+        /*
+         * TODO:
+         * - Verify whether the wall has thickness, and generate accordingly?
+         * - Collider
+         * - General clean up / transfer to the other mesh API?
+         */
+
+
+        public void GenerateWallMesh(Vector3 anchorAPos, float anchorAHeight, Vector3 anchorBPos, float anchorBHeight)
+        {
+            // // Temp: random thickness and heights instead:
+            //anchorAHeight = Random.Range(0.5f, 2f);
+            //anchorBHeight = Random.Range(0.5f, 2f);
+            //thickness = Random.Range(0.05f, 1f);
+
+             
+            // Calculate the upper vertices' locations.
+            Vector3 anchorATopPos = anchorAPos + new Vector3(0, anchorAHeight, 0);
+            Vector3 anchorBTopPos = anchorBPos + new Vector3(0, anchorBHeight, 0);
+
+            // Calculate the initial face normal.
+            Vector3 faceNormal = Building_MathHelpers.CalculateFaceNormal(anchorAPos, anchorBPos, anchorBTopPos);
+
+            // Calculate displacement based on wall thickness.
+            Vector3 halfNormal = faceNormal * (thickness / 2);
+
+            // Calculate the displaced points
+            Vector3 pointZeroZeroFront = anchorAPos - halfNormal;
+            Vector3 pointOneZeroFront = anchorBPos - halfNormal;
+            Vector3 pointZeroOneFront = anchorATopPos - halfNormal;
+            Vector3 pointOneOneFront = anchorBTopPos - halfNormal;
+
+            Vector3 pointZeroZeroBack = anchorAPos + halfNormal;
+            Vector3 pointOneZeroBack = anchorBPos + halfNormal;
+            Vector3 pointZeroOneBack = anchorATopPos + halfNormal;
+            Vector3 pointOneOneBack = anchorBTopPos + halfNormal;
+
+            // Calculate the UV distances.
+            float uvDistanceHorizontal = Vector3.Distance(anchorAPos, anchorBPos);
+            float uvDistanceVerticalA = Vector3.Distance(anchorAPos, anchorATopPos);
+            float uvDistanceVerticalB = Vector3.Distance(anchorBPos, anchorBTopPos);
+
+
+            // Create the arrays.
+            Vector3[] wallVertices = new Vector3[]{pointZeroZeroFront, pointOneZeroFront, pointZeroOneFront, pointOneOneFront, // Main Clockwise
+                                                   pointZeroZeroBack, pointOneZeroBack, pointZeroOneBack, pointOneOneBack, // Main Counterclockwise
+
+                                                   pointZeroOneFront, pointOneOneFront, pointZeroOneBack, pointOneOneBack, // Top
+                                                   pointZeroZeroFront, pointOneZeroFront, pointZeroZeroBack, pointOneZeroBack, // Bottom
+
+                                                   pointZeroZeroBack, pointZeroZeroFront, pointZeroOneBack, pointZeroOneFront, // AnchorA
+                                                   pointOneZeroBack, pointOneZeroFront, pointOneOneBack, pointOneOneFront // AnchorB
+            };
+
+            Vector2[] wallUVs = new Vector2[] { new Vector2(0, 0), new Vector2(uvDistanceHorizontal, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(uvDistanceHorizontal, uvDistanceVerticalB),
+                                                new Vector2(0, 0), new Vector2(-uvDistanceHorizontal, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(-uvDistanceHorizontal, uvDistanceVerticalB),
+
+                                                new Vector2(0, 0), new Vector2(uvDistanceHorizontal, 0), new Vector2(0, thickness), new Vector2(uvDistanceHorizontal, thickness),
+                                                new Vector2(0, 0), new Vector2(-uvDistanceHorizontal, 0), new Vector2(0, thickness), new Vector2(-uvDistanceHorizontal, thickness),
+
+                                                new Vector2(0, 0), new Vector2(thickness, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(thickness, uvDistanceVerticalA),
+                                                new Vector2(0, 0), new Vector2(-thickness, 0), new Vector2(0, uvDistanceVerticalB), new Vector2(-thickness, uvDistanceVerticalB)
+            };
+
+            int[] wallTrianglesSideA = new int[] { 0, 3, 1, 0, 2, 3 };
+            int[] wallTrianglesSideB = new int[] { 4, 5, 7, 4, 7, 6 };
+            int[] wallTrianglesOthers = new int[] { 8, 11, 9, 8, 10, 11,
+                                                    12, 13, 15, 12, 15, 14,
+                                                    16, 19, 17, 16, 18, 19,
+                                                    20, 21, 23, 20, 23, 22
+            };
+
+
+            // Create the mesh proper.
+            Mesh wallMesh = new Mesh
+            {
+                name = "WallMesh",
+                subMeshCount = 3,
+
+                vertices = wallVertices,
+                uv = wallUVs
+            };
+
+           wallMesh.SetTriangles(wallTrianglesSideA, 0);
+           wallMesh.SetTriangles(wallTrianglesSideB, 1);
+           wallMesh.SetTriangles(wallTrianglesOthers, 2);
+
+            // Recalculate the necessary stuff.
+            wallMesh.RecalculateNormals();
+            wallMesh.RecalculateTangents();
+            wallMesh.RecalculateBounds();
+
+            // Set!
+            meshFilter.mesh = wallMesh;
         }
     }
 }

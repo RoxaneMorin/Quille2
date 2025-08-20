@@ -101,4 +101,13 @@ public static class Building_MathHelpers
     }
 
 
+
+    public static Vector3 CalculateFaceNormal(Vector3 pointA, Vector3 pointB, Vector3 pointC)
+    {
+        Vector3 direction = Vector3.Cross(pointB - pointA, pointC - pointA);
+        Vector3 normal = Vector3.Normalize(direction);
+
+        return normal;
+    }
+
 }

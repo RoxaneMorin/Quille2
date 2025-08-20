@@ -64,6 +64,11 @@ namespace Building
         // PROPERTIES
         public int ID { get { return id; } }
 
+        public Vector3 Position
+        {
+            get { return gameObject.transform.position; }
+        }
+
         public float Height
         {
             get { return height; }
