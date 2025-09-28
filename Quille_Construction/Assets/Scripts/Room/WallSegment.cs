@@ -13,6 +13,8 @@ namespace Building
         [SerializeField] private WallAnchor anchorB;
         // These should never be null.
 
+        // TODO: also include the WallConnections?
+
         [SerializeField] private float thickness;
         // Height at both anchors?
         // Should those switch if we switch up the anchors?
@@ -20,9 +22,9 @@ namespace Building
         // Should it depend on the wall direction?
 
         [Header("Resources")]
-        [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private MeshCollider meshCollider;
 
 
 
@@ -48,6 +50,15 @@ namespace Building
                     anchorB = value;
                 }
             }
+        }
+
+        public WallConnection ConnectionA
+        {
+            get { return anchorA.GetConnectionTo(anchorA); }
+        }
+        public WallConnection ConnectionB
+        {
+            get { return anchorB.GetConnectionTo(anchorB); }
         }
 
         public float Thickness
@@ -106,27 +117,12 @@ namespace Building
             this.anchorA = anchorA;
             this.anchorB = anchorB;
 
-            //// Fetch lineRenderer and update its visuals.
-            //lineRenderer = gameObject.GetComponent<LineRenderer>();
-            //lineRenderer.widthMultiplier = 0.1f;
-
-            //UpdateSegmentVisual();
-
             // Fetch the mesh components and generate the mesh.
             meshFilter = gameObject.GetComponent<MeshFilter>();
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            meshCollider = gameObject.GetComponent<MeshCollider>();
 
             GenerateWallMesh(anchorA.Position, anchorA.Height, anchorB.Position, anchorB.Height);
-        }
-
-        public void UpdateSegmentVisual()
-        {
-            lineRenderer.SetPosition(0, anchorA.transform.position);
-            lineRenderer.SetPosition(1, anchorB.transform.position);
-
-            Color randomColour = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-            lineRenderer.startColor = randomColour;
-            lineRenderer.endColor = randomColour;
         }
 
 
@@ -241,6 +237,7 @@ namespace Building
 
             // Set!
             meshFilter.mesh = wallMesh;
+            meshCollider.sharedMesh = wallMesh;
         }
     }
 }

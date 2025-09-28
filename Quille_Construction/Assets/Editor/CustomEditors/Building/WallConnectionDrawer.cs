@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(Building.WallAnchor.WallConnection))]
+[CustomPropertyDrawer(typeof(Building.WallConnection))]
 public class WallConnectionDrawer : PropertyDrawer
 {
     SerializedProperty connectedWallSegment;

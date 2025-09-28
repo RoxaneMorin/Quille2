@@ -25,6 +25,7 @@ namespace Building
 
         [SerializeField] private List<WallAnchor> areaWallAnchors;
         [SerializeField] private List<WallSegment> areaWallSegments;
+        // TODO: add list with all connections
 
         [SerializeField] private WallAnchor selectedAnchor;
 
@@ -41,7 +42,11 @@ namespace Building
 
         // TODO:
         // Rework anchorID, add segmentID to the actual segments.
-        // Option to split a wall segment by clicking on it? Will wall segments have physical objects anyways?
+
+        // Since walls now exist "physically", simply check for intersections via raycast. 
+        // Option to split a wall segment by clicking on it?
+
+
         // Room detection!
 
 
@@ -112,7 +117,7 @@ namespace Building
             // TODO: can we toggle whether the wall gets selected after its creation?
             // Atm, it "gets clicked" which throws the event.
 
-            //Debug.Log(String.Format("Created a new wall anchor: {0}", newAnchor));
+            Debug.Log(string.Format("Created a new wall anchor: {0}", newAnchor));
 
             if (doSegment && selectedAnchor != null)
             {
@@ -318,7 +323,7 @@ namespace Building
             List<WallAnchor> updatedPath = path.Concat(new[] { currentNode }).ToList();
             //Debug.Log(string.Format("The path so far: {0}", string.Join(", ", updatedPath.Select(node => node.ID))));
 
-            foreach (WallAnchor.WallConnection connection in currentNode.Connections)
+            foreach (WallConnection connection in currentNode.Connections)
             {
                 if (!path.Contains(connection.ConnectedAnchor))
                 {
@@ -368,7 +373,7 @@ namespace Building
         {
             // Vend: the path's current last node.
             WallAnchor vEnd = previousPath.Last();
-            foreach (WallAnchor.WallConnection adjacentConnection in vEnd.Connections)
+            foreach (WallConnection adjacentConnection in vEnd.Connections)
             {
                 WallAnchor vJ = adjacentConnection.ConnectedAnchor;
 

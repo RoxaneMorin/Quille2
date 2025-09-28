@@ -12,35 +12,6 @@ namespace Building
 {
     public class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler
     {
-        // INTERNAL CLASSES
-        [System.Serializable]
-        public class WallConnection
-        {
-            // TODO: move this class to its own file?
-
-            // VARIABLES/PARAMETERS
-            [SerializeField] private WallSegment connectedWallSegment;
-            [SerializeField] private WallAnchor connectedAnchor;
-            [SerializeField] private float angle;
-            // TODO: should we also track whether this is anchor A or B?
-
-            // PROPERTIES
-            public WallSegment ConnectedWallSegment { get { return connectedWallSegment; } set { connectedWallSegment = value; } }
-            public WallAnchor ConnectedAnchor { get { return connectedAnchor; } set { connectedAnchor = value; } }
-            public float Angle { get { return angle; } set { angle = value; } }
-
-
-            // CONSTRUCTOR
-            public WallConnection(WallSegment connectedWallSegment, WallAnchor connectedAnchor, float angle)
-            {
-                this.connectedWallSegment = connectedWallSegment;
-                this.connectedAnchor = connectedAnchor;
-                this.angle = angle;
-            }
-        }
-
-
-
         // VARIABLES/PARAMETERS
         [SerializeField] private int id; 
 
@@ -50,7 +21,7 @@ namespace Building
         [SerializeField] private List<WallConnection> connections;
         [SerializeField] private Dictionary<WallAnchor, WallConnection> connectionsFromAnchorsDict;
         [SerializeField] private Dictionary<WallSegment, WallConnection> connectionsFromSegmentsDict;
-        // TODO: these don't need to be serialized, switch that around once testing is done.
+        // TODO: these don't need to be serialized, switch that around once testing is done. Could use a hash table?
         
 
         [SerializeField] private Renderer myRenderer;
@@ -67,6 +38,10 @@ namespace Building
         public Vector3 Position
         {
             get { return gameObject.transform.position; }
+        }
+        public Vector3 TopPosition
+        {
+            get { return gameObject.transform.position + new Vector3() { y = height }; }
         }
 
         public float Height
@@ -85,7 +60,6 @@ namespace Building
                 UpdateGameObjectHeight();
             }
         }
-        // return pos at height?
 
         public List<WallConnection> Connections { get { return connections; } }
 
@@ -144,7 +118,7 @@ namespace Building
             float newConnectionsAngle = MathHelpers.GetNormalizedAngleBetween(transform.position, connectedAnchor.transform.position);
             //Debug.Log(string.Format("{0}'s angle around {1}: {2}.", connectedAnchor, this, angle));
 
-            WallConnection newConnection = new WallConnection(connectedSegment, connectedAnchor, newConnectionsAngle);
+            WallConnection newConnection = new WallConnection(this, connectedAnchor, connectedSegment, newConnectionsAngle);
             connections.SortedInsert(newConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
             connectionsFromAnchorsDict.Add(connectedAnchor, newConnection);
             connectionsFromSegmentsDict.Add(connectedSegment, newConnection);
@@ -216,6 +190,29 @@ namespace Building
         public bool IsConnectedTo(WallSegment targetSegment)
         {
             return connectionsFromSegmentsDict.ContainsKey(targetSegment);
+        }
+
+        public WallConnection GetConnectionTo(WallAnchor targetAnchor)
+        {
+            if (IsConnectedTo(targetAnchor))
+            {
+                return connectionsFromAnchorsDict[targetAnchor];
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public WallConnection GetConnectionTo(WallSegment targetSegment)
+        {
+            if (IsConnectedTo(targetSegment))
+            {
+                return connectionsFromSegmentsDict[targetSegment];
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
