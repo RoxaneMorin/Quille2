@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9128427423989591159}
   - component: {fileID: 3805103224010661567}
   - component: {fileID: 3987946538313913335}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: WallSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,9 +155,9 @@ MonoBehaviour:
   anchorA: {fileID: 0}
   anchorB: {fileID: 0}
   thickness: 0.1
-  lineRenderer: {fileID: 911307537505270364}
   meshFilter: {fileID: 0}
   meshRenderer: {fileID: 0}
+  meshCollider: {fileID: 0}
 --- !u!33 &9128427423989591159
 MeshFilter:
   m_ObjectHideFlags: 0

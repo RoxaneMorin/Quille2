@@ -93,12 +93,12 @@ namespace Building
             OnWallAnchorSelected?.Invoke(targetAnchor);
             selectedAnchor = targetAnchor;
 
-            // Test finding new cycles
-            if (selectedAnchor != null)
-            {
-                //FindCycles(selectedAnchor);
-                FindCordlessCycles();
-            }
+            //// Test finding new cycles
+            //if (selectedAnchor != null)
+            //{
+            //    //FindCycles(selectedAnchor);
+            //    //FindCordlessCycles();
+            //}
         }
 
 
@@ -182,27 +182,35 @@ namespace Building
             Destroy(targetSegment.gameObject);
         }
 
+
+        // TODO: Clean up. Do raycast at middle and top also.
+        // BUG: Since the walls have thickness, the hit points aren't exactly on the other wall's main line. The results are thus deformed. Either fix by having a flat collider, or doing a bit of math here.
         private List<(WallSegment, Vector3, float)> ListIntersectingWallSegments(WallAnchor anchorA, WallAnchor anchorB)
         {
             List<(WallSegment, Vector3, float)> intersectingSegments = new List<(WallSegment, Vector3, float)>();
 
-            foreach (WallSegment otherSegment in areaWallSegments)
+            Vector3 posA = anchorA.transform.position;
+            Vector3 dirAtoB = anchorB.transform.position - anchorA.transform.position;
+            float distAtoB = dirAtoB.magnitude;
+            
+            RaycastHit[] wallHits;
+            wallHits = Physics.RaycastAll(posA, dirAtoB, distAtoB, (1 << 13));
+
+            foreach(RaycastHit hit in wallHits)
             {
-                // TODO: Further skip segments we know won't intersect.
+                Vector3 intersectionPoint = hit.point;
 
-                // Skip segments connected to the same anchors.
-                if (anchorA == otherSegment.AnchorA || anchorA == otherSegment.AnchorB || anchorB == otherSegment.AnchorA || anchorB == otherSegment.AnchorB)
-                {
-                    continue;
-                }
+                Collider hitCollider = hit.collider;
+                GameObject hitGameObject = hitCollider.gameObject;
+                WallSegment hitWallSegment = hitGameObject.GetComponent<WallSegment>();
 
-                Vector3? intersectionPoint = MathHelpers.CalculatePotentialIntersectionPointXZ(anchorA.transform.position, anchorB.transform.position, otherSegment.AnchorA.transform.position, otherSegment.AnchorB.transform.position);
-                if (intersectionPoint.HasValue)
+                if ( hitWallSegment != null )
                 {
-                    float distanceFromAnchorA = Vector3.Distance(anchorA.transform.position, intersectionPoint.Value);
-                    intersectingSegments.SortedInsert((otherSegment, intersectionPoint.Value, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
+                    float distanceFromAnchorA = Vector3.Distance(posA, intersectionPoint);
+                    intersectingSegments.SortedInsert((hitWallSegment, intersectionPoint, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
                 }
             }
+            //    Vector3? intersectionPoint = MathHelpers.CalculatePotentialIntersectionPointXZ(anchorA.transform.position, anchorB.transform.position, otherSegment.AnchorA.transform.position, otherSegment.AnchorB.transform.position);
 
             return intersectingSegments;
         }

@@ -146,8 +146,11 @@ namespace Building
         /*
          * TODO:
          * - Verify whether the wall has thickness, and generate accordingly?
-         * - Collider
+         * - Review collider: can we use a simpler box collider instead?
          * - General clean up / transfer to the other mesh API?
+         * - Keep track of the wall 'sides' locations
+         * - Account for intersecting walls
+         * - Editor stuff with tools to change thickness and the like.
          */
 
 
