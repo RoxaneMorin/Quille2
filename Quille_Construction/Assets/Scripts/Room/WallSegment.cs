@@ -1,5 +1,9 @@
+using proceduralGrid;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -147,100 +151,176 @@ namespace Building
          * TODO:
          * - Verify whether the wall has thickness, and generate accordingly?
          * - Review collider: can we use a simpler box collider instead?
-         * - General clean up / transfer to the other mesh API?
          * - Keep track of the wall 'sides' locations
          * - Account for intersecting walls
          * - Editor stuff with tools to change thickness and the like.
          */
 
 
+
+        // TODO: edit the mesh streams and stuff to allow for multiple submeshes.
+
+
         public void GenerateWallMesh(Vector3 anchorAPos, float anchorAHeight, Vector3 anchorBPos, float anchorBHeight)
         {
-            // // Temp: random thickness and heights instead:
-            //anchorAHeight = Random.Range(0.5f, 2f);
-            //anchorBHeight = Random.Range(0.5f, 2f);
-            //thickness = Random.Range(0.05f, 1f);
-
-             
             // Calculate the upper vertices' locations.
-            Vector3 anchorATopPos = anchorAPos + new Vector3(0, anchorAHeight, 0);
-            Vector3 anchorBTopPos = anchorBPos + new Vector3(0, anchorBHeight, 0);
+            float3 anchorATopPos = (float3)anchorAPos + new float3(0, anchorAHeight, 0);
+            float3 anchorBTopPos = (float3)anchorBPos + new float3(0, anchorBHeight, 0);
 
-            // Calculate the initial face normal.
-            Vector3 faceNormal = MathHelpers.CalculateFaceNormal(anchorAPos, anchorBPos, anchorBTopPos);
+            // Calculate the initial wall normal.
+            float3 wallNormal = MathHelpers.CalculateFaceNormal(anchorAPos, anchorBPos, anchorBTopPos);
 
             // Calculate displacement based on wall thickness.
-            Vector3 halfNormal = faceNormal * (thickness / 2);
+            float3 halfDistance = wallNormal * (thickness / 2);
 
             // Calculate the displaced points
-            Vector3 pointZeroZeroFront = anchorAPos - halfNormal;
-            Vector3 pointOneZeroFront = anchorBPos - halfNormal;
-            Vector3 pointZeroOneFront = anchorATopPos - halfNormal;
-            Vector3 pointOneOneFront = anchorBTopPos - halfNormal;
+            float3 anchorAPosMin = (float3)anchorAPos - halfDistance;
+            float3 anchorBPosMin = (float3)anchorBPos - halfDistance;
+            float3 anchorATopPosMin = anchorATopPos - halfDistance;
+            float3 anchorBTopPosMin = anchorBTopPos - halfDistance;
 
-            Vector3 pointZeroZeroBack = anchorAPos + halfNormal;
-            Vector3 pointOneZeroBack = anchorBPos + halfNormal;
-            Vector3 pointZeroOneBack = anchorATopPos + halfNormal;
-            Vector3 pointOneOneBack = anchorBTopPos + halfNormal;
+            float3 anchorAPosPlus = (float3)anchorAPos + halfDistance;
+            float3 anchorBPosPlus = (float3)anchorBPos + halfDistance;
+            float3 anchorATopPosPlus = anchorATopPos + halfDistance;
+            float3 anchorBTopPosPlus = anchorBTopPos + halfDistance;
 
-            // Calculate the UV distances.
-            float uvDistanceHorizontal = Vector3.Distance(anchorAPos, anchorBPos);
-            float uvDistanceVerticalA = Vector3.Distance(anchorAPos, anchorATopPos);
-            float uvDistanceVerticalB = Vector3.Distance(anchorBPos, anchorBTopPos);
+            // Bounds
+            Bounds wallBounds = GenerateWallMeshBounds(anchorAPos, anchorATopPos, anchorAHeight, anchorBPos, anchorBTopPos, anchorBHeight);
 
 
-            // Create the arrays.
-            Vector3[] wallVertices = new Vector3[]{pointZeroZeroFront, pointOneZeroFront, pointZeroOneFront, pointOneOneFront, // Main Clockwise
-                                                   pointZeroZeroBack, pointOneZeroBack, pointZeroOneBack, pointOneOneBack, // Main Counterclockwise
+            // Counts
+            int vertexCount = 24;
+            int triangleCount = 12;
+            int indexCount = triangleCount * 3;
 
-                                                   pointZeroOneFront, pointOneOneFront, pointZeroOneBack, pointOneOneBack, // Top
-                                                   pointZeroZeroFront, pointOneZeroFront, pointZeroZeroBack, pointOneZeroBack, // Bottom
+            // Set up the mesh and stream.
+            Mesh wallMesh = new Mesh { name = "WallMesh" };
+            wallMesh.Clear();
 
-                                                   pointZeroZeroBack, pointZeroZeroFront, pointZeroOneBack, pointZeroOneFront, // AnchorA
-                                                   pointOneZeroBack, pointOneZeroFront, pointOneOneBack, pointOneOneFront // AnchorB
-            };
+            Mesh.MeshDataArray wallMeshDataArray = Mesh.AllocateWritableMeshData(1);
+            Mesh.MeshData wallMeshData = wallMeshDataArray[0];
 
-            Vector2[] wallUVs = new Vector2[] { new Vector2(0, 0), new Vector2(uvDistanceHorizontal, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(uvDistanceHorizontal, uvDistanceVerticalB),
-                                                new Vector2(0, 0), new Vector2(-uvDistanceHorizontal, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(-uvDistanceHorizontal, uvDistanceVerticalB),
-
-                                                new Vector2(0, 0), new Vector2(uvDistanceHorizontal, 0), new Vector2(0, thickness), new Vector2(uvDistanceHorizontal, thickness),
-                                                new Vector2(0, 0), new Vector2(-uvDistanceHorizontal, 0), new Vector2(0, thickness), new Vector2(-uvDistanceHorizontal, thickness),
-
-                                                new Vector2(0, 0), new Vector2(thickness, 0), new Vector2(0, uvDistanceVerticalA), new Vector2(thickness, uvDistanceVerticalA),
-                                                new Vector2(0, 0), new Vector2(-thickness, 0), new Vector2(0, uvDistanceVerticalB), new Vector2(-thickness, uvDistanceVerticalB)
-            };
-
-            int[] wallTrianglesSideA = new int[] { 0, 3, 1, 0, 2, 3 };
-            int[] wallTrianglesSideB = new int[] { 4, 5, 7, 4, 7, 6 };
-            int[] wallTrianglesOthers = new int[] { 8, 11, 9, 8, 10, 11,
-                                                    12, 13, 15, 12, 15, 14,
-                                                    16, 19, 17, 16, 18, 19,
-                                                    20, 21, 23, 20, 23, 22
-            };
+            var stream = new SingleStream();
+            stream.Setup(wallMeshData, wallBounds, vertexCount, indexCount);
 
 
-            // Create the mesh proper.
-            Mesh wallMesh = new Mesh
+            // Create the vertices
+            // Main clockwise
+            proceduralGrid.Vertex[] faceVertices = CreateFaceVertices(anchorAPosMin, anchorBPosMin, anchorATopPosMin, anchorBTopPosMin);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i, faceVertices[i]); }
+            // Main counterclockwise
+            faceVertices = CreateFaceVertices(anchorBPosPlus, anchorAPosPlus, anchorBTopPosPlus, anchorATopPosPlus);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+4, faceVertices[i]); }
+            // Top
+            faceVertices = CreateFaceVertices(anchorATopPosMin, anchorBTopPosMin, anchorATopPosPlus, anchorBTopPosPlus);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+8, faceVertices[i]); }
+            // Bottom
+            faceVertices = CreateFaceVertices(anchorBPosMin, anchorAPosMin, anchorBPosPlus, anchorAPosPlus);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+12, faceVertices[i]); }
+            // AnchorA
+            faceVertices = CreateFaceVertices(anchorAPosPlus, anchorAPosMin, anchorATopPosPlus, anchorATopPosMin);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i + 16, faceVertices[i]); }
+            // AnchorB
+            faceVertices = CreateFaceVertices(anchorBPosMin, anchorBPosPlus, anchorBTopPosMin, anchorBTopPosPlus);
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i + 20, faceVertices[i]); }
+
+            // Create the triangles
+            for (int t = 0, v = 0; t < triangleCount; t+=2, v+=4)
             {
-                name = "WallMesh",
-                subMeshCount = 3,
+                stream.SetTriangle(t, new int3(v, v+3, v+1));
+                stream.SetTriangle(t+1, new int3(v, v+2, v+3));
+            }
 
-                vertices = wallVertices,
-                uv = wallUVs
-            };
 
-           wallMesh.SetTriangles(wallTrianglesSideA, 0);
-           wallMesh.SetTriangles(wallTrianglesSideB, 1);
-           wallMesh.SetTriangles(wallTrianglesOthers, 2);
-
-            // Recalculate the necessary stuff.
-            wallMesh.RecalculateNormals();
-            wallMesh.RecalculateTangents();
-            wallMesh.RecalculateBounds();
+            // Apply and adjust.
+            Mesh.ApplyAndDisposeWritableMeshData(wallMeshDataArray, wallMesh);
 
             // Set!
+            wallMesh.bounds = wallBounds; // TODO: verify why the bounds aren't being set earlier :/
+
+            wallMesh.RecalculateBounds();
+
             meshFilter.mesh = wallMesh;
             meshCollider.sharedMesh = wallMesh;
         }
+
+
+
+
+        
+
+        private static proceduralGrid.Vertex[] CreateFaceVertices(float3 posZeroZero, float3 posOneZero, float3 posZeroOne, float3 posOneOne)
+        {
+            // Calculate normal and tangent.
+            (float3, float4) normalAndTangent = MathHelpers.CalculateTrisNormalAndTangent(posZeroZero, posOneZero, posOneOne);
+            //Vector3 faceTangent =  
+
+            // Calculate UV composants.
+            float uvDistanceHorizontal = math.distance(posZeroZero, posOneZero);
+            float uvDistanceVerticalZero = math.distance(posZeroZero, posZeroOne);
+            float uvDistanceVerticalOne = math.distance(posOneZero, posOneOne);
+
+            // Create the vertices.
+            proceduralGrid.Vertex[] vertices = new proceduralGrid.Vertex[4];
+
+            vertices[0] = new proceduralGrid.Vertex
+            {
+                position = posZeroZero,
+                normal = normalAndTangent.Item1,
+                tangent = normalAndTangent.Item2,
+                texCoord0 = new float2(0f, 0f)
+            };
+            vertices[1] = new proceduralGrid.Vertex
+            {
+                position = posOneZero,
+                normal = normalAndTangent.Item1,
+                tangent = normalAndTangent.Item2,
+                texCoord0 = new float2(uvDistanceHorizontal, 0f)
+            };
+            vertices[2] = new proceduralGrid.Vertex
+            {
+                position = posZeroOne,
+                normal = normalAndTangent.Item1,
+                tangent = normalAndTangent.Item2,
+                texCoord0 = new float2(0f, uvDistanceVerticalZero)
+            };
+            vertices[3] = new proceduralGrid.Vertex
+            {
+                position = posOneOne,
+                normal = normalAndTangent.Item1,
+                tangent = normalAndTangent.Item2,
+                texCoord0 = new float2(uvDistanceHorizontal, uvDistanceVerticalOne)
+            };
+
+            return vertices;
+        }
+
+        private static Bounds GenerateWallMeshBounds(Vector3 anchorAPos, Vector3 anchorATopPos, float anchorAHeight, Vector3 anchorBPos, Vector3 anchorBTopPos, float anchorBHeight)
+        {
+            // Calculate the bounds' necessary data.
+            Vector3 anchorAMidPos = anchorAPos + new Vector3(0f, anchorAHeight / 2f, 0f);
+            Vector3 anchorBMidPos = anchorBPos + new Vector3(0f, anchorBHeight / 2f, 0f);
+
+            Vector3 boundsCenter = Vector3.Lerp(anchorAMidPos, anchorBMidPos, 0.5f);
+            float boundsSizeX = math.abs(anchorAPos.x - anchorBPos.x);
+            float boundsSizeY = math.abs(math.max(anchorATopPos.y, anchorBTopPos.y) - math.min(anchorAPos.y, anchorBPos.y));
+            float boundsSizeZ = math.abs(anchorAPos.z - anchorBPos.z);
+            Vector3 boundsSize = new Vector3(boundsSizeX, boundsSizeY, boundsSizeZ);
+
+            return new Bounds(boundsCenter, boundsSize);
+        }
+
+
+#if UNITY_EDITOR
+        // VISUALIZATION
+        private void OnDrawGizmos()
+        {
+            //if (meshFilter.mesh != null)
+            //{
+            //    Bounds meshBounds = meshFilter.mesh.bounds;
+            //    Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
+            //}
+        }
+#endif
     }
 }

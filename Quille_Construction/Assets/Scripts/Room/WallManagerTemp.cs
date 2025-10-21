@@ -127,6 +127,8 @@ namespace Building
             return newAnchor;
         }
 
+        // BUG: there is some wonk with creating close walls atm, probably due to the collision detection :/
+
         private void CreateWallSegment(WallAnchor anchorA, WallAnchor anchorB)
         {
             // Collect potential intersections with other segments.

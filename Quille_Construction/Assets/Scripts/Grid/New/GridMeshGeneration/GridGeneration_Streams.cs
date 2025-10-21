@@ -10,6 +10,10 @@ using Unity.Mathematics;
 
 namespace proceduralGrid
 {
+    // TODO: make a general namespace for procedural geo beyond the grid.
+    // TODO: Add the option to have multiple submeshes
+
+
     // These use a larger index buffer format than the default to allow for large grids.
     // I may revert this in the future if large grids prove unecessary.
 

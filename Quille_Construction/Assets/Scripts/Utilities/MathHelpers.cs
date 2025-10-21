@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class MathHelpers
@@ -108,6 +109,20 @@ public static class MathHelpers
         Vector3 normal = Vector3.Normalize(direction);
 
         return normal;
+    }
+
+    public static (float3, float4) CalculateTrisNormalAndTangent(float3 pointA, float3 pointB, float3 pointC)
+    {
+        float3 xDir = pointB - pointA;
+        float3 direction = math.cross(xDir, pointB - pointC);
+
+        float3 normal = math.normalize(direction);
+        float4 tangent = new float4(xDir, 1f);
+
+        return (normal, tangent);
+
+        // TODO: verify this tangent calculation is ok.
+        // https://www.code-spot.co.za/2020/11/25/procedural-meshes-in-unity-normals-and-tangents/
     }
 
 }
