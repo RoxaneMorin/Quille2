@@ -40,7 +40,7 @@ namespace MeshGeneration
     public interface IMultiMeshStreams
     {
         // Should the vertexCounts use NativeArrays instead?
-        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, int[] vertexCounts, int[] indexCounts);
+        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> indexCounts);
         public void SetVertex(int submesh, int index, Vertex vertex);
         public void SetTriangle(int submesh, int index, int3 triangle);
     }

@@ -12,37 +12,19 @@ namespace MeshGeneration
 {
     // TODO: Add the option to have multiple submeshes
 
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SingleStreamVertex
-    {
-        // VARIABLES
-        public float3 position;
-        public float3 normal;
-        public half4 tangent;
-        public half2 texCoord0;
-    }
-
-
     // Single submesh streams
 
     // For a maximum of ~65535 indices.
     public struct SingleStreamUInt16 : IMeshStreams
     {
         // VARIABLES
-        [NativeDisableContainerSafetyRestriction] NativeArray<SingleStreamVertex> stream;
+        [NativeDisableContainerSafetyRestriction] NativeArray<Vertex> stream;
         [NativeDisableContainerSafetyRestriction] NativeArray<TriangleUInt16> triangleIndices;
 
 
         // METHODS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetVertex(int index, Vertex vertex) => stream[index] = new SingleStreamVertex
-        {
-            position = vertex.position,
-            normal = vertex.normal,
-            tangent = vertex.tangent,
-            texCoord0 = vertex.texCoord0
-        };
+        public void SetVertex(int index, Vertex vertex) => stream[index] = vertex;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetTriangle(int index, int3 triangle)
@@ -62,7 +44,7 @@ namespace MeshGeneration
             meshData.subMeshCount = 1;
             meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount) { bounds = bounds, vertexCount = vertexCount }, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
 
-            stream = meshData.GetVertexData<SingleStreamVertex>();
+            stream = meshData.GetVertexData<Vertex>();
             triangleIndices = meshData.GetIndexData<ushort>().Reinterpret<TriangleUInt16>(2);
         }
 
@@ -82,19 +64,13 @@ namespace MeshGeneration
     public struct SingleStreamUInt32 : IMeshStreams
     {
         // VARIABLES
-        [NativeDisableContainerSafetyRestriction] NativeArray<SingleStreamVertex> stream;
+        [NativeDisableContainerSafetyRestriction] NativeArray<Vertex> stream;
         [NativeDisableContainerSafetyRestriction] NativeArray<int3> triangleIndices;
 
 
         // METHODS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetVertex(int index, Vertex vertex) => stream[index] = new SingleStreamVertex
-        {
-            position = vertex.position,
-            normal = vertex.normal,
-            tangent = vertex.tangent,
-            texCoord0 = vertex.texCoord0
-        };
+        public void SetVertex(int index, Vertex vertex) => stream[index] = vertex;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetTriangle(int index, int3 triangle)
@@ -114,7 +90,7 @@ namespace MeshGeneration
             meshData.subMeshCount = 1;
             meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount) { bounds = bounds, vertexCount = vertexCount }, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
 
-            stream = meshData.GetVertexData<SingleStreamVertex>();
+            stream = meshData.GetVertexData<Vertex>();
             triangleIndices = meshData.GetIndexData<int>().Reinterpret<int3>(4);
         }
 
@@ -129,6 +105,4 @@ namespace MeshGeneration
             return vertexAttributeDescriptor;
         }
     }
-
-
 }

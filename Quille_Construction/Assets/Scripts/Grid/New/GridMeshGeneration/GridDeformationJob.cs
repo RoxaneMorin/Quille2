@@ -43,7 +43,7 @@ namespace ProceduralGrid
             outputMeshData.SetVertexBufferParams(inputMeshData.vertexCount, SingleStreamUInt32.GetVertexAttributeDescriptor());
             outputMeshData.SetIndexBufferParams(inputMeshData.GetSubMesh(0).indexCount, inputMeshData.indexFormat);
 
-            NativeArray<SingleStreamVertex> vertexData = outputMeshData.GetVertexData<SingleStreamVertex>();
+            NativeArray<Vertex> vertexData = outputMeshData.GetVertexData<Vertex>();
 
             // Use the streams that already exists instead?
             var job = new GridDeformationJob<S>();
