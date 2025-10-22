@@ -10,6 +10,9 @@ using UnityEngine.Rendering;
 
 namespace MeshGeneration
 {
+    // TODO: see if we should switch from receiving index to triangle counts for the single-mesh streams too.
+
+
     // Mesh streams for a single submesh.
 
     // For a maximum of ~65535 indices.

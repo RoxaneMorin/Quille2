@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -35,14 +36,10 @@ namespace Building
         // PROPERTIES
         public int ID { get { return id; } }
 
-        public Vector3 Position
-        {
-            get { return gameObject.transform.position; }
-        }
-        public Vector3 TopPosition
-        {
-            get { return gameObject.transform.position + new Vector3() { y = height }; }
-        }
+        public Vector3 GroundPosition { get { return gameObject.transform.position; } }
+        public Vector3 TopPosition { get { return gameObject.transform.position + new Vector3() { y = height }; } }
+        public float3 GroundPositionF { get { return (float3)gameObject.transform.position; } }
+        public float3 TopPositionF { get { return (float3)(gameObject.transform.position + new Vector3() { y = height }); } }
 
         public float Height
         {
@@ -58,6 +55,8 @@ namespace Building
                     height = value;
                 }
                 UpdateGameObjectHeight();
+
+                // TODO: notify connecting walls.
             }
         }
 
