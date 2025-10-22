@@ -7,7 +7,7 @@ using Unity.Mathematics;
 using static Unity.Mathematics.math;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct GridItemSearchJob : IJob

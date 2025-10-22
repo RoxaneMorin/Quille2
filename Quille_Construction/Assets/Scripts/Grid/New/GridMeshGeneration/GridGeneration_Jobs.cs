@@ -3,8 +3,9 @@ using Unity.Burst;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using MeshGeneration;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct GridGenerationJob<G, S> : IJobFor

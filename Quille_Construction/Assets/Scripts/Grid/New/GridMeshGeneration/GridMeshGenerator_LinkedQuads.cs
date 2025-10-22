@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using static Unity.Mathematics.math;
+using MeshGeneration;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     public struct GridMeshGenerator_LinkedQuads : IGridMeshGenerator
     {
@@ -28,18 +29,18 @@ namespace proceduralGrid
 
             var vertex = new Vertex();
             vertex.normal.y = 1f;
-            vertex.tangent.xw = float2(1f, -1f);
+            vertex.tangent.xw = half2(half(1f), half(-1f));
 
             vertex.position.x = 0f;
             vertex.position.z = z * TileSize;
-            vertex.texCoord0.y = z;
+            vertex.texCoord0.y = half(z);
             streams.SetVertex(vi, vertex);
             vi += 1;
 
             for (int x = 1; x <= Resolution.x; x++, vi++, ti += 2)
             {
                 vertex.position.x = x * TileSize;
-                vertex.texCoord0.x = x;
+                vertex.texCoord0.x = half(x);
                 streams.SetVertex(vi, vertex);
 
                 if (z > 0)

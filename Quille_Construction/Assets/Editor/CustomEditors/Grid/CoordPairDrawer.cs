@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(proceduralGrid.CoordPair))]
+[CustomPropertyDrawer(typeof(ProceduralGrid.CoordPair))]
 public class CoordPairDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

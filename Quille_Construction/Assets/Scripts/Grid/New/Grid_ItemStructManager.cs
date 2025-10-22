@@ -2,8 +2,9 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Jobs;
 using UnityEngine;
+using MeshGeneration;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [System.Serializable]
     public class Grid_ItemStructManager : Grid_ItemManager
@@ -92,7 +93,7 @@ namespace proceduralGrid
             Mesh.MeshDataArray newMeshDataArray = Mesh.AllocateWritableMeshData(1);
             Mesh.MeshData newMeshData = newMeshDataArray[0];
 
-            GridMeshGenerator_SeparateQuadsFromItems<SingleStream>.Schedule(myMesh, newMeshData, myGridItems, myTileSize, myItemSize, default).Complete();
+            GridMeshGenerator_SeparateQuadsFromItems<SingleStreamUInt32>.Schedule(myMesh, newMeshData, myGridItems, myTileSize, myItemSize, default).Complete();
 
             Mesh.ApplyAndDisposeWritableMeshData(newMeshDataArray, myMesh);
         }

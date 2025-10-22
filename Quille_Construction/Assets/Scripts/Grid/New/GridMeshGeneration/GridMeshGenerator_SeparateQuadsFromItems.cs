@@ -6,8 +6,9 @@ using Unity.Jobs;
 using Unity.Collections;
 using Unity.Mathematics;
 using static Unity.Mathematics.math;
+using MeshGeneration;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct GridMeshGenerator_SeparateQuadsFromItems<S> : IJobParallelFor
@@ -66,11 +67,14 @@ namespace proceduralGrid
             int vi = index * 4;
             int ti = index * 2;
 
+            half hZero = half(0f);
+            half hOne = half(1f);
+
             // Create the base vertex.
             var vertex = new Vertex();
             vertex.position.y = posY;
             vertex.normal.y = 1f;
-            vertex.tangent.xw = float2(1f, -1f);
+            vertex.tangent.xw = half2(hOne, half(-1f));
 
             // Bottom left.
             vertex.position.x = negPosX;
@@ -79,18 +83,18 @@ namespace proceduralGrid
 
             // Bottom right.
             vertex.position.x = posPosX;
-            vertex.texCoord0 = float2(1f, 0f);
+            vertex.texCoord0 = half2(hOne, hZero);
             streams.SetVertex(vi + 1, vertex);
 
             // Top left.
             vertex.position.x = negPosX;
             vertex.position.z = centeredPosZ + halfWidth;
-            vertex.texCoord0 = float2(0f, 1f);
+            vertex.texCoord0 = half2(hZero, hOne);
             streams.SetVertex(vi + 2, vertex);
 
             // Top right.
             vertex.position.x = posPosX;
-            vertex.texCoord0 = 1f;
+            vertex.texCoord0 = hOne;
             streams.SetVertex(vi + 3, vertex);
 
             // Triangles.

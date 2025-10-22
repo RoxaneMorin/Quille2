@@ -3,9 +3,9 @@ using Unity.Burst;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using MeshGeneration;
 
-
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct GridDeformationJob<S> : IJobFor
@@ -40,10 +40,10 @@ namespace proceduralGrid
             // TODO: customisable type of stream?
             // Rebuild the vertex attribute descriptor? Pass it as a parameter?
 
-            outputMeshData.SetVertexBufferParams(inputMeshData.vertexCount, SingleStream.GetVertexAttributeDescriptor());
+            outputMeshData.SetVertexBufferParams(inputMeshData.vertexCount, SingleStreamUInt32.GetVertexAttributeDescriptor());
             outputMeshData.SetIndexBufferParams(inputMeshData.GetSubMesh(0).indexCount, inputMeshData.indexFormat);
 
-            NativeArray<SingleStream.SingleStreamVertex> vertexData = outputMeshData.GetVertexData<SingleStream.SingleStreamVertex>();
+            NativeArray<SingleStreamVertex> vertexData = outputMeshData.GetVertexData<SingleStreamVertex>();
 
             // Use the streams that already exists instead?
             var job = new GridDeformationJob<S>();

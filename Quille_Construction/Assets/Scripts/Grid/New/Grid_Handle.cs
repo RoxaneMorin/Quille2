@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [RequireComponent(typeof(MeshFilter)), RequireComponent(typeof(MeshRenderer))]
     public class Grid_Handle : MonoBehaviour

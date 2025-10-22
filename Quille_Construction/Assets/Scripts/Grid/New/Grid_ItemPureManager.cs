@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [System.Serializable]
     public class Grid_ItemPureManager : Grid_ItemManager

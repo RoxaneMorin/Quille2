@@ -1,11 +1,10 @@
-using proceduralGrid;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
+using MeshGeneration;
 
 namespace Building
 {
@@ -157,6 +156,10 @@ namespace Building
          */
 
 
+        // TODO: consider a flat colliderMesh.
+
+        // Idea: if the wall has no thickness, just reuse the flat mesh for it.
+
 
         // TODO: edit the mesh streams and stuff to allow for multiple submeshes.
 
@@ -200,13 +203,13 @@ namespace Building
             Mesh.MeshDataArray wallMeshDataArray = Mesh.AllocateWritableMeshData(1);
             Mesh.MeshData wallMeshData = wallMeshDataArray[0];
 
-            var stream = new SingleStream();
+            var stream = new SingleStreamUInt16();
             stream.Setup(wallMeshData, wallBounds, vertexCount, indexCount);
 
 
             // Create the vertices
             // Main clockwise
-            proceduralGrid.Vertex[] faceVertices = CreateFaceVertices(anchorAPosMin, anchorBPosMin, anchorATopPosMin, anchorBTopPosMin);
+            Vertex[] faceVertices = CreateFaceVertices(anchorAPosMin, anchorBPosMin, anchorATopPosMin, anchorBTopPosMin);
             for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i, faceVertices[i]); }
             // Main counterclockwise
             faceVertices = CreateFaceVertices(anchorBPosPlus, anchorAPosPlus, anchorBTopPosPlus, anchorATopPosPlus);
@@ -219,10 +222,10 @@ namespace Building
             for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+12, faceVertices[i]); }
             // AnchorA
             faceVertices = CreateFaceVertices(anchorAPosPlus, anchorAPosMin, anchorATopPosPlus, anchorATopPosMin);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i + 16, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+16, faceVertices[i]); }
             // AnchorB
             faceVertices = CreateFaceVertices(anchorBPosMin, anchorBPosPlus, anchorBTopPosMin, anchorBTopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i + 20, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+20, faceVertices[i]); }
 
             // Create the triangles
             for (int t = 0, v = 0; t < triangleCount; t+=2, v+=4)
@@ -249,47 +252,47 @@ namespace Building
 
         
 
-        private static proceduralGrid.Vertex[] CreateFaceVertices(float3 posZeroZero, float3 posOneZero, float3 posZeroOne, float3 posOneOne)
+        private static Vertex[] CreateFaceVertices(float3 posZeroZero, float3 posOneZero, float3 posZeroOne, float3 posOneOne)
         {
             // Calculate normal and tangent.
-            (float3, float4) normalAndTangent = MathHelpers.CalculateTrisNormalAndTangent(posZeroZero, posOneZero, posOneOne);
+            (float3, half4) normalAndTangent = MathHelpers.CalculateTrisNormalAndTangent(posZeroZero, posOneZero, posOneOne);
             //Vector3 faceTangent =  
 
             // Calculate UV composants.
-            float uvDistanceHorizontal = math.distance(posZeroZero, posOneZero);
-            float uvDistanceVerticalZero = math.distance(posZeroZero, posZeroOne);
-            float uvDistanceVerticalOne = math.distance(posOneZero, posOneOne);
+            half uvDistanceHorizontal = (half)math.distance(posZeroZero, posOneZero);
+            half uvDistanceVerticalZero = (half)math.distance(posZeroZero, posZeroOne);
+            half uvDistanceVerticalOne = (half)math.distance(posOneZero, posOneOne);
 
             // Create the vertices.
-            proceduralGrid.Vertex[] vertices = new proceduralGrid.Vertex[4];
+            Vertex[] vertices = new Vertex[4];
 
-            vertices[0] = new proceduralGrid.Vertex
+            vertices[0] = new Vertex
             {
                 position = posZeroZero,
                 normal = normalAndTangent.Item1,
                 tangent = normalAndTangent.Item2,
-                texCoord0 = new float2(0f, 0f)
+                texCoord0 = new half2(half.zero, half.zero)
             };
-            vertices[1] = new proceduralGrid.Vertex
+            vertices[1] = new Vertex
             {
                 position = posOneZero,
                 normal = normalAndTangent.Item1,
                 tangent = normalAndTangent.Item2,
-                texCoord0 = new float2(uvDistanceHorizontal, 0f)
+                texCoord0 = new half2(uvDistanceHorizontal, half.zero)
             };
-            vertices[2] = new proceduralGrid.Vertex
+            vertices[2] = new Vertex
             {
                 position = posZeroOne,
                 normal = normalAndTangent.Item1,
                 tangent = normalAndTangent.Item2,
-                texCoord0 = new float2(0f, uvDistanceVerticalZero)
+                texCoord0 = new half2(half.zero, uvDistanceVerticalZero)
             };
-            vertices[3] = new proceduralGrid.Vertex
+            vertices[3] = new Vertex
             {
                 position = posOneOne,
                 normal = normalAndTangent.Item1,
                 tangent = normalAndTangent.Item2,
-                texCoord0 = new float2(uvDistanceHorizontal, uvDistanceVerticalOne)
+                texCoord0 = new half2(uvDistanceHorizontal, uvDistanceVerticalOne)
             };
 
             return vertices;

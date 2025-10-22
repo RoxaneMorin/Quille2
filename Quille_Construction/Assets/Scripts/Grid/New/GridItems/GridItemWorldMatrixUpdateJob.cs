@@ -7,7 +7,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using static Unity.Mathematics.math;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
     public struct GridItemWorldMatrixUpdateJob : IJobParallelFor

@@ -5,7 +5,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [BurstCompile]
     public struct GridItem

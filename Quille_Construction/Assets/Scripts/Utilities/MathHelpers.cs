@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using static Unity.Mathematics.math;
 using UnityEngine;
 
 public static class MathHelpers
@@ -111,13 +112,13 @@ public static class MathHelpers
         return normal;
     }
 
-    public static (float3, float4) CalculateTrisNormalAndTangent(float3 pointA, float3 pointB, float3 pointC)
+    public static (float3, half4) CalculateTrisNormalAndTangent(float3 pointA, float3 pointB, float3 pointC)
     {
         float3 xDir = pointB - pointA;
         float3 direction = math.cross(xDir, pointB - pointC);
 
         float3 normal = math.normalize(direction);
-        float4 tangent = new float4(xDir, 1f);
+        half4 tangent = new half4(half3(xDir), half(1f));
 
         return (normal, tangent);
 

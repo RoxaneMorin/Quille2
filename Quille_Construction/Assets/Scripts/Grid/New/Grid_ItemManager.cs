@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [System.Serializable]
     public class Grid_ItemManager : MonoBehaviour

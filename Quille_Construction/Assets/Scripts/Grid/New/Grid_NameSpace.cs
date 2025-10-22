@@ -10,7 +10,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using static Unity.Mathematics.math;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     // ENUMS
     public enum Corners { bottomLeft, bottomRight, topLeft, topRight, none };

@@ -4,8 +4,9 @@ using Unity.Mathematics;
 using Unity.Burst;
 using Unity.Jobs;
 using UnityEngine;
+using MeshGeneration;
 
-namespace proceduralGrid
+namespace ProceduralGrid
 {
     [System.Serializable]
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -14,8 +15,8 @@ namespace proceduralGrid
         // STATIC
         static GridMeshJobScheduleDelegate[] gridMeshJobs =
         {
-            GridGenerationJob<GridMeshGenerator_SeparateQuads, SingleStream>.ScheduleParallel,
-            GridGenerationJob<GridMeshGenerator_LinkedQuads, SingleStream>.ScheduleParallel
+            GridGenerationJob<GridMeshGenerator_SeparateQuads, SingleStreamUInt32>.ScheduleParallel,
+            GridGenerationJob<GridMeshGenerator_LinkedQuads, SingleStreamUInt32>.ScheduleParallel
         };
 
 
