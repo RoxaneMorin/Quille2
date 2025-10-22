@@ -40,7 +40,7 @@ namespace ProceduralGrid
             // TODO: customisable type of stream?
             // Rebuild the vertex attribute descriptor? Pass it as a parameter?
 
-            outputMeshData.SetVertexBufferParams(inputMeshData.vertexCount, SingleStreamUInt32.GetVertexAttributeDescriptor());
+            outputMeshData.SetVertexBufferParams(inputMeshData.vertexCount, MeshStreamUInt32.GetVertexAttributeDescriptor());
             outputMeshData.SetIndexBufferParams(inputMeshData.GetSubMesh(0).indexCount, inputMeshData.indexFormat);
 
             NativeArray<Vertex> vertexData = outputMeshData.GetVertexData<Vertex>();

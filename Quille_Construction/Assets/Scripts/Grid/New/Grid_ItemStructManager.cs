@@ -93,7 +93,7 @@ namespace ProceduralGrid
             Mesh.MeshDataArray newMeshDataArray = Mesh.AllocateWritableMeshData(1);
             Mesh.MeshData newMeshData = newMeshDataArray[0];
 
-            GridMeshGenerator_SeparateQuadsFromItems<SingleStreamUInt32>.Schedule(myMesh, newMeshData, myGridItems, myTileSize, myItemSize, default).Complete();
+            GridMeshGenerator_SeparateQuadsFromItems<MeshStreamUInt32>.Schedule(myMesh, newMeshData, myGridItems, myTileSize, myItemSize, default).Complete();
 
             Mesh.ApplyAndDisposeWritableMeshData(newMeshDataArray, myMesh);
         }

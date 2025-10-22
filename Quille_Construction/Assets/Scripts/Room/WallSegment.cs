@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using MeshGeneration;
@@ -161,9 +162,6 @@ namespace Building
         // Idea: if the wall has no thickness, just reuse the flat mesh for it.
 
 
-        // TODO: edit the mesh streams and stuff to allow for multiple submeshes.
-
-
         public void GenerateWallMesh(Vector3 anchorAPos, float anchorAHeight, Vector3 anchorBPos, float anchorBHeight)
         {
             // Calculate the upper vertices' locations.
@@ -196,6 +194,12 @@ namespace Building
             int triangleCount = 12;
             int indexCount = triangleCount * 3;
 
+            NativeArray<int> vertexCounts = new NativeArray<int>(1, Allocator.Temp);
+            vertexCounts[0] = vertexCount;
+
+            NativeArray<int> indexCounts = new NativeArray<int>(1, Allocator.Temp);
+            indexCounts[0] = indexCount;
+
             // Set up the mesh and stream.
             Mesh wallMesh = new Mesh { name = "WallMesh" };
             wallMesh.Clear();
@@ -203,35 +207,35 @@ namespace Building
             Mesh.MeshDataArray wallMeshDataArray = Mesh.AllocateWritableMeshData(1);
             Mesh.MeshData wallMeshData = wallMeshDataArray[0];
 
-            var stream = new SingleStreamUInt16();
-            stream.Setup(wallMeshData, wallBounds, vertexCount, indexCount);
+            var stream = new MultimeshStreamUInt16();
+            stream.Setup(wallMeshData, wallBounds, 1, vertexCounts, indexCounts);
 
 
             // Create the vertices
             // Main clockwise
             Vertex[] faceVertices = CreateFaceVertices(anchorAPosMin, anchorBPosMin, anchorATopPosMin, anchorBTopPosMin);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i, faceVertices[i]); }
             // Main counterclockwise
             faceVertices = CreateFaceVertices(anchorBPosPlus, anchorAPosPlus, anchorBTopPosPlus, anchorATopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+4, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i+4, faceVertices[i]); }
             // Top
             faceVertices = CreateFaceVertices(anchorATopPosMin, anchorBTopPosMin, anchorATopPosPlus, anchorBTopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+8, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i+8, faceVertices[i]); }
             // Bottom
             faceVertices = CreateFaceVertices(anchorBPosMin, anchorAPosMin, anchorBPosPlus, anchorAPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+12, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i+12, faceVertices[i]); }
             // AnchorA
             faceVertices = CreateFaceVertices(anchorAPosPlus, anchorAPosMin, anchorATopPosPlus, anchorATopPosMin);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+16, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i+16, faceVertices[i]); }
             // AnchorB
             faceVertices = CreateFaceVertices(anchorBPosMin, anchorBPosPlus, anchorBTopPosMin, anchorBTopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+20, faceVertices[i]); }
+            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i+20, faceVertices[i]); }
 
             // Create the triangles
             for (int t = 0, v = 0; t < triangleCount; t+=2, v+=4)
             {
-                stream.SetTriangle(t, new int3(v, v+3, v+1));
-                stream.SetTriangle(t+1, new int3(v, v+2, v+3));
+                stream.SetTriangle(0, t, new int3(v, v+3, v+1));
+                stream.SetTriangle(0, t+1, new int3(v, v+2, v+3));
             }
 
 

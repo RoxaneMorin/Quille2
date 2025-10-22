@@ -15,8 +15,8 @@ namespace ProceduralGrid
         // STATIC
         static GridMeshJobScheduleDelegate[] gridMeshJobs =
         {
-            GridGenerationJob<GridMeshGenerator_SeparateQuads, SingleStreamUInt32>.ScheduleParallel,
-            GridGenerationJob<GridMeshGenerator_LinkedQuads, SingleStreamUInt32>.ScheduleParallel
+            GridGenerationJob<GridMeshGenerator_SeparateQuads, MeshStreamUInt32>.ScheduleParallel,
+            GridGenerationJob<GridMeshGenerator_LinkedQuads, MeshStreamUInt32>.ScheduleParallel
         };
 
 
