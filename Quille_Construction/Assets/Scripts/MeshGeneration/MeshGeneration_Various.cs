@@ -26,6 +26,11 @@ namespace MeshGeneration
         public ushort a, b, c;
 
         public static implicit operator TriangleUInt16(int3 t) => new TriangleUInt16 { a = (ushort)t.x, b = (ushort)t.y, c = (ushort)t.z };
+
+        public override string ToString()
+        {
+            return $"({a}, {b}, {c})";
+        }
     }
 
 
@@ -40,7 +45,7 @@ namespace MeshGeneration
     public interface IMultiMeshStreams
     {
         // Should the vertexCounts use NativeArrays instead?
-        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> indexCounts);
+        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> triangleCounts);
         public void SetVertex(int submesh, int index, Vertex vertex);
         public void SetTriangle(int submesh, int index, int3 triangle);
     }

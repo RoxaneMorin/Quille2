@@ -111,8 +111,12 @@ namespace MeshGeneration
         // VARIABLES
         [NativeDisableContainerSafetyRestriction] NativeArray<Vertex> stream;
         [NativeDisableContainerSafetyRestriction] NativeArray<TriangleUInt16> triangleIndices;
+
         [NativeDisableContainerSafetyRestriction] NativeArray<int> firstVertexForSubmesh;
         [NativeDisableContainerSafetyRestriction] NativeArray<int> firstTriangleForSubmesh;
+        [NativeDisableContainerSafetyRestriction] NativeArray<int> firstIndexForSubmesh;
+
+        // TODO: see if we could use NativeSlices instead of doing this math.
 
         // METHODS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -126,24 +130,34 @@ namespace MeshGeneration
         public void SetTriangle(int submesh, int index, int3 triangle)
         {
             int true_index = firstTriangleForSubmesh[submesh] + index;
-            triangleIndices[true_index] = triangle;
+            int3 true_triangle = triangle + new int3(firstVertexForSubmesh[submesh]);
+            triangleIndices[true_index] = true_triangle;
         }
 
-        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> indexCounts)
+        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> triangleCounts)
         {
             var vertexAttributeDescriptor = GetVertexAttributeDescriptor();
 
+            NativeArray<int> indexCounts = new NativeArray<int>(submeshCount, Allocator.Temp);
+
             firstVertexForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
             firstTriangleForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
+            firstIndexForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
+
             int totalVertexCount = 0;
+            int totalTriangleCount = 0;
             int totalIndexCount = 0;
 
             for (int i = 0; i < submeshCount; i++)
             {
+                indexCounts[i] = triangleCounts[i] * 3;
+
                 firstVertexForSubmesh[i] = totalVertexCount;
-                firstTriangleForSubmesh[i] = totalIndexCount;
+                firstTriangleForSubmesh[i] = totalTriangleCount;
+                firstIndexForSubmesh[i] = totalIndexCount;
 
                 totalVertexCount += vertexCounts[i];
+                totalTriangleCount += triangleCounts[i];
                 totalIndexCount += indexCounts[i];
             }
 
@@ -155,12 +169,12 @@ namespace MeshGeneration
             meshData.subMeshCount = submeshCount;
             for (int i = 0; i < submeshCount; i++)
             {
-                meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCounts[i]) 
+                meshData.SetSubMesh(i, new SubMeshDescriptor(0, indexCounts[i]) 
                 { 
                     bounds = bounds, 
                     firstVertex = firstVertexForSubmesh[i], 
                     vertexCount = vertexCounts[i],
-                    indexStart = firstTriangleForSubmesh[i],
+                    indexStart = firstIndexForSubmesh[i],
                     indexCount = indexCounts[i],
                 }, 
                 MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
@@ -187,8 +201,12 @@ namespace MeshGeneration
         // VARIABLES
         [NativeDisableContainerSafetyRestriction] NativeArray<Vertex> stream;
         [NativeDisableContainerSafetyRestriction] NativeArray<int3> triangleIndices;
+
         [NativeDisableContainerSafetyRestriction] NativeArray<int> firstVertexForSubmesh;
         [NativeDisableContainerSafetyRestriction] NativeArray<int> firstTriangleForSubmesh;
+        [NativeDisableContainerSafetyRestriction] NativeArray<int> firstIndexForSubmesh;
+
+        // TODO: see if we could use NativeSlices instead of doing this math.
 
         // METHODS
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -202,41 +220,51 @@ namespace MeshGeneration
         public void SetTriangle(int submesh, int index, int3 triangle)
         {
             int true_index = firstTriangleForSubmesh[submesh] + index;
-            triangleIndices[true_index] = triangle;
+            int3 true_triangle = triangle + new int3(firstVertexForSubmesh[submesh]);
+            triangleIndices[true_index] = true_triangle;
         }
 
-        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> indexCounts)
+        public void Setup(Mesh.MeshData meshData, Bounds bounds, int submeshCount, NativeArray<int> vertexCounts, NativeArray<int> triangleCounts)
         {
             var vertexAttributeDescriptor = GetVertexAttributeDescriptor();
 
+            NativeArray<int> indexCounts = new NativeArray<int>(submeshCount, Allocator.Temp);
+
             firstVertexForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
             firstTriangleForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
+            firstIndexForSubmesh = new NativeArray<int>(submeshCount, Allocator.Temp);
+
             int totalVertexCount = 0;
+            int totalTriangleCount = 0;
             int totalIndexCount = 0;
 
             for (int i = 0; i < submeshCount; i++)
             {
+                indexCounts[i] = triangleCounts[i] * 3;
+
                 firstVertexForSubmesh[i] = totalVertexCount;
-                firstTriangleForSubmesh[i] = totalIndexCount;
+                firstTriangleForSubmesh[i] = totalTriangleCount;
+                firstIndexForSubmesh[i] = totalIndexCount;
 
                 totalVertexCount += vertexCounts[i];
+                totalTriangleCount += triangleCounts[i];
                 totalIndexCount += indexCounts[i];
             }
 
             meshData.SetVertexBufferParams(totalVertexCount, vertexAttributeDescriptor);
             vertexAttributeDescriptor.Dispose();
 
-            meshData.SetIndexBufferParams(totalIndexCount, IndexFormat.UInt16);
+            meshData.SetIndexBufferParams(totalIndexCount, IndexFormat.UInt32);
 
             meshData.subMeshCount = submeshCount;
             for (int i = 0; i < submeshCount; i++)
             {
-                meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCounts[i])
+                meshData.SetSubMesh(i, new SubMeshDescriptor(0, indexCounts[i])
                 {
                     bounds = bounds,
                     firstVertex = firstVertexForSubmesh[i],
                     vertexCount = vertexCounts[i],
-                    indexStart = firstTriangleForSubmesh[i],
+                    indexStart = firstIndexForSubmesh[i],
                     indexCount = indexCounts[i],
                 },
                 MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
