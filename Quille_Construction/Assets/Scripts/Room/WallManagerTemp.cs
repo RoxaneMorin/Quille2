@@ -127,7 +127,7 @@ namespace Building
             return newAnchor;
         }
 
-        // BUG: there is some wonk with creating close walls atm, probably due to the collision detection :/
+        // TODO: ensure we aren't recreating a wall that already exists.
 
         private void CreateWallSegment(WallAnchor anchorA, WallAnchor anchorB)
         {
@@ -166,10 +166,10 @@ namespace Building
         private void SplitWallSegment(WallSegment targetSegment, WallAnchor centralAnchor)
         {
             WallSegment newSegmentA = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
-            newSegmentA.Init(targetSegment.AnchorA, centralAnchor);
+            newSegmentA.Init(targetSegment.AnchorA, centralAnchor, targetSegment.Thickness);
            
             WallSegment newSegmentB = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
-            newSegmentB.Init(centralAnchor, targetSegment.AnchorB);
+            newSegmentB.Init(centralAnchor, targetSegment.AnchorB, targetSegment.Thickness);
 
             targetSegment.AnchorA.ReplaceConnection(targetSegment, centralAnchor, newSegmentA);
             targetSegment.AnchorB.ReplaceConnection(targetSegment, centralAnchor, newSegmentB);
@@ -186,7 +186,6 @@ namespace Building
 
 
         // TODO: Clean up. Do raycast at middle and top also.
-        // BUG: Since the walls have thickness, the hit points aren't exactly on the other wall's main line. The results are thus deformed. Either fix by having a flat collider, or doing a bit of math here.
         private List<(WallSegment, Vector3, float)> ListIntersectingWallSegments(WallAnchor anchorA, WallAnchor anchorB)
         {
             List<(WallSegment, Vector3, float)> intersectingSegments = new List<(WallSegment, Vector3, float)>();

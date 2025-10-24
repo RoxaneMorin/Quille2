@@ -54,13 +54,17 @@ namespace Building
                 {
                     height = value;
                 }
-                UpdateGameObjectHeight();
 
-                // TODO: notify connecting walls.
+                OnParameterUpdate();
             }
         }
 
         public List<WallConnection> Connections { get { return connections; } }
+
+
+
+        // TODO: editor tool to change the height.
+
 
 
 
@@ -104,6 +108,19 @@ namespace Building
             else
             {
                 myMaterial.color = colourDefault;
+            }
+        }
+
+        public void OnParameterUpdate()
+        {
+            // Visual update.
+            UpdateGameObjectHeight();
+
+            // Notify the connected wall segments.
+            foreach (WallConnection connection in connections)
+            {
+                WallSegment segment = connection.ConnectedWallSegment;
+                segment.OnParameterUpdate();
             }
         }
 
@@ -213,6 +230,131 @@ namespace Building
                 return null;
             }
         }
+
+        public WallConnection? GetConnectionPreceding(WallAnchor targetAnchor)
+        {
+            if (connections.Count > 1)
+            {
+                WallConnection targetConnection = GetConnectionTo(targetAnchor);
+
+                if (targetConnection != null)
+                {
+                    int index = connections.FindIndex(x => x == targetConnection);
+                    int prevIndex = (index - 1) % connections.Count;
+                    return connections[prevIndex];
+                }
+            }
+            // Else,
+            return null;
+        }
+        public WallConnection? GetConnectionFollowing(WallAnchor targetAnchor)
+        {
+            if (connections.Count > 1)
+            {
+                WallConnection targetConnection = GetConnectionTo(targetAnchor);
+
+                if (targetConnection != null)
+                {
+                    int index = connections.FindIndex(x => x == targetConnection);
+                    int nextIndex = (index + 1) % connections.Count;
+                    return connections[nextIndex];
+                }
+            }
+            // Else,
+            return null;
+        }
+
+        public WallConnection? GetConnectionPreceding(WallSegment targetSegment)
+        {
+            if (connections.Count > 1)
+            {
+                WallConnection targetConnection = GetConnectionTo(targetSegment);
+
+                if (targetConnection != null)
+                {
+                    int index = connections.FindIndex(x => x == targetConnection);
+                    int prevIndex = (index - 1) % connections.Count;
+                    return connections[prevIndex];
+                }
+            }
+            // Else,
+            return null;
+        }
+        public WallConnection? GetConnectionFollowing(WallSegment targetSegment)
+        {
+            if (connections.Count > 1)
+            {
+                WallConnection targetConnection = GetConnectionTo(targetSegment);
+
+                if (targetConnection != null)
+                {
+                    int index = connections.FindIndex(x => x == targetConnection);
+                    int nextIndex = (index + 1) % connections.Count;
+                    return connections[nextIndex];
+                }
+            }
+            // Else,
+            return null;
+        }
+
+        public WallAnchor? GetAnchorPreceding(WallAnchor targetAnchor)
+        {
+            WallConnection? prevConnection = GetConnectionPreceding(targetAnchor);
+            if (prevConnection != null)
+            {
+                return prevConnection.ConnectedAnchor;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public WallAnchor? GetAnchorFollowing(WallAnchor targetAnchor)
+        {
+            WallConnection? nextConnection = GetConnectionFollowing(targetAnchor);
+            if (nextConnection != null)
+            {
+                return nextConnection.ConnectedAnchor;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public WallSegment? GetSegmentPreceding(WallSegment targetSegment)
+        {
+            WallConnection? prevConnection = GetConnectionPreceding(targetSegment);
+            if (prevConnection != null)
+            {
+                return prevConnection.ConnectedWallSegment;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public WallSegment? GetSegmentFollowing(WallSegment targetSegment)
+        {
+            WallConnection? nextConnection = GetConnectionFollowing(targetSegment);
+            if (nextConnection != null)
+            {
+                return nextConnection.ConnectedWallSegment;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+
+
+       
+
+
+
+
 
 
         // -> OTHER
