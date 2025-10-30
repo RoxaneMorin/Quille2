@@ -161,6 +161,8 @@ namespace Building
             anchorB.AddConnection(newSegment);
 
             areaWallSegments.Add(newSegment);
+
+            newSegment.OnParameterUpdate();
         }
 
         private void SplitWallSegment(WallSegment targetSegment, WallAnchor centralAnchor)
@@ -182,6 +184,9 @@ namespace Building
 
             areaWallSegments.Remove(targetSegment);
             Destroy(targetSegment.gameObject);
+
+            newSegmentA.OnParameterUpdate();
+            newSegmentB.OnParameterUpdate();
         }
 
 

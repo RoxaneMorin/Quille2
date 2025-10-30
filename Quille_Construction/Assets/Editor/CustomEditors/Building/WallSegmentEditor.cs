@@ -31,5 +31,13 @@ public class WallSegmentEditor : Editor
             Undo.RecordObject(target, "Change Wall Thickness");
             segment.Thickness = thickness;
         }
+
+
+
+        // Label the wall's anchors and sides.
+        Handles.Label(segment.AnchorAGroundPosition, "Achor A");
+        Handles.Label(segment.AnchorBGroundPosition, "Anchor B");
+        Handles.Label(segment.CenterMinPos, "Min Side");
+        Handles.Label(segment.CenterPlusPos, "Plus Side");
     }
 }

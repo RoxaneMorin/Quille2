@@ -6,10 +6,11 @@ using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using MeshGeneration;
+using System.Collections.Specialized;
 
 namespace Building
 {
-    public class WallSegment : MonoBehaviour
+    public partial class WallSegment : MonoBehaviour
     {
         // VARIABLES/PARAMETERS
         [SerializeField] private WallAnchor anchorA;
@@ -43,7 +44,9 @@ namespace Building
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private MeshCollider meshCollider;
 
-         
+        // TODO: track materials, so they can be adjusted when the wall is thick vs thicknessless?
+
+        
         // PROPERTIES AND OTHER ACCESSORS
         public WallAnchor AnchorA
         {
@@ -97,6 +100,16 @@ namespace Building
         public float3 AnchorBGroundPositionF { get { return AnchorB.GroundPositionF; } }
         public float3 AnchorBTopPositionF { get { return AnchorB.TopPositionF; } }
 
+        public float3 AnchorAGroundPosMin { get { return thickness > 0 ? anchorAGroundPosMin : AnchorAGroundPositionF; } }
+        public float3 AnchorATopPosMin { get { return thickness > 0 ? anchorATopPosMin : AnchorATopPositionF; } }
+        public float3 AnchorBGroundPosMin { get { return thickness > 0 ? anchorBGroundPosMin : AnchorBGroundPositionF; } }
+        public float3 AnchorBTopPosMin { get { return thickness > 0 ? anchorBTopPosMin : AnchorBTopPositionF; } }
+
+        public float3 AnchorAGroundPosPlus { get { return thickness > 0 ? anchorAGroundPosPlus : AnchorAGroundPositionF; } }
+        public float3 AnchorATopPosPlus { get { return thickness > 0 ? anchorATopPosPlus : AnchorATopPositionF; } }
+        public float3 AnchorBGroundPosPlus { get { return thickness > 0 ? anchorBGroundPosPlus : AnchorBGroundPositionF; } }
+        public float3 AnchorBTopPosPlus { get { return thickness > 0 ? anchorBTopPosPlus : AnchorBTopPositionF; } }
+
         public float Thickness
         {
             get { return thickness; }
@@ -132,25 +145,34 @@ namespace Building
                 return Vector3.Lerp(centerPosA, centerPosB, 0.5f);
             }
         }
-
-
+        public Vector3 CenterMinPos
+        {
+            get
+            {
+                Vector3 centerPosA = (AnchorAGroundPosMin + AnchorATopPosMin) / 2f;
+                Vector3 centerPosB = (AnchorBGroundPosMin + AnchorBTopPosMin) / 2f;
+                return Vector3.Lerp(centerPosA, centerPosB, 0.5f);
+            }
+        }
+        public Vector3 CenterPlusPos
+        {
+            get
+            {
+                Vector3 centerPosA = (AnchorAGroundPosPlus + AnchorATopPosPlus) / 2f;
+                Vector3 centerPosB = (AnchorBGroundPosPlus + AnchorBTopPosPlus) / 2f;
+                return Vector3.Lerp(centerPosA, centerPosB, 0.5f);
+            }
+        }
 
 
 
         // METHODS
 
-        // CONSTRUCTOR
-        public WallSegment(WallAnchor anchorA, WallAnchor anchorB)
-        {
-            this.anchorA = anchorA;
-            this.anchorB = anchorB;
-        }
-
         // INIT
         public void Init(WallAnchor anchorA, WallAnchor anchorB, float thickness = 0.1f)
         {
             // Name the game object.
-            gameObject.name = string.Format("WallSegment ({0} <-> {1})", anchorA, anchorB);
+            gameObject.name = string.Format("WallSegment ({0} <-> {1})", anchorA.ID, anchorB.ID);
 
             // Set the anchor references.
             this.anchorA = anchorA;
@@ -164,37 +186,32 @@ namespace Building
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
             meshCollider = gameObject.GetComponent<MeshCollider>();
 
-            GenerateWallMesh();
+            //GenerateWallMesh();
         }
 
 
         // UTILITY
-        public void InverseWallDirection()
-        {
-            // TODO: update the connection also
-
-            WallAnchor tempAnchor = anchorA;
-            anchorA = anchorB;
-            anchorB = tempAnchor;
-
-            OnParameterUpdate();
-        }
-
-
-
         public void OnParameterUpdate()
         {
             GenerateWallMesh();
         }
 
+        //public void InverseWallDirection()
+        //{
+        //    // TODO: update the connection also
 
+        //    WallAnchor tempAnchor = anchorA;
+        //    anchorA = anchorB;
+        //    anchorB = tempAnchor;
+
+        //    OnParameterUpdate();
+        //}
 
 
         // MESH GENERATION
 
         /*
          * TODO:
-         * - Keep track of the wall 'sides' locations
          * - Account for intersecting walls
          */
 
@@ -225,6 +242,62 @@ namespace Building
                 anchorATopPosPlus = anchorATopPos + thicknessDisplacement;
                 anchorBTopPosPlus = anchorBTopPos + thicknessDisplacement;
 
+                // TODO: check adjacent walls if we need to clip.
+
+                WallSegment? aPrev = anchorA.GetSegmentPreceding(this);
+                WallSegment? aNext = anchorA.GetSegmentFollowing(this);
+                WallSegment? bPrev = anchorB.GetSegmentPreceding(this);
+                WallSegment? bNext = anchorB.GetSegmentFollowing(this);
+
+                Debug.Log($"Walls adjacent to {this}:\nAPrev: {aPrev}\nANext: {aNext}\nBPrev: {bPrev}\nBNext: {bNext}");
+
+                // If the two walls share the same AnchorA, min/min or plus/plus face each other
+                // Else, we have min/plus or plus/min
+
+                // Check if min or plus is determined by prev vs next.
+
+                if (aPrev != null)
+                {
+                    bool sharedAnchor = this.AnchorA == aPrev.AnchorA;
+                    Debug.Log($"Do {this} and {aPrev} (aPrev) share the same anchor A? {sharedAnchor}");
+                }
+                if (aNext != null)
+                {
+                    bool sharedAnchor = this.AnchorA == aNext.AnchorA;
+                    Debug.Log($"Do {this} and {aNext} (aNext) share the same anchor A? {sharedAnchor}");
+                }
+                if (bPrev != null)
+                {
+                    bool sharedAnchor = this.AnchorB == bPrev.AnchorB;
+                    Debug.Log($"Do {this} and {bPrev} (bPrev) share the same anchor B? {sharedAnchor}");
+                }
+                if (bNext != null)
+                {
+                    bool sharedAnchor = this.AnchorB == bNext.AnchorB;
+                    Debug.Log($"Do {this} and {bNext} (bNext) share the same anchor B? {sharedAnchor}");
+                }
+
+
+                // TODO: check for intersections in 3D
+
+                //if (aPrev != null)
+                //{
+                //    bool minWithAMin = MathHelpers.DoSegmentsIntersectXZ(anchorAGroundPosMin, anchorBGroundPosMin, aPrev.AnchorAGroundPosMin, aPrev.anchorBGroundPosMin);
+                //    bool minWithAPlus = MathHelpers.DoSegmentsIntersectXZ(anchorAGroundPosMin, anchorBGroundPosMin, aPrev.AnchorAGroundPosPlus, aPrev.anchorBGroundPosPlus);
+
+                //    bool plusWithAMin = MathHelpers.DoSegmentsIntersectXZ(anchorAGroundPosPlus, anchorBGroundPosPlus, aPrev.AnchorAGroundPosMin, aPrev.anchorBGroundPosMin);
+                //    bool plusWithAPlus = MathHelpers.DoSegmentsIntersectXZ(anchorAGroundPosPlus, anchorBGroundPosPlus, aPrev.AnchorAGroundPosPlus, aPrev.anchorBGroundPosPlus);
+
+                //    Debug.Log($"Min side intersects with:\naPrev min: {minWithAMin}\naPrev plus: {minWithAPlus}\nPlus side intersects with:\naPrev min: {plusWithAMin}\naPrev plus: {plusWithAPlus}");
+
+                //    // Need to check them all as two min sides may be "facing" each other.
+                //    // Is there a way to check for this so we can avoid useless calculations?
+
+                //    Vector3? test = MathHelpers.CalculatePotentialIntersectionPointXZ(anchorAGroundPosMin, anchorBGroundPosMin, aPrev.AnchorAGroundPosMin, aPrev.anchorBGroundPosMin);
+
+                //    Debug.Log(test);
+                //}
+
                 // Generate the actual meshes.
                 wallMesh = GenerateThickWallMesh(anchorAGroundPosMin, anchorBGroundPosMin, anchorATopPosMin, anchorBTopPosMin, anchorAGroundPosPlus, anchorBGroundPosPlus, anchorATopPosPlus, anchorBTopPosPlus);
                 colliderMesh = GenerateWallColliderMesh(anchorAGroundPos, anchorATopPos, anchorBGroundPos, anchorBTopPos);
@@ -245,219 +318,6 @@ namespace Building
             meshFilter.mesh = wallMesh;
             meshCollider.sharedMesh = colliderMesh;
         }
-
-
-
-
-        // STATIC METHODS
-
-        private static Mesh GenerateThickWallMesh(float3 anchorAGroundPosMin, float3 anchorBGroundPosMin, float3 anchorATopPosMin, float3 anchorBTopPosMin, float3 anchorAGroundPosPlus, float3 anchorBGroundPosPlus, float3 anchorATopPosPlus, float3 anchorBTopPosPlus)
-        {
-            // Counts
-            int submeshCount = 3;
-
-            NativeArray<int> vertexCounts = new NativeArray<int>(3, Allocator.Temp);
-            vertexCounts[0] = 4;
-            vertexCounts[1] = 4;
-            vertexCounts[2] = 16;
-
-            NativeArray<int> triangleCounts = new NativeArray<int>(3, Allocator.Temp);
-            triangleCounts[0] = 2;
-            triangleCounts[1] = 2;
-            triangleCounts[2] = 8;
-
-            // Set up the mesh and stream.
-            Mesh wallMesh = new Mesh { name = "WallMesh" };
-            wallMesh.Clear();
-
-            Mesh.MeshDataArray wallMeshDataArray = Mesh.AllocateWritableMeshData(1);
-            Mesh.MeshData wallMeshData = wallMeshDataArray[0];
-
-            var stream = new MultimeshStreamUInt16();
-            stream.Setup(wallMeshData, new Bounds(), submeshCount, vertexCounts, triangleCounts);
-
-            // Create the vertices
-            // Main clockwise
-            Vertex[] faceVertices = CreateFlatFaceVertices(anchorAGroundPosMin, anchorBGroundPosMin, anchorATopPosMin, anchorBTopPosMin);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i, faceVertices[i]); }
-            // Main counterclockwise
-            faceVertices = CreateFlatFaceVertices(anchorBGroundPosPlus, anchorAGroundPosPlus, anchorBTopPosPlus, anchorATopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(1, i, faceVertices[i]); }
-            // Top
-            faceVertices = CreateFlatFaceVertices(anchorATopPosMin, anchorBTopPosMin, anchorATopPosPlus, anchorBTopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(2, i, faceVertices[i]); }
-            // Bottom
-            faceVertices = CreateFlatFaceVertices(anchorBGroundPosMin, anchorAGroundPosMin, anchorBGroundPosPlus, anchorAGroundPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(2, i + 4, faceVertices[i]); }
-            // AnchorA
-            faceVertices = CreateFlatFaceVertices(anchorAGroundPosPlus, anchorAGroundPosMin, anchorATopPosPlus, anchorATopPosMin);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(2, i + 8, faceVertices[i]); }
-            // AnchorB
-            faceVertices = CreateFlatFaceVertices(anchorBGroundPosMin, anchorBGroundPosPlus, anchorBTopPosMin, anchorBTopPosPlus);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(2, i + 12, faceVertices[i]); }
-
-            // Create the triangles
-            for (int i = 0; i < 2; i++)
-            {
-                stream.SetTriangle(i, 0, new int3(0, 3, 1));
-                stream.SetTriangle(i, 1, new int3(0, 2, 3));
-            }
-            for (int t = 0, v = 0; t < triangleCounts[2]; t += 2, v += 4)
-            {
-                stream.SetTriangle(2, t, new int3(v, v + 3, v + 1));
-                stream.SetTriangle(2, t + 1, new int3(v, v + 2, v + 3));
-            }
-
-            // Apply and adjust.
-            Mesh.ApplyAndDisposeWritableMeshData(wallMeshDataArray, wallMesh);
-
-            return wallMesh;
-        }
-
-        private static Mesh GenerateFlatWallMesh(float3 anchorAPos, float3 anchorATopPos, float3 anchorBPos, float3 anchorBTopPos)
-        {
-            // Counts
-            int submeshCount = 2;
-
-            NativeArray<int> vertexCounts = new NativeArray<int>(2, Allocator.Temp);
-            vertexCounts[0] = 4;
-            vertexCounts[1] = 4;
-
-            NativeArray<int> triangleCounts = new NativeArray<int>(2, Allocator.Temp);
-            triangleCounts[0] = 2;
-            triangleCounts[1] = 2;
-
-            // Set up the mesh and stream.
-            Mesh wallMesh = new Mesh { name = "WallMesh" };
-            wallMesh.Clear();
-
-            Mesh.MeshDataArray wallMeshDataArray = Mesh.AllocateWritableMeshData(1);
-            Mesh.MeshData wallMeshData = wallMeshDataArray[0];
-
-            var stream = new MultimeshStreamUInt16();
-            stream.Setup(wallMeshData, new Bounds(), submeshCount, vertexCounts, triangleCounts);
-
-            // Create the vertices
-            // Main clockwise
-            Vertex[] faceVertices = CreateFlatFaceVertices(anchorAPos, anchorBPos, anchorATopPos, anchorBTopPos);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(0, i, faceVertices[i]); }
-            // Main counterclockwise
-            faceVertices = CreateFlatFaceVertices(anchorBPos, anchorAPos, anchorBTopPos, anchorATopPos);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(1, i, faceVertices[i]); }
-
-            // Create the triangles
-            for (int i = 0; i < submeshCount; i++)
-            {
-                stream.SetTriangle(i, 0, new int3(0, 3, 1));
-                stream.SetTriangle(i, 1, new int3(0, 2, 3));
-            }
-
-            // Apply and adjust.
-            Mesh.ApplyAndDisposeWritableMeshData(wallMeshDataArray, wallMesh);
-
-            return wallMesh;
-        }
-
-        private static Mesh GenerateWallColliderMesh(float3 anchorAPos, float3 anchorATopPos, float3 anchorBPos, float3 anchorBTopPos)
-        {
-            // Counts
-            int vertexCount = 8;
-            int triangleCount = 4;
-            int indexCount = 4 * 3;
-
-            // Set up the mesh and stream.
-            Mesh colliderMesh = new Mesh { name = "WallColliderMesh" };
-            colliderMesh.Clear();
-
-            Mesh.MeshDataArray colliderMeshDataArray = Mesh.AllocateWritableMeshData(1);
-            Mesh.MeshData colliderMeshData = colliderMeshDataArray[0];
-
-            var stream = new MeshStreamUInt16();
-            stream.Setup(colliderMeshData, new Bounds(), vertexCount, indexCount);
-
-            // Create the vertices
-            // Main clockwise
-            Vertex[] faceVertices = CreateFlatFaceVertices(anchorAPos, anchorBPos, anchorATopPos, anchorBTopPos);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i, faceVertices[i]); }
-            // Main counterclockwise
-            faceVertices = CreateFlatFaceVertices(anchorBPos, anchorAPos, anchorBTopPos, anchorATopPos);
-            for (int i = 0; i < faceVertices.Length; i++) { stream.SetVertex(i+4, faceVertices[i]); }
-
-            // Create the triangles
-            for (int t = 0, v = 0; t < triangleCount; t += 2, v += 4)
-            {
-                stream.SetTriangle(t, new int3(v, v + 3, v + 1));
-                stream.SetTriangle(t + 1, new int3(v, v + 2, v + 3));
-            }
-
-            // Apply and adjust.
-            Mesh.ApplyAndDisposeWritableMeshData(colliderMeshDataArray, colliderMesh);
-
-            return colliderMesh;
-        }
-
-        private static Bounds GenerateWallMeshBounds(Vector3 anchorAPos, Vector3 anchorATopPos, Vector3 anchorBPos, Vector3 anchorBTopPos)
-        {
-            // Calculate the bounds' necessary data.
-            Vector3 anchorAMidPos = (anchorAPos + anchorATopPos) / 2f;
-            Vector3 anchorBMidPos = (anchorBPos + anchorBTopPos) / 2f;
-
-            Vector3 boundsCenter = Vector3.Lerp(anchorAMidPos, anchorBMidPos, 0.5f);
-            float boundsSizeX = math.abs(anchorAPos.x - anchorBPos.x);
-            float boundsSizeY = math.abs(math.max(anchorATopPos.y, anchorBTopPos.y) - math.min(anchorAPos.y, anchorBPos.y));
-            float boundsSizeZ = math.abs(anchorAPos.z - anchorBPos.z);
-            Vector3 boundsSize = new Vector3(boundsSizeX, boundsSizeY, boundsSizeZ);
-
-            return new Bounds(boundsCenter, boundsSize);
-        }
-
-        // TODO: decide whether to move this for reuse elsewhere.
-        private static Vertex[] CreateFlatFaceVertices(float3 posZeroZero, float3 posOneZero, float3 posZeroOne, float3 posOneOne)
-        {
-            // Calculate normal and tangent.
-            (float3, half4) normalAndTangent = MathHelpers.CalculateTrisNormalAndTangent(posZeroZero, posOneZero, posOneOne);
-            //Vector3 faceTangent =  
-
-            // Calculate UV composants.
-            half uvDistanceHorizontal = (half)math.distance(posZeroZero, posOneZero);
-            half uvDistanceVerticalZero = (half)math.distance(posZeroZero, posZeroOne);
-            half uvDistanceVerticalOne = (half)math.distance(posOneZero, posOneOne);
-
-            // Create the vertices.
-            Vertex[] vertices = new Vertex[4];
-
-            vertices[0] = new Vertex
-            {
-                position = posZeroZero,
-                normal = normalAndTangent.Item1,
-                tangent = normalAndTangent.Item2,
-                texCoord0 = new half2(half.zero, half.zero)
-            };
-            vertices[1] = new Vertex
-            {
-                position = posOneZero,
-                normal = normalAndTangent.Item1,
-                tangent = normalAndTangent.Item2,
-                texCoord0 = new half2(uvDistanceHorizontal, half.zero)
-            };
-            vertices[2] = new Vertex
-            {
-                position = posZeroOne,
-                normal = normalAndTangent.Item1,
-                tangent = normalAndTangent.Item2,
-                texCoord0 = new half2(half.zero, uvDistanceVerticalZero)
-            };
-            vertices[3] = new Vertex
-            {
-                position = posOneOne,
-                normal = normalAndTangent.Item1,
-                tangent = normalAndTangent.Item2,
-                texCoord0 = new half2(uvDistanceHorizontal, uvDistanceVerticalOne)
-            };
-
-            return vertices;
-        }
-
 
 
 #if UNITY_EDITOR

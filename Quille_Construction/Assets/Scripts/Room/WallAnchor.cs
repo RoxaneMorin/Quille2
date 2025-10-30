@@ -46,9 +46,10 @@ namespace Building
             get { return height; }
             set
             {
-                if (value < 0)
+                // Have a constant for the lowest value allowed?
+                if (value < 0.1f)
                 {
-                    height = 0;
+                    height = 0.1f;
                 }
                 else
                 {
@@ -240,8 +241,7 @@ namespace Building
                 if (targetConnection != null)
                 {
                     int index = connections.FindIndex(x => x == targetConnection);
-                    int prevIndex = (index - 1) % connections.Count;
-                    return connections[prevIndex];
+                    return connections[(index - 1 + connections.Count) % connections.Count];
                 }
             }
             // Else,
@@ -256,8 +256,7 @@ namespace Building
                 if (targetConnection != null)
                 {
                     int index = connections.FindIndex(x => x == targetConnection);
-                    int nextIndex = (index + 1) % connections.Count;
-                    return connections[nextIndex];
+                    return connections[(index + 1) % connections.Count];
                 }
             }
             // Else,
@@ -273,8 +272,7 @@ namespace Building
                 if (targetConnection != null)
                 {
                     int index = connections.FindIndex(x => x == targetConnection);
-                    int prevIndex = (index - 1) % connections.Count;
-                    return connections[prevIndex];
+                    return connections[(index - 1 + connections.Count) % connections.Count];
                 }
             }
             // Else,
@@ -289,8 +287,7 @@ namespace Building
                 if (targetConnection != null)
                 {
                     int index = connections.FindIndex(x => x == targetConnection);
-                    int nextIndex = (index + 1) % connections.Count;
-                    return connections[nextIndex];
+                    return connections[(index + 1) % connections.Count];
                 }
             }
             // Else,
