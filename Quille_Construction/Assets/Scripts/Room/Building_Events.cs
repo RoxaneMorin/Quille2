@@ -14,4 +14,4 @@ namespace Building
     public delegate void WallAnchorClicked(WallAnchor targetAnchor, PointerEventData.InputButton clickType);
     // A new wall anchor has been selected by the wall manager.
     public delegate void WallAnchorSelected(WallAnchor selectedAnchor);
-}
+} 

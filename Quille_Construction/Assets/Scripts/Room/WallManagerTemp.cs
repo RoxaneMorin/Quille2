@@ -77,13 +77,13 @@ namespace Building
                     SelectWallAnchor(null);
                 }
             }
-            else if (clickType == PointerEventData.InputButton.Right)
-            {
-                if (targetAnchor != selectedAnchor && selectedAnchor != null && !targetAnchor.IsConnectedTo(selectedAnchor))
-                {
-                    CreateWallSegment(targetAnchor, selectedAnchor);
-                }
-            }
+            //else if (clickType == PointerEventData.InputButton.Right)
+            //{
+            //    if (targetAnchor != selectedAnchor && selectedAnchor != null && !targetAnchor.IsConnectedTo(selectedAnchor))
+            //    {
+            //        CreateWallSegment(targetAnchor, selectedAnchor);
+            //    }
+            //}
         }
 
 
@@ -92,13 +92,6 @@ namespace Building
         {
             OnWallAnchorSelected?.Invoke(targetAnchor);
             selectedAnchor = targetAnchor;
-
-            //// Test finding new cycles
-            //if (selectedAnchor != null)
-            //{
-            //    //FindCycles(selectedAnchor);
-            //    //FindCordlessCycles();
-            //}
         }
 
 
@@ -154,8 +147,10 @@ namespace Building
 
         private void CreateSingleWallSegment(WallAnchor anchorA, WallAnchor anchorB)
         {
+            highestSegmentID++;
+            
             WallSegment newSegment = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
-            newSegment.Init(anchorA, anchorB);
+            newSegment.Init(highestSegmentID, anchorA, anchorB);
 
             anchorA.AddConnection(newSegment);
             anchorB.AddConnection(newSegment);
@@ -167,11 +162,13 @@ namespace Building
 
         private void SplitWallSegment(WallSegment targetSegment, WallAnchor centralAnchor)
         {
+            highestSegmentID++;
+
             WallSegment newSegmentA = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
-            newSegmentA.Init(targetSegment.AnchorA, centralAnchor, targetSegment.Thickness);
+            newSegmentA.Init(targetSegment.ID, targetSegment.AnchorA, centralAnchor, targetSegment.Thickness);
            
             WallSegment newSegmentB = Instantiate(wallSegmentPrefab, transform.position, Quaternion.identity).GetComponent<WallSegment>();
-            newSegmentB.Init(centralAnchor, targetSegment.AnchorB, targetSegment.Thickness);
+            newSegmentB.Init(highestSegmentID, centralAnchor, targetSegment.AnchorB, targetSegment.Thickness);
 
             targetSegment.AnchorA.ReplaceConnection(targetSegment, centralAnchor, newSegmentA);
             targetSegment.AnchorB.ReplaceConnection(targetSegment, centralAnchor, newSegmentB);
@@ -227,225 +224,225 @@ namespace Building
         // Find rooms/cycles
 
         
-        static bool IsPathNew(List<List<WallAnchor>> cycles, List<WallAnchor> path)
-        {
-            return !cycles.Any(cycle => cycle.SequenceEqual(path));
-        }
+        //static bool IsPathNew(List<List<WallAnchor>> cycles, List<WallAnchor> path)
+        //{
+        //    return !cycles.Any(cycle => cycle.SequenceEqual(path));
+        //}
 
-        static List<WallAnchor> RotatePathToRootNode(List<WallAnchor> path, WallAnchor rootNode)
-        {
-            if (path.Count == 0)
-            {
-                return path;
-            }
+        //static List<WallAnchor> RotatePathToRootNode(List<WallAnchor> path, WallAnchor rootNode)
+        //{
+        //    if (path.Count == 0)
+        //    {
+        //        return path;
+        //    }
 
-            int rootIndex = path.IndexOf(rootNode);
-            return path.Skip(rootIndex).Concat(path.Take(rootIndex)).ToList();
-        }
-        static List<WallAnchor> InvertPathAroundRootNode(List<WallAnchor> path, WallAnchor rootNode)
-        {
-            if (path.Count == 0)
-            {
-                return path;
-            }
+        //    int rootIndex = path.IndexOf(rootNode);
+        //    return path.Skip(rootIndex).Concat(path.Take(rootIndex)).ToList();
+        //}
+        //static List<WallAnchor> InvertPathAroundRootNode(List<WallAnchor> path, WallAnchor rootNode)
+        //{
+        //    if (path.Count == 0)
+        //    {
+        //        return path;
+        //    }
 
-            return RotatePathToRootNode(Enumerable.Reverse(path).ToList(), rootNode);
-        }
+        //    return RotatePathToRootNode(Enumerable.Reverse(path).ToList(), rootNode);
+        //}
 
-        static List<WallAnchor> RotatePathToLowestID(List<WallAnchor> path)
-        {
-            if (path.Count == 0)
-            {
-                return path;
-            }
+        //static List<WallAnchor> RotatePathToLowestID(List<WallAnchor> path)
+        //{
+        //    if (path.Count == 0)
+        //    {
+        //        return path;
+        //    }
 
-            int lowestIDsIndex = path.IndexOf(path.Min());
-            return path.Skip(lowestIDsIndex).Concat(path.Take(lowestIDsIndex)).ToList();
-        }
+        //    int lowestIDsIndex = path.IndexOf(path.Min());
+        //    return path.Skip(lowestIDsIndex).Concat(path.Take(lowestIDsIndex)).ToList();
+        //}
 
-        static List<WallAnchor> InvertPathAroundLowestID(List<WallAnchor> path)
-        {
-            if (path.Count == 0)
-            {
-                return path;
-            }
+        //static List<WallAnchor> InvertPathAroundLowestID(List<WallAnchor> path)
+        //{
+        //    if (path.Count == 0)
+        //    {
+        //        return path;
+        //    }
 
-            return RotatePathToLowestID(Enumerable.Reverse(path).ToList());
-        }
+        //    return RotatePathToLowestID(Enumerable.Reverse(path).ToList());
+        //}
 
-        private List<List<WallAnchor>> PruneCordedCycles(List<List<WallAnchor>> cycles)
-        {
-            List<List<WallAnchor>> prunedCycles = new List<List<WallAnchor>>();
+        //private List<List<WallAnchor>> PruneCordedCycles(List<List<WallAnchor>> cycles)
+        //{
+        //    List<List<WallAnchor>> prunedCycles = new List<List<WallAnchor>>();
 
-            foreach (List<WallAnchor> cycle in cycles)
-            {
-                if (!IsCycleCorded(cycle))
-                {
-                    prunedCycles.Add(cycle);
-                }
-            }
+        //    foreach (List<WallAnchor> cycle in cycles)
+        //    {
+        //        if (!IsCycleCorded(cycle))
+        //        {
+        //            prunedCycles.Add(cycle);
+        //        }
+        //    }
 
-            return prunedCycles;
-        }
+        //    return prunedCycles;
+        //}
 
-        private bool IsCycleCorded(List<WallAnchor> cycle)
-        {
-            foreach (WallAnchor node in cycle)
-            {
-                if (node.Connections.Count(connection => cycle.Contains(connection.ConnectedAnchor)) > 2)
-                {
-                    return true;
-                }
-            }
+        //private bool IsCycleCorded(List<WallAnchor> cycle)
+        //{
+        //    foreach (WallAnchor node in cycle)
+        //    {
+        //        if (node.Connections.Count(connection => cycle.Contains(connection.ConnectedAnchor)) > 2)
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
-
-
-        // TODO: verify/test which is more efficient.
+        //    return false;
+        //}
 
 
-        // https://www.geeksforgeeks.org/print-all-the-cycles-in-an-undirected-graph/
-        private void FindCycles(WallAnchor rootNode)
-        {
-            List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
-            List<WallAnchor> path = new List<WallAnchor>();
-
-            FindCyclesRecursive(cycles, path, rootNode);
-
-            if (cycles.Count > 0)
-            {
-                List<List<WallAnchor>> prunedCycles = PruneCordedCycles(cycles);
-
-                string infoString = string.Format("Cycles found for rootNode {0}:", rootNode.ID);
-                foreach (List<WallAnchor> pathFound in cycles)
-                {
-                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
-                }
-
-                infoString += string.Format("\nCordless cycles found for rootNode {0}:", rootNode.ID);
-                foreach (List<WallAnchor> pathFound in prunedCycles)
-                {
-                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
-                }
-
-                Debug.Log(infoString);
-            }
-        }
-        private void FindCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode)
-        {
-            List<WallAnchor> updatedPath = path.Concat(new[] { currentNode }).ToList();
-            //Debug.Log(string.Format("The path so far: {0}", string.Join(", ", updatedPath.Select(node => node.ID))));
-
-            foreach (WallConnection connection in currentNode.Connections)
-            {
-                if (!path.Contains(connection.ConnectedAnchor))
-                {
-                    FindCyclesRecursive(cycles, updatedPath, connection.ConnectedAnchor);
-                }
-                else if (updatedPath.Count > 2 && connection.ConnectedAnchor == updatedPath[0])
-                {
-                    // We found a cycle!
-
-                    // TODO: Rotate path to the smallest ID too if we search all nodes instead of node by node.
-                    List<WallAnchor> invertedPath = InvertPathAroundRootNode(updatedPath, connection.ConnectedAnchor);
-
-                    if (IsPathNew(cycles, updatedPath) && IsPathNew(cycles, invertedPath))
-                    {
-                        cycles.Add(updatedPath);
-                    }
-                }
-            }
-        }
+        //// TODO: verify/test which is more efficient.
 
 
-        // Inspired by the algorithm described in the paper "Identification of chordless cycles in ecological networks"
-        // http://richard.baltensp.home.hefr.ch/Publications/20.pdf
-        private void FindCordlessCycles()
-        {
-            List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
+        //// https://www.geeksforgeeks.org/print-all-the-cycles-in-an-undirected-graph/
+        //private void FindCycles(WallAnchor rootNode)
+        //{
+        //    List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
+        //    List<WallAnchor> path = new List<WallAnchor>();
 
-            foreach (WallAnchor node in areaWallAnchors)
-            {
-                // Create a new path containing only the starter node.
-                FindCordlessCyclesRecursive(cycles, new List<WallAnchor>() { node });
-            }
+        //    FindCyclesRecursive(cycles, path, rootNode);
 
-            if (cycles.Count > 0)
-            {
-                string infoString = string.Format("Cycles found:");
-                foreach (List<WallAnchor> pathFound in cycles)
-                {
-                    infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
-                }
+        //    if (cycles.Count > 0)
+        //    {
+        //        List<List<WallAnchor>> prunedCycles = PruneCordedCycles(cycles);
 
-                Debug.Log(infoString);
-            }
-        }
+        //        string infoString = string.Format("Cycles found for rootNode {0}:", rootNode.ID);
+        //        foreach (List<WallAnchor> pathFound in cycles)
+        //        {
+        //            infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
+        //        }
 
-        private void FindCordlessCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> previousPath)
-        {
-            // Vend: the path's current last node.
-            WallAnchor vEnd = previousPath.Last();
-            foreach (WallConnection adjacentConnection in vEnd.Connections)
-            {
-                WallAnchor vJ = adjacentConnection.ConnectedAnchor;
+        //        infoString += string.Format("\nCordless cycles found for rootNode {0}:", rootNode.ID);
+        //        foreach (List<WallAnchor> pathFound in prunedCycles)
+        //        {
+        //            infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
+        //        }
 
-                // Select the first adjacent node Vj of the path's last node. Vj should be bigger than vStart, and absent from the current path.
-                if (vJ.ID > previousPath[0].ID && !previousPath.Contains(vJ))
-                {
-                    // If vJ is valid, add it to the path.
-                    List<WallAnchor> path = previousPath.Concat(new[] { vJ }).ToList();
+        //        Debug.Log(infoString);
+        //    }
+        //}
+        //private void FindCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> path, WallAnchor currentNode)
+        //{
+        //    List<WallAnchor> updatedPath = path.Concat(new[] { currentNode }).ToList();
+        //    //Debug.Log(string.Format("The path so far: {0}", string.Join(", ", updatedPath.Select(node => node.ID))));
 
-                    // If path.Count = 2, recursive call.
+        //    foreach (WallConnection connection in currentNode.Connections)
+        //    {
+        //        if (!path.Contains(connection.ConnectedAnchor))
+        //        {
+        //            FindCyclesRecursive(cycles, updatedPath, connection.ConnectedAnchor);
+        //        }
+        //        else if (updatedPath.Count > 2 && connection.ConnectedAnchor == updatedPath[0])
+        //        {
+        //            // We found a cycle!
 
-                    // If path.Count = 3, check if Vend (which is now Vj) and Vstart are connected.
-                    if (path.Count == 3 && vJ.IsConnectedTo(path[0]))
-                    {
-                        // If they are, output the cycle and continue.
-                        List<WallAnchor> rotatedPath = RotatePathToLowestID(path);
-                        List<WallAnchor> invertedPath = InvertPathAroundLowestID(path);
+        //            // TODO: Rotate path to the smallest ID too if we search all nodes instead of node by node.
+        //            List<WallAnchor> invertedPath = InvertPathAroundRootNode(updatedPath, connection.ConnectedAnchor);
 
-                        if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
-                        {
-                            cycles.Add(rotatedPath);
-                        }
-                        continue;
-                    }
-                    // If they are not, recursive call.
+        //            if (IsPathNew(cycles, updatedPath) && IsPathNew(cycles, invertedPath))
+        //            {
+        //                cycles.Add(updatedPath);
+        //            }
+        //        }
+        //    }
+        //}
 
-                    // If path.Count > 3, 
-                    else if (path.Count > 3)
-                    {
-                        // Check if any non-adjacent vertices are connected (ignoring vStart).
-                        if (previousPath.Skip(1).Take(previousPath.Count - 2).Any(node => vJ.IsConnectedTo(node)))
-                        {
-                            // TODO: try an extra level of depth here?
 
-                            // If any, continue.
-                            continue;
-                        }
+        //// Inspired by the algorithm described in the paper "Identification of chordless cycles in ecological networks"
+        //// http://richard.baltensp.home.hefr.ch/Publications/20.pdf
+        //private void FindCordlessCycles()
+        //{
+        //    List<List<WallAnchor>> cycles = new List<List<WallAnchor>>();
 
-                        // Else, check if Vend and Vstart are connected.
-                        if (vJ.IsConnectedTo(path[0]))
-                        {
-                            // If they are, output the cycle and continue.
-                            List<WallAnchor> rotatedPath = RotatePathToLowestID(path);
-                            List<WallAnchor> invertedPath = InvertPathAroundLowestID(path);
+        //    foreach (WallAnchor node in areaWallAnchors)
+        //    {
+        //        // Create a new path containing only the starter node.
+        //        FindCordlessCyclesRecursive(cycles, new List<WallAnchor>() { node });
+        //    }
 
-                            if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
-                            {
-                                cycles.Add(rotatedPath);
-                            }
-                            continue;
-                        }
-                        // If they are not, recursive call.
-                    }
+        //    if (cycles.Count > 0)
+        //    {
+        //        string infoString = string.Format("Cycles found:");
+        //        foreach (List<WallAnchor> pathFound in cycles)
+        //        {
+        //            infoString += string.Format("\n{0}", string.Join(", ", pathFound.Select(node => node.ID)));
+        //        }
 
-                    FindCordlessCyclesRecursive(cycles, path);
-                }
-            }
-        }
+        //        Debug.Log(infoString);
+        //    }
+        //}
+
+        //private void FindCordlessCyclesRecursive(List<List<WallAnchor>> cycles, List<WallAnchor> previousPath)
+        //{
+        //    // Vend: the path's current last node.
+        //    WallAnchor vEnd = previousPath.Last();
+        //    foreach (WallConnection adjacentConnection in vEnd.Connections)
+        //    {
+        //        WallAnchor vJ = adjacentConnection.ConnectedAnchor;
+
+        //        // Select the first adjacent node Vj of the path's last node. Vj should be bigger than vStart, and absent from the current path.
+        //        if (vJ.ID > previousPath[0].ID && !previousPath.Contains(vJ))
+        //        {
+        //            // If vJ is valid, add it to the path.
+        //            List<WallAnchor> path = previousPath.Concat(new[] { vJ }).ToList();
+
+        //            // If path.Count = 2, recursive call.
+
+        //            // If path.Count = 3, check if Vend (which is now Vj) and Vstart are connected.
+        //            if (path.Count == 3 && vJ.IsConnectedTo(path[0]))
+        //            {
+        //                // If they are, output the cycle and continue.
+        //                List<WallAnchor> rotatedPath = RotatePathToLowestID(path);
+        //                List<WallAnchor> invertedPath = InvertPathAroundLowestID(path);
+
+        //                if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
+        //                {
+        //                    cycles.Add(rotatedPath);
+        //                }
+        //                continue;
+        //            }
+        //            // If they are not, recursive call.
+
+        //            // If path.Count > 3, 
+        //            else if (path.Count > 3)
+        //            {
+        //                // Check if any non-adjacent vertices are connected (ignoring vStart).
+        //                if (previousPath.Skip(1).Take(previousPath.Count - 2).Any(node => vJ.IsConnectedTo(node)))
+        //                {
+        //                    // TODO: try an extra level of depth here?
+
+        //                    // If any, continue.
+        //                    continue;
+        //                }
+
+        //                // Else, check if Vend and Vstart are connected.
+        //                if (vJ.IsConnectedTo(path[0]))
+        //                {
+        //                    // If they are, output the cycle and continue.
+        //                    List<WallAnchor> rotatedPath = RotatePathToLowestID(path);
+        //                    List<WallAnchor> invertedPath = InvertPathAroundLowestID(path);
+
+        //                    if (IsPathNew(cycles, rotatedPath) && IsPathNew(cycles, invertedPath))
+        //                    {
+        //                        cycles.Add(rotatedPath);
+        //                    }
+        //                    continue;
+        //                }
+        //                // If they are not, recursive call.
+        //            }
+
+        //            FindCordlessCyclesRecursive(cycles, path);
+        //        }
+        //    }
+        //}
 
         // TODO: clean up function to remove cycles cut through by indirect connections.
         // Aparently these aren't considered cords.

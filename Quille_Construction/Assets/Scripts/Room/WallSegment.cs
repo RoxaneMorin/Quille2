@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -13,6 +13,8 @@ namespace Building
     public partial class WallSegment : MonoBehaviour
     {
         // VARIABLES/PARAMETERS
+        [SerializeField] private int id;
+
         [SerializeField] private WallAnchor anchorA;
         [SerializeField] private WallAnchor anchorB;
         // These should never be null.
@@ -46,8 +48,10 @@ namespace Building
 
         // TODO: track materials, so they can be adjusted when the wall is thick vs thicknessless?
 
-        
+
         // PROPERTIES AND OTHER ACCESSORS
+        public int ID { get { return id; } }
+
         public WallAnchor AnchorA
         {
             get { return anchorA; }
@@ -115,9 +119,13 @@ namespace Building
             get { return thickness; }
             set
             {
-                if (value < 0)
+                if (value < Constants_Building.MIX_WALL_SEGMENT_THICKNESS)
                 {
-                    thickness = 0;
+                    thickness = Constants_Building.MIX_WALL_SEGMENT_THICKNESS;
+                }
+                else if (value > Constants_Building.MAX_WALL_SEGMENT_THICKNESS)
+                {
+                    thickness = Constants_Building.MAX_WALL_SEGMENT_THICKNESS;
                 }
                 else
                 {
@@ -169,16 +177,17 @@ namespace Building
         // METHODS
 
         // INIT
-        public void Init(WallAnchor anchorA, WallAnchor anchorB, float thickness = 0.1f)
+        public void Init(int id, WallAnchor anchorA, WallAnchor anchorB, float thickness = 0.1f)
         {
             // Name the game object.
-            gameObject.name = string.Format("WallSegment ({0} <-> {1})", anchorA.ID, anchorB.ID);
+            gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
 
             // Set the anchor references.
             this.anchorA = anchorA;
             this.anchorB = anchorB;
 
             // Adjust other parameters.
+            this.id = id;
             this.thickness = thickness;
 
             // Fetch the mesh components and generate the mesh.

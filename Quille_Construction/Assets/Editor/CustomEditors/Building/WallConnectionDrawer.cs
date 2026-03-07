@@ -7,14 +7,14 @@ using UnityEngine;
 public class WallConnectionDrawer : PropertyDrawer
 {
     SerializedProperty connectedWallSegment;
-    SerializedProperty connectedAnchor;
+    SerializedProperty connectedWallAnchor;
     SerializedProperty angle;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Change the label text to the connecterAnchor's name.
-        connectedAnchor = property.FindPropertyRelative("connectedAnchor");
-        label.text += string.Format(" ({0})", connectedAnchor.objectReferenceValue);
+        connectedWallAnchor = property.FindPropertyRelative("connectedWallAnchor");
+        label.text += string.Format(" ({0})", connectedWallAnchor.objectReferenceValue);
 
         EditorGUI.BeginProperty(position, label, property);
 
@@ -32,7 +32,7 @@ public class WallConnectionDrawer : PropertyDrawer
             Rect newPosition = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight * 1.25f, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.PropertyField(newPosition, connectedWallSegment);
             newPosition.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(newPosition, connectedAnchor);
+            EditorGUI.PropertyField(newPosition, connectedWallAnchor);
             newPosition.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(newPosition, angle);
         }

@@ -243,9 +243,9 @@ GameObject:
   - component: {fileID: 717887572}
   - component: {fileID: 717887571}
   - component: {fileID: 717887570}
-  - component: {fileID: 717887574}
   - component: {fileID: 717887575}
   - component: {fileID: 717887576}
+  - component: {fileID: 717887577}
   m_Layer: 0
   m_Name: GroundTemp
   m_TagString: Untagged
@@ -340,25 +340,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &717887574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 717887569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c515f97626fd1b4187769eb2ef6cdd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  areaWallAnchors: []
-  areaWallSegments: []
-  selectedAnchor: {fileID: 0}
-  wallAnchorPrefab: {fileID: 1964239970475636204, guid: b65216333a5ba934da94520bd9e6cb41,
-    type: 3}
-  wallSegmentPrefab: {fileID: 7096292235776928402, guid: 1729d6d6eb503ea43a7e12c7981b5128,
-    type: 3}
 --- !u!114 &717887575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,6 +375,27 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!114 &717887577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717887569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5c26966888a8b4189829bff605d8e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallAnchorPrefab: {fileID: 1964239970475636204, guid: b65216333a5ba934da94520bd9e6cb41, type: 3}
+  wallSegmentPrefab: {fileID: 7096292235776928402, guid: 1729d6d6eb503ea43a7e12c7981b5128, type: 3}
+  previewObjectPrefab: {fileID: 1964239970475636204, guid: 3186712514b4020468a94025a4440766, type: 3}
+  highestAnchorID: -1
+  highestSegmentID: -1
+  previewObject: {fileID: 0}
+  areaWallAnchors: []
+  areaWallSegments: []
+  selectedAnchor: {fileID: 0}
 --- !u!1 &942657493
 GameObject:
   m_ObjectHideFlags: 0

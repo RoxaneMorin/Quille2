@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 namespace Building
 {
-    public class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler
+    public class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler, ISelectable
     {
         // VARIABLES/PARAMETERS
         [SerializeField] private int id; 
@@ -22,13 +22,13 @@ namespace Building
         [SerializeField] private List<WallConnection> connections;
         [SerializeField] private Dictionary<WallAnchor, WallConnection> connectionsFromAnchorsDict;
         [SerializeField] private Dictionary<WallSegment, WallConnection> connectionsFromSegmentsDict;
-        // TODO: these don't need to be serialized, switch that around once testing is done. Could use a hash table?
+        // Idea: since walls physically exist now, can we merge them with connections?
         
 
         [SerializeField] private Renderer myRenderer;
         [SerializeField] private Material myMaterial;
 
-        [SerializeField] private Color colourDefault = Color.black;
+        [SerializeField] private Color colourDefault = Color.white;
         [SerializeField] private Color colourSelected = Color.blue;
 
 
@@ -38,18 +38,21 @@ namespace Building
 
         public Vector3 GroundPosition { get { return gameObject.transform.position; } }
         public Vector3 TopPosition { get { return gameObject.transform.position + new Vector3() { y = height }; } }
-        public float3 GroundPositionF { get { return (float3)gameObject.transform.position; } }
-        public float3 TopPositionF { get { return (float3)(gameObject.transform.position + new Vector3() { y = height }); } }
+        public float3 GroundPositionF { get { return (float3)GroundPosition; } }
+        public float3 TopPositionF { get { return (float3)TopPosition; } }
 
         public float Height
         {
             get { return height; }
             set
             {
-                // Have a constant for the lowest value allowed?
-                if (value < 0.1f)
+                if (value < Constants_Building.MIN_WALL_ANCHOR_HEIGHT)
                 {
-                    height = 0.1f;
+                    height = Constants_Building.MIN_WALL_ANCHOR_HEIGHT;
+                }
+                else if(value > Constants_Building.MAX_WALL_ANCHOR_HEIGHT)
+                {
+                    height = Constants_Building.MAX_WALL_ANCHOR_HEIGHT;
                 }
                 else
                 {
@@ -91,11 +94,12 @@ namespace Building
             // Set parameters.
             this.id = id;
             this.height = height;
-            UpdateGameObjectHeight();
 
             this.connections = new List<WallConnection>();
             this.connectionsFromAnchorsDict = new Dictionary<WallAnchor, WallConnection>();
             this.connectionsFromSegmentsDict = new Dictionary<WallSegment, WallConnection>();
+
+            OnParameterUpdate();
         }
 
 
@@ -104,11 +108,11 @@ namespace Building
         {
             if (selectedAnchor == this)
             {
-                myMaterial.color = colourSelected;
+                Select();
             }
             else
             {
-                myMaterial.color = colourDefault;
+                Unselect();
             }
         }
 
@@ -120,7 +124,7 @@ namespace Building
             // Notify the connected wall segments.
             foreach (WallConnection connection in connections)
             {
-                WallSegment segment = connection.ConnectedWallSegment;
+                WallSegment segment = connection.ConnectedSegment;
                 segment.OnParameterUpdate();
             }
         }
@@ -144,7 +148,7 @@ namespace Building
         private void DeleteConnection(WallConnection targetConnection)
         {
             connectionsFromAnchorsDict.Remove(targetConnection.ConnectedAnchor);
-            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedWallSegment);
+            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedSegment);
             connections.Remove(targetConnection);
         }
         public void DeleteConnection(WallAnchor targetAnchor)
@@ -167,10 +171,10 @@ namespace Building
         private void EditConnection(WallConnection targetConnection, WallAnchor newAnchor, WallSegment newSegment, bool recalculateAngle = false)
         {
             connectionsFromAnchorsDict.Remove(targetConnection.ConnectedAnchor);
-            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedWallSegment);
+            connectionsFromSegmentsDict.Remove(targetConnection.ConnectedSegment);
 
             targetConnection.ConnectedAnchor = newAnchor;
-            targetConnection.ConnectedWallSegment = newSegment;
+            targetConnection.ConnectedSegment = newSegment;
 
             connectionsFromAnchorsDict.Add(newAnchor, targetConnection);
             connectionsFromSegmentsDict.Add(newSegment, targetConnection);
@@ -324,7 +328,7 @@ namespace Building
             WallConnection? prevConnection = GetConnectionPreceding(targetSegment);
             if (prevConnection != null)
             {
-                return prevConnection.ConnectedWallSegment;
+                return prevConnection.ConnectedSegment;
             }
             else
             {
@@ -336,7 +340,7 @@ namespace Building
             WallConnection? nextConnection = GetConnectionFollowing(targetSegment);
             if (nextConnection != null)
             {
-                return nextConnection.ConnectedWallSegment;
+                return nextConnection.ConnectedSegment;
             }
             else
             {
@@ -346,8 +350,15 @@ namespace Building
 
 
 
-
-       
+        // -> SELECTION
+        public void Select()
+        {
+            myMaterial.color = colourSelected;
+        }
+        public void Unselect()
+        {
+            myMaterial.color = colourDefault;
+        }
 
 
 

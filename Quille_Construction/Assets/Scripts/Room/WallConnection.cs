@@ -14,17 +14,17 @@ namespace Building
     public class WallConnection
     {
         // VARIABLES/PARAMETERS
-        [SerializeField] private WallAnchor ownerAnchor;
-        [SerializeField] private WallAnchor connectedAnchor;
+        [SerializeField] private WallAnchor ownerWallAnchor;
+        [SerializeField] private WallAnchor connectedWallAnchor;
         [SerializeField] private WallSegment connectedWallSegment;
         [SerializeField] private float angle;
         // Should we also track surrounding connections?
 
 
         // PROPERTIES
-        public WallAnchor OwnerAnchor { get { return ownerAnchor; } set { ownerAnchor = value; } }
-        public WallAnchor ConnectedAnchor { get { return connectedAnchor; } set { connectedAnchor = value; } }
-        public WallSegment ConnectedWallSegment { get { return connectedWallSegment; } set { connectedWallSegment = value; } }
+        public WallAnchor OwnerAnchor { get { return ownerWallAnchor; } set { ownerWallAnchor = value; } }
+        public WallAnchor ConnectedAnchor { get { return connectedWallAnchor; } set { connectedWallAnchor = value; } }
+        public WallSegment ConnectedSegment { get { return connectedWallSegment; } set { connectedWallSegment = value; } }
         
         public float Angle { get { return angle; } set { angle = value; } }
 
@@ -32,8 +32,8 @@ namespace Building
         // CONSTRUCTOR
         public WallConnection(WallAnchor ownerAnchor, WallAnchor connectedAnchor, WallSegment connectedWallSegment, float angle)
         {
-            this.ownerAnchor = ownerAnchor;
-            this.connectedAnchor = connectedAnchor;
+            this.ownerWallAnchor = ownerAnchor;
+            this.connectedWallAnchor = connectedAnchor;
             this.connectedWallSegment = connectedWallSegment;
             this.angle = angle;
         }
