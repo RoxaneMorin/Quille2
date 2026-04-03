@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 namespace Building
 {
-    public class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler, ISelectable
+    public partial class WallAnchor : MonoBehaviour, IComparable, IPointerDownHandler
     {
         // VARIABLES/PARAMETERS
         [SerializeField] private int id; 
@@ -66,8 +66,6 @@ namespace Building
         public List<WallConnection> Connections { get { return connections; } }
 
 
-
-        // TODO: editor tool to change the height.
 
 
 
@@ -133,9 +131,8 @@ namespace Building
         // UTILITY
 
         // -> CONNECTIONS
-        public void AddConnection(WallSegment connectedSegment)
+        public void AddConnection(WallAnchor connectedAnchor, WallSegment connectedSegment)
         {
-            WallAnchor connectedAnchor = connectedSegment.OtherAnchor(this);
             float newConnectionsAngle = MathHelpers.GetNormalizedAngleBetween(transform.position, connectedAnchor.transform.position);
             //Debug.Log(string.Format("{0}'s angle around {1}: {2}.", connectedAnchor, this, angle));
 
@@ -143,6 +140,11 @@ namespace Building
             connections.SortedInsert(newConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
             connectionsFromAnchorsDict.Add(connectedAnchor, newConnection);
             connectionsFromSegmentsDict.Add(connectedSegment, newConnection);
+        }
+        public void AddConnection(WallSegment connectedSegment)
+        {
+            WallAnchor connectedAnchor = connectedSegment.OtherAnchor(this);
+            AddConnection(connectedAnchor, connectedSegment);
         }
 
         private void DeleteConnection(WallConnection targetConnection)
@@ -187,6 +189,7 @@ namespace Building
                 connections.SortedInsert(targetConnection, (existingConnection, newConnection) => existingConnection.Angle > newConnection.Angle);
             }
         }
+
         public void ReplaceConnection(WallAnchor targetAnchor, WallAnchor newAnchor, WallSegment newSegment, bool recalculateAngle = false)
         {
             WallConnection targetConnection = connectionsFromAnchorsDict[targetAnchor];
@@ -203,6 +206,9 @@ namespace Building
                 EditConnection(targetConnection, newAnchor, newSegment, recalculateAngle);
             }
         }
+
+
+        
 
         public bool IsConnectedTo(WallAnchor targetAnchor)
         {
@@ -379,28 +385,6 @@ namespace Building
         {
             OnWallAnchorClicked?.Invoke(this, eventData.button);
         }
-
-
-        // TODO: should be compare with something other than the ID?
-        public int CompareTo(object otherObject)
-        {
-            if (otherObject == null)
-            {
-                return 1;
-            }
-
-            WallAnchor otherWallAnchor = otherObject as WallAnchor;
-            if (otherWallAnchor != null)
-            {
-                return this.ID.CompareTo(otherWallAnchor.ID);
-            }
-            else
-            {
-                throw new ArgumentException("The otherObject is not a WallAnchor.");
-            }
-        }
-
-
 
 
 #if DEBUG

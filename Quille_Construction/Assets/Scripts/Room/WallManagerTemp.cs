@@ -77,13 +77,13 @@ namespace Building
                     SelectWallAnchor(null);
                 }
             }
-            //else if (clickType == PointerEventData.InputButton.Right)
-            //{
-            //    if (targetAnchor != selectedAnchor && selectedAnchor != null && !targetAnchor.IsConnectedTo(selectedAnchor))
-            //    {
-            //        CreateWallSegment(targetAnchor, selectedAnchor);
-            //    }
-            //}
+            else if (clickType == PointerEventData.InputButton.Right)
+            {
+                if (targetAnchor != selectedAnchor && selectedAnchor != null && !targetAnchor.IsConnectedTo(selectedAnchor))
+                {
+                    CreateWallSegment(targetAnchor, selectedAnchor);
+                }
+            }
         }
 
 

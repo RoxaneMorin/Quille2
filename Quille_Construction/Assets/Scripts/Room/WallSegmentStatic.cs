@@ -13,6 +13,7 @@ namespace Building
     {
         // STATIC METHODS
 
+        // MESH GENERATION
         private static Mesh GenerateThickWallMesh(float3 anchorAGroundPosMin, float3 anchorBGroundPosMin, float3 anchorATopPosMin, float3 anchorBTopPosMin, float3 anchorAGroundPosPlus, float3 anchorBGroundPosPlus, float3 anchorATopPosPlus, float3 anchorBTopPosPlus)
         {
             // Counts

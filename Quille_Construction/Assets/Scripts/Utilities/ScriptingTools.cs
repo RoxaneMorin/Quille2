@@ -9,6 +9,19 @@ public static class ExtensionMethods
 {
     // Various extension methods.
 
+    // GENERIC
+    public static void SwapIfGreater<T>(ref T left, ref T right) where T : IComparable
+    {
+        T temp;
+        if (left.CompareTo(right) > 0)
+        {
+            temp = left;
+            left = right;
+            right = temp;
+        }
+    }
+
+
     // FLOAT
     public static float NormalizeRadAngle(this float angle)
     {
@@ -183,10 +196,10 @@ public static class ExtensionMethods
 
 
 
-
-
-
     
+
+
+
 
 }
 

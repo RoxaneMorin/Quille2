@@ -13,17 +13,12 @@ namespace Building
     public partial class WallSegment : MonoBehaviour
     {
         // VARIABLES/PARAMETERS
+        [Header("Data")]
         [SerializeField] private int id;
 
         [SerializeField] private WallAnchor anchorA;
         [SerializeField] private WallAnchor anchorB;
         // These should never be null.
-
-        //private WallConnection connectionA;
-        //private WallConnection connectionB;
-
-        // TODO: create all the setters and accessors for the wall connections, update existing functions, etc?
-        // Though they are annoying with references and serialization :/ 
 
         [SerializeField] private float thickness;
         // Some info on both 'sides'?
@@ -41,7 +36,7 @@ namespace Building
         private float3 anchorBTopPosPlus;
 
 
-        [Header("Resources")]
+        [Header("References")]
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private MeshCollider meshCollider;
@@ -52,28 +47,41 @@ namespace Building
         // PROPERTIES AND OTHER ACCESSORS
         public int ID { get { return id; } }
 
-        public WallAnchor AnchorA
-        {
+        public WallAnchor AnchorA 
+        { 
             get { return anchorA; }
             set
             {
                 if (value && value != anchorB)
                 {
+                    WallAnchor.DisconnectAnchors(anchorA, anchorB);
+
                     anchorA = value;
+                    WallAnchor.ConnectAnchors(anchorA, anchorB, this);
+
+                    gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
+                    OnParameterUpdate();
                 }
             }
         }
-        public WallAnchor AnchorB
-        {
+        public WallAnchor AnchorB 
+        { 
             get { return anchorB; }
             set
             {
                 if (value && value != anchorA)
                 {
+                    WallAnchor.DisconnectAnchors(anchorA, anchorB);
+
                     anchorB = value;
+                    WallAnchor.ConnectAnchors(anchorA, anchorB, this);
+
+                    gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
+                    OnParameterUpdate();
                 }
             }
         }
+
         public WallAnchor OtherAnchor(WallAnchor sourceAnchor)
         {
             if (sourceAnchor == anchorA)
@@ -179,12 +187,16 @@ namespace Building
         // INIT
         public void Init(int id, WallAnchor anchorA, WallAnchor anchorB, float thickness = 0.1f)
         {
+            // Always start from the lowest ID anchor.
+            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
+
             // Name the game object.
             gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
 
             // Set the anchor references.
             this.anchorA = anchorA;
             this.anchorB = anchorB;
+            WallAnchor.ConnectAnchors(anchorA, anchorB, this);
 
             // Adjust other parameters.
             this.id = id;
@@ -195,9 +207,9 @@ namespace Building
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
             meshCollider = gameObject.GetComponent<MeshCollider>();
 
-            //GenerateWallMesh();
+            // Regenerate visuals and the like.
+            OnParameterUpdate();
         }
-
 
         // UTILITY
         public void OnParameterUpdate()
@@ -253,38 +265,50 @@ namespace Building
 
                 // TODO: check adjacent walls if we need to clip.
 
-                WallSegment? aPrev = anchorA.GetSegmentPreceding(this);
-                WallSegment? aNext = anchorA.GetSegmentFollowing(this);
-                WallSegment? bPrev = anchorB.GetSegmentPreceding(this);
-                WallSegment? bNext = anchorB.GetSegmentFollowing(this);
+                //WallSegment? aPrev = anchorA.GetSegmentPreceding(this);
+                //WallSegment? aNext = anchorA.GetSegmentFollowing(this);
+                //WallSegment? bPrev = anchorB.GetSegmentPreceding(this);
+                //WallSegment? bNext = anchorB.GetSegmentFollowing(this);
 
-                Debug.Log($"Walls adjacent to {this}:\nAPrev: {aPrev}\nANext: {aNext}\nBPrev: {bPrev}\nBNext: {bNext}");
 
-                // If the two walls share the same AnchorA, min/min or plus/plus face each other
-                // Else, we have min/plus or plus/min
+                /*
+                 * Always anchorA < anchorB
+                 * 
+                 * Looking from A towards B,
+                 * Left is blue (plus)
+                 * Right is red (min)
+                 */
 
-                // Check if min or plus is determined by prev vs next.
 
-                if (aPrev != null)
-                {
-                    bool sharedAnchor = this.AnchorA == aPrev.AnchorA;
-                    Debug.Log($"Do {this} and {aPrev} (aPrev) share the same anchor A? {sharedAnchor}");
-                }
-                if (aNext != null)
-                {
-                    bool sharedAnchor = this.AnchorA == aNext.AnchorA;
-                    Debug.Log($"Do {this} and {aNext} (aNext) share the same anchor A? {sharedAnchor}");
-                }
-                if (bPrev != null)
-                {
-                    bool sharedAnchor = this.AnchorB == bPrev.AnchorB;
-                    Debug.Log($"Do {this} and {bPrev} (bPrev) share the same anchor B? {sharedAnchor}");
-                }
-                if (bNext != null)
-                {
-                    bool sharedAnchor = this.AnchorB == bNext.AnchorB;
-                    Debug.Log($"Do {this} and {bNext} (bNext) share the same anchor B? {sharedAnchor}");
-                }
+
+
+                //Debug.Log($"Walls adjacent to {this}:\nAPrev: {aPrev}\nANext: {aNext}\nBPrev: {bPrev}\nBNext: {bNext}");
+
+                //// If the two walls share the same AnchorA, min/min or plus/plus face each other
+                //// Else, we have min/plus or plus/min
+
+                //// Check if min or plus is determined by prev vs next.
+
+                //if (aPrev != null)
+                //{
+                //    bool sharedAnchor = this.AnchorA == aPrev.AnchorA;
+                //    Debug.Log($"Do {this} and {aPrev} (aPrev) share the same anchor A? {sharedAnchor}");
+                //}
+                //if (aNext != null)
+                //{
+                //    bool sharedAnchor = this.AnchorA == aNext.AnchorA;
+                //    Debug.Log($"Do {this} and {aNext} (aNext) share the same anchor A? {sharedAnchor}");
+                //}
+                //if (bPrev != null)
+                //{
+                //    bool sharedAnchor = this.AnchorB == bPrev.AnchorB;
+                //    Debug.Log($"Do {this} and {bPrev} (bPrev) share the same anchor B? {sharedAnchor}");
+                //}
+                //if (bNext != null)
+                //{
+                //    bool sharedAnchor = this.AnchorB == bNext.AnchorB;
+                //    Debug.Log($"Do {this} and {bNext} (bNext) share the same anchor B? {sharedAnchor}");
+                //}
 
 
                 // TODO: check for intersections in 3D
