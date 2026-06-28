@@ -57,6 +57,25 @@ public static class ExtensionMethods
     }
 
 
+    // COLOR
+    public static Vector3 AsVector3(this Color color)
+    {
+        return new Vector3(color.r, color.g, color.b);
+    }
+
+    public static Vector3 AsVector4(this Color color)
+    {
+        return new Vector4(color.r, color.g, color.b, color.a);
+    }
+
+    public static Vector3 AsHSV(this Color color)
+    {
+        float H, S, V;
+        Color.RGBToHSV(color, out H, out S, out V);
+        return new Vector3(H, S, V);
+    }
+
+
     // LISTS
     public static void SortedInsert<T>(this List<T> list, T newItem, Func<T, T, bool> sortingCondition)
     {
@@ -178,16 +197,6 @@ public static class ExtensionMethods
             action(item);
         }
     }
-
-
-
-
-
-
-
-
-    
-
 }
 
 
