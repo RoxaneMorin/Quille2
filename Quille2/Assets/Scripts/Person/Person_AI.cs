@@ -148,7 +148,7 @@ namespace Quille
 
             List<LocalInteraction> relevantInteractions = inThisArea.LocalInteractionsFor(thisNeed);
 
-            if (relevantInteractions.Count == 0)
+            if (relevantInteractions == null || relevantInteractions.Count == 0)
             {
                 return null;
             }

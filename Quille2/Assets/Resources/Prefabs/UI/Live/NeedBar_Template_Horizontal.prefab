@@ -233,7 +233,6 @@ MonoBehaviour:
   myFillImage: {fileID: 2704835313209453388}
   myInfoBox: {fileID: 4759417721436474903}
   myInfoText: {fileID: 6656660341519779514}
-  myTargetNeedSO: {fileID: 0}
 --- !u!1 &1897414376102225464
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +665,6 @@ MonoBehaviour:
   m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
