@@ -74,6 +74,7 @@ namespace Quille
         public const int DEFAULT_INTEREST_COUNT = 5;
         public const int MAXIMUM_INITIAL_INTEREST_COUNT = 8;
 
+        // TODO: default/max in total point "cost" for traits and drives instead?
 
 
         // NEEDS

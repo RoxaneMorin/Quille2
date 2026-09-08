@@ -173,7 +173,7 @@ public class Person_CharacterDrawer : PropertyDrawer
                 personCharacter.RandomPopulateInterestsDict(false);
             }
             buttonPosition.x += newPosition.width / 2;
-            if (GUI.Button(buttonPosition, "Random Populate Drives (Randomized)"))
+            if (GUI.Button(buttonPosition, "Random Populate Interests (Randomized)"))
             {
                 Quille.Person_Character personCharacter = fieldInfo.GetValue(property.serializedObject.targetObject) as Quille.Person_Character;
                 personCharacter.RandomPopulateInterestsDict(true);

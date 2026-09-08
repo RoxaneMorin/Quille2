@@ -15,28 +15,18 @@ namespace World
 
         // SINGLETON PATTERN
         private static WorldData _currentWorldData;
-        private static readonly object _lock = new object();
 
         public static WorldData GetCurrentWorldData()
         {
             if (_currentWorldData == null)
             {
-                lock (_lock)
-                {
-                    if (_currentWorldData == null)
-                    {
-                        _currentWorldData = new WorldData();
-                    }
-                }
+                _currentWorldData = new WorldData();
             }
             return _currentWorldData;
         }
         public static WorldData CreateAndGetNewWorldData(int startFromID = -1)
         {
-            lock (_lock)
-            {
-                _currentWorldData = new WorldData(startFromID);
-            }
+            _currentWorldData = new WorldData(startFromID);
             return _currentWorldData;
         }
 

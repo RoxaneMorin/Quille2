@@ -121,19 +121,21 @@ namespace Quille
 
 
         // UTILITY
-        public void PopulatePersonalityAxesDict(bool randomize = false)
+
+        public void PopulatePersonalityAxesDict(bool randomizeValues = false)
         {
             PersonalityAxeSO[] personalityAxeSOs = Resources.LoadAll<PersonalityAxeSO>(Constants_PathResources.SO_PATH_PERSONALITYAXES);
-            this.myPersonalityAxes =personalityAxeSOs.ToSerializedDictionary(personalityAxeSO => personalityAxeSO, personalityAxeSO => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
+            this.myPersonalityAxes = personalityAxeSOs.ToSerializedDictionary(personalityAxeSO => personalityAxeSO, personalityAxeSO => (randomizeValues ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
         }
         public void ClearPersonalityAxesDict()
         {
             this.myPersonalityAxes = new SerializedDictionary<PersonalityAxeSO, float>();
         }
 
-        public void RandomPopulatePersonalityTraitsDict(bool randomize = false)
+        public void RandomPopulatePersonalityTraitsDict(bool randomizeValues = false)
         {
             // TODO: avoid incompatible traits.
+             // TODO: may have more if values add up to default count.
 
             PersonalityTraitSO[] personalityTraitSOs = Resources.LoadAll<PersonalityTraitSO>(Constants_PathResources.SO_PATH_PERSONALITYTRAITS);
             int SOCount = personalityTraitSOs.Length;
@@ -142,16 +144,17 @@ namespace Quille
             int targetCount = Mathf.Min(Constants_Quille.DEFAULT_PERSONALITY_TRAIT_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
-            this.myPersonalityTraits = targetIDs.ToSerializedDictionary(ID => personalityTraitSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
+            this.myPersonalityTraits = targetIDs.ToSerializedDictionary(ID => personalityTraitSOs[ID], ID => (randomizeValues ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
         }
         public void ClearPersonalityTraitsDict()
         {
             this.myPersonalityTraits = new SerializedDictionary<PersonalityTraitSO, float>();
         }
 
-        public void RandomPopulateDrivesDict(bool randomize = false)
+        public void RandomPopulateDrivesDict(bool randomizeValues = false)
         {
             // TODO: avoid incompatible drives.
+            // TODO: may have more if values add up to default count
 
             DriveSO[] driveSOs = Resources.LoadAll<DriveSO>(Constants_PathResources.SO_PATH_DRIVES);
             int SOCount = driveSOs.Length;
@@ -160,14 +163,14 @@ namespace Quille
             int targetCount = Mathf.Min(Constants_Quille.DEFAULT_DRIVES_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
-            this.myDrives = targetIDs.ToSerializedDictionary(ID => driveSOs[ID], ID => (randomize ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
+            this.myDrives = targetIDs.ToSerializedDictionary(ID => driveSOs[ID], ID => (randomizeValues ? RandomExtended.CoinFlipBetween(0.5f, 1f) : 1f));
         }
         public void ClearDrivesDict()
         {
             this.myDrives = new SerializedDictionary<DriveSO, float>();
         }
 
-        public void RandomPopulateInterestsDict(bool randomize = false)
+        public void RandomPopulateInterestsDict(bool randomizeValues = false)
         {
             InterestSO[] interestSOs = Resources.LoadAll<InterestSO>(Constants_PathResources.SO_PATH_INTERESTS);
             int SOCount = interestSOs.Length;
@@ -176,7 +179,7 @@ namespace Quille
             int targetCount = Mathf.Min(Constants_Quille.DEFAULT_INTEREST_COUNT, SOCount);
             List<int> targetIDs = RandomExtended.NonRepeatingIntegersInRange(0, SOCount, targetCount);
 
-            this.myInterests = targetIDs.ToSerializedDictionary(ID => interestSOs[ID], ID => (randomize ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
+            this.myInterests = targetIDs.ToSerializedDictionary(ID => interestSOs[ID], ID => (randomizeValues ? RandomExtended.RangeStepped(-1f, 1f, 0.125f) : 0f));
         }
         public void ClearInterestDict()
         {

@@ -9,9 +9,11 @@ namespace Building
     public partial class WallAnchor_v2 : MonoBehaviour, IPointerDownHandler, ISelectable
     {
         // VARIABLES
-        private Renderer myRenderer;
-        private Material myMaterial;
-        private ControlArrow myControlArrow;
+        [Header("References")]
+        [SerializeField] private MeshFilter myMeshFilter;
+        [SerializeField] private MeshRenderer myMeshRenderer;
+        [SerializeField] private Material myMaterial;
+        [SerializeField] private ControlArrow myControlArrow;
 
         [Header("Parameters")]
         [SerializeField] private Color colourDefault = Color.white;
@@ -59,8 +61,6 @@ namespace Building
         // EVENTS
         public event ItemClicked<WallAnchor_v2> OnClicked;
         public event ItemParametersUpdated<WallAnchor_v2> OnParameterUpdated;
-        // Also one thrown when parameters are updated?
-
 
 
         // METHODS
@@ -92,8 +92,9 @@ namespace Building
             gameObject.name = string.Format("WallAnchor {0} {1}", id, transform.position);
 
             // Fetch components.
-            myRenderer = gameObject.GetComponent<Renderer>();
-            myMaterial = myRenderer.material;
+            myMeshFilter = gameObject.GetComponent<MeshFilter>();
+            myMeshRenderer = gameObject.GetComponent<MeshRenderer>();
+            myMaterial = myMeshRenderer.material;
             myControlArrow = gameObject.GetComponentInChildren<ControlArrow>();
 
             myControlArrow.OnDragged += OnControlArrowAdjustment;
@@ -192,6 +193,19 @@ namespace Building
             Vector3 scale = gameObject.transform.localScale;
             scale.y = height;
             gameObject.transform.localScale = scale;
+
+            // TODO: edit the mesh itself so the arrow doesn't get deformed.
+
+            Mesh myMesh = myMeshFilter.mesh;
+
+            List<Vector3> myVertices = new List<Vector3>();
+            myMesh.GetVertices(myVertices);
+
+            foreach (Vector3 vertex in myVertices)
+            {
+                Debug.Log(vertex);
+            }
+
         }
 
 

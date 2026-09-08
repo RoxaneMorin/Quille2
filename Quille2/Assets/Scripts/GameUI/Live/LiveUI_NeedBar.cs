@@ -65,14 +65,14 @@ namespace QuilleUI
             myFillImage.fillAmount = currentFillLevelAsPercentage;
             myFillImage.color = colourByFill.Evaluate(currentFillLevelAsPercentage);
 
-            myInfoText.text = string.Format("{0} : {1}%", myTargetNeedSO.NeedName, newFillLevel);
+            myInfoText.text = string.Format("{0} : {1:0.00}%", myTargetNeedSO.NeedName, newFillLevel);
         }
 
 
         // EVENT LISTENERS
         public void OnTargetNeedUpdated(Quille.BasicNeedSO needIdentity, float needLevelCurrent, float needLevelCurrentAsPercentage)
         {
-            Debug.Log(string.Format("In NeedBar's event for {0}, now at {1}%.", needIdentity, needLevelCurrent));
+            Debug.Log(string.Format("In NeedBar's event for {0}, now at {1:0.00} %.", needIdentity, needLevelCurrent));
 
             UpdateFill(needLevelCurrent, needLevelCurrentAsPercentage);
         }
