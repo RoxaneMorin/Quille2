@@ -2,18 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IArrowControllable
+// Interface for objects that can be modified using one or more control arrows.
+namespace Building
 {
-    // ControlArrowDragged(Vector2 cursorPosDelta);
+    public interface IArrowControllable
+    {
+        public void OnControlArrowAdjustment(ControlArrow sourceArrow, Vector2 cursorPosDelta);
 
-    // TODO: interface for using this arrow?
-    /* Send out OnDragged, containing the mouse delta
-     * Receive movement instructions for the controlled object
-     */
-
-    protected void OnControlArrowAdjustment(Vector2 adjustmentDelta);
-
-
-
-    // Instructions for the arrow to move
+        // TODO: separate function to return a message to the arrow?
+        // Event the arrow listens to when it should change position?
+    }
 }
+

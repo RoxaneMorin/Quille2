@@ -1,32 +1,40 @@
 using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Building
 {
-    public partial class WallAnchor_v2 : MonoBehaviour, IPointerDownHandler, ISelectable
+    // TODO: should each wall anchor have its own control arrow?
+
+    // GameObject representing the start or end point of a segment of wall.
+    public partial class WallAnchor_v2 : MonoBehaviour, IComparable, IPointerClickAndHoverHandler, ISelectable, IArrowControllable
     {
-        // VARIABLES
+        // VARIABLES/PARAMETERS
         [Header("References")]
-        [SerializeField] private MeshFilter myMeshFilter;
-        [SerializeField] private MeshRenderer myMeshRenderer;
-        [SerializeField] private Material myMaterial;
-        [SerializeField] private ControlArrow myControlArrow;
+        [SerializeField] protected MeshFilter myMeshFilter;
+        [SerializeField] protected MeshRenderer myMeshRenderer;
+        [SerializeField] protected Material myMaterial;
+        [SerializeField] protected BoxCollider myCollider;
 
         [Header("Parameters")]
-        [SerializeField] private Color colourDefault = Color.white;
-        [SerializeField] private Color colourSelected = Color.blue;
+        [SerializeField] protected Color colourDefault = Color.white;
+        [SerializeField] protected Color colourHovered = Color.cyan;
+        [SerializeField] protected Color colourSelected = Color.blue;
+        [SerializeField] protected float colliderSizePadding = 0.1f;
 
         [Header("Data")]
-        [SerializeField] private int id;
-        [SerializeField] private float height = 1f;
-        [SerializeField] private List<WallAnchor_v2> connections;
-        [SerializeField] private SerializedDictionary<WallAnchor_v2, float> connectionAngles;
+        [SerializeField] protected int id;
+        [SerializeField] protected float height = 1f;
+        [SerializeField] protected List<WallAnchor_v2> connections;
+        [SerializeField] protected SerializedDictionary<WallAnchor_v2, float> connectionAngles;
+        // TODO: should we also keep track of the corresponding wall segments here?
 
         [Header("Runtime")]
-        [SerializeField] private bool isSelected;
+        [SerializeField] protected bool isSelected;
 
 
         // PROPERTIES
@@ -49,6 +57,8 @@ namespace Building
                     height = value;
                 }
 
+                // Propagate this update;
+                UpdateGameObjectHeight();
                 NotifyParameterUpdated();
             }
         }
@@ -78,10 +88,12 @@ namespace Building
             }
         }
 
-        public void OnControlArrowAdjustment(Vector2 cursorPosDelta)
+        public void OnControlArrowAdjustment(ControlArrow sourceArrow, Vector2 cursorPosDelta)
         {
-            float result = cursorPosDelta.y * -0.03f;
-            Height += result;
+            float heightDelta = cursorPosDelta.y * -0.03f;
+            Height += heightDelta;
+
+            sourceArrow.SetPositionFromTarget();
         }
 
 
@@ -95,35 +107,21 @@ namespace Building
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
             myMeshRenderer = gameObject.GetComponent<MeshRenderer>();
             myMaterial = myMeshRenderer.material;
-            myControlArrow = gameObject.GetComponentInChildren<ControlArrow>();
+            myCollider = gameObject.GetComponent<BoxCollider>();
 
-            myControlArrow.OnDragged += OnControlArrowAdjustment;
-            
             // Set parameters.
             this.id = id;
             this.height = height;
             connections = new List<WallAnchor_v2>();
             connectionAngles = new SerializedDictionary<WallAnchor_v2, float>();
 
+            // Propagate.
+            UpdateGameObjectHeight();
             NotifyParameterUpdated();
         }
 
 
         // UTILITY
-
-        // -> SELECTION
-        public void Select()
-        {
-            isSelected = true;
-            myMaterial.color = colourSelected;
-            myControlArrow.gameObject.SetActive(true);
-        }
-        public void Unselect()
-        {
-            isSelected = false;
-            myMaterial.color = colourDefault;
-            myControlArrow.gameObject.SetActive(false);
-        }
 
         // -> CONNECTIONS
         public bool IsConnectedTo(WallAnchor_v2 anchor)
@@ -178,48 +176,92 @@ namespace Building
             }
         }
 
+
         // -> PARAMETER UPDATES
+        protected void UpdateGameObjectHeight()
+        {
+            // TODO: do this less hackily
+            Mesh myMesh = myMeshFilter.mesh;
+
+            List<Vector3> meshVertices = new List<Vector3>();
+            myMesh.GetVertices(meshVertices);
+
+            for (int i = 0; i < meshVertices.Count; i++)
+            {
+                Vector3 vertex = meshVertices[i];
+
+                if (vertex.y != 0)
+                {
+                    vertex.y = Height;
+                    meshVertices[i] = vertex;
+                }
+            }
+
+            myMesh.SetVertices(meshVertices);
+            myMesh.RecalculateBounds();
+
+            // Update collider
+            myCollider.size = myMesh.bounds.size + new Vector3(colliderSizePadding, colliderSizePadding, colliderSizePadding);
+            myCollider.center = myMesh.bounds.center;
+        }
+
         public void NotifyParameterUpdated()
         {
-            // Visual update.
-            UpdateGameObjectHeight();
-
             // Throw event to notify relevant wall segments.
             OnParameterUpdated?.Invoke(this);
         }
 
-        private void UpdateGameObjectHeight()
+
+        // INTERFACES
+
+        // -> SELECTION
+        public void Select()
         {
-            Vector3 scale = gameObject.transform.localScale;
-            scale.y = height;
-            gameObject.transform.localScale = scale;
-
-            // TODO: edit the mesh itself so the arrow doesn't get deformed.
-
-            Mesh myMesh = myMeshFilter.mesh;
-
-            List<Vector3> myVertices = new List<Vector3>();
-            myMesh.GetVertices(myVertices);
-
-            foreach (Vector3 vertex in myVertices)
-            {
-                Debug.Log(vertex);
-            }
-
+            isSelected = true;
+            myMaterial.color = colourSelected;
+        }
+        public void Unselect()
+        {
+            isSelected = false;
+            myMaterial.color = colourDefault;
         }
 
 
-        // BUILT IN
-        public void OnPointerDown(PointerEventData eventData)
+        // -> POINTER
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!isSelected)
+            {
+                myMaterial.color = colourHovered;
+            }
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!isSelected)
+            {
+                myMaterial.color = colourDefault;
+            }
+        }
+        public void OnPointerClick(PointerEventData eventData)
         {
             OnClicked?.Invoke(this, eventData.button);
         }
 
+
 #if DEBUG
-        private void OnDrawGizmos()
+        protected void OnDrawGizmos()
         {
             Gizmos.color = Color.white;
-            Handles.Label(gameObject.transform.position, ID.ToString());
+
+            // ID
+            Vector3 idLabelPos = gameObject.transform.position;
+            idLabelPos.y -= 0.05f;
+            Handles.Label(idLabelPos, string.Format("Anchor #{0}", ID));
+
+            // Height.
+            Vector3 heightLabelPos = gameObject.transform.position;
+            heightLabelPos.y += myMeshRenderer.bounds.size.y + 0.075f;
+            Handles.Label(heightLabelPos, string.Format("Height: {0:0.000}", height));
         }
 #endif
     }
