@@ -93,7 +93,7 @@ namespace Building
 
             // To review
             anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
-            anchorControlArrow.Init(ControlArrowOrientation.YPlus);
+            anchorControlArrow.Init(new Vector3(0, 0.1f, 0));
 
             previewObject = Instantiate(previewObjectPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewObject>();
             previewObject.gameObject.SetActive(false);

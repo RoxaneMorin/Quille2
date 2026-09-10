@@ -119,15 +119,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ff498bd6e80ce4dbb9fe7f46617c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myCollider: {fileID: 0}
   myMeshFilter: {fileID: 0}
   myMeshRenderer: {fileID: 0}
   myMaterial: {fileID: 2100000, guid: 62b20251679984b4397e6b97d267fc0a, type: 2}
+  originalArrowMesh: {fileID: 0}
   arrowOrientation: 2
   additionalDeltaFromTarget: {x: 0, y: 0, z: 0}
   colourDefault: {r: 0, g: 0, b: 1, a: 1}
   colourHovered: {r: 0.3443396, g: 0.6512674, b: 1, a: 1}
   colourInUse: {r: 0, g: 1, b: 1, a: 1}
   arrowAvailable: 0
-  arrowInUse: 1
+  arrowInUse: 0
   prevCursorPos: {x: 0, y: 0, z: 0}
   cursorPosDelta: {x: 0, y: 0}

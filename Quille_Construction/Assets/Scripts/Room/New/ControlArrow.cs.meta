@@ -3,7 +3,11 @@ guid: b8ff498bd6e80ce4dbb9fe7f46617c49
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - myMeshFilter: {instanceID: 0}
+  - myMeshRenderer: {instanceID: 0}
+  - myMaterial: {instanceID: 0}
+  - arrowMesh: {fileID: -7929139438592967118, guid: 5e7792851208cb74597d7ff6e1ff9a8e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

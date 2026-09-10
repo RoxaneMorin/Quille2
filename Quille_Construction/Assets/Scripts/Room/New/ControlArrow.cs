@@ -20,17 +20,18 @@ namespace Building
 
     // TODO: determine how our target may inform us it's going inactive.
     // TODO: should it instead be unaware of its target, and throw up an event?
-    // TODO: rotate the mesh depending on the arrowOrientation?
 
     public class ControlArrow : MonoBehaviour, IPointerDragAndHoverHandler
     {
         // VARIABLES
         [Header("References")]
+        [SerializeField] protected MeshCollider myCollider;
         [SerializeField] protected MeshFilter myMeshFilter;
         [SerializeField] protected MeshRenderer myMeshRenderer;
         [SerializeField] protected Material myMaterial;
-
+        
         [Header("Parameters")]
+        [SerializeField] protected Mesh originalArrowMesh;
         [SerializeField] protected ControlArrowOrientation arrowOrientation = ControlArrowOrientation.YPlus;
         [SerializeField] protected Vector3 additionalDeltaFromTarget;
 
@@ -85,16 +86,29 @@ namespace Building
 
 
         // METHODS
-        public void Init(ControlArrowOrientation arrowOrientation = ControlArrowOrientation.XPlus)
+        public void Init(Vector3 additionalDeltaFromTarget, ControlArrowOrientation arrowOrientation = ControlArrowOrientation.YPlus)
         {
             // Fetch components.
+            myCollider = gameObject.GetComponent<MeshCollider>();
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
             myMeshRenderer = gameObject.GetComponent<MeshRenderer>();
             myMaterial = myMeshRenderer.material;
 
             // Set parameters
+            this.additionalDeltaFromTarget = additionalDeltaFromTarget;
             this.arrowOrientation = arrowOrientation;
 
+            // Handle mesh stuff
+            if (originalArrowMesh != myMeshFilter.mesh)
+            {
+                // TODO:make sure it's getting copied properly
+                this.originalArrowMesh = Instantiate(myMeshFilter.mesh);
+            }
+            if (arrowOrientation != ControlArrowOrientation.YPlus) // don't rotate the mesh for the default orientation of YPlus.
+            {
+                RotateArrowMeshFromCAO();
+            }
+            
             // Set the arrow's availability based on its target.
             ArrowAvailable = ArrowTarget != null;
         }
@@ -108,6 +122,7 @@ namespace Building
 
             arrowTarget.OnControlArrowAdjustment(this, cursorPosDelta);
         }
+
 
         public void SetPosition(Vector3 newPosition, bool addDeltaFromTarget = true)
         {
@@ -127,10 +142,17 @@ namespace Building
                 Transform targetsTransform = targetGameObject.transform;
                 Vector3 newPosition = targetsTransform.position;
 
+                // If the target has a mesh, offset our position by its bounds
                 MeshRenderer targetsMeshRenderer = targetGameObject.GetComponent<MeshRenderer>();
-                if (targetsMeshRenderer != null)
+                if (targetsMeshRenderer != null && arrowOrientation != ControlArrowOrientation.YMin) // unless the arrow orientation is YMin.
                 {
-                    newPosition.y += SignedVecComponentFromCAO(targetsMeshRenderer.bounds.size);
+                    Vector3 targetSizeOnAxis = IsolatedVecComponentFromCAO(targetsMeshRenderer.bounds.size);
+                    // Half X and Z bound values, assuming the mesh was centered.
+                    if (arrowOrientation != ControlArrowOrientation.YPlus)
+                    {
+                        targetSizeOnAxis /= 2f;
+                    }
+                    newPosition += targetSizeOnAxis;
                 }
 
                 SetPosition(newPosition, addDeltaFromTarget);
@@ -146,43 +168,50 @@ namespace Building
 
 
         // UTILITY
-        protected float SignedVecComponentFromCAO(Vector3 sourceVec)
+        protected void RotateArrowMeshFromCAO()
+        {
+            List<Vector3> referenceMeshVertices = new List<Vector3>();
+            originalArrowMesh.GetVertices(referenceMeshVertices);
+
+            Quaternion rotation = MeshRotationFromCAO();
+            for (int i = 0; i < referenceMeshVertices.Count; i++)
+            {
+                Vector3 vertex = referenceMeshVertices[i];
+                referenceMeshVertices[i] = rotation * vertex;
+            }
+
+            Mesh myMesh = myMeshFilter.mesh;
+            myMesh.SetVertices(referenceMeshVertices);
+            myMesh.RecalculateBounds();
+
+            myCollider.sharedMesh = myMesh;
+        }
+        protected Quaternion MeshRotationFromCAO()
         {
             return arrowOrientation switch
             {
-                ControlArrowOrientation.XPlus => sourceVec.x,
-                ControlArrowOrientation.XMin => -sourceVec.x,
-                ControlArrowOrientation.YPlus => sourceVec.y,
-                ControlArrowOrientation.YMin => -sourceVec.y,
-                ControlArrowOrientation.ZPlus => sourceVec.z,
-                ControlArrowOrientation.ZMin => -sourceVec.z,
+                ControlArrowOrientation.XPlus => Quaternion.AngleAxis(90, Vector3.back),
+                ControlArrowOrientation.XMin => Quaternion.AngleAxis(-90, Vector3.back),
+                ControlArrowOrientation.YPlus => Quaternion.identity,
+                ControlArrowOrientation.YMin => Quaternion.AngleAxis(180, Vector3.back),
+                ControlArrowOrientation.ZPlus => Quaternion.AngleAxis(90, Vector3.right),
+                ControlArrowOrientation.ZMin => Quaternion.AngleAxis(-90, Vector3.right),
                 _ => throw new ArgumentOutOfRangeException(string.Format("Somehow, the inputed ControlArrowOrientation '{0}' is not valid.", nameof(arrowOrientation))),
             };
         }
 
-
-        protected void RotateArrowMeshFromCAO()
+        protected Vector3 IsolatedVecComponentFromCAO(Vector3 sourceVec)
         {
-            Mesh myMesh = myMeshFilter.mesh;
-            List<Vector3> meshVertices = new List<Vector3>();
-            myMesh.GetVertices(meshVertices);
-
-            // TODO: finish this
-            // TODO: take into account the mesh's previous orientation
-
-            Quaternion rotation = Quaternion.AngleAxis(90, Vector3.left);
-
-            for (int i = 0; i < meshVertices.Count; i++)
+            return arrowOrientation switch
             {
-                Vector3 vertex = meshVertices[i];
-                meshVertices[i] = rotation * vertex;
-            }
-
-            myMesh.SetVertices(meshVertices);
-            myMesh.RecalculateBounds();
-
-            // Update collider
-
+                ControlArrowOrientation.XPlus => new Vector3(sourceVec.x, 0, 0),
+                ControlArrowOrientation.XMin => new Vector3(-sourceVec.x, 0, 0),
+                ControlArrowOrientation.YPlus => new Vector3(0, sourceVec.y, 0),
+                ControlArrowOrientation.YMin => new Vector3(0, -sourceVec.y, 0),
+                ControlArrowOrientation.ZPlus => new Vector3(0, 0, sourceVec.z),
+                ControlArrowOrientation.ZMin => new Vector3(0, 0, -sourceVec.z),
+                _ => throw new ArgumentOutOfRangeException(string.Format("Somehow, the inputed ControlArrowOrientation '{0}' is not valid.", nameof(arrowOrientation))),
+            };
         }
 
 
