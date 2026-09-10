@@ -1,7 +1,11 @@
 using AYellowpaper.SerializedCollections;
+using MeshGeneration;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.Collections;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,8 +18,6 @@ namespace Building
         [SerializeField] protected MeshFilter myMeshFilter;
         [SerializeField] protected MeshRenderer myMeshRenderer;
         [SerializeField] protected MeshCollider myMeshCollider;
-
-        [SerializeField] protected LineRenderer myLineRenderer;
        
         [Header("Data")]
         [SerializeField] protected int id;
@@ -57,26 +59,30 @@ namespace Building
         }
 
         //
-        public Vector3 PosAtPointA
+        public Vector3 PosAtPointABase
         {
-            get { return AnchorA.transform.position; }
+            get { return AnchorA.PosAtBase; }
         }
-        public Vector3 PosAtPointB
+        public Vector3 PosAtPointBBase
         {
-            get { return AnchorB.transform.position; }
+            get { return AnchorB.PosAtBase; }
         }
-        public Vector3 LocalPosAtPointB
+        public Vector3 PosAtMidpointBase
         {
-            get { return AnchorB.transform.position - AnchorA.transform.position; }
-        }
-        public Vector3 PosAtMidpoint
-        {
-            get { return Vector3.Lerp(PosAtPointA, PosAtPointB, 0.5f); }
+            get { return Vector3.Lerp(PosAtPointABase, PosAtPointBBase, 0.5f); }
         }
 
-        public float DistanceBetweenPoints
+        public Vector3 PosAtPointATop
         {
-            get { return Vector3.Distance(PosAtPointA, PosAtPointB); }
+            get { return AnchorA.PosAtTop; }
+        }
+        public Vector3 PosAtPointBTop
+        {
+            get { return AnchorB.PosAtTop; }
+        }
+        public Vector3 PosAtMidpointTop
+        {
+            get { return Vector3.Lerp(PosAtPointATop, PosAtPointBTop, 0.5f); }
         }
 
         public float HeightAtPointA
@@ -86,6 +92,15 @@ namespace Building
         public float HeightAtPointB
         {
             get { return anchorB.Height; }
+        }
+        public float HeightAtMidpoint
+        {
+            get { return Mathf.Lerp(HeightAtPointA, HeightAtPointB, 0.5f); }
+        }
+
+        public float Length
+        {
+            get { return Vector3.Distance(PosAtPointABase, PosAtPointBBase); }
         }
 
 
@@ -118,13 +133,12 @@ namespace Building
                 this.id = id;
                 this.thickness = thickness;
 
-                // Temp line renderer
-                myLineRenderer = gameObject.GetComponent<LineRenderer>();
-                myLineRenderer.SetPosition(0, anchorA.transform.position);
-                myLineRenderer.SetPosition(1, anchorB.transform.position);
+                // Subscribe to anchors' update events.
+                anchorA.OnParameterUpdated += AnchorParameterUpdated;
+                anchorB.OnParameterUpdated += AnchorParameterUpdated;
 
-                // Test mesh
-                GenerateMesh();
+                // Generate wall mesh.
+                GenerateWallMesh();
             }
             else // log error and commit sudoku
             {
@@ -134,72 +148,92 @@ namespace Building
         }
 
 
+        // UPDATES
 
-
-        // Generate flat mesh
-        protected void GenerateMesh()
+        public void AnchorParameterUpdated(WallAnchor_v2 updatedItem)
         {
-            // TODO: simpler to modify a base/existing mesh instead?
+            ParameterUpdated();
+        }
 
-            Mesh generatedMesh = new Mesh();
-            generatedMesh.name = "WallMesh";
-
-            float halfThickness = Thickness / 2f;
-
-            var vertices = new NativeArray<Vector3>(8, Allocator.Temp);
-            vertices[0] = new Vector3(0, 0, halfThickness);
-            vertices[1] = new Vector3(DistanceBetweenPoints, 0, halfThickness);
-            vertices[2] = new Vector3(0, HeightAtPointA, halfThickness);
-            vertices[3] = new Vector3(DistanceBetweenPoints, HeightAtPointB, halfThickness);
-
-            vertices[4] = new Vector3(0, 0, -halfThickness);
-            vertices[5] = new Vector3(DistanceBetweenPoints, 0, -halfThickness);
-            vertices[6] = new Vector3(0, HeightAtPointA, -halfThickness);
-            vertices[7] = new Vector3(DistanceBetweenPoints, HeightAtPointB, -halfThickness);
-
-
-            // Rotate the vector
-            float angle = MathHelpers.GetNormalizedAngleBetween(PosAtPointA, PosAtPointB);
-            Quaternion rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.down);
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                Vector3 vertex = vertices[i];
-                vertices[i] = rotation * vertex;
-            }
-
-            var UVs = new NativeArray<Vector2>(8, Allocator.Temp);
-            UVs[0] = Vector2.zero;
-            UVs[1] = new Vector2(DistanceBetweenPoints, 0);
-            UVs[2] = new Vector2(0, HeightAtPointA);
-            UVs[3] = new Vector2(DistanceBetweenPoints, HeightAtPointB);
-            UVs[4] = Vector2.zero;
-            UVs[5] = new Vector2(DistanceBetweenPoints, 0);
-            UVs[6] = new Vector2(0, HeightAtPointA);
-            UVs[7] = new Vector2(DistanceBetweenPoints, HeightAtPointB);
-
-            var triangles = new NativeArray<int>(12, Allocator.Temp);
-            triangles[0] = 0; triangles[1] = 1; triangles[2] = 2;
-            triangles[3] = 1; triangles[4] = 3; triangles[5] = 2;
-            triangles[6] = 4; triangles[7] = 6; triangles[8] = 5;
-            triangles[9] = 5; triangles[10] = 6; triangles[11] = 7;
-
-            generatedMesh.SetVertices(vertices);
-            generatedMesh.SetUVs(0, UVs);
-            generatedMesh.SetIndices(triangles, MeshTopology.Triangles, 0);
-
-            vertices.Dispose();
-            triangles.Dispose();
-
-            generatedMesh.RecalculateNormals();
-            generatedMesh.RecalculateBounds();
-
-            myMeshFilter.mesh = generatedMesh;
+        public void ParameterUpdated()
+        {
+            GenerateWallMesh();
         }
 
 
+        // MESH GENERATION
+        protected void GenerateWallMesh()
+        {
+            Mesh wallMesh;
+            Mesh colliderMesh;
+
+            Quaternion localRot = GetLocalRotationQuat();
+            if (Thickness == 0f)
+            {
+                wallMesh = GenerateFlatWallMesh(localRot);
+                colliderMesh = wallMesh;
+            }
+            else
+            {
+                wallMesh = GenerateThickWallMesh(localRot);
+                colliderMesh = GenerateFlatWallMesh(localRot, false);
+            }
+
+            wallMesh.RecalculateTangents();
+            wallMesh.RecalculateBounds();
+            colliderMesh.RecalculateBounds();
+
+            wallMesh.name = "WallMesh";
+            colliderMesh.name = "WallColliderMesh";
+
+            myMeshFilter.mesh = wallMesh;
+            myMeshCollider.sharedMesh = colliderMesh;
+        }
+
+        // TODO: make these static, move to other script?
+        protected Mesh GenerateFlatWallMesh(Quaternion localRot, bool TwoMats = true)
+        {
+            // Vertex positions
+            float3 posABase = new float3(0);
+            float3 posBBase = localRot * new float3(Length, 0, 0);
+            float3 posATop = localRot * new float3(0, HeightAtPointA, 0);
+            float3 posBTop = localRot * new float3(Length, HeightAtPointB, 0);
+
+            // The mesh proper
+            if (TwoMats)
+            {
+                return MeshGenerationHelpers.GenerateTwoSidedPlaneTwoMats(posABase, posBBase, posATop, posBTop);
+            }
+            else
+            {
+                return MeshGenerationHelpers.GenerateTwoSidedPlane(posABase, posBBase, posATop, posBTop);
+            }
+        }
+        protected Mesh GenerateThickWallMesh(Quaternion localRot)
+        {
+            // Vertex positions
+            float halfThickness = Thickness / 2f;
+            float3 posABaseLeft = localRot * new float3(0, 0, -halfThickness);
+            float3 posBBaseLeft = localRot * new float3(Length, 0, -halfThickness);
+            float3 posATopLeft = localRot * new float3(0, HeightAtPointA, -halfThickness);
+            float3 posBTopLeft = localRot * new float3(Length, HeightAtPointB, -halfThickness);
+            float3 posABaseRight = localRot * new float3(0, 0, halfThickness);
+            float3 posBBaseRight = localRot * new float3(Length, 0, halfThickness);
+            float3 posATopRight = localRot * new float3(0, HeightAtPointA, halfThickness);
+            float3 posBTopRight = localRot * new float3(Length, HeightAtPointB, halfThickness);
+
+            // The mesh proper
+            return MeshGenerationHelpers.GenerateBoxThreeMats(posABaseLeft, posBBaseLeft, posATopLeft, posBTopLeft, posABaseRight, posBBaseRight, posATopRight, posBTopRight);
+        }
+
+        protected Quaternion GetLocalRotationQuat()
+        {
+            float angle = MathHelpers.GetNormalizedAngleBetween(PosAtPointABase, PosAtPointBBase);
+            return Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.down);
+        }
 
 
-
+        //
 
 #if DEBUG
         protected void OnDrawGizmos()
@@ -207,7 +241,7 @@ namespace Building
             Gizmos.color = Color.white;
 
             // ID
-            Vector3 idLabelPos = PosAtMidpoint;
+            Vector3 idLabelPos = PosAtMidpointBase;
             idLabelPos.y -= 0.05f;
             Handles.Label(idLabelPos, string.Format("Segment #{0}", ID));
         }

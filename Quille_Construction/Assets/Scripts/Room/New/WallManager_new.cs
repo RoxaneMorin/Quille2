@@ -11,7 +11,9 @@ namespace Building
 {
     // TODO: separate wall creation and management into two different controllers.
 
-    public class WallManager_new : MonoBehaviour, IPointerDownHandler
+    // TODO: detect intersections, do wall splits
+
+    public class WallManager_new : MonoBehaviour, IPointerClickAndHoverHandler
     {
         // VARIABLES/PARAMETERS
         [Header("Resources")]
@@ -22,31 +24,40 @@ namespace Building
         [SerializeField] protected GameObject previewObjectPrefab;
 
         [Header("Data and References")]
-        [SerializeField] private int highestAnchorID = -1;
-        [SerializeField] private int highestSegmentID = -1;
+        [SerializeField] protected int highestAnchorID = -1;
+        [SerializeField] protected int highestSegmentID = -1;
 
-        [SerializeField] private List<WallAnchor_v2> areaWallAnchors;
-        [SerializeField] private List<WallSegment_v2> areaWallSegments;
+        [SerializeField] protected List<WallAnchor_v2> areaWallAnchors;
+        [SerializeField] protected List<WallSegment_v2> areaWallSegments;
 
-        // TODO: keep a dict of them too?
+        protected Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2> anchorPairsToSegments;
 
 
-        [SerializeField] private WallAnchor_v2 selectedAnchor;
+        [SerializeField] protected WallAnchor_v2 selectedAnchor;
         // TODO: Any selectable from the ISelectable interface?
 
-        [SerializeField] private ControlArrow anchorControlArrow;
+        [SerializeField] protected ControlArrow anchorControlArrow;
         // TÒDO: where should the controlArrows live??
 
 
 
         // TODO: have this be some kind of reticule instead?
-        [SerializeField] private PreviewObject previewObject;
+        [SerializeField] protected PreviewObject previewObject;
 
-        [SerializeField] private LineRenderer myLineRenderer;
+        [SerializeField] protected LineRenderer myLineRenderer;
 
 
         // PROPERTIES
-        private int NextAnchorID
+        protected int HighestAnchorID
+        {
+            get { return highestAnchorID; }
+        }
+        protected int HighestSegmentID
+        {
+            get { return highestSegmentID; }
+        }
+
+        protected int NextAnchorID
         {
             get
             {
@@ -54,7 +65,7 @@ namespace Building
                 return highestAnchorID;
             }
         }
-        private int NextSegmentID
+        protected int NextSegmentID
         {
             get
             {
@@ -74,8 +85,13 @@ namespace Building
         // INIT
         public void Init()
         {
+            // Create containers.
             areaWallAnchors = new List<WallAnchor_v2>();
+            areaWallSegments = new List<WallSegment_v2>();
+            anchorPairsToSegments = new Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2>();
 
+
+            // To review
             anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
             anchorControlArrow.Init(ControlArrowOrientation.YPlus);
 
@@ -83,7 +99,7 @@ namespace Building
             previewObject.gameObject.SetActive(false);
 
             myLineRenderer = GetComponent<LineRenderer>();
-            myLineRenderer.enabled = false;
+            DeactivateLineRenderer();
 
         }
 
@@ -91,13 +107,21 @@ namespace Building
         // EVENT LISTENERS
         private void OnWallAnchorClicked(WallAnchor_v2 targetAnchor, PointerEventData.InputButton clickType)
         {
-            if (targetAnchor != selectedAnchor)
+            // On right clicks, try to connect the clicked and currently selected anchors
+            if (clickType == PointerEventData.InputButton.Right && selectedAnchor != null)
             {
-                SelectWallAnchor(targetAnchor);
+                CreateWallSegment(selectedAnchor, targetAnchor);
             }
-            else
+            else // (un)select the clicked anchor
             {
-                SelectWallAnchor(null);
+                if (targetAnchor != selectedAnchor)
+                {
+                    SelectWallAnchor(targetAnchor);
+                }
+                else
+                {
+                    SelectWallAnchor(null);
+                }
             }
         }
 
@@ -110,16 +134,19 @@ namespace Building
             selectedAnchor = targetAnchor;
             anchorControlArrow.ArrowTarget = selectedAnchor;
 
-            //// Temp line renderer stuff
-            //if (selectedAnchor != null)
-            //{
-            //    myLineRenderer.enabled = true;
-            //    myLineRenderer.SetPosition(0, selectedAnchor.transform.position);
-            //}
-            //else
-            //{
-            //    myLineRenderer.enabled = false;
-            //}
+            // Temp line renderer stuff
+            if (selectedAnchor != null)
+            {
+                myLineRenderer.enabled = true;
+                myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
+                myLineRenderer.SetPosition(1, selectedAnchor.PosAtBase);
+            }
+            else
+            {
+                myLineRenderer.enabled = false;
+                myLineRenderer.SetPosition(0, Vector3.zero);
+                myLineRenderer.SetPosition(1, Vector3.zero);
+            }
         }
 
 
@@ -139,16 +166,28 @@ namespace Building
 
         private WallSegment_v2 CreateWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
         {
-            WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
-            newSegment.Init(NextSegmentID, anchorA, anchorB);
+            // Always start from the lowest ID anchor.
+            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
 
-            // Event stuff
+            // Do not recreate existing wall segments.
+            if (!anchorPairsToSegments.ContainsKey((anchorA, anchorB)))
+            {
+                WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
+                newSegment.Init(NextSegmentID, anchorA, anchorB);
 
-            areaWallSegments.Add(newSegment);
+                // Event subscriptions
 
-            return newSegment;
+                areaWallSegments.Add(newSegment);
+                anchorPairsToSegments.Add((anchorA, anchorB), newSegment);
+
+                return newSegment;
+            }
+            else
+            {
+                Debug.Log(string.Format("A wall segment already exists between anchors '{0}' and '{1}'. The CreateWallSegment function will return it instead.", anchorA, anchorB));
+                return anchorPairsToSegments[(anchorA, anchorB)];
+            } 
         }
-
 
 
 
@@ -160,55 +199,61 @@ namespace Building
         }
 
 
-        public void OnPointerDown(PointerEventData eventData)
+        // OR: do drag and on pointer release for previewing?
+
+
+        public void OnPointerClick(PointerEventData eventData)
         {
             WallAnchor_v2 newAnchor = CreateWallAnchor(eventData.pointerPressRaycast.worldPosition);
 
-            if (selectedAnchor != null)
+            if (selectedAnchor != null && selectedAnchor != newAnchor)
             {
-                Debug.Log(selectedAnchor);
-                Debug.Log(newAnchor);
-
                 CreateWallSegment(selectedAnchor, newAnchor);
-            }
+            } 
 
             SelectWallAnchor(newAnchor);
         }
 
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (selectedAnchor != null)
+            {
+                myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
+                myLineRenderer.enabled = true;
+            }
+        }
 
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            DeactivateLineRenderer();
+        }
 
-        //// Hacky preview/visualization stuff
-        //// TODO: move to a separate system
-        //private void OnMouseOver()
-        //{
-        //    RaycastHit cursorHit;
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    if (Physics.Raycast(ray, out cursorHit))
-        //    {
-        //        previewObject.transform.position = cursorHit.point;
+        // Hacky preview/visualization stuff
+        // TODO: move to a separate system
+        private void OnMouseOver()
+        {
+            RaycastHit cursorHit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out cursorHit))
+            {
+                if (selectedAnchor != null)
+                {
+                    myLineRenderer.SetPosition(1, cursorHit.point);
+                }
+                else
+                {
+                    myLineRenderer.SetPosition(1, Vector3.zero);
+                }
+            }
+        }
 
-        //        if (selectedAnchor != null)
-        //        {
-        //            myLineRenderer.SetPosition(1, cursorHit.point);
-        //        }
-        //    }
-        //}
-
-        //private void OnMouseEnter()
-        //{
-        //    previewObject.gameObject.SetActive(true);
-        //    if (selectedAnchor != null)
-        //    {
-        //        myLineRenderer.enabled = true;
-        //    }
-        //}
-        //private void OnMouseExit()
-        //{
-        //    previewObject.gameObject.SetActive(false);
-        //    myLineRenderer.enabled = false;
-        //}
-
+        private void DeactivateLineRenderer()
+        {
+            myLineRenderer.enabled = false;
+            myLineRenderer.SetPosition(0, Vector3.zero);
+            myLineRenderer.SetPosition(1, Vector3.zero);
+        }
 
 
         //#if DEBUG

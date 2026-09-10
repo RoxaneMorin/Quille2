@@ -107,9 +107,19 @@ public static class MathHelpers
     public static Vector3 CalculateFaceNormal(Vector3 pointA, Vector3 pointB, Vector3 pointC)
     {
         Vector3 direction = Vector3.Cross(pointB - pointA, pointC - pointA);
-        Vector3 normal = Vector3.Normalize(direction);
+        return Vector3.Normalize(direction);
+    }
 
-        return normal;
+    public static float3 CalculateFaceNormal(float3 pointA, float3 pointB, float3 pointC)
+    {
+        float3 direction = math.cross(pointB - pointA, pointC - pointA);
+        return math.normalize(direction);
+    }
+    public static float3 CalculateFaceNormal(float3 pointA, float3 pointB, float3 pointC, float3 pointD)
+    {
+        float3 normalACD = CalculateFaceNormal(pointA, pointC, pointD);
+        float3 normalADB = CalculateFaceNormal(pointA, pointD, pointB);
+        return math.normalize((normalACD + normalACD) / 2);
     }
 
     public static (float3, half4) CalculateTrisNormalAndTangent(float3 pointA, float3 pointB, float3 pointC)
@@ -125,5 +135,7 @@ public static class MathHelpers
         // TODO: verify this tangent calculation is ok.
         // https://www.code-spot.co.za/2020/11/25/procedural-meshes-in-unity-normals-and-tangents/
     }
+
+    
 
 }

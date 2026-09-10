@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 namespace Building
 {
     // TODO: should each wall anchor have its own control arrow?
+    // TODO: can also set height with the scroll wheel?
 
     // GameObject representing the start or end point of a segment of wall.
     public partial class WallAnchor_v2 : MonoBehaviour, IComparable, IPointerClickAndHoverHandler, ISelectable, IArrowControllable
@@ -67,10 +68,21 @@ namespace Building
         public bool IsSelected { get { return isSelected; } }
 
 
+        public Vector3 PosAtBase
+        {
+            get { return transform.position; }
+        }
+        public Vector3 PosAtTop
+        {
+            get { return transform.position + new Vector3(0, Height, 0); }
+        }
+
+
 
         // EVENTS
         public event ItemClicked<WallAnchor_v2> OnClicked;
         public event ItemParametersUpdated<WallAnchor_v2> OnParameterUpdated;
+
 
 
         // METHODS
@@ -182,7 +194,6 @@ namespace Building
         {
             // TODO: do this less hackily
             Mesh myMesh = myMeshFilter.mesh;
-
             List<Vector3> meshVertices = new List<Vector3>();
             myMesh.GetVertices(meshVertices);
 
@@ -254,13 +265,13 @@ namespace Building
             Gizmos.color = Color.white;
 
             // ID
-            Vector3 idLabelPos = gameObject.transform.position;
+            Vector3 idLabelPos = PosAtBase;
             idLabelPos.y -= 0.05f;
             Handles.Label(idLabelPos, string.Format("Anchor #{0}", ID));
 
             // Height.
-            Vector3 heightLabelPos = gameObject.transform.position;
-            heightLabelPos.y += myMeshRenderer.bounds.size.y + 0.075f;
+            Vector3 heightLabelPos = PosAtTop;
+            heightLabelPos.y += 0.075f;
             Handles.Label(heightLabelPos, string.Format("Height: {0:0.000}", height));
         }
 #endif

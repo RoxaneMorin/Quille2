@@ -15,9 +15,11 @@ namespace Building
     public delegate void ItemSelected<T>(T item);
 
 
-    public delegate void ItemParametersUpdated<T>(T item);
+    public delegate void ItemParametersUpdated<T>(T updatedItem);
 
 
+    // Do we need this one?
+    // Might be better to have the control arrow send up its update
     public delegate void ControlArrowDragged(Vector2 cursorPosDelta);
 
 
