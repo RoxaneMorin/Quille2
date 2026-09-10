@@ -9,20 +9,11 @@ using UnityEngine.EventSystems;
 
 namespace Building
 {
-    // TODO: separate wall creation and management into two different controllers.
-
-    // TODO: detect intersections, do wall splits
-
-    public class WallManager_new : MonoBehaviour, IPointerClickAndHoverHandler
+    // Manager keeping track of the wall anchors, segments and rooms in a scene.
+    // (Will be renamed in the future. Could be a singleton?)
+    public class WallManager_new : MonoBehaviour
     {
         // VARIABLES/PARAMETERS
-        [Header("Resources")]
-        [SerializeField] protected GameObject wallAnchorPrefab;
-        [SerializeField] protected GameObject wallSegmentPrefab;
-
-        [SerializeField] protected GameObject controlArrowPrefab;
-        [SerializeField] protected GameObject previewObjectPrefab;
-
         [Header("Data and References")]
         [SerializeField] protected int highestAnchorID = -1;
         [SerializeField] protected int highestSegmentID = -1;
@@ -31,20 +22,6 @@ namespace Building
         [SerializeField] protected List<WallSegment_v2> areaWallSegments;
 
         protected Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2> anchorPairsToSegments;
-
-
-        [SerializeField] protected WallAnchor_v2 selectedAnchor;
-        // TODO: Any selectable from the ISelectable interface?
-
-        [SerializeField] protected ControlArrow anchorControlArrow;
-        // TÒDO: where should the controlArrows live??
-
-
-
-        // TODO: have this be some kind of reticule instead?
-        [SerializeField] protected PreviewObject previewObject;
-
-        [SerializeField] protected LineRenderer myLineRenderer;
 
 
         // PROPERTIES
@@ -75,10 +52,6 @@ namespace Building
         }
 
 
-        // EVENTS
-        public event ItemSelected<WallAnchor_v2> OnWallAnchorSelected;
-
-
 
         // METHODS
 
@@ -89,107 +62,162 @@ namespace Building
             areaWallAnchors = new List<WallAnchor_v2>();
             areaWallSegments = new List<WallSegment_v2>();
             anchorPairsToSegments = new Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2>();
-
-
-            // To review
-            anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
-            anchorControlArrow.Init(new Vector3(0, 0.1f, 0));
-
-            previewObject = Instantiate(previewObjectPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewObject>();
-            previewObject.gameObject.SetActive(false);
-
-            myLineRenderer = GetComponent<LineRenderer>();
-            DeactivateLineRenderer();
-
         }
 
 
-        // EVENT LISTENERS
-        private void OnWallAnchorClicked(WallAnchor_v2 targetAnchor, PointerEventData.InputButton clickType)
+        // MANAGEMENT
+
+        // -> WALL ANCHORS
+        public bool IsWallAnchorRegistered(WallAnchor_v2 wallAnchor)
         {
-            // On right clicks, try to connect the clicked and currently selected anchors
-            if (clickType == PointerEventData.InputButton.Right && selectedAnchor != null)
+            return areaWallAnchors.Contains(wallAnchor);
+        }
+        public bool RegisterWallAnchor(WallAnchor_v2 newAnchor)
+        {
+            if (newAnchor == null) // ignore null object
             {
-                CreateWallSegment(selectedAnchor, targetAnchor);
+                return false;
             }
-            else // (un)select the clicked anchor
+            else if (IsWallAnchorRegistered(newAnchor))
             {
-                if (targetAnchor != selectedAnchor)
+                Debug.Log(string.Format("The WallAnchor '{0}' is already registered with the WallManager for this scene. It will not be registered twice.", newAnchor.name));
+                return false;
+            }
+
+            areaWallAnchors.Add(newAnchor);
+            return true;
+        }
+        public bool RemoveWallAnchor(WallAnchor_v2 wallAnchor)
+        {
+            if (wallAnchor == null) // ignore null object
+            {
+                return false;
+            }
+            else if (!IsWallAnchorRegistered(wallAnchor))
+            {
+                Debug.Log(string.Format("The WallAnchor '{0}' is not recognised by the WallManager. Nothing to remove.", wallAnchor.name));
+                return false;
+            }
+
+            areaWallAnchors.Remove(wallAnchor);
+            return true;
+        }
+
+        // -> ANCHOR PAIRS (internal use only)
+        protected bool IsValidAnchorPair((WallAnchor_v2, WallAnchor_v2) anchorPair)
+        {
+            if (anchorPair.Item1 == null || anchorPair.Item2 == null)
+            {
+                Debug.Log("This pair of WallAnchors is invalid for registrations. One or both are null.");
+                return false;
+            }
+            else if (!IsWallAnchorRegistered(anchorPair.Item1) || !IsWallAnchorRegistered(anchorPair.Item2))
+            {
+                Debug.Log("This pair of WallAnchors is invalid for registration. One or both are not individually registered with the WallManager.");
+                return false;
+            }
+
+            return true;
+        }
+        protected bool IsAnchorPairRegistered((WallAnchor_v2, WallAnchor_v2) anchorPair)
+        {
+            return anchorPairsToSegments.ContainsKey(anchorPair);
+        }
+
+        // TODO:
+        // register and remove wallpairs
+
+
+        public bool RegisterAnchorPairForSegment(WallSegment_v2 newSegment)
+        {
+            (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
+
+            if (!IsValidAnchorPair(segmentAnchors)) // ignore invalid pairs
+            {
+                return false;
+            }
+            else if (IsAnchorPairRegistered(segmentAnchors))
+            {
+                Debug.Log(string.Format("The WallAnchors '{0}' and '{1}' are already registered as the pair for the WallSegment '{2}'.", segmentAnchors.Item1.name, segmentAnchors.Item2.name, anchorPairsToSegments[segmentAnchors]));
+                return false;
+            }
+
+            anchorPairsToSegments.Add(segmentAnchors, newSegment);
+            return true;
+        }
+
+
+
+        // -> WALL SEGMENTS
+        protected bool IsWallSegmentRegistered(WallSegment_v2 wallSegment)
+        {
+            return areaWallSegments.Contains(wallSegment); 
+        }
+        public bool IsWallSegmentFullyRegistered(WallSegment_v2 wallSegment)
+        {
+            (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (wallSegment.AnchorA, wallSegment.AnchorB);
+            return IsWallSegmentRegistered(wallSegment) && IsAnchorPairRegistered(segmentAnchors);
+        }
+
+        public bool RegisterWallSegment(WallSegment_v2 newSegment)
+        {
+            if (newSegment == null) // ignore null object
+            {
+                return false;
+            }
+
+            (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
+            if (!IsValidAnchorPair(segmentAnchors))
+            {
+                Debug.Log(string.Format("The WallSegment '{0}' cannot be registered as one or both of its WallAnchors are not valid or registered.", newSegment.name));
+            }
+
+            if (IsAnchorPairRegistered(segmentAnchors))
+            {
+                WallSegment_v2 segmentRegisteredForThisPair = anchorPairsToSegments[segmentAnchors];
+                if (segmentRegisteredForThisPair != newSegment)
                 {
-                    SelectWallAnchor(targetAnchor);
+                    Debug.Log(string.Format("A different WallSegment is already registered with '{0}''s pair of WallAnchors. It cannot be registered.", newSegment.name));
+                    return false;
                 }
                 else
                 {
-                    SelectWallAnchor(null);
+                    Debug.Log(string.Format("The WallSegment '{0}''s pair of WallAnchors is already registered with the WallManager for this scene. It will not be registered twice.", newSegment.name));
                 }
             }
-        }
 
-
-        // UTILITY
-        private void SelectWallAnchor(WallAnchor_v2 targetAnchor)
-        {
-            OnWallAnchorSelected?.Invoke(targetAnchor);
-
-            selectedAnchor = targetAnchor;
-            anchorControlArrow.ArrowTarget = selectedAnchor;
-
-            // Temp line renderer stuff
-            if (selectedAnchor != null)
+            if (!areaWallSegments.Contains(newSegment))
             {
-                myLineRenderer.enabled = true;
-                myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
-                myLineRenderer.SetPosition(1, selectedAnchor.PosAtBase);
-            }
-            else
-            {
-                myLineRenderer.enabled = false;
-                myLineRenderer.SetPosition(0, Vector3.zero);
-                myLineRenderer.SetPosition(1, Vector3.zero);
-            }
-        }
-
-
-        // -> ANCHOR AND SEGMENT CREATION
-        private WallAnchor_v2 CreateWallAnchor(Vector3 location)
-        {
-            WallAnchor_v2 newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor_v2>();
-            newAnchor.Init(NextAnchorID);
-
-            newAnchor.OnClicked += this.OnWallAnchorClicked;
-            this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
-
-            areaWallAnchors.Add(newAnchor);
-
-            return newAnchor;
-        }
-
-        private WallSegment_v2 CreateWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
-        {
-            // Always start from the lowest ID anchor.
-            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
-
-            // Do not recreate existing wall segments.
-            if (!anchorPairsToSegments.ContainsKey((anchorA, anchorB)))
-            {
-                WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
-                newSegment.Init(NextSegmentID, anchorA, anchorB);
-
-                // Event subscriptions
-
                 areaWallSegments.Add(newSegment);
-                anchorPairsToSegments.Add((anchorA, anchorB), newSegment);
-
-                return newSegment;
+                return true;
             }
             else
             {
-                Debug.Log(string.Format("A wall segment already exists between anchors '{0}' and '{1}'. The CreateWallSegment function will return it instead.", anchorA, anchorB));
-                return anchorPairsToSegments[(anchorA, anchorB)];
-            } 
+                Debug.Log(string.Format("The WallSegment '{0}' is already registered with the WallManager for this scene. It will not be registered twice.", newSegment.name));
+                return false;
+            }
+        }
+
+        public bool RemoveWallSegment(WallSegment_v2 wallSegment)
+        {
+            if (wallSegment == null) // ignore null object
+            {
+                return false;
+            }
+            else if (!IsWallSegmentRegistered(wallSegment))
+            {
+                Debug.Log(string.Format("The WallAnchor '{0}' is not recognised by the WallManager. Nothing to remove.", wallSegment.name));
+                return false;
+            }
+
+            areaWallSegments.Remove(wallSegment);
+            return true;
+
+            // TODO: also remove from the dict
         }
 
 
+        // update/split?
 
 
         // BUILT IN
@@ -197,74 +225,6 @@ namespace Building
         {
             Init();
         }
-
-
-        // OR: do drag and on pointer release for previewing?
-
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            WallAnchor_v2 newAnchor = CreateWallAnchor(eventData.pointerPressRaycast.worldPosition);
-
-            if (selectedAnchor != null && selectedAnchor != newAnchor)
-            {
-                CreateWallSegment(selectedAnchor, newAnchor);
-            } 
-
-            SelectWallAnchor(newAnchor);
-        }
-
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (selectedAnchor != null)
-            {
-                myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
-                myLineRenderer.enabled = true;
-            }
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            DeactivateLineRenderer();
-        }
-
-        // Hacky preview/visualization stuff
-        // TODO: move to a separate system
-        private void OnMouseOver()
-        {
-            RaycastHit cursorHit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out cursorHit))
-            {
-                if (selectedAnchor != null)
-                {
-                    myLineRenderer.SetPosition(1, cursorHit.point);
-                }
-                else
-                {
-                    myLineRenderer.SetPosition(1, Vector3.zero);
-                }
-            }
-        }
-
-        private void DeactivateLineRenderer()
-        {
-            myLineRenderer.enabled = false;
-            myLineRenderer.SetPosition(0, Vector3.zero);
-            myLineRenderer.SetPosition(1, Vector3.zero);
-        }
-
-
-        //#if DEBUG
-        //        private void OnDrawGizmos()
-        //        {
-        //            if (selectedAnchor != null)
-        //            {
-        //                Debug.DrawLine(selectedAnchor.transform.position, previewObject.transform.position);
-        //            }
-        //        }
-        //#endif
     }
 }
 
