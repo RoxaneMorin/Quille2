@@ -20,7 +20,6 @@ namespace Building
 
         [SerializeField] protected List<WallAnchor_v2> areaWallAnchors;
         [SerializeField] protected List<WallSegment_v2> areaWallSegments;
-
         protected Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2> anchorPairsToSegments;
 
 
@@ -50,6 +49,10 @@ namespace Building
                 return highestSegmentID;
             }
         }
+
+
+        // TODO: track deleted/freed IDs for reused?
+        // Though would this fuck with the ID ordering stuff?
 
 
 
@@ -123,12 +126,7 @@ namespace Building
         {
             return anchorPairsToSegments.ContainsKey(anchorPair);
         }
-
-        // TODO:
-        // register and remove wallpairs
-
-
-        public bool RegisterAnchorPairForSegment(WallSegment_v2 newSegment)
+        protected bool RegisterAnchorPairForSegment(WallSegment_v2 newSegment)
         {
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
 
@@ -145,8 +143,17 @@ namespace Building
             anchorPairsToSegments.Add(segmentAnchors, newSegment);
             return true;
         }
+        protected bool RemoveAnchorPair((WallAnchor_v2, WallAnchor_v2) anchorPair)
+        {
+            if (!IsAnchorPairRegistered(anchorPair))
+            {
+                Debug.Log(string.Format("The pair of WallAnchors '{0}' and '{1}' are not registered with the WallManager. Nothing to remove.", anchorPair.Item1.name, anchorPair.Item2.name));
+                return false;
+            }
 
-
+            anchorPairsToSegments.Remove(anchorPair);
+            return true;
+        }
 
         // -> WALL SEGMENTS
         protected bool IsWallSegmentRegistered(WallSegment_v2 wallSegment)
@@ -169,7 +176,7 @@ namespace Building
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
             if (!IsValidAnchorPair(segmentAnchors))
             {
-                Debug.Log(string.Format("The WallSegment '{0}' cannot be registered as one or both of its WallAnchors are not valid or registered.", newSegment.name));
+                Debug.Log(string.Format("The WallSegment '{0}' cannot be registered as one or both of its WallAnchors are not valid or individually registered.", newSegment.name));
             }
 
             if (IsAnchorPairRegistered(segmentAnchors))
@@ -204,7 +211,12 @@ namespace Building
             {
                 return false;
             }
-            else if (!IsWallSegmentRegistered(wallSegment))
+
+            // First unlist the associated pair of anchors.
+            (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (wallSegment.AnchorA, wallSegment.AnchorB);
+            RemoveAnchorPair(segmentAnchors);
+
+            if (!IsWallSegmentRegistered(wallSegment))
             {
                 Debug.Log(string.Format("The WallAnchor '{0}' is not recognised by the WallManager. Nothing to remove.", wallSegment.name));
                 return false;
@@ -212,8 +224,6 @@ namespace Building
 
             areaWallSegments.Remove(wallSegment);
             return true;
-
-            // TODO: also remove from the dict
         }
 
 

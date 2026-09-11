@@ -18,8 +18,7 @@ namespace Building
         ZMin
     }
 
-    // TODO: determine how our target may inform us it's going inactive.
-    // TODO: should it instead be unaware of its target, and throw up an event?
+    // TODO: determine how a target or controller may inform us it's going inactive
 
     public class ControlArrow : MonoBehaviour, IPointerDragAndHoverHandler
     {

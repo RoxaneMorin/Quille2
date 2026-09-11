@@ -7,12 +7,12 @@ namespace Building
 {
     public interface IArrowControllable
     {
-        // Reference to the arrow? Would necessitate a different interface for having multiple arrows.
-
         public void OnControlArrowAdjustment(ControlArrow sourceArrow, Vector2 cursorPosDelta);
 
-        // TODO: separate function to return a message to the arrow?
-        // Event the arrow listens to when it should change position?
+        // TODO: function to return the object's bounds / new position for the arrow
+        // or having OnControlArrowAdjustment return that
+
+        // TODO: store the desired arrow orientation and delta from target as properties here instead?
     }
 }
 
