@@ -7,18 +7,18 @@ namespace Building
 {
     // TODO: detect intersections, do wall splits
 
-    public class WallTools : MonoBehaviour
+    public class WallTools : MonoBehaviour, IPointerClickAndHoverHandler
     {
-        //// VARIABLES/PARAMETERS
-        //[Header("Resources")]
-        //[SerializeField] protected GameObject wallAnchorPrefab;
-        //[SerializeField] protected GameObject wallSegmentPrefab;
+        // VARIABLES/PARAMETERS
+        [Header("Resources")]
+        [SerializeField] protected GameObject wallAnchorPrefab;
+        [SerializeField] protected GameObject wallSegmentPrefab;
 
-        //[SerializeField] protected GameObject controlArrowPrefab;
-        //[SerializeField] protected GameObject previewObjectPrefab;
+        [SerializeField] protected GameObject controlArrowPrefab;
+        [SerializeField] protected GameObject previewObjectPrefab;
 
-        //[Header("References")]
-
+        [Header("References")]
+        [SerializeField] protected WallManager_new wallManager;
 
         //[SerializeField] protected WallAnchor_v2 selectedAnchor;
         //// TODO: Any selectable from the ISelectable interface?
@@ -34,61 +34,34 @@ namespace Building
         //[SerializeField] protected LineRenderer myLineRenderer;
 
 
-        //// PROPERTIES
-        //protected int HighestAnchorID
-        //{
-        //    get { return highestAnchorID; }
-        //}
-        //protected int HighestSegmentID
-        //{
-        //    get { return highestSegmentID; }
-        //}
-
-        //protected int NextAnchorID
-        //{
-        //    get
-        //    {
-        //        highestAnchorID++;
-        //        return highestAnchorID;
-        //    }
-        //}
-        //protected int NextSegmentID
-        //{
-        //    get
-        //    {
-        //        highestSegmentID++;
-        //        return highestSegmentID;
-        //    }
-        //}
-
 
         //// EVENTS
         //public event ItemSelected<WallAnchor_v2> OnWallAnchorSelected;
 
 
 
-        //// METHODS
+        // METHODS
 
-        //// INIT
-        //public void Init()
-        //{
-        //    // Create containers.
-        //    areaWallAnchors = new List<WallAnchor_v2>();
-        //    areaWallSegments = new List<WallSegment_v2>();
-        //    anchorPairsToSegments = new Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2>();
+        // INIT
+        public void Init()
+        {
+            // Find the WallManager
+            if (wallManager is null)
+            {
+                wallManager = FindFirstObjectByType<WallManager_new>();
+            }
+            
 
+            //// To review
+            //anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
+            //anchorControlArrow.Init(new Vector3(0, 0.1f, 0));
 
-        //    // To review
-        //    anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
-        //    anchorControlArrow.Init(new Vector3(0, 0.1f, 0));
+            //previewObject = Instantiate(previewObjectPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewObject>();
+            //previewObject.gameObject.SetActive(false);
 
-        //    previewObject = Instantiate(previewObjectPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewObject>();
-        //    previewObject.gameObject.SetActive(false);
-
-        //    myLineRenderer = GetComponent<LineRenderer>();
-        //    DeactivateLineRenderer();
-
-        //}
+            //myLineRenderer = GetComponent<LineRenderer>();
+            //DeactivateLineRenderer();
+        }
 
 
         //// EVENT LISTENERS
@@ -179,45 +152,51 @@ namespace Building
 
 
 
-        //// BUILT IN
-        //private void Start()
-        //{
-        //    Init();
-        //}
+        // BUILT IN
+        private void Start()
+        {
+            Init();
+        }
 
 
-        //// OR: do drag and on pointer release for previewing?
+        // OR: do drag and on pointer release for previewing?
 
 
-        //public void OnPointerClick(PointerEventData eventData)
-        //{
-        //    WallAnchor_v2 newAnchor = CreateWallAnchor(eventData.pointerPressRaycast.worldPosition);
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log("Wall tool pointer click");
 
-        //    if (selectedAnchor != null && selectedAnchor != newAnchor)
-        //    {
-        //        CreateWallSegment(selectedAnchor, newAnchor);
-        //    }
+            //WallAnchor_v2 newAnchor = CreateWallAnchor(eventData.pointerPressRaycast.worldPosition);
 
-        //    SelectWallAnchor(newAnchor);
-        //}
+            //if (selectedAnchor != null && selectedAnchor != newAnchor)
+            //{
+            //    CreateWallSegment(selectedAnchor, newAnchor);
+            //}
+
+            //SelectWallAnchor(newAnchor);
+        }
 
 
-        //public void OnPointerEnter(PointerEventData eventData)
-        //{
-        //    if (selectedAnchor != null)
-        //    {
-        //        myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
-        //        myLineRenderer.enabled = true;
-        //    }
-        //}
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            Debug.Log("Wall tool pointer enter");
 
-        //public void OnPointerExit(PointerEventData eventData)
-        //{
-        //    DeactivateLineRenderer();
-        //}
+            //if (selectedAnchor != null)
+            //{
+            //    myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
+            //    myLineRenderer.enabled = true;
+            //}
+        }
 
-        //// Hacky preview/visualization stuff
-        //// TODO: move to a separate system
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            Debug.Log("Wall tool pointer exit");
+
+            //DeactivateLineRenderer();
+        }
+
+        // Hacky preview/visualization stuff
+        // TODO: move to a separate system
         //private void OnMouseOver()
         //{
         //    RaycastHit cursorHit;
