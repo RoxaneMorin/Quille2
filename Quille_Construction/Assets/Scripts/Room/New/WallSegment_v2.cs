@@ -85,6 +85,19 @@ namespace Building
             get { return Vector3.Lerp(PosAtPointATop, PosAtPointBTop, 0.5f); }
         }
 
+        public Vector3 PosAtPointAMed
+        {
+            get { return Vector3.Lerp(PosAtPointABase, PosAtPointATop, 0.5f); }
+        }
+        public Vector3 PosAtPointBMed
+        {
+            get { return Vector3.Lerp(PosAtPointBBase, PosAtPointBTop, 0.5f); }
+        }
+        public Vector3 PosAtMidpointMed
+        {
+            get { return Vector3.Lerp(PosAtMidpointBase, PosAtMidpointTop, 0.5f); }
+        }
+
         public float HeightAtPointA
         {
             get { return anchorA.Height; }
@@ -108,7 +121,7 @@ namespace Building
         // METHODS
 
         // INIT
-        public void Init(int id, WallAnchor_v2 anchorA, WallAnchor_v2 anchorB, float thickness = 0.1f)
+        public void Init(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB, float thickness = 0.1f)
         {
             // Fetch mesh components.
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
@@ -122,7 +135,7 @@ namespace Building
                 ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
 
                 // Name the game object.
-                gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
+                gameObject.name = string.Format("Unregistered WallSegment ({0} <-> {1})", anchorA.ID, anchorB.ID);
 
                 // Set the anchor references.
                 this.anchorA = anchorA;
@@ -130,7 +143,7 @@ namespace Building
                 WallAnchor_v2.Connect(anchorA, anchorB);
 
                 // Adjust other parameters.
-                this.id = id;
+                //this.id = id;
                 this.thickness = thickness;
 
                 // Subscribe to anchors' update events.
@@ -145,6 +158,12 @@ namespace Building
                 Debug.LogError("Invalid attempt at initializing a WallSegment with a null WallAnchor parameter.");
                 Destroy(this);
             } 
+        }
+
+        public void AssignID(int id)
+        {
+            this.id = id;
+            gameObject.name = string.Format("WallSegment {0} ({1} <-> {2})", id, anchorA.ID, anchorB.ID);
         }
 
 
@@ -233,8 +252,18 @@ namespace Building
         }
 
 
-        //
+        // BUILT IN
+        private void OnDestroy()
+        {
+            // Clear away anchors' subscriptions and references.
+            anchorA.OnParameterUpdated -= AnchorParameterUpdated;
+            anchorB.OnParameterUpdated -= AnchorParameterUpdated;
+            WallAnchor_v2.Disconnect(AnchorA, AnchorB);
+        }
 
+
+
+        // DEBUG
 #if DEBUG
         protected void OnDrawGizmos()
         {

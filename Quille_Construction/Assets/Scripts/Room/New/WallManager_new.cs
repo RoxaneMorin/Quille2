@@ -1,11 +1,6 @@
-using AYellowpaper;
-using Building;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Building
 {
@@ -17,6 +12,8 @@ namespace Building
         [Header("Data and References")]
         [SerializeField] protected int highestAnchorID = -1;
         [SerializeField] protected int highestSegmentID = -1;
+        [SerializeField] protected List<int> freeAnchorIDs;
+        [SerializeField] protected List<int> freeSegmentIDs;
 
         [SerializeField] protected List<WallAnchor_v2> areaWallAnchors;
         [SerializeField] protected List<WallSegment_v2> areaWallSegments;
@@ -24,35 +21,101 @@ namespace Building
 
 
         // PROPERTIES
-        protected int HighestAnchorID
+        //Not sure these two are useful:
+        public int HighestAnchorID
         {
             get { return highestAnchorID; }
         }
-        protected int HighestSegmentID
+        public int HighestSegmentID
         {
             get { return highestSegmentID; }
         }
 
-        protected int NextAnchorID
+        protected int NextAvailableAnchorID
         {
             get
             {
-                highestAnchorID++;
-                return highestAnchorID;
+                int? firstFreeID = TryGetFirstUnusedAnchorID();
+                if (firstFreeID != null)
+                {
+                    return firstFreeID.Value;
+                }
+                else
+                {
+                    highestAnchorID++;
+                    return highestAnchorID;
+                }   
             }
         }
-        protected int NextSegmentID
+        protected int NextAvailableSegmentID
         {
             get
             {
-                highestSegmentID++;
-                return highestSegmentID;
+                int? firstFreeID = TryGetFirstUnusedSegmentID();
+                if (firstFreeID != null)
+                {
+                    return firstFreeID.Value;
+                }
+                else
+                {
+                    highestSegmentID++;
+                    return highestSegmentID;
+                }
             }
         }
 
 
-        // TODO: track deleted/freed IDs for reused?
-        // Though would this fuck with the ID ordering stuff?
+        // OTHER SETTERS/GETTERS
+        protected bool FreeAnchorID(int theID)
+        {
+            if (freeAnchorIDs.Contains(theID))
+            {
+                Debug.Log(string.Format("The ID '{0}' is already in the list of anchor IDs waiting for reuse.", theID));
+                return false;
+            }
+
+            freeAnchorIDs.SortedInsert(theID, (existingID, newID) => existingID > newID);
+            return true;
+        }
+        protected int? TryGetFirstUnusedAnchorID()
+        {
+            if (freeAnchorIDs.Count > 0)
+            {
+                int theID = freeAnchorIDs[0];
+                freeAnchorIDs.RemoveAt(0);
+                return theID;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        protected bool FreeSegmentID(int theID)
+        {
+            if (freeSegmentIDs.Contains(theID))
+            {
+                Debug.Log(string.Format("The ID '{0}' is already in the list of segment IDs waiting for reuse.", theID));
+                return false;
+            }
+
+            freeSegmentIDs.SortedInsert(theID, (existingID, newID) => existingID > newID);
+            return true;
+        }
+
+        protected int? TryGetFirstUnusedSegmentID()
+        {
+            if (freeSegmentIDs.Count > 0)
+            {
+                int theID = freeSegmentIDs[0];
+                freeSegmentIDs.RemoveAt(0);
+                return theID;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
 
@@ -62,6 +125,9 @@ namespace Building
         public void Init()
         {
             // Create containers.
+            freeAnchorIDs = new List<int>();
+            freeSegmentIDs = new List<int>();
+
             areaWallAnchors = new List<WallAnchor_v2>();
             areaWallSegments = new List<WallSegment_v2>();
             anchorPairsToSegments = new Dictionary<(WallAnchor_v2, WallAnchor_v2), WallSegment_v2>();
@@ -87,6 +153,7 @@ namespace Building
                 return false;
             }
 
+            newAnchor.AssignID(NextAvailableAnchorID);
             areaWallAnchors.Add(newAnchor);
             return true;
         }
@@ -103,20 +170,21 @@ namespace Building
             }
 
             areaWallAnchors.Remove(wallAnchor);
+            FreeAnchorID(wallAnchor.ID);
             return true;
         }
 
-        // -> ANCHOR PAIRS (internal use only)
-        protected bool IsValidAnchorPair((WallAnchor_v2, WallAnchor_v2) anchorPair)
+        // -> ANCHOR PAIRS
+        protected bool IsViableAnchorPair((WallAnchor_v2, WallAnchor_v2) anchorPair)
         {
             if (anchorPair.Item1 == null || anchorPair.Item2 == null)
             {
-                Debug.Log("This pair of WallAnchors is invalid for registrations. One or both are null.");
+                Debug.Log("This pair of WallAnchors is invalid. One or both are null.");
                 return false;
             }
             else if (!IsWallAnchorRegistered(anchorPair.Item1) || !IsWallAnchorRegistered(anchorPair.Item2))
             {
-                Debug.Log("This pair of WallAnchors is invalid for registration. One or both are not individually registered with the WallManager.");
+                Debug.Log("This pair of WallAnchors is invalid. One or both are not individually registered with the WallManager.");
                 return false;
             }
 
@@ -130,7 +198,7 @@ namespace Building
         {
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
 
-            if (!IsValidAnchorPair(segmentAnchors)) // ignore invalid pairs
+            if (!IsViableAnchorPair(segmentAnchors)) // ignore invalid pairs
             {
                 return false;
             }
@@ -155,15 +223,40 @@ namespace Building
             return true;
         }
 
+        public bool HasSegmentForAnchorPair(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            (WallAnchor_v2, WallAnchor_v2) anchorPair = (anchorA, anchorB);
+
+            if (IsViableAnchorPair(anchorPair))
+            {
+                return anchorPairsToSegments.ContainsKey(anchorPair);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public WallSegment_v2 GetSegmentForAnchorPair((WallAnchor_v2, WallAnchor_v2) anchorPair)
+        {
+            if (IsAnchorPairRegistered(anchorPair))
+            {
+                return anchorPairsToSegments[anchorPair];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         // -> WALL SEGMENTS
-        protected bool IsWallSegmentRegistered(WallSegment_v2 wallSegment)
+        protected bool IsWallSegmentRegisteredIgnoreAnchorPair(WallSegment_v2 wallSegment)
         {
             return areaWallSegments.Contains(wallSegment); 
         }
-        public bool IsWallSegmentFullyRegistered(WallSegment_v2 wallSegment)
+        public bool IsWallSegmentRegistered(WallSegment_v2 wallSegment)
         {
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (wallSegment.AnchorA, wallSegment.AnchorB);
-            return IsWallSegmentRegistered(wallSegment) && IsAnchorPairRegistered(segmentAnchors);
+            return IsWallSegmentRegisteredIgnoreAnchorPair(wallSegment) && IsAnchorPairRegistered(segmentAnchors);
         }
 
         public bool RegisterWallSegment(WallSegment_v2 newSegment)
@@ -173,8 +266,9 @@ namespace Building
                 return false;
             }
 
+            // TODO: simplify this section as the checks are already handled by the various subfunctions.
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (newSegment.AnchorA, newSegment.AnchorB);
-            if (!IsValidAnchorPair(segmentAnchors))
+            if (!IsViableAnchorPair(segmentAnchors))
             {
                 Debug.Log(string.Format("The WallSegment '{0}' cannot be registered as one or both of its WallAnchors are not valid or individually registered.", newSegment.name));
             }
@@ -192,9 +286,14 @@ namespace Building
                     Debug.Log(string.Format("The WallSegment '{0}''s pair of WallAnchors is already registered with the WallManager for this scene. It will not be registered twice.", newSegment.name));
                 }
             }
+            else
+            {
+                RegisterAnchorPairForSegment(newSegment);
+            }
 
             if (!areaWallSegments.Contains(newSegment))
             {
+                newSegment.AssignID(NextAvailableSegmentID);
                 areaWallSegments.Add(newSegment);
                 return true;
             }
@@ -216,18 +315,18 @@ namespace Building
             (WallAnchor_v2, WallAnchor_v2) segmentAnchors = (wallSegment.AnchorA, wallSegment.AnchorB);
             RemoveAnchorPair(segmentAnchors);
 
-            if (!IsWallSegmentRegistered(wallSegment))
+            if (!IsWallSegmentRegisteredIgnoreAnchorPair(wallSegment))
             {
                 Debug.Log(string.Format("The WallAnchor '{0}' is not recognised by the WallManager. Nothing to remove.", wallSegment.name));
                 return false;
             }
 
             areaWallSegments.Remove(wallSegment);
+            FreeSegmentID(wallSegment.ID);
             return true;
         }
 
-
-        // update/split?
+        // TODO: maybe clean up some of the repetitiveness in anchorPair/wallSegment checks.
 
 
         // BUILT IN

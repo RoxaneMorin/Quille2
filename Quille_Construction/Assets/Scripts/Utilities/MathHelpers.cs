@@ -16,6 +16,7 @@ public static class MathHelpers
         Vector3 relativeOtherPoint = otherPoint - centerPoint;
         return Mathf.Atan2(relativeOtherPoint.z, relativeOtherPoint.x).NormalizeRadAngle();
     }
+    // TODO: use unity's Vector3.Angle function instead?
 
 
     // Determine whether the given two segments, given as points, intersect in the X and Z axes.

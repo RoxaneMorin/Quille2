@@ -134,7 +134,7 @@ namespace Building
                     CreateIndividualWallSegment(anchorA, newAnchor);
 
                     // Split the existing intersected segment.
-                    SplitWallSegment(intersection.Item1, newAnchor);
+                    SplitWallSegment(intersection.Item1, newAnchor);   
 
                     anchorA = newAnchor;
                 }

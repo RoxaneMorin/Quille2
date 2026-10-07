@@ -28,10 +28,11 @@ namespace Building
         [SerializeField] protected float colliderSizePadding = 0.1f;
 
         [Header("Data")]
-        [SerializeField] protected int id;
+        [SerializeField] protected int id = -1;
         [SerializeField] protected float height = 1f;
         [SerializeField] protected List<WallAnchor_v2> connections;
         [SerializeField] protected SerializedDictionary<WallAnchor_v2, float> connectionAngles;
+        // TODO: could use a sorted list?
         // TODO: should we also keep track of the corresponding wall segments here?
 
         [Header("Runtime")]
@@ -76,6 +77,10 @@ namespace Building
         {
             get { return transform.position + new Vector3(0, Height, 0); }
         }
+        public Vector3 PosAtMidpoint
+        {
+            get { return Vector3.Lerp(PosAtBase, PosAtTop, 0.5f); }
+        }
 
 
 
@@ -110,10 +115,10 @@ namespace Building
 
 
         // INIT
-        public void Init(int id, float height = 1f)
+        public void Init(float height = 1f)
         {
             // Name the game object.
-            gameObject.name = string.Format("WallAnchor {0} {1}", id, transform.position);
+            gameObject.name = string.Format("Unregistered WallAnchor {0}", transform.position);
 
             // Fetch components.
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
@@ -122,7 +127,7 @@ namespace Building
             myCollider = gameObject.GetComponent<BoxCollider>();
 
             // Set parameters.
-            this.id = id;
+            //this.id = id;
             this.height = height;
             connections = new List<WallAnchor_v2>();
             connectionAngles = new SerializedDictionary<WallAnchor_v2, float>();
@@ -130,6 +135,12 @@ namespace Building
             // Propagate.
             UpdateGameObjectHeight();
             NotifyParameterUpdated();
+        }
+
+        public void AssignID(int id)
+        {
+            this.id = id;
+            gameObject.name = string.Format("WallAnchor {0} {1}", id, transform.position);
         }
 
 
@@ -161,15 +172,20 @@ namespace Building
             return null;
         }
 
-        public void Connect(WallAnchor_v2 anchor)
+        public bool HasConnectionAtAngle(float angle)
         {
-            float angle = MathHelpers.GetNormalizedAngleBetween(transform.position, anchor.transform.position);
-            connections.SortedInsert(anchor, (existingAnchor, newAnchor) => connectionAngles[existingAnchor] > angle);
-            connectionAngles.Add(anchor, angle);
+            return connectionAngles.ContainsValue(angle);
         }
-        public bool Disconnect(WallAnchor_v2 anchor)
+
+        public void Connect(WallAnchor_v2 otherAnchor)
         {
-            return connections.Remove(anchor) & connectionAngles.Remove(anchor);
+            float angle = MathHelpers.GetNormalizedAngleBetween(transform.position, otherAnchor.transform.position);
+            connections.SortedInsert(otherAnchor, (existingAnchor, newAnchor) => connectionAngles[existingAnchor] > angle);
+            connectionAngles.Add(otherAnchor, angle);
+        }
+        public bool Disconnect(WallAnchor_v2 otherAnchor)
+        {
+            return connections.Remove(otherAnchor) & connectionAngles.Remove(otherAnchor);
         }
         public void ReplaceConnection(WallAnchor_v2 existingAnchor, WallAnchor_v2 newAnchor) // Replace the given connection without recalculating its angle.
         {
@@ -187,6 +203,7 @@ namespace Building
                 Connect(newAnchor);
             }
         }
+
 
 
         // -> PARAMETER UPDATES

@@ -416,7 +416,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717887569}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -429,7 +429,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0815f575e5eeb0341abeed44c01c2997, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -503,6 +503,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highestAnchorID: -1
   highestSegmentID: -1
+  freeAnchorIDs: 
+  freeSegmentIDs: 
   areaWallAnchors: []
   areaWallSegments: []
 --- !u!120 &717887578
@@ -626,6 +628,9 @@ MonoBehaviour:
   controlArrowPrefab: {fileID: 6833376301732396801, guid: e933087674bde1f419328ad1c3b9e09e, type: 3}
   previewObjectPrefab: {fileID: 1964239970475636204, guid: 3186712514b4020468a94025a4440766, type: 3}
   wallManager: {fileID: 717887577}
+  selectedAnchor: {fileID: 0}
+  anchorControlArrow: {fileID: 0}
+  myLineRenderer: {fileID: 0}
 --- !u!114 &717887580
 MonoBehaviour:
   m_ObjectHideFlags: 0

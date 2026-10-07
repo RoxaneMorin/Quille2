@@ -34,6 +34,17 @@ public static class ExtensionMethods
     }
 
 
+    // VECTOR3
+    public static bool RoughlyEquals(this Vector3 thisVector, Vector3 otherVector, float tolerance = 0.001f)
+    {
+        float xDelta = MathF.Abs(thisVector.x - otherVector.x);
+        float yDelta = MathF.Abs(thisVector.y - otherVector.y);
+        float zDelta = MathF.Abs(thisVector.z - otherVector.z);
+
+        return xDelta < tolerance && yDelta < tolerance && zDelta < tolerance;
+    }
+
+
     // ARRAY
     public static void InvertedSort(this Array array)
     {
