@@ -172,6 +172,17 @@ namespace Building
             return null;
         }
 
+        public float GetConnectionAngleFor(WallAnchor_v2 targetAnchor)
+        {
+            if (connectionAngles.ContainsKey(targetAnchor))
+            {
+                return connectionAngles[targetAnchor];
+            }
+            else
+            {
+                return 0f;
+            }
+        }
         public bool HasConnectionAtAngle(float angle)
         {
             return connectionAngles.ContainsValue(angle);
@@ -179,7 +190,7 @@ namespace Building
 
         public void Connect(WallAnchor_v2 otherAnchor)
         {
-            float angle = MathHelpers.GetNormalizedAngleBetween(transform.position, otherAnchor.transform.position);
+            float angle = MathHelpers.GetNormalizeAngleBetweenInDegrees(PosAtBase, otherAnchor.PosAtBase);
             connections.SortedInsert(otherAnchor, (existingAnchor, newAnchor) => connectionAngles[existingAnchor] > angle);
             connectionAngles.Add(otherAnchor, angle);
         }
@@ -279,17 +290,17 @@ namespace Building
 #if DEBUG
         protected void OnDrawGizmos()
         {
-            Gizmos.color = Color.white;
+            //Gizmos.color = Color.white;
 
-            // ID
-            Vector3 idLabelPos = PosAtBase;
-            idLabelPos.y -= 0.05f;
-            Handles.Label(idLabelPos, string.Format("Anchor #{0}", ID));
+            //// ID
+            //Vector3 idLabelPos = PosAtBase;
+            //idLabelPos.y -= 0.05f;
+            //Handles.Label(idLabelPos, string.Format("Anchor #{0}", ID));
 
-            // Height.
-            Vector3 heightLabelPos = PosAtTop;
-            heightLabelPos.y += 0.075f;
-            Handles.Label(heightLabelPos, string.Format("Height: {0:0.000}", height));
+            //// Height.
+            //Vector3 heightLabelPos = PosAtTop;
+            //heightLabelPos.y += 0.075f;
+            //Handles.Label(heightLabelPos, string.Format("Height: {0:0.000}", height));
         }
 #endif
     }

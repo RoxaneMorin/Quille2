@@ -152,6 +152,8 @@ namespace Building
 
                 // Generate wall mesh.
                 GenerateWallMesh();
+
+                //myMeshRenderer.enabled = false;
             }
             else // log error and commit sudoku
             {
@@ -247,8 +249,9 @@ namespace Building
 
         protected Quaternion GetLocalRotationQuat()
         {
-            float angle = MathHelpers.GetNormalizedAngleBetween(PosAtPointABase, PosAtPointBBase);
-            return Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.down);
+            // TODO: request this from the anchor instead?
+            float angle = MathHelpers.GetNormalizeAngleBetweenInDegrees(PosAtPointABase, PosAtPointBBase);
+            return Quaternion.AngleAxis(-angle, Vector3.up);
         }
 
 
@@ -273,6 +276,9 @@ namespace Building
             Vector3 idLabelPos = PosAtMidpointBase;
             idLabelPos.y -= 0.05f;
             Handles.Label(idLabelPos, string.Format("Segment #{0}", ID));
+
+            // Line between anchors
+            Handles.DrawLine(anchorA.PosAtBase, anchorB.PosAtBase);
         }
 #endif
     }

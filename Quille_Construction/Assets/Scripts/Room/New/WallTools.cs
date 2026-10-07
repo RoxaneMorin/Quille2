@@ -24,18 +24,13 @@ namespace Building
         [Header("References")]
         [SerializeField] protected WallManager_new wallManager;
 
+        [SerializeField] protected LinePlacementVisualizer placementVisualizer;
+
         [SerializeField] protected WallAnchor_v2 selectedAnchor;
         // TODO: Any selectable from the ISelectable interface?
 
         [SerializeField] protected ControlArrow anchorControlArrow;
         // TÒDO: where should the controlArrows live??
-
-
-
-        //// TODO: have this be some kind of reticule instead?
-        //[SerializeField] protected PreviewObject previewObject;
-
-        [SerializeField] protected LineRenderer myLineRenderer;
 
 
 
@@ -55,17 +50,16 @@ namespace Building
                 wallManager = gameObject.GetComponent<WallManager_new>() ?? FindFirstObjectByType<WallManager_new>();
             }
 
+            // To review
+            if (placementVisualizer is null)
+            {
+                placementVisualizer = gameObject.GetComponentInChildren<LinePlacementVisualizer>() ?? FindFirstObjectByType<LinePlacementVisualizer>();
+            }
+
 
             // To review
             anchorControlArrow = Instantiate(controlArrowPrefab, Vector3.zero, Quaternion.identity).GetComponent<ControlArrow>();
             anchorControlArrow.Init(new Vector3(0, 0.1f, 0));
-
-
-            //previewObject = Instantiate(previewObjectPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewObject>();
-            //previewObject.gameObject.SetActive(false);
-
-            //myLineRenderer = GetComponent<LineRenderer>();
-            //DeactivateLineRenderer();
         }
 
 
@@ -112,23 +106,9 @@ namespace Building
             selectedAnchor = targetAnchor;
             anchorControlArrow.ArrowTarget = selectedAnchor;
 
-            //// Temp line renderer stuff
-            //if (selectedAnchor != null)
-            //{
-            //    myLineRenderer.enabled = true;
-            //    myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
-            //    myLineRenderer.SetPosition(1, selectedAnchor.PosAtBase);
-            //}
-            //else
-            //{
-            //    myLineRenderer.enabled = false;
-            //    myLineRenderer.SetPosition(0, Vector3.zero);
-            //    myLineRenderer.SetPosition(1, Vector3.zero);
-            //}
+            placementVisualizer.SetLineSource(targetAnchor == null? null : targetAnchor.gameObject);
         }
 
-
-        
 
 
         // -> ANCHOR CREATION
@@ -269,8 +249,8 @@ namespace Building
             }
 
             // Check whether another connection with the same angle already exists.
-            float newAngleAToB = MathHelpers.GetNormalizedAngleBetween(anchorA.PosAtBase, anchorB.PosAtBase);
-            float newAngleBtoA = MathHelpers.GetNormalizedAngleBetween(anchorB.PosAtBase, anchorA.PosAtBase);
+            float newAngleAToB = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorA.PosAtBase, anchorB.PosAtBase);
+            float newAngleBtoA = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorB.PosAtBase, anchorA.PosAtBase);
             return !anchorA.HasConnectionAtAngle(newAngleAToB) && !anchorB.HasConnectionAtAngle(newAngleBtoA);
 
             // TODO: may still throw errors if the angles are very similar but not quite exact :/
@@ -285,53 +265,24 @@ namespace Building
             Init();
         }
 
-
         // OR: do drag and on pointer release for previewing?
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            placementVisualizer.gameObject.SetActive(true);
 
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            placementVisualizer.gameObject.SetActive(false);
+
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             OnFreeGroundClicked(eventData.pointerPressRaycast.worldPosition);
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            //Debug.Log("Wall tool pointer enter");
-
-            //if (selectedAnchor != null)
-            //{
-            //    myLineRenderer.SetPosition(0, selectedAnchor.PosAtBase);
-            //    myLineRenderer.enabled = true;
-            //}
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            //Debug.Log("Wall tool pointer exit");
-
-            //DeactivateLineRenderer();
-        }
-
-        //// Hacky preview/visualization stuff
-        //// TODO: move to a separate system
-        //private void OnMouseOver()
-        //{
-        //    RaycastHit cursorHit;
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    if (Physics.Raycast(ray, out cursorHit))
-        //    {
-        //        if (selectedAnchor != null)
-        //        {
-        //            //myLineRenderer.SetPosition(1, SnapAngle(cursorHit.point));
-
-        //            myLineRenderer.SetPosition(1, cursorHit.point);
-        //        }
-        //        else
-        //        {
-        //            myLineRenderer.SetPosition(1, Vector3.zero);
-        //        }
-        //    }
-        //}
+        
 
 
         //// TODO: try snap to a certain angle from the center
@@ -349,14 +300,6 @@ namespace Building
         //    return selectedAnchor.PosAtBase + test + new Vector3(0f, 0.1f, 0f);
         //}
 
-
-
-        //private void DeactivateLineRenderer()
-        //{
-        //    myLineRenderer.enabled = false;
-        //    myLineRenderer.SetPosition(0, Vector3.zero);
-        //    myLineRenderer.SetPosition(1, Vector3.zero);
-        //}
 
 
         //#if DEBUG
