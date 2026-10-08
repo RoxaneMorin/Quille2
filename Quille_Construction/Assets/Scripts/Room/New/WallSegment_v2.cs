@@ -121,7 +121,7 @@ namespace Building
         // METHODS
 
         // INIT
-        public void Init(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB, float thickness = 0.1f)
+        public void Init(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB, float thickness = 0.05f)
         {
             // Fetch mesh components.
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
@@ -152,8 +152,6 @@ namespace Building
 
                 // Generate wall mesh.
                 GenerateWallMesh();
-
-                //myMeshRenderer.enabled = false;
             }
             else // log error and commit sudoku
             {
@@ -251,6 +249,8 @@ namespace Building
         {
             // TODO: request this from the anchor instead?
             float angle = MathHelpers.GetNormalizeAngleBetweenInDegrees(PosAtPointABase, PosAtPointBBase);
+
+            angle = anchorA.GetConnectionAngleFor(anchorB);
             return Quaternion.AngleAxis(-angle, Vector3.up);
         }
 
@@ -270,15 +270,15 @@ namespace Building
 #if DEBUG
         protected void OnDrawGizmos()
         {
-            Gizmos.color = Color.white;
+            //Gizmos.color = Color.white;
 
-            // ID
-            Vector3 idLabelPos = PosAtMidpointBase;
-            idLabelPos.y -= 0.05f;
-            Handles.Label(idLabelPos, string.Format("Segment #{0}", ID));
+            //// ID
+            //Vector3 idLabelPos = PosAtMidpointBase;
+            //idLabelPos.y -= 0.05f;
+            //Handles.Label(idLabelPos, string.Format("Segment #{0}", ID));
 
-            // Line between anchors
-            Handles.DrawLine(anchorA.PosAtBase, anchorB.PosAtBase);
+            //// Line between anchors
+            //Handles.DrawLine(anchorA.PosAtBase, anchorB.PosAtBase);
         }
 #endif
     }

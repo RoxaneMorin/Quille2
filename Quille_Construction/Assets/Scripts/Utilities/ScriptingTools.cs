@@ -9,6 +9,9 @@ public static class ExtensionMethods
 {
     // Various extension methods.
 
+
+    // STATIC PSEUDO-EXTENTION METHODS
+
     // GENERIC
     public static void SwapIfGreater<T>(ref T left, ref T right) where T : IComparable
     {
@@ -21,6 +24,25 @@ public static class ExtensionMethods
         }
     }
 
+    // VECTOR3
+    // Should this be moved to math helpers?
+    public static float Vector3InverseLerp(Vector3 vectorA, Vector3 vectorB, Vector3 value)
+    {
+        Vector3 vecAtoB = vectorB - vectorA;
+        Vector3 vecAtoValue = value - vectorA;
+
+        float denominator = Vector3.Dot(vecAtoB, vecAtoB);
+        if (denominator== 0)
+        {
+            return 0.0f;
+        }
+
+        return Vector3.Dot(vecAtoValue, vecAtoB) / denominator;
+    }
+
+
+
+    // PROPER, NON-STATIC EXTENTION METHODS
 
     // FLOAT
     public static float NormalizeRadAngle(this float angle)
@@ -202,16 +224,6 @@ public static class ExtensionMethods
             action(item);
         }
     }
-
-
-
-
-
-    
-
-
-
-
 }
 
 

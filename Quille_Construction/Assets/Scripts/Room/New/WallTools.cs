@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.FilePathAttribute;
 
 namespace Building
 {
-    // TODO: detect intersections, do wall splits
-
-    // TODO: cleanup and deletion of anchors and segments
-
     // TODO: separate wall creation and registering to the wallManager?
+
+    // TODO: add safety checks for a new segment potentially hitting existing but unconnected anchors
+    // TODO: add safety checks for a new segment potentially creating overly steep angles
+
+    // TODO: add more visual feedback for potential actions, like the anchors that would be linked by a click, and indication that a segment won't be created as it would not be valid.
 
     public class WallTools : MonoBehaviour, IPointerClickAndHoverHandler
     {
@@ -69,7 +71,7 @@ namespace Building
             // On right clicks, try to connect the clicked and currently selected anchors
             if (clickType == PointerEventData.InputButton.Right && selectedAnchor != null)
             {
-                CreateWallSegment(selectedAnchor, targetAnchor);
+                TryCreateWallSegment(selectedAnchor, targetAnchor);
             }
             else // (un)select the clicked anchor
             {
@@ -83,17 +85,206 @@ namespace Building
                 }
             }
         }
-
-        protected void OnFreeGroundClicked(Vector3 location)
+        protected void OnFreeGroundClicked(Vector3 clickedLocation)
         {
-            WallAnchor_v2 newAnchor = CreateWallAnchor(location);
+            WallAnchor_v2 newAnchor;
 
-            if (selectedAnchor != null && selectedAnchor != newAnchor)
+            if (selectedAnchor == null)
             {
-                CreateWallSegment(selectedAnchor, newAnchor);
+                newAnchor = CreateIndividualWallAnchor(clickedLocation);
+            }
+            else
+            {
+                newAnchor = TryCreateWallAnchorAndSegment(clickedLocation);
+            }
+            
+            SelectWallAnchor(newAnchor);
+        }
+
+
+        
+        // ITEM CREATION
+
+        // -> Individual items
+        protected WallAnchor_v2 CreateIndividualWallAnchor(Vector3 location, float height = 1.0f)
+        {
+            WallAnchor_v2 newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor_v2>();
+            newAnchor.Init(height);
+
+            newAnchor.OnClicked += this.OnWallAnchorClicked;
+            this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
+
+            wallManager.RegisterWallAnchor(newAnchor);
+
+            return newAnchor;
+        }
+        protected WallSegment_v2 CreateIndividualWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            // Always start from the lowest ID anchor.
+            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
+
+            WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
+            newSegment.Init(anchorA, anchorB);
+
+            // Event subscriptions
+
+            wallManager.RegisterWallSegment(newSegment);
+
+            return newSegment;
+        }
+
+        // -> 
+        protected WallAnchor_v2 TryCreateWallAnchorAndSegment(Vector3 newAnchorLocation)
+        {
+            if (WouldBeNewAndLegalAngleForAnchor(selectedAnchor, newAnchorLocation))
+            {
+                WallAnchor_v2 newAnchor = CreateIndividualWallAnchor(newAnchorLocation);
+                WallSegment_v2 newSegment = TryCreateWallSegment(selectedAnchor, newAnchor);
+                if (newSegment == null)
+                {
+                    DeleteWallAnchor(newAnchor);
+                    return null;
+                }
+                return newAnchor;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        protected WallSegment_v2 TryCreateWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            // Always start from the lowest ID anchor.
+            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
+
+            if (wallManager.HasSegmentForAnchorPair(anchorA, anchorB))
+            {
+                Debug.Log(string.Format("A WallSegment already exists between anchors '{0}' and '{1}'. It will be returned instead.", anchorA.name, anchorB.name));
+                return wallManager.GetSegmentForAnchorPair((anchorA, anchorB));
             }
 
-            SelectWallAnchor(newAnchor);
+            if (WouldBeValidWallSegment(anchorA, anchorB))
+            {
+                List<(WallSegment_v2, Vector3, float)> intersectedSegments = FindPotentialIntersectedSegments(anchorA, anchorB);
+
+                if (intersectedSegments.Count > 0)
+                {
+                    WallAnchor_v2 anchorAtSplit;
+                    foreach ((WallSegment_v2, Vector3, float) intersection in intersectedSegments)
+                    {
+                        anchorAtSplit = SplitExistingWallSegment(intersection.Item1, intersection.Item2);
+                        CreateIndividualWallSegment(anchorA, anchorAtSplit);
+                        anchorA = anchorAtSplit;
+                    }
+                }
+                return CreateIndividualWallSegment(anchorA, anchorB);
+            }
+            else
+            {
+                Debug.Log(string.Format("A WallSegment between anchors '{0}' and '{1}' would not be valid and was not created.", anchorA.name, anchorB.name));
+                return null;
+            }
+        }
+        protected WallAnchor_v2 SplitExistingWallSegment(WallSegment_v2 targetSegment, Vector3 splitAt)
+        {
+            WallAnchor_v2 anchorA = targetSegment.AnchorA;
+            WallAnchor_v2 anchorB = targetSegment.AnchorB;
+
+            DeleteWallSegment(targetSegment);
+
+            float splitAtLerpValue = ExtensionMethods.Vector3InverseLerp(anchorA.PosAtBase, anchorB.PosAtBase, splitAt);
+            float heigthAtSplitPoint = Mathf.Lerp(anchorA.Height, anchorB.Height, splitAtLerpValue);
+            WallAnchor_v2 anchorAtSplit = CreateIndividualWallAnchor(splitAt, heigthAtSplitPoint);
+
+            CreateIndividualWallSegment(anchorA, anchorAtSplit);
+            CreateIndividualWallSegment(anchorB, anchorAtSplit);
+
+            return anchorAtSplit;
+        }
+
+
+        // -> Checks
+        protected List<(WallSegment_v2, Vector3, float)> FindPotentialIntersectedSegments(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            List<(WallSegment_v2, Vector3, float)> intersectedSegments = new List<(WallSegment_v2, Vector3, float)>();
+
+            RaycastHit[] segmentHits;
+            Vector3 dirAtoB = anchorB.PosAtBase - anchorA.PosAtBase;
+            segmentHits = Physics.RaycastAll(anchorA.PosAtBase, dirAtoB, dirAtoB.magnitude, 1 << 13);
+
+            foreach (RaycastHit hit in segmentHits)
+            {
+                Collider hitCollider = hit.collider;
+                GameObject hitGameObject = hitCollider.gameObject;
+                WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
+
+                if (hitSegment != null)
+                {
+                    if (hitSegment.AnchorA == anchorA || hitSegment.AnchorB == anchorA || hitSegment.AnchorA == anchorB || hitSegment.AnchorB == anchorB)
+                    {
+                        Debug.Log($"The segment {hitSegment.name} disqualified as a potential intersection as it's connected to either {anchorA.name} or {anchorB}.");
+
+                        // Ignore segments connected to either of the anchors.
+                        continue;
+                    }
+
+                    Vector3 intersectionPoint = hit.point;
+                    float distanceFromAnchorA = Vector3.Distance(anchorA.PosAtBase, intersectionPoint);
+                    intersectedSegments.SortedInsert((hitSegment, intersectionPoint, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
+                }
+            }
+
+            return intersectedSegments;
+        }
+
+        protected bool WouldBeNewAndLegalAngleForAnchor(WallAnchor_v2 existingAnchor, Vector3 newAnchorLocation)
+        {
+            float angleExistingToLocation = MathHelpers.GetNormalizeAngleBetweenInDegrees(existingAnchor.PosAtBase, newAnchorLocation);
+            return existingAnchor.WouldBeNewAndLegalConnectionAngle(angleExistingToLocation);
+        }
+
+        protected bool WouldBeValidWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            // Always start from the lowest ID anchor.
+            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
+
+            if (anchorA == anchorB)
+            {
+                return false;
+            }
+
+            // Commenting out as it's likely redudant.
+            //if (wallManager.HasSegmentForAnchorPair(anchorA, anchorB))
+            //{
+            //    return false;
+            //}
+
+            float newAngleAToB = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorA.PosAtBase, anchorB.PosAtBase);
+            float newAngleBtoA = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorB.PosAtBase, anchorA.PosAtBase);
+
+            return anchorA.WouldBeNewAndLegalConnectionAngle(newAngleAToB) && anchorB.WouldBeNewAndLegalConnectionAngle(newAngleBtoA);
+        }
+
+
+
+        // ITEM DELETION
+        protected void DeleteWallAnchor(WallAnchor_v2 targetAnchor)
+        {
+            if (targetAnchor != null && wallManager.RemoveWallAnchor(targetAnchor))
+            {
+                targetAnchor.OnClicked -= this.OnWallAnchorClicked;
+
+                Destroy(targetAnchor.gameObject);
+            }
+        }
+        protected void DeleteWallSegment(WallSegment_v2 targetSegment)
+        {
+            if (targetSegment != null && wallManager.RemoveWallSegment(targetSegment))
+            {
+                // TODO: unregister events when  they get added.
+
+                Destroy(targetSegment.gameObject);
+            }
         }
 
 
@@ -106,157 +297,9 @@ namespace Building
             selectedAnchor = targetAnchor;
             anchorControlArrow.ArrowTarget = selectedAnchor;
 
-            placementVisualizer.SetLineSource(targetAnchor == null? null : targetAnchor.gameObject);
+            placementVisualizer.SetLineSource(targetAnchor == null ? null : targetAnchor.gameObject);
         }
 
-
-
-        // -> ANCHOR CREATION
-        protected WallAnchor_v2 CreateWallAnchor(Vector3 location)
-        {
-            WallAnchor_v2 newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor_v2>();
-            newAnchor.Init();
-
-            newAnchor.OnClicked += this.OnWallAnchorClicked;
-            this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
-
-            wallManager.RegisterWallAnchor(newAnchor);
-
-            return newAnchor;
-        }
-
-
-    // -> SEGMENT CREATION
-        protected WallSegment_v2 CreateWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
-        {
-            // Always start from the lowest ID anchor.
-            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
-
-            // Do not recreate existing wall segments.
-            if (WouldBeNewAndValidWallSegment(anchorA, anchorB))
-            {
-                // Account for potential intersections with other segments.
-                List<(WallSegment_v2, Vector3, float)> intersectedSegments = FindPotentialIntersectedSegments(anchorA, anchorB);
-                if (intersectedSegments.Count > 0)
-                {
-                    WallAnchor_v2 anchorAtSplit;
-                    foreach ((WallSegment_v2, Vector3, float) intersection in intersectedSegments)
-                    {
-                        anchorAtSplit = SplitExistingWallSegment(intersection.Item1, intersection.Item2);
-                        CreateIndividualWallSegment(anchorA, anchorAtSplit, true);
-                        anchorA = anchorAtSplit;
-                    }
-                }
-                // Else and beyond, just create the one segment.
-                return CreateIndividualWallSegment(anchorA, anchorB, true);
-            }
-            else
-            {
-                Debug.Log(string.Format("Could not create a wall segment between anchors '{0}' and '{1}'.", anchorA, anchorB));
-                return null;
-            }
-        }
-        protected WallAnchor_v2 SplitExistingWallSegment(WallSegment_v2 targetSegment, Vector3 splitAt)
-        {
-            WallAnchor_v2 anchorA = targetSegment.AnchorA;
-            WallAnchor_v2 anchorB = targetSegment.AnchorB;
-
-            DeleteWallSegment(targetSegment);
-
-            WallAnchor_v2 anchorAtSplit = CreateWallAnchor(splitAt);
-            CreateIndividualWallSegment(anchorA, anchorAtSplit, true);
-            CreateIndividualWallSegment(anchorB, anchorAtSplit, true);
-
-            return anchorAtSplit;
-        }
-        protected WallSegment_v2 CreateIndividualWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB, bool bypassValidityCheck = false)
-        {
-            // Always start from the lowest ID anchor.
-            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
-
-            // Do not recreate existing wall segments.
-            if (bypassValidityCheck || WouldBeNewAndValidWallSegment(anchorA, anchorB))
-            {
-                WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
-                newSegment.Init(anchorA, anchorB);
-
-                // Event subscriptions
-
-                wallManager.RegisterWallSegment(newSegment);
-
-                return newSegment;
-            }
-            else
-            {
-                Debug.Log(string.Format("A wall segment already exists between anchors '{0}' and '{1}'. The CreateWallSegment function will return it instead.", anchorA, anchorB));
-                return wallManager.GetSegmentForAnchorPair((anchorA, anchorB));
-            }
-        }
-        protected void DeleteWallSegment(WallSegment_v2 targetSegment)
-        {
-            if (targetSegment != null && wallManager.RemoveWallSegment(targetSegment))
-            {
-                Destroy(targetSegment.gameObject);
-            }
-        }
-
-        protected List<(WallSegment_v2, Vector3, float)> FindPotentialIntersectedSegments(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
-        {
-            List<(WallSegment_v2, Vector3, float)> intersectedSegments = new List<(WallSegment_v2, Vector3, float)>();
-
-            RaycastHit[] segmentHits;
-            Vector3 dirAtoB = anchorB.PosAtBase - anchorA.PosAtBase;
-            segmentHits = Physics.RaycastAll(anchorA.PosAtBase, dirAtoB, dirAtoB.magnitude, 1 << 13);
-            // Should we also check their middles and tops?
-
-            foreach (RaycastHit hit in segmentHits)
-            {
-                Vector3 intersectionPoint = hit.point;
-                if (intersectionPoint.RoughlyEquals(anchorA.PosAtBase) || intersectionPoint.RoughlyEquals(anchorB.PosAtBase))
-                {
-                    continue; // Discard hits to segments connected to the anchors.
-                }
-
-                Collider hitCollider = hit.collider;
-                GameObject hitGameObject = hitCollider.gameObject;
-                WallSegment_v2 hitSegment =  hitGameObject.GetComponent<WallSegment_v2>();
-                if (hitSegment != null)
-                {
-                    float distanceFromAnchorA = Vector3.Distance(anchorA.PosAtBase, intersectionPoint);
-                    intersectedSegments.SortedInsert((hitSegment, intersectionPoint, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
-                }
-            }
-
-            return intersectedSegments;
-        }
-
-
-        protected bool WouldBeNewAndValidWallSegment(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
-        {
-            // Always start from the lowest ID anchor.
-            ExtensionMethods.SwapIfGreater(ref anchorA, ref anchorB);
-
-            // Ensure the two segments are actually different.
-            if (anchorA == anchorB)
-            {
-                return false;
-            }
-
-            // Check whether this exact connection already exist.
-            if (wallManager.HasSegmentForAnchorPair(anchorA, anchorB))
-            {
-                return false;
-            }
-
-            // Check whether another connection with the same angle already exists.
-            float newAngleAToB = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorA.PosAtBase, anchorB.PosAtBase);
-            float newAngleBtoA = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorB.PosAtBase, anchorA.PosAtBase);
-            return !anchorA.HasConnectionAtAngle(newAngleAToB) && !anchorB.HasConnectionAtAngle(newAngleBtoA);
-
-            // TODO: may still throw errors if the angles are very similar but not quite exact :/
-        }
-
-        
 
 
         // BUILT IN

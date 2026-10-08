@@ -11,6 +11,8 @@ namespace Building
     // TODO: should each wall anchor have its own control arrow?
     // TODO: can also set height with the scroll wheel?
 
+    // TODO: throw up event OnHover
+
     // GameObject representing the start or end point of a segment of wall.
     public partial class WallAnchor_v2 : MonoBehaviour, IComparable, IPointerClickAndHoverHandler, ISelectable, IArrowControllable
     {
@@ -115,7 +117,7 @@ namespace Building
 
 
         // INIT
-        public void Init(float height = 1f)
+        public void Init(float height = 1.0f)
         {
             // Name the game object.
             gameObject.name = string.Format("Unregistered WallAnchor {0}", transform.position);
@@ -186,6 +188,24 @@ namespace Building
         public bool HasConnectionAtAngle(float angle)
         {
             return connectionAngles.ContainsValue(angle);
+        }
+        public bool WouldBeNewAndLegalConnectionAngle(float potentialAngle)
+        {
+            if (HasConnectionAtAngle(potentialAngle))
+            {
+                return false;
+            }
+
+            foreach (float angle in connectionAngles.Values)
+            {
+                float difference = Mathf.Abs(angle - potentialAngle);
+                if (difference < Constants_Building.MIN_WALL_SEGMENT_ANGULAR_SPACING)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Connect(WallAnchor_v2 otherAnchor)
@@ -285,6 +305,19 @@ namespace Building
         {
             OnClicked?.Invoke(this, eventData.button);
         }
+
+
+
+        // BUILT IN
+
+        private void OnDestroy()
+        {
+            foreach (WallAnchor_v2 connectedAnchor in connections)
+            {
+                connectedAnchor.Disconnect(this);
+            }
+        }
+
 
 
 #if DEBUG
