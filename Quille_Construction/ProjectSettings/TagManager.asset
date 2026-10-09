@@ -18,8 +18,8 @@ TagManager:
   - World
   - ArchitecturalData
   - Architecture
-  - Walls
-  - 
+  - WallAnchors
+  - WallSegments
   - 
   - 
   - 

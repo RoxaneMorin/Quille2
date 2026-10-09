@@ -71,6 +71,8 @@ namespace Building
             // On right clicks, try to connect the clicked and currently selected anchors
             if (clickType == PointerEventData.InputButton.Right && selectedAnchor != null)
             {
+                ListWallStuffHitBetweenSelectedAndLocation(targetAnchor.PosAtBase);
+
                 TryCreateWallSegment(selectedAnchor, targetAnchor);
             }
             else // (un)select the clicked anchor
@@ -88,13 +90,14 @@ namespace Building
         protected void OnFreeGroundClicked(Vector3 clickedLocation)
         {
             WallAnchor_v2 newAnchor;
-
             if (selectedAnchor == null)
             {
                 newAnchor = CreateIndividualWallAnchor(clickedLocation);
             }
             else
             {
+                ListWallStuffHitBetweenSelectedAndLocation(clickedLocation);
+
                 newAnchor = TryCreateWallAnchorAndSegment(clickedLocation);
             }
             
@@ -102,7 +105,47 @@ namespace Building
         }
 
 
-        
+
+
+
+        // TODO: actually do smt with the collected hits.
+        protected void ListWallStuffHitBetweenSelectedAndLocation(Vector3 targetLocation)
+        {
+            if (selectedAnchor != null)
+            {
+                RaycastHit[] raycastHits;
+                Vector3 dirSelectedToTarget = targetLocation - selectedAnchor.PosAtBase;
+                Vector3 dirNormalized = dirSelectedToTarget.normalized;
+                raycastHits = Physics.RaycastAll(selectedAnchor.PosAtBase, dirNormalized, dirSelectedToTarget.magnitude, (1 << 13) | (1 << 14));
+
+                Debug.Log($"Start: {selectedAnchor.PosAtBase}. End: {targetLocation}. Ray: {dirNormalized}.");
+
+                foreach (RaycastHit hit in raycastHits)
+                {
+                    GameObject hitGameObject = hit.collider.gameObject;
+
+                    WallAnchor_v2 hitAnchor = hitGameObject.GetComponent<WallAnchor_v2>();
+                    if (hitAnchor != null)
+                    {
+                        Debug.Log($"Hit the anchor {hitAnchor.name} at {hit.point}.");
+                    }
+                    
+                    WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
+                    if (hitSegment != null)
+                    { 
+                        float dotProduct = Mathf.Abs(Vector3.Dot(hit.normal, dirNormalized));
+
+                        Debug.Log($"Hit the segment {hitSegment.name} at {hit.point}. Surface normal: {hit.normal}. DotProduct: {dotProduct}.");
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
         // ITEM CREATION
 
         // -> Individual items
@@ -204,39 +247,6 @@ namespace Building
 
 
         // -> Checks
-        protected List<(WallSegment_v2, Vector3, float)> FindPotentialIntersectedSegments(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
-        {
-            List<(WallSegment_v2, Vector3, float)> intersectedSegments = new List<(WallSegment_v2, Vector3, float)>();
-
-            RaycastHit[] segmentHits;
-            Vector3 dirAtoB = anchorB.PosAtBase - anchorA.PosAtBase;
-            segmentHits = Physics.RaycastAll(anchorA.PosAtBase, dirAtoB, dirAtoB.magnitude, 1 << 13);
-
-            foreach (RaycastHit hit in segmentHits)
-            {
-                Collider hitCollider = hit.collider;
-                GameObject hitGameObject = hitCollider.gameObject;
-                WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
-
-                if (hitSegment != null)
-                {
-                    if (hitSegment.AnchorA == anchorA || hitSegment.AnchorB == anchorA || hitSegment.AnchorA == anchorB || hitSegment.AnchorB == anchorB)
-                    {
-                        Debug.Log($"The segment {hitSegment.name} disqualified as a potential intersection as it's connected to either {anchorA.name} or {anchorB}.");
-
-                        // Ignore segments connected to either of the anchors.
-                        continue;
-                    }
-
-                    Vector3 intersectionPoint = hit.point;
-                    float distanceFromAnchorA = Vector3.Distance(anchorA.PosAtBase, intersectionPoint);
-                    intersectedSegments.SortedInsert((hitSegment, intersectionPoint, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
-                }
-            }
-
-            return intersectedSegments;
-        }
-
         protected bool WouldBeNewAndLegalAngleForAnchor(WallAnchor_v2 existingAnchor, Vector3 newAnchorLocation)
         {
             float angleExistingToLocation = MathHelpers.GetNormalizeAngleBetweenInDegrees(existingAnchor.PosAtBase, newAnchorLocation);
@@ -253,16 +263,47 @@ namespace Building
                 return false;
             }
 
-            // Commenting out as it's likely redudant.
-            //if (wallManager.HasSegmentForAnchorPair(anchorA, anchorB))
-            //{
-            //    return false;
-            //}
+            if (wallManager.HasSegmentForAnchorPair(anchorA, anchorB))
+            {
+                return false;
+            }
 
             float newAngleAToB = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorA.PosAtBase, anchorB.PosAtBase);
             float newAngleBtoA = MathHelpers.GetNormalizeAngleBetweenInDegrees(anchorB.PosAtBase, anchorA.PosAtBase);
 
             return anchorA.WouldBeNewAndLegalConnectionAngle(newAngleAToB) && anchorB.WouldBeNewAndLegalConnectionAngle(newAngleBtoA);
+        }
+
+
+        protected List<(WallSegment_v2, Vector3, float)> FindPotentialIntersectedSegments(WallAnchor_v2 anchorA, WallAnchor_v2 anchorB)
+        {
+            List<(WallSegment_v2, Vector3, float)> intersectedSegments = new List<(WallSegment_v2, Vector3, float)>();
+
+            RaycastHit[] segmentHits;
+            Vector3 dirAtoB = anchorB.PosAtBase - anchorA.PosAtBase;
+            segmentHits = Physics.RaycastAll(anchorA.PosAtBase, dirAtoB, dirAtoB.magnitude, 1 << 14);
+
+            foreach (RaycastHit hit in segmentHits)
+            {
+                Collider hitCollider = hit.collider;
+                GameObject hitGameObject = hitCollider.gameObject;
+                WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
+
+                if (hitSegment != null)
+                {
+                    if (hitSegment.AnchorA == anchorA || hitSegment.AnchorB == anchorA || hitSegment.AnchorA == anchorB || hitSegment.AnchorB == anchorB)
+                    {
+                        //Debug.Log($"The segment {hitSegment.name} disqualified as a potential intersection as it's connected to either {anchorA.name} or {anchorB}.");
+                        continue; // Ignore segments connected to either of the anchors.
+                    }
+
+                    Vector3 intersectionPoint = hit.point;
+                    float distanceFromAnchorA = Vector3.Distance(anchorA.PosAtBase, intersectionPoint);
+                    intersectedSegments.SortedInsert((hitSegment, intersectionPoint, distanceFromAnchorA), (existingIntersection, newIntersection) => existingIntersection.Item3 > newIntersection.Item3);
+                }
+            }
+
+            return intersectedSegments;
         }
 
 
