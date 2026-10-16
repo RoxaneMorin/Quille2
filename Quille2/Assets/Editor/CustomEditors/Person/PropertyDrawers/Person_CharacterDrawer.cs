@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(Quille.Person_Character))]
 public class Person_CharacterDrawer : PropertyDrawer
 {
+    // TODO: add a foldout for the personality section.
+
     bool _foldoutOpen = true; // Open by default.
 
     SerializedProperty firstName;

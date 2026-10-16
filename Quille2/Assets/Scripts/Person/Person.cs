@@ -29,8 +29,6 @@ namespace Quille
         [SerializeField] private Person_AI myPersonAI;
 
 
-        public string TempJsonString;
-
 
         // PROPERTIES & GETTERS/SETTERS
        public int CharID { get { return charID; } internal set { charID = value; } } // TODO: make sure the Setter is safe.
@@ -79,14 +77,18 @@ namespace Quille
             // Try to collect and convert this person's various components to JSON.
             try
             {
-                jsonPersonCharacter = myPersonCharacter.SaveToJSON();
-                jsonNeedController = myNeedController.SaveToJSON();
-
                 jsonPerson = new JObject();
 
                 jsonPerson.Add("charID", charID);
+
+                jsonPersonCharacter = myPersonCharacter.SaveToJSON();
                 jsonPerson.Add("PersonCharacter", JObject.Parse(jsonPersonCharacter));
-                jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
+
+                if (myNeedController != null)
+                {
+                    jsonNeedController = myNeedController.SaveToJSON();
+                    jsonPerson.Add("NeedController", JObject.Parse(jsonNeedController));
+                }
             }
             catch (Exception theError)
             {
@@ -119,7 +121,16 @@ namespace Quille
 
                 jsonCharID = jsonPerson.GetValue("charID").ToString();
                 jsonPersonCharacter = jsonPerson.GetValue("PersonCharacter").ToString(Formatting.Indented);
-                jsonNeedController = jsonPerson.GetValue("NeedController").ToString(Formatting.Indented);
+
+                JToken? jtokenNeedController;
+                if (jsonPerson.TryGetValue("NeedController", out jtokenNeedController))
+                {
+                    jsonNeedController = jtokenNeedController.ToString(Formatting.Indented);
+                }
+                else
+                {
+                    jsonNeedController = null;
+                }
             }
             catch(JsonException theError)
             {
@@ -144,13 +155,16 @@ namespace Quille
                 }
 
                 // Need_Controller
-                if (myNeedController != null)
+                if (jsonNeedController != null)
                 {
-                    myNeedController.LoadFromJSON(jsonNeedController);
-                }
-                else
-                {
-                    myNeedController = Person_NeedController.CreateFromJSON(jsonNeedController, gameObject);
+                    if (myNeedController != null)
+                    {
+                        myNeedController.LoadFromJSON(jsonNeedController);
+                    }
+                    else
+                    {
+                        myNeedController = Person_NeedController.CreateFromJSON(jsonNeedController, gameObject);
+                    }
                 }
             }
             catch (Exception theError)

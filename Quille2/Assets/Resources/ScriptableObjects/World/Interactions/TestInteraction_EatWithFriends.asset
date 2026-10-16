@@ -26,7 +26,8 @@ MonoBehaviour:
     defaultNeedChangeRate: 0.01
     defaultMaxNeedChange: 0.3
     needChangeRateModulatedBy: []
-    maxNeedChangeModulatedBy: []
+    maxNeedChangeModulatedBy:
+    - rid: 5214892702800543745
   viabilityChecks: []
   scoringModulators:
   - rid: 141020535755898886
@@ -38,5 +39,12 @@ MonoBehaviour:
       data:
         modOpIdx: 3
         modifier: 0.5
+        mainOpIdx: 1
+        target: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}
+    - rid: 5214892702800543745
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 0.1
         mainOpIdx: 1
         target: {fileID: 11400000, guid: 98446cad915dc0543a3c800f98e12daa, type: 2}

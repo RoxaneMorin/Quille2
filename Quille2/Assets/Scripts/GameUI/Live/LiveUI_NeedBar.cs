@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 namespace QuilleUI
 {
+    // TODO: separate the info-box on hover to a parent class or interface
+
     public class LiveUI_NeedBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         // Display element for an individual need gauge, used for both basic and subjective needs.

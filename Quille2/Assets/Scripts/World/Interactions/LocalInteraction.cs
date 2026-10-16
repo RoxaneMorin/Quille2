@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace World
 {
-    // TODO: convert to a purely C# object once the basic testing is done.
+    // TODO: convert to a purely C# object or a scriptable object once the basic testing is done?
 
     //[System.Serializable]
     public class LocalInteraction : MonoBehaviour

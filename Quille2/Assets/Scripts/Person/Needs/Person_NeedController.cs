@@ -24,6 +24,8 @@ namespace Quille
         [SerializeField, SerializedDictionary("BasicNeed SO", "Basic Need")] private SerializedDictionary<BasicNeedSO, BasicNeed> myBasicNeedsMapped;
         [SerializeField, SerializedDictionary("SubjectiveNeed SO", "Subjective Need")] private SerializedDictionary<SubjectiveNeedSO, SubjectiveNeed> mySubjectiveNeedsMapped;
 
+        // TODO: these dictionaries likely no longer need to be serialized.
+
         // General need-related parameters.
 
 
