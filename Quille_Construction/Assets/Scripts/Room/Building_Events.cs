@@ -15,7 +15,7 @@ namespace Building
     public delegate void ItemClicked<T>(T item, PointerEventData.InputButton clickType);
     // An item has been selected, usually via its manager.
     public delegate void ItemSelected<T>(T item);
-
+    // TODO: associate itemSelected with the selection interface?
 
     public delegate void ItemParametersUpdated<T>(T updatedItem);
 

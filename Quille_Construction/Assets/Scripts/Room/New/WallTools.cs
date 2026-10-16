@@ -13,6 +13,10 @@ namespace Building
 
     // TODO: add more visual feedback for potential actions, like the anchors that would be linked by a click, and indication that a segment won't be created as it would not be valid.
 
+    // TODO: add the possibility to split a wall when it's clicked on 
+
+    // TODO: do all the mouse cursor raycasting here rather than in the line visualizer?
+
     public class WallTools : MonoBehaviour, IPointerClickAndHoverHandler
     {
         // VARIABLES/PARAMETERS
@@ -21,7 +25,6 @@ namespace Building
         [SerializeField] protected GameObject wallSegmentPrefab;
 
         [SerializeField] protected GameObject controlArrowPrefab;
-        [SerializeField] protected GameObject previewObjectPrefab;
 
         [Header("References")]
         [SerializeField] protected WallManager_new wallManager;
@@ -106,13 +109,14 @@ namespace Building
 
 
 
-
-
         // TODO: actually do smt with the collected hits.
         protected void ListWallStuffHitBetweenSelectedAndLocation(Vector3 targetLocation)
         {
             if (selectedAnchor != null)
             {
+                List<WallAnchor_v2> hitWallAnchors = new List<WallAnchor_v2>();
+                List<WallSegment_v2> hitWallSegments = new List<WallSegment_v2>();
+
                 RaycastHit[] raycastHits;
                 Vector3 dirSelectedToTarget = targetLocation - selectedAnchor.PosAtBase;
                 Vector3 dirNormalized = dirSelectedToTarget.normalized;
@@ -128,6 +132,7 @@ namespace Building
                     if (hitAnchor != null)
                     {
                         Debug.Log($"Hit the anchor {hitAnchor.name} at {hit.point}.");
+                        hitWallAnchors.Add(hitAnchor);
                     }
                     
                     WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
@@ -136,13 +141,11 @@ namespace Building
                         float dotProduct = Mathf.Abs(Vector3.Dot(hit.normal, dirNormalized));
 
                         Debug.Log($"Hit the segment {hitSegment.name} at {hit.point}. Surface normal: {hit.normal}. DotProduct: {dotProduct}.");
+                        hitWallSegments.Add(hitSegment);
                     }
                 }
             }
         }
-
-
-
 
 
 
@@ -154,6 +157,7 @@ namespace Building
             WallAnchor_v2 newAnchor = Instantiate(wallAnchorPrefab, location, Quaternion.identity).GetComponent<WallAnchor_v2>();
             newAnchor.Init(height);
 
+            newAnchor.OnHovered += this.OnWallAnchorHovered;
             newAnchor.OnClicked += this.OnWallAnchorClicked;
             this.OnWallAnchorSelected += newAnchor.OnWallAnchorSelected;
 
@@ -169,7 +173,7 @@ namespace Building
             WallSegment_v2 newSegment = Instantiate(wallSegmentPrefab, anchorA.transform.position, Quaternion.identity).GetComponent<WallSegment_v2>();
             newSegment.Init(anchorA, anchorB);
 
-            // Event subscriptions
+            newSegment.OnHovered += this.OnWallSegmentHovered;
 
             wallManager.RegisterWallSegment(newSegment);
 
@@ -313,6 +317,7 @@ namespace Building
         {
             if (targetAnchor != null && wallManager.RemoveWallAnchor(targetAnchor))
             {
+                targetAnchor.OnHovered -= this.OnWallAnchorHovered;
                 targetAnchor.OnClicked -= this.OnWallAnchorClicked;
 
                 Destroy(targetAnchor.gameObject);
@@ -322,7 +327,7 @@ namespace Building
         {
             if (targetSegment != null && wallManager.RemoveWallSegment(targetSegment))
             {
-                // TODO: unregister events when  they get added.
+                targetSegment.OnHovered -= this.OnWallSegmentHovered;
 
                 Destroy(targetSegment.gameObject);
             }
@@ -343,17 +348,16 @@ namespace Building
 
 
 
-        // BUILT IN
-        private void Start()
-        {
-            Init();
-        }
+        // INTERFACES
+
+        // -> POINTER
 
         // OR: do drag and on pointer release for previewing?
         public void OnPointerEnter(PointerEventData eventData)
         {
+            placementVisualizer.SetLineValid();
+            placementVisualizer.ClearLineEndpoint();
             placementVisualizer.gameObject.SetActive(true);
-
         }
         public void OnPointerExit(PointerEventData eventData)
         {
@@ -366,8 +370,29 @@ namespace Building
             OnFreeGroundClicked(eventData.pointerPressRaycast.worldPosition);
         }
 
-        
 
+        protected void OnWallAnchorHovered(WallAnchor_v2 targetAnchor)
+        {
+            // TODO: possible wall validity check
+
+            if (selectedAnchor != null && selectedAnchor != targetAnchor)
+            {
+                placementVisualizer.SetLineEndpoint(targetAnchor.gameObject);
+                placementVisualizer.gameObject.SetActive(true);
+            }
+        }
+        protected void OnWallSegmentHovered(WallSegment_v2 targetSegment)
+        {
+            placementVisualizer.gameObject.SetActive(false);
+        }
+
+
+
+        // BUILT IN
+        private void Start()
+        {
+            Init();
+        }
 
         //// TODO: try snap to a certain angle from the center
         //private Vector3 SnapAngle(Vector3 endPoint, float snap = 22.5f)

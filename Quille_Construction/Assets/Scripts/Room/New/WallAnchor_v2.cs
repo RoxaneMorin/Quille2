@@ -11,8 +11,6 @@ namespace Building
     // TODO: should each wall anchor have its own control arrow?
     // TODO: can also set height with the scroll wheel?
 
-    // TODO: throw up event OnHover
-
     // GameObject representing the start or end point of a segment of wall.
     public partial class WallAnchor_v2 : MonoBehaviour, IComparable, IPointerClickAndHoverHandler, ISelectable, IArrowControllable
     {
@@ -87,6 +85,7 @@ namespace Building
 
 
         // EVENTS
+        public event ItemHovered<WallAnchor_v2> OnHovered;
         public event ItemClicked<WallAnchor_v2> OnClicked;
         public event ItemParametersUpdated<WallAnchor_v2> OnParameterUpdated;
 
@@ -289,6 +288,8 @@ namespace Building
         // -> POINTER
         public void OnPointerEnter(PointerEventData eventData)
         {
+            OnHovered?.Invoke(this);
+
             if (!isSelected)
             {
                 myMaterial.color = colourHovered;

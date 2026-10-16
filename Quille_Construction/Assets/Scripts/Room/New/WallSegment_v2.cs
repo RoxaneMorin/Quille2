@@ -8,10 +8,13 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Building
 {
-    public class WallSegment_v2 : MonoBehaviour
+    // TODO: add the selection interface?
+
+    public class WallSegment_v2 : MonoBehaviour, IPointerClickAndHoverHandler
     {
         // VARIABLES/PARAMETERS
         [Header("References")]
@@ -115,6 +118,11 @@ namespace Building
         {
             get { return Vector3.Distance(PosAtPointABase, PosAtPointBBase); }
         }
+
+
+
+        // EVENTS
+        public event ItemHovered<WallSegment_v2> OnHovered;
 
 
 
@@ -253,6 +261,24 @@ namespace Building
             angle = anchorA.GetConnectionAngleFor(anchorB);
             return Quaternion.AngleAxis(-angle, Vector3.up);
         }
+
+
+
+        // INTERFACES
+
+        // -> POINTER
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            OnHovered?.Invoke(this);
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+
+        }
+        public void OnPointerClick(PointerEventData eventData)
+        {
+        }
+
 
 
         // BUILT IN
