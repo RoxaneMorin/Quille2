@@ -288,7 +288,7 @@ namespace Building
         // -> POINTER
         public void OnPointerEnter(PointerEventData eventData)
         {
-            OnHovered?.Invoke(this);
+            OnHovered?.Invoke(this, eventData);
 
             if (!isSelected)
             {
@@ -304,7 +304,7 @@ namespace Building
         }
         public void OnPointerClick(PointerEventData eventData)
         {
-            OnClicked?.Invoke(this, eventData.button);
+            OnClicked?.Invoke(this, eventData);
         }
 
 

@@ -6,10 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class LinePlacementVisualizer : MonoBehaviour
 {
+    // TODO: 
+    // -> better organisation of state-changing functions? Ex: set line between stuff, valid or invalid as a param
+
     // VARIABLES
     [Header("References")]
-    [SerializeField] protected MeshRenderer myMeshRenderer;
-    [SerializeField] protected LineRenderer myLineRenderer;
+    [SerializeField] protected MeshRenderer targetMeshRenderer;
+    [SerializeField] protected LineRenderer previewLineRenderer;
 
     [Header("Parameters")]
     [SerializeField] protected Vector3 offsetVector;
@@ -21,116 +24,123 @@ public class LinePlacementVisualizer : MonoBehaviour
     [SerializeField] protected Material previewItemMaterial;
 
     // Runtime
-    protected GameObject lineSource;
+    protected GameObject lineSourceObject;
+    protected GameObject lineEndpointObject;
     protected List<Vector3> itemPositions;
 
-    protected bool endPointToCursor = true;
-    protected RaycastHit cursorHit;
-    protected Ray rayFromMousePos;
-    
 
-    // TODO: 
-    // -> better organisation of state-changing functions? Ex: set line between stuff, valid or invalid as a param
-    // -> Possibility to spawn preview items at given points. Use a pool/instanced rendering for them.
+
+    // PROPERTIES
+    public List<Vector3> ItemPositions 
+    { 
+        get {  return itemPositions; }
+        set {  itemPositions = value; } 
+    } 
+
 
 
     // METHODS
     protected void Init()
     {
-        myMeshRenderer = GetComponent<MeshRenderer>();
-        myLineRenderer = GetComponent<LineRenderer>();
+        targetMeshRenderer = GetComponent<MeshRenderer>();
+        previewLineRenderer = GetComponent<LineRenderer>();
 
         // Prepare the line renderer.
-        if (myLineRenderer.positionCount < 2)
+        if (previewLineRenderer.positionCount < 2)
         {
-            myLineRenderer.positionCount = 2;
+            previewLineRenderer.positionCount = 2;
         }
 
-        if (lineSource != null)
+        if (lineSourceObject != null)
         {
-            myLineRenderer.SetPosition(0, lineSource.transform.position + offsetVector);
+            previewLineRenderer.SetPosition(0, lineSourceObject.transform.position + offsetVector);
         }
-        SetLineEndpointInternal(transform.position + offsetVector);
+        SetLineEndpointPosition(transform.position);
     }
-    
-    // -> Line renderer management.
-    public void SetLineSource(GameObject newLineSource)
+
+
+    // -> 
+    public void SetTargetPosition(Vector3 newPos)
     {
-        lineSource = newLineSource;
-        if (lineSource != null)
+        Vector3 newPosOffset = newPos + offsetVector;
+        transform.position = newPosOffset;
+
+        SetLineEndpointPosition(newPosOffset);
+    }
+
+    public void SetLineSourceObject(GameObject newSourceObject)
+    {
+        lineSourceObject  = newSourceObject;
+        if (lineSourceObject != null)
         {
-            myLineRenderer.SetPosition(0, lineSource.transform.position + offsetVector);
+            previewLineRenderer.SetPosition(0, lineSourceObject.transform.position + offsetVector);
+        }
+        ResolveVisibility();
+    }
+    public void SetLineEndpointObject(GameObject newEndpointObject)
+    {
+        lineEndpointObject = newEndpointObject;
+        if (lineEndpointObject != null)
+        {
+            SetLineEndpointPosition(lineEndpointObject.transform.position + offsetVector);
+        }
+        ResolveVisibility();
+    }
+    public void SetLineEndpointObjectAndPos(GameObject newEndpointObject, Vector3 newEndpointPos)
+    {
+        lineEndpointObject = newEndpointObject;
+        if (lineEndpointObject != null)
+        {
+            SetLineEndpointPosition(newEndpointPos + offsetVector);
+        }
+        ResolveVisibility();
+    }
+
+    internal void SetLineEndpointPosition(Vector3 newEndpointPos)
+    {
+        previewLineRenderer.SetPosition(1, newEndpointPos);
+        if (lineSourceObject == null)
+        {
+            previewLineRenderer.SetPosition(0, newEndpointPos);
+        }
+    }
+
+    internal void ResolveVisibility()
+    {
+        // The target is visible when we have no endpoint object.
+        if (lineEndpointObject == null)
+        {
+            targetMeshRenderer.enabled = true;
         }
         else
         {
-            myLineRenderer.SetPosition(0, transform.position + offsetVector);
+            targetMeshRenderer.enabled = false;
         }
-    }
 
-    public void SetLineEndpoint(GameObject newLineEndpoint)
-    {
-        if (newLineEndpoint != null)
+        // The line is visible where there is a source object.
+        if (lineSourceObject == null)
         {
-            endPointToCursor = false;
-            myMeshRenderer.enabled = false;
-            SetLineEndpointInternal(newLineEndpoint.transform.position + offsetVector);
+            previewLineRenderer.enabled = false;
         }
         else
         {
-            ClearLineEndpoint();
+            previewLineRenderer.enabled = true;
         }
     }
 
-    public void ClearLineEndpoint()
-    {
-        endPointToCursor = true;
-        myMeshRenderer.enabled = true;
-        TryUpdatePosition();
-    }
-
-    protected void SetLineEndpointInternal(Vector3 newEndpointPos)
-    {
-        myLineRenderer.SetPosition(1, newEndpointPos);
-        if (lineSource == null)
-        {
-            myLineRenderer.SetPosition(0, newEndpointPos);
-        }
-    }
 
     public void SetLineValid()
     {
-        myLineRenderer.colorGradient = lineColourValid;
+        previewLineRenderer.colorGradient = lineColourValid;
     }
 
     public void SetLineInvalid()
     {
-        myLineRenderer.colorGradient = lineColourInvalid;
+        previewLineRenderer.colorGradient = lineColourInvalid;
     }
 
 
-    // -> General positioning loop.
-    protected void TryUpdatePosition()
-    {
-        if (endPointToCursor)
-        {
-            rayFromMousePos = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(rayFromMousePos, out cursorHit))
-            {
-                UpdatePosition(cursorHit.point);
-            }
-        }
-    }
-
-    protected void UpdatePosition(Vector3 newPos)
-    {
-        Vector3 newPosOffset = newPos + offsetVector;
-
-        transform.position = newPosOffset;
-        SetLineEndpointInternal(newPosOffset);
-    }
-
-
-    protected void RenderPreviewItems()
+    protected void TryRenderPreviewItems()
     {
         if (itemPositions != null && itemPositions.Count > 0)
         {
@@ -156,9 +166,8 @@ public class LinePlacementVisualizer : MonoBehaviour
 
     private void Update()
     {
-        TryUpdatePosition();
-
-        RenderPreviewItems();
+        //TryUpdatePosition();
+        TryRenderPreviewItems();
     }
 
 }

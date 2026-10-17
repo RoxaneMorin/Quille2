@@ -10,9 +10,9 @@ namespace Building
 
     // GENERICS
     // An item has been hovered over.
-    public delegate void ItemHovered<T>(T item);
+    public delegate void ItemHovered<T>(T item, PointerEventData eventData);
     // An item has been clicked.
-    public delegate void ItemClicked<T>(T item, PointerEventData.InputButton clickType);
+    public delegate void ItemClicked<T>(T item, PointerEventData eventData);
     // An item has been selected, usually via its manager.
     public delegate void ItemSelected<T>(T item);
     // TODO: associate itemSelected with the selection interface?

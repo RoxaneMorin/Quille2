@@ -11,11 +11,11 @@ namespace Building
     // TODO: add safety checks for a new segment potentially hitting existing but unconnected anchors
     // TODO: add safety checks for a new segment potentially creating overly steep angles
 
-    // TODO: add more visual feedback for potential actions, like the anchors that would be linked by a click, and indication that a segment won't be created as it would not be valid.
+    // TODO: add indication that a segment won't be created as it would not be valid.
 
     // TODO: add the possibility to split a wall when it's clicked on 
 
-    // TODO: do all the mouse cursor raycasting here rather than in the line visualizer?
+    // TODO: split some of this into different scripts to avoid it getting too long?
 
     public class WallTools : MonoBehaviour, IPointerClickAndHoverHandler
     {
@@ -28,14 +28,25 @@ namespace Building
 
         [Header("References")]
         [SerializeField] protected WallManager_new wallManager;
-
         [SerializeField] protected LinePlacementVisualizer placementVisualizer;
 
+        // Runtime
         [SerializeField] protected WallAnchor_v2 selectedAnchor;
         // TODO: Any selectable from the ISelectable interface?
 
         [SerializeField] protected ControlArrow anchorControlArrow;
         // TÒDO: where should the controlArrows live??
+
+        // 
+        protected bool raycastAtCursor = true;
+        protected RaycastHit cursorHit;
+        protected Ray rayFromMousePos;
+
+        protected WallToolItemType currentlyHoveredItemType;
+
+        List<WallAnchor_v2> currentPotentialIntersectedAnchors;
+        List<WallSegment_v2> currentPotentialIntersectedSegments;
+        List<Vector3> currentPotentialIntersectedSegmentPos;
 
 
 
@@ -69,13 +80,11 @@ namespace Building
 
 
         // CLICK LISTENERS
-        protected void OnWallAnchorClicked(WallAnchor_v2 targetAnchor, PointerEventData.InputButton clickType)
+        protected void OnWallAnchorClicked(WallAnchor_v2 targetAnchor, PointerEventData eventData)
         {
             // On right clicks, try to connect the clicked and currently selected anchors
-            if (clickType == PointerEventData.InputButton.Right && selectedAnchor != null)
+            if (eventData.button == PointerEventData.InputButton.Right && selectedAnchor != null)
             {
-                ListWallStuffHitBetweenSelectedAndLocation(targetAnchor.PosAtBase);
-
                 TryCreateWallSegment(selectedAnchor, targetAnchor);
             }
             else // (un)select the clicked anchor
@@ -99,54 +108,11 @@ namespace Building
             }
             else
             {
-                ListWallStuffHitBetweenSelectedAndLocation(clickedLocation);
-
                 newAnchor = TryCreateWallAnchorAndSegment(clickedLocation);
             }
             
             SelectWallAnchor(newAnchor);
         }
-
-
-
-        // TODO: actually do smt with the collected hits.
-        protected void ListWallStuffHitBetweenSelectedAndLocation(Vector3 targetLocation)
-        {
-            if (selectedAnchor != null)
-            {
-                List<WallAnchor_v2> hitWallAnchors = new List<WallAnchor_v2>();
-                List<WallSegment_v2> hitWallSegments = new List<WallSegment_v2>();
-
-                RaycastHit[] raycastHits;
-                Vector3 dirSelectedToTarget = targetLocation - selectedAnchor.PosAtBase;
-                Vector3 dirNormalized = dirSelectedToTarget.normalized;
-                raycastHits = Physics.RaycastAll(selectedAnchor.PosAtBase, dirNormalized, dirSelectedToTarget.magnitude, (1 << 13) | (1 << 14));
-
-                Debug.Log($"Start: {selectedAnchor.PosAtBase}. End: {targetLocation}. Ray: {dirNormalized}.");
-
-                foreach (RaycastHit hit in raycastHits)
-                {
-                    GameObject hitGameObject = hit.collider.gameObject;
-
-                    WallAnchor_v2 hitAnchor = hitGameObject.GetComponent<WallAnchor_v2>();
-                    if (hitAnchor != null)
-                    {
-                        Debug.Log($"Hit the anchor {hitAnchor.name} at {hit.point}.");
-                        hitWallAnchors.Add(hitAnchor);
-                    }
-                    
-                    WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
-                    if (hitSegment != null)
-                    { 
-                        float dotProduct = Mathf.Abs(Vector3.Dot(hit.normal, dirNormalized));
-
-                        Debug.Log($"Hit the segment {hitSegment.name} at {hit.point}. Surface normal: {hit.normal}. DotProduct: {dotProduct}.");
-                        hitWallSegments.Add(hitSegment);
-                    }
-                }
-            }
-        }
-
 
 
         // ITEM CREATION
@@ -343,7 +309,7 @@ namespace Building
             selectedAnchor = targetAnchor;
             anchorControlArrow.ArrowTarget = selectedAnchor;
 
-            placementVisualizer.SetLineSource(targetAnchor == null ? null : targetAnchor.gameObject);
+            placementVisualizer.SetLineSourceObject(selectedAnchor == null ? null : selectedAnchor.gameObject);
         }
 
 
@@ -355,14 +321,11 @@ namespace Building
         // OR: do drag and on pointer release for previewing?
         public void OnPointerEnter(PointerEventData eventData)
         {
-            placementVisualizer.SetLineValid();
-            placementVisualizer.ClearLineEndpoint();
-            placementVisualizer.gameObject.SetActive(true);
+            placementVisualizer.SetLineEndpointObject(null);
+            currentlyHoveredItemType = WallToolItemType.Ground;
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            placementVisualizer.gameObject.SetActive(false);
-
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -371,19 +334,89 @@ namespace Building
         }
 
 
-        protected void OnWallAnchorHovered(WallAnchor_v2 targetAnchor)
+        protected void OnWallAnchorHovered(WallAnchor_v2 targetAnchor, PointerEventData eventData)
         {
             // TODO: possible wall validity check
 
-            if (selectedAnchor != null && selectedAnchor != targetAnchor)
+            placementVisualizer.SetLineEndpointObject(targetAnchor.gameObject);
+            currentlyHoveredItemType = WallToolItemType.Anchor;
+        }
+        protected void OnWallSegmentHovered(WallSegment_v2 targetSegment, PointerEventData eventData)
+        {
+            Vector3 posOnWall = eventData.pointerCurrentRaycast.worldPosition;
+            posOnWall.y = 0.0f;
+
+            placementVisualizer.SetLineEndpointObjectAndPos(targetSegment.gameObject, posOnWall);
+            currentlyHoveredItemType = WallToolItemType.Segment;
+        }
+
+
+
+        // TODO: better separate hits to the ground vs an existing anchor or segment.
+        protected void RaycastAtCursor()
+        {
+            rayFromMousePos = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(rayFromMousePos, out cursorHit))
             {
-                placementVisualizer.SetLineEndpoint(targetAnchor.gameObject);
-                placementVisualizer.gameObject.SetActive(true);
+                Vector3 targetPos = cursorHit.point;
+
+                if (currentlyHoveredItemType != WallToolItemType.Ground)
+                {
+                    targetPos.y = 0.0f;
+                }
+
+                FindPotentialIntersectedItems(targetPos);
+                placementVisualizer.ItemPositions = currentPotentialIntersectedSegmentPos;
+
+                if (currentlyHoveredItemType != WallToolItemType.Anchor)
+                {
+                    placementVisualizer.SetTargetPosition(targetPos);
+                }
             }
         }
-        protected void OnWallSegmentHovered(WallSegment_v2 targetSegment)
+
+
+
+        // TODO: actually do smt with the collected hits.
+        protected void FindPotentialIntersectedItems(Vector3 targetLocation)
         {
-            placementVisualizer.gameObject.SetActive(false);
+            currentPotentialIntersectedAnchors = new List<WallAnchor_v2>();
+            currentPotentialIntersectedSegments = new List<WallSegment_v2>();
+            currentPotentialIntersectedSegmentPos = new List<Vector3>();
+
+            if (selectedAnchor != null)
+            {
+                RaycastHit[] raycastHits;
+                Vector3 dirSelectedToTarget = targetLocation - selectedAnchor.PosAtBase;
+                Vector3 dirNormalized = dirSelectedToTarget.normalized;
+                raycastHits = Physics.RaycastAll(selectedAnchor.PosAtBase, dirNormalized, dirSelectedToTarget.magnitude + 0.01f, (1 << 13) | (1 << 14));
+
+                //Debug.Log($"Start: {selectedAnchor.PosAtBase}. End: {targetLocation}. Ray: {dirNormalized}.");
+
+                foreach (RaycastHit hit in raycastHits)
+                {
+                    GameObject hitGameObject = hit.collider.gameObject;
+
+                    //Debug.Log($"Intersection hit {hitGameObject.name} {hit.point}.");
+
+                    WallAnchor_v2 hitAnchor = hitGameObject.GetComponent<WallAnchor_v2>();
+                    if (hitAnchor != null)
+                    {
+                        //Debug.Log($"Hit the anchor {hitAnchor.name} at {hit.point}.");
+                        currentPotentialIntersectedAnchors.Add(hitAnchor);
+                    }
+
+                    WallSegment_v2 hitSegment = hitGameObject.GetComponent<WallSegment_v2>();
+                    if (hitSegment != null)
+                    {
+                        //float dotProduct = Mathf.Abs(Vector3.Dot(hit.normal, dirNormalized));
+                        //Debug.Log($"Hit the segment {hitSegment.name} at {hit.point}. Surface normal: {hit.normal}. DotProduct: {dotProduct}.");
+
+                        currentPotentialIntersectedSegments.Add(hitSegment);
+                        currentPotentialIntersectedSegmentPos.Add(hit.point);
+                    }
+                }
+            }
         }
 
 
@@ -393,6 +426,16 @@ namespace Building
         {
             Init();
         }
+
+
+        private void Update()
+        {
+            if (raycastAtCursor)
+            {
+                RaycastAtCursor();
+            }
+        }
+
 
         //// TODO: try snap to a certain angle from the center
         //private Vector3 SnapAngle(Vector3 endPoint, float snap = 22.5f)

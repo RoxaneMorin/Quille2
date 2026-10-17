@@ -269,7 +269,7 @@ namespace Building
         // -> POINTER
         public void OnPointerEnter(PointerEventData eventData)
         {
-            OnHovered?.Invoke(this);
+            OnHovered?.Invoke(this, eventData);
         }
         public void OnPointerExit(PointerEventData eventData)
         {

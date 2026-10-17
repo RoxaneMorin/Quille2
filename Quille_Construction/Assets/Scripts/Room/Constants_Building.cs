@@ -4,6 +4,15 @@ using UnityEngine;
 
 namespace Building
 {
+    public enum WallToolItemType
+    {
+        Ground,
+        Anchor,
+        Segment
+    }
+
+
+
     public static class Constants_Building
     {
         public const float MIN_WALL_ANCHOR_HEIGHT = 0.1f;
