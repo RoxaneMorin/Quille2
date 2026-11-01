@@ -3706,8 +3706,8 @@ MonoBehaviour:
   currentPerson: {fileID: 1849462652}
   currentWorldData:
     worldName: Quilleland
-    safeWorldName: Quilleland
     highestCharID: -1
+    worldCharacters: []
   characterManagementMenu: {fileID: 1933163582}
   sourceNamesMenu: {fileID: 1700573431}
   sourcePersonalityAxesMenu: {fileID: 668329984}
@@ -6227,29 +6227,7 @@ MonoBehaviour:
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
-  m_AfterStackBundles:
-  - assemblyQualifiedName: Outline_LaplacianPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: OstiDeShaderPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Test_SmudgePPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Outline_RoystanPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Outline_LaplacianSplitPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Blur_BoxPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Blur_GaussianPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Outline_ZucconiPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Outline_LaplacianPreBlurPPSSettings, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Utility_PrevDepthmapPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: NewAmplifyShaderPPSSettings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  m_AfterStackBundles: []
 --- !u!1 &1632576260
 GameObject:
   m_ObjectHideFlags: 0
@@ -7623,7 +7601,6 @@ MonoBehaviour:
       _serializedList: []
   myNeedController: {fileID: 0}
   myPersonAI: {fileID: 0}
-  TempJsonString: 
 --- !u!114 &1849462653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7641,6 +7618,10 @@ MonoBehaviour:
   noticeBasicNeed: 0.5
   noticeSubjectiveNeed: 0.5
   inAction: 0
+  reactToNotice: 0
+  reactToWarning: 0
+  reactToCritical: 0
+  currentArea: {fileID: 0}
 --- !u!114 &1849462654
 MonoBehaviour:
   m_ObjectHideFlags: 0

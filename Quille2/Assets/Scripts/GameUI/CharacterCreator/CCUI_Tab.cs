@@ -9,7 +9,7 @@ namespace QuilleUI
     public class CCUI_Tab : MonoBehaviour
     {
         // Test setup for a generic tab in the character creator.
-
+        // TODO: doesn't need to be exclusive to the character creator
 
         // VARIABLES
         [Header("References")]
@@ -23,7 +23,7 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        public Button MyButtom { get { return myButton; } }
+        public Button MyButton { get { return myButton; } }
 
 
 

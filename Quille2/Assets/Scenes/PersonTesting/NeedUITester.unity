@@ -239,7 +239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &426648938
 RectTransform:
   m_ObjectHideFlags: 0
@@ -314,7 +314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &733382136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -724,7 +724,6 @@ MonoBehaviour:
       _serializedList: []
   myNeedController: {fileID: 0}
   myPersonAI: {fileID: 0}
-  TempJsonString: 
 --- !u!114 &1635557745
 MonoBehaviour:
   m_ObjectHideFlags: 0

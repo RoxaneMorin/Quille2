@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: 076d210294d50d446a4ddf113dfd6028
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - myOwner: {instanceID: 0}
+  - myTail: {instanceID: 0}
+  - myTailsImage: {instanceID: 0}
+  - myText: {instanceID: 0}
+  - myIcon: {instanceID: 0}
+  - myRect: {instanceID: 0}
+  - myOwnersRect: {instanceID: 0}
+  - myTailsRect: {instanceID: 0}
+  - myTextsRect: {instanceID: 0}
+  - myIconsRect: {instanceID: 0}
+  - tailSpritePointingDown: {fileID: -2129469653, guid: 37b4413bbcfa54847bb785bd2a2e9f74,
+      type: 3}
+  - tailSpritePointingUp: {fileID: 269540046, guid: 37b4413bbcfa54847bb785bd2a2e9f74,
+      type: 3}
+  - tailSpritePointingLeft: {fileID: 1432719819, guid: 37b4413bbcfa54847bb785bd2a2e9f74,
+      type: 3}
+  - tailSpritePointingRight: {fileID: -567035331, guid: 37b4413bbcfa54847bb785bd2a2e9f74,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

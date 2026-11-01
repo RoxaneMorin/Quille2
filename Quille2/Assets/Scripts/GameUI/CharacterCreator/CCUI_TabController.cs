@@ -46,7 +46,7 @@ namespace QuilleUI
             myOwnerCanvas = GetComponentInParent<Canvas>(true);
 
             myTabs = gameObject.transform.GetComponentsInChildren<CCUI_Tab>(true);
-            myTabsButtons = myTabs.Select(tab => tab.MyButtom).ToArray();
+            myTabsButtons = myTabs.Select(tab => tab.MyButton).ToArray();
         }
 
         private void Init()
