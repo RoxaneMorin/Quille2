@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -311,6 +310,7 @@ public class UI_PopUpBubbleEditor : Editor
                 Vector2 renderedSize = targetTextMain.GetRenderedValues();
                 rectWorldCorners[0] = rectWorldCorners[1] - new Vector3(0.0f, renderedSize.y, 0.0f);
                 rectWorldCorners[3] = rectWorldCorners[2] - new Vector3(0.0f, renderedSize.y, 0.0f);
+                // TODO: also adjust values in X?
                 Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(255, 255, 0, 10), new Color32(255, 255, 0, 50));
             }
 

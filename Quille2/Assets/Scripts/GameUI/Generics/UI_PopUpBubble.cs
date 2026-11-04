@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -352,12 +353,28 @@ namespace QuilleUI
             }
         }
 
-        
+
+        protected Vector2 CalculateSizeForRatio(float widthForSingularLine)
+        {
+            float ratio = bubbleRatio.x / bubbleRatio.y;
+            float lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
+
+            float mysteriousValue = Mathf.Sqrt(widthForSingularLine / (ratio * lineHeight));
+            float newWidth = widthForSingularLine / mysteriousValue;
+            float newHeight = lineHeight * mysteriousValue;
+
+            return new Vector2(newWidth, newHeight);
+        }
+
+     
         public void UpdateBubbleDimensions()
         {
+            float ratio = bubbleRatio.x / bubbleRatio.y;
+            float lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
+            float ratioTimesLineHeight = ratio * lineHeight;
+
             // Adjust text flow and padding.
             Vector2 topLeftCornerPadding = new Vector2(interiorPadding, -interiorPadding);
-            float bubbleWidthMinPadding = myRect.sizeDelta.x - interiorPadding * 2.0f;
 
             if (hasIcon)
             {
@@ -366,39 +383,47 @@ namespace QuilleUI
 
                 float paddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding * 2.0f;
                 float paddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding * 2.0f;
-                float mainTextSizeX = myRect.sizeDelta.x - paddedIconWidth - interiorPadding;
+                
+                float halfPaddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding;
+                float halfPaddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding;
 
-                if (myTextMain.preferredHeight > paddedIconHeight)
+                float iconHeightInLines = halfPaddedIconHeight / lineHeight;
+                float iconAsAdditionalWidth = halfPaddedIconWidth * iconHeightInLines;
+                float totalPreferredWidth = myTextMain.preferredWidth + iconAsAdditionalWidth;
+
+                Vector2 potentialNewSize = CalculateSizeForRatio(totalPreferredWidth);
+
+                if (potentialNewSize.y > paddedIconHeight)
                 {
                     myTextOverflow.enabled = true;
                     myTextMain.overflowMode = TextOverflowModes.Linked;
                     myTextMain.linkedTextComponent = myTextOverflow;
 
-                    float halfPaddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding;
-                    float overflowTextSizeX = myRect.sizeDelta.x - interiorPadding * 2.0f;
-
                     myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, -interiorPadding);
-                    myTextMainsRect.sizeDelta = new Vector2(mainTextSizeX, halfPaddedIconHeight);
+                    myTextMainsRect.sizeDelta = new Vector2(potentialNewSize.x - halfPaddedIconWidth, halfPaddedIconHeight);
                     myTextMain.ForceMeshUpdate();
 
                     myTextOverflowsRect.anchoredPosition = new Vector2(interiorPadding, -paddedIconHeight);
-                    myTextOverflowsRect.sizeDelta = new Vector2(overflowTextSizeX, myTextOverflow.preferredHeight);
+                    myTextOverflowsRect.sizeDelta = new Vector2(potentialNewSize.x, myTextOverflow.preferredHeight);
 
-                    float totalBubbleHeight = paddedIconHeight + myTextOverflow.preferredHeight + interiorPadding;
+                    float newWidth = potentialNewSize.x + interiorPadding * 2.0f;
+                    float newHeight = paddedIconHeight + myTextOverflow.preferredHeight + interiorPadding;
 
-                    myRect.sizeDelta = new Vector2(myRect.sizeDelta.x, totalBubbleHeight);
-
+                    myRect.sizeDelta = new Vector2(newWidth, newHeight);
                 }
                 else
                 {
                     myTextOverflow.enabled = false;
 
-                    float textPaddingY = -(paddedIconHeight - myTextMain.preferredHeight) / 2.0f;
-                    
-                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, textPaddingY);
-                    myTextMainsRect.sizeDelta = new Vector2(mainTextSizeX, myTextMain.preferredHeight);
+                    float textPaddingY = -(paddedIconHeight - potentialNewSize.y) / 2.0f;
 
-                    myRect.sizeDelta = new Vector2(myRect.sizeDelta.x, paddedIconHeight);
+                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, textPaddingY);
+                    myTextMainsRect.sizeDelta = new Vector2(potentialNewSize.x - paddedIconWidth, myTextMain.preferredHeight);
+                    myTextMain.ForceMeshUpdate();
+
+                    float newWidth = myTextMain.renderedWidth + paddedIconWidth + interiorPadding;
+
+                    myRect.sizeDelta = new Vector2(newWidth, paddedIconHeight);
                 }
             }
             else
@@ -408,25 +433,13 @@ namespace QuilleUI
                 myTextOverflow.enabled = false;
                 myTextMain.overflowMode = TextOverflowModes.Overflow;
 
+                Vector2 newDimensions = CalculateSizeForRatio(myTextMain.preferredWidth);
+
                 myTextMainsRect.anchoredPosition = topLeftCornerPadding;
-                //myTextMainsRect.sizeDelta = new Vector2(bubbleWidthMinPadding, myTextMain.preferredHeight);
-
-                //myRect.sizeDelta = new Vector2(myRect.sizeDelta.x, myTextMain.preferredHeight + interiorPadding * 2.0f);
-
-
-
-                float paramRatio = bubbleRatio.x / bubbleRatio.y;
-                float mysteriousValue = Mathf.Sqrt(myTextMain.preferredWidth/(paramRatio * myTextMain.textInfo.lineInfo[0].lineHeight));
-                float newWidth = myTextMain.preferredWidth / mysteriousValue;
-                float newHeight = myTextMain.textInfo.lineInfo[0].lineHeight * mysteriousValue;
-
-                myTextMainsRect.sizeDelta = new Vector2(newWidth, newHeight);
+                myTextMainsRect.sizeDelta = newDimensions;
                 myTextMain.ForceMeshUpdate();
 
-
-                myRect.sizeDelta = new Vector2(newWidth + interiorPadding * 2.0f, myTextMain.preferredHeight + interiorPadding * 2.0f);
-
-
+                myRect.sizeDelta = new Vector2(newDimensions.x + interiorPadding * 2.0f, myTextMain.preferredHeight + interiorPadding * 2.0f);
             }
         }
 
