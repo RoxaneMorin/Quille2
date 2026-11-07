@@ -12,15 +12,11 @@ public class UI_PopUpBubbleEditor : Editor
     // VARIABLES
     // Object References
     private UI_PopUpBubble targetPopUpBubble;
-    private TMP_Text targetTextMain;
-    private TMP_Text targetTextOverflow;
-    private Image targetIcon;
+    private UI_ReflowableTextbox targetReflowableTextbox;
 
     private RectTransform targetPopUpBubbleRect;
     private RectTransform targetOwnerRect;
-    private RectTransform targetTextMainRect;
-    private RectTransform targetTextOverflowRect;
-    private RectTransform targetIconRect;
+    private RectTransform targetReflowableTextboxRect;
 
     // Serialized Properties
     private SerializedProperty scriptProperty;
@@ -28,26 +24,17 @@ public class UI_PopUpBubbleEditor : Editor
     private SerializedProperty myOwner;
     private SerializedProperty myTail;
     private SerializedProperty myTailsImage;
-    private SerializedProperty myTextMain;
-    private SerializedProperty myTextOverflow;
-    private SerializedProperty myIcon;
+    private SerializedProperty myReflowableTextbox;
 
     private SerializedProperty myRect;
     private SerializedProperty myOwnersRect;
     private SerializedProperty myTailsRect;
-    private SerializedProperty myTextMainsRect;
-    private SerializedProperty myTextOverflowsRect;
-    private SerializedProperty myIconsRect;
+    private SerializedProperty myReflowableTextboxsRect;
 
     private SerializedProperty tailSpritePointingDown;
     private SerializedProperty tailSpritePointingUp;
     private SerializedProperty tailSpritePointingLeft;
     private SerializedProperty tailSpritePointingRight;
-
-    private SerializedProperty hasIcon;
-    private SerializedProperty tailDistance;
-    private SerializedProperty distanceFromOwner;
-    private SerializedProperty bubbleRatio;
 
     private SerializedProperty ownerScreenPosXRightOfPivot;
     private SerializedProperty ownerScreenPosXLeftOfPivot;
@@ -56,20 +43,23 @@ public class UI_PopUpBubbleEditor : Editor
 
     private SerializedProperty currentDirection;
 
-    // Locally cached values
+    // Local and cached variables 
+    private GameObject cachedOwner;
 
+    private Sprite cachedIconSprite;
+    private string cachedTextContent;
+
+    private bool cachedHasIcon;
+    private Vector2 cachedDimensionRatio;
+    private float cachedInteriorPadding;
+    private Vector2 cachedIconSize;
     private float cachedFontSize;
 
-    private float cachedBubblePadding;
+    private float cachedDistanceFromOwner;
+    private float cachedTailDistance;
+    private Vector2 cachedTailSize;
 
-
-
-    private string cachedTextContent;
-    private Sprite cachedIconSprite;
-
-
-    Vector3[] rectWorldCorners;
-
+    private FourDirections cachedCurrentDirection;
 
 
     // METHODS
@@ -92,21 +82,12 @@ public class UI_PopUpBubbleEditor : Editor
         myOwner = serializedObject.FindProperty("myOwner");
         myTail = serializedObject.FindProperty("myTail");
         myTailsImage = serializedObject.FindProperty("myTailsImage");
-        myTextMain = serializedObject.FindProperty("myTextMain");
-        myTextOverflow = serializedObject.FindProperty("myTextOverflow");
-        myIcon = serializedObject.FindProperty("myIcon");
+        myReflowableTextbox = serializedObject.FindProperty("myReflowableTextbox");
 
         myRect = serializedObject.FindProperty("myRect");
         myOwnersRect = serializedObject.FindProperty("myOwnersRect");
         myTailsRect = serializedObject.FindProperty("myTailsRect");
-        myTextMainsRect = serializedObject.FindProperty("myTextMainsRect");
-        myTextOverflowsRect = serializedObject.FindProperty("myTextOverflowsRect");
-        myIconsRect = serializedObject.FindProperty("myIconsRect");
-
-        hasIcon = serializedObject.FindProperty("hasIcon");
-        tailDistance = serializedObject.FindProperty("tailDistance");
-        distanceFromOwner = serializedObject.FindProperty("distanceFromOwner");
-        bubbleRatio = serializedObject.FindProperty("bubbleRatio");
+        myReflowableTextboxsRect = serializedObject.FindProperty("myReflowableTextboxsRect");
 
         ownerScreenPosXRightOfPivot = serializedObject.FindProperty("ownerScreenPosXRightOfPivot");
         ownerScreenPosXLeftOfPivot = serializedObject.FindProperty("ownerScreenPosXLeftOfPivot");
@@ -116,20 +97,11 @@ public class UI_PopUpBubbleEditor : Editor
         currentDirection = serializedObject.FindProperty("currentDirection");
 
         // Fetch rects from serialized properties
-        targetTextMain = (TMP_Text)myTextMain.objectReferenceValue;
-        targetTextOverflow = (TMP_Text)myTextOverflow.objectReferenceValue;
-        targetIcon = (Image)myIcon.objectReferenceValue;
+        targetReflowableTextbox = (UI_ReflowableTextbox)myReflowableTextbox.objectReferenceValue;
 
         targetPopUpBubbleRect = (RectTransform)myRect.objectReferenceValue;
         targetOwnerRect = (RectTransform)myOwnersRect.objectReferenceValue;
-        targetTextMainRect = (RectTransform)myTextMainsRect.objectReferenceValue;
-        targetTextOverflowRect = (RectTransform)myTextOverflowsRect.objectReferenceValue;
-        targetIconRect = (RectTransform)myIconsRect.objectReferenceValue;
-
-
-        // Misc
-        rectWorldCorners = new Vector3[4];
-
+        targetReflowableTextboxRect = (RectTransform)myReflowableTextboxsRect.objectReferenceValue;
     }
 
 
@@ -167,8 +139,27 @@ public class UI_PopUpBubbleEditor : Editor
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(myOwner.displayName, GUILayout.Width(EditorGUIUtility.labelWidth));
-            EditorGUILayout.PropertyField(myOwner, GUIContent.none);
+            //EditorGUILayout.PropertyField(myOwner, GUIContent.none);
+
+            EditorGUI.BeginChangeCheck();
+            cachedOwner = (GameObject)EditorGUILayout.ObjectField(targetPopUpBubble.Owner, typeof(GameObject), true);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Owner");
+                targetPopUpBubble.Owner = cachedOwner;
+            }
+
+            
             EditorGUILayout.PropertyField(myOwnersRect, GUIContent.none);
+            EditorGUILayout.EndHorizontal();
+
+            // TODO: auto update of owner data
+
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(myReflowableTextbox.displayName, GUILayout.Width(EditorGUIUtility.labelWidth));
+            EditorGUILayout.PropertyField(myReflowableTextbox, GUIContent.none);
+            EditorGUILayout.PropertyField(myReflowableTextboxsRect, GUIContent.none);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
@@ -179,66 +170,6 @@ public class UI_PopUpBubbleEditor : Editor
 
             EditorGUILayout.PropertyField(myTailsImage);
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(myTextMain.displayName, GUILayout.Width(EditorGUIUtility.labelWidth));
-            EditorGUILayout.PropertyField(myTextMain, GUIContent.none);
-            EditorGUILayout.PropertyField(myTextMainsRect, GUIContent.none);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(myTextOverflow.displayName, GUILayout.Width(EditorGUIUtility.labelWidth));
-            EditorGUILayout.PropertyField(myTextOverflow, GUIContent.none);
-            EditorGUILayout.PropertyField(myTextOverflowsRect, GUIContent.none);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(myIcon.displayName, GUILayout.Width(EditorGUIUtility.labelWidth));
-            EditorGUILayout.PropertyField(myIcon, GUIContent.none);
-            EditorGUILayout.PropertyField(myIconsRect, GUIContent.none);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
-
-            GUILayout.Label("Layout", EditorStyles.boldLabel);
-
-            EditorGUI.BeginChangeCheck();
-            cachedBubblePadding = EditorGUILayout.Slider(new GUIContent("Interior Padding"), targetPopUpBubble.InteriorPadding, 0.0f, 20.0f);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Interior Padding");
-
-                targetPopUpBubble.InteriorPadding = cachedBubblePadding;
-
-                targetPopUpBubble.UpdateBubbleDimensions();
-            }
-
-            EditorGUI.BeginChangeCheck();
-            cachedFontSize = EditorGUILayout.Slider(new GUIContent("Font Size"), targetTextMain.fontSize, 10.0f, 30.0f);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Font Size");
-                targetTextMain.fontSize = targetTextOverflow.fontSize = cachedFontSize;
-                targetPopUpBubble.UpdateBubbleDimensions();
-            }
-
-            EditorGUILayout.PropertyField(hasIcon);
-            EditorGUILayout.PropertyField(tailDistance);
-            EditorGUILayout.PropertyField(distanceFromOwner);
-
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(bubbleRatio);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Ratio");
-                targetPopUpBubble.UpdateBubbleDimensions();
-            }
-
-
-            // TODO:
-            // Icon size
-            // Tail size
-
 
             EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
 
@@ -247,30 +178,113 @@ public class UI_PopUpBubbleEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(new GUIContent("Icon"), GUILayout.Width(EditorGUIUtility.labelWidth));
             EditorGUI.BeginChangeCheck();
-            cachedIconSprite = (Sprite)EditorGUILayout.ObjectField(targetIcon.sprite, typeof(Sprite), false);
+            cachedIconSprite = (Sprite)EditorGUILayout.ObjectField(targetPopUpBubble.IconSprite, typeof(Sprite), false);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Icon Sprite");
-                targetIcon.sprite = cachedIconSprite;
+                targetPopUpBubble.IconSprite = cachedIconSprite;
             }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(new GUIContent("Text"), GUILayout.Width(EditorGUIUtility.labelWidth));
             EditorGUI.BeginChangeCheck();
-            cachedTextContent = GUILayout.TextArea(targetTextMain.text);
+            cachedTextContent = GUILayout.TextArea(targetPopUpBubble.TextContent);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Text Content");
-                targetPopUpBubble.SetBubbleText(cachedTextContent);
+                targetPopUpBubble.TextContent = cachedTextContent;
             }
             EditorGUILayout.EndHorizontal();
 
-            
 
-            
+            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
+
+            GUILayout.Label("Layout", EditorStyles.boldLabel);
+
+            EditorGUI.BeginChangeCheck();
+            cachedDimensionRatio = EditorGUILayout.Vector2Field("Dimension Ratio", targetPopUpBubble.DimensionRatio);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Dimension Ratio");
+                targetPopUpBubble.DimensionRatio = cachedDimensionRatio;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedInteriorPadding = EditorGUILayout.Slider("Interior Padding", targetPopUpBubble.InteriorPadding, 0.0f, 50.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Interior Padding");
+                targetPopUpBubble.InteriorPadding = cachedInteriorPadding;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedHasIcon = EditorGUILayout.Toggle("Has Icon", targetPopUpBubble.HasIcon);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Toggle PopUpBubble Icon");
+                targetPopUpBubble.HasIcon = cachedHasIcon;
+            }
+            EditorGUI.BeginChangeCheck();
+            cachedIconSize = EditorGUILayout.Vector2Field("Icon Size", targetPopUpBubble.IconSize);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Icon Size");
+                targetPopUpBubble.IconSize = cachedIconSize;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedFontSize = EditorGUILayout.Slider("Font Size", targetPopUpBubble.FontSize, 5.0f, 50.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Font Size");
+                targetPopUpBubble.FontSize = cachedFontSize;
+            }
+
+            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 4f);
+
+            EditorGUI.BeginChangeCheck();
+            cachedDistanceFromOwner = EditorGUILayout.Slider("Distance from Owner", targetPopUpBubble.DistanceFromOwner, -50.0f, 100.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Distance from Owner");
+                targetPopUpBubble.DistanceFromOwner = cachedDistanceFromOwner;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedTailDistance = EditorGUILayout.Slider("Tail Distance", targetPopUpBubble.TailDistance, -50.0f, 100.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Tail Distance");
+                targetPopUpBubble.TailDistance = cachedTailDistance;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedTailSize = EditorGUILayout.Vector2Field("Tail Size", targetPopUpBubble.TailSize);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Tail Size");
+                targetPopUpBubble.TailSize = cachedTailSize;
+            }
+
+
+            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
+
+            EditorGUI.BeginChangeCheck();
+            cachedCurrentDirection = (FourDirections)EditorGUILayout.EnumPopup("Current Direction", targetPopUpBubble.CurrentDirection);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetPopUpBubble, "Change PopUpBubble Current Direction");
+                targetPopUpBubble.CurrentDirection = cachedCurrentDirection;
+            }
+
 
             serializedObject.ApplyModifiedProperties();
+
+            if (targetPopUpBubble.IsDirty)
+            {
+                targetPopUpBubble.UpdateLayout();
+            }
 
         }
         else
@@ -298,41 +312,7 @@ public class UI_PopUpBubbleEditor : Editor
             Handles.DrawSolidDisc(new Vector3(targetOwnerRect.position.x, ownerScreenPosYBottomOfPivot.floatValue, 0.0f), Vector3.forward, handleSize);
             Handles.DrawSolidDisc(new Vector3(targetOwnerRect.position.x, ownerScreenPosYTopOfPivot.floatValue, 0.0f), Vector3.forward, handleSize);
 
-            Handles.color = Color.white;
-
-            // Main text bounds
-            targetTextMainRect.GetWorldCorners(rectWorldCorners);
-            Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(250, 250, 0, 25), new Color32(250, 250, 0, 255));
-
-            if (targetTextMain.overflowMode == TextOverflowModes.Overflow)
-            {
-                // Overflow text actual length
-                Vector2 renderedSize = targetTextMain.GetRenderedValues();
-                rectWorldCorners[0] = rectWorldCorners[1] - new Vector3(0.0f, renderedSize.y, 0.0f);
-                rectWorldCorners[3] = rectWorldCorners[2] - new Vector3(0.0f, renderedSize.y, 0.0f);
-                // TODO: also adjust values in X?
-                Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(255, 255, 0, 10), new Color32(255, 255, 0, 50));
-            }
-
-            if (hasIcon.boolValue)
-            {
-                // Icon bounds
-                targetIconRect.GetWorldCorners(rectWorldCorners);
-                Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(0, 250, 0, 25), new Color32(0, 250, 0, 255));
-
-                if (targetTextOverflow.enabled)
-                {
-                    // Overflow text bounds
-                    targetTextOverflowRect.GetWorldCorners(rectWorldCorners);
-                    Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(255, 150, 0, 25), new Color32(255, 150, 0, 255));
-
-                    // Overflow text actual length
-                    Vector2 renderedSize = targetTextOverflow.GetRenderedValues();
-                    rectWorldCorners[0] = rectWorldCorners[1] - new Vector3(0.0f, renderedSize.y, 0.0f);
-                    rectWorldCorners[3] = rectWorldCorners[2] - new Vector3(0.0f, renderedSize.y, 0.0f);
-                    Handles.DrawSolidRectangleWithOutline(rectWorldCorners, new Color32(255, 150, 0, 10), new Color32(255, 150, 0, 50));
-                }
-            }
+            
         }
     }
 }

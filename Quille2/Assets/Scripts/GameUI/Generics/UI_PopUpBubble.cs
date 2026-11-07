@@ -19,16 +19,12 @@ namespace QuilleUI
         [SerializeField] protected GameObject myOwner;
         [SerializeField] protected GameObject myTail;
         [SerializeField] protected Image myTailsImage;
-        [SerializeField] protected TMP_Text myTextMain;
-        [SerializeField] protected TMP_Text myTextOverflow;
-        [SerializeField] protected Image myIcon;
+        [SerializeField] protected UI_ReflowableTextbox myReflowableTextbox;
 
         [SerializeField] protected RectTransform myRect;
         [SerializeField] protected RectTransform myOwnersRect;
         [SerializeField] protected RectTransform myTailsRect;
-        [SerializeField] protected RectTransform myTextMainsRect;
-        [SerializeField] protected RectTransform myTextOverflowsRect;
-        [SerializeField] protected RectTransform myIconsRect;
+        [SerializeField] protected RectTransform myReflowableTextboxsRect;
 
         // Resources
         [SerializeField] protected Sprite tailSpritePointingDown;
@@ -37,63 +33,233 @@ namespace QuilleUI
         [SerializeField] protected Sprite tailSpritePointingRight;
 
         // Layout
-        [SerializeField] protected bool hasIcon = true;
-
-        [SerializeField] protected float interiorPadding = 10.0f;
-
-        [SerializeField] protected float fontSize = 20.0f;
-
-
-        
-
-        [SerializeField] protected float tailDistance = 16.0f;
-
-
+        [SerializeField] protected float interiorPadding = 10f;
         [SerializeField] protected float distanceFromOwner = 40.0f;
-
-
-
-
-        [SerializeField] protected Vector2 bubbleRatio;
-
-        // Tail size
-        // Icon size
-
-        // Icon and tail sizes, only customisable in editor?
-
-
+        [SerializeField] protected float tailDistance = 16.0f;
+        // Tail size?
 
         // Runtime
         [Header("Runtime")]
+        protected bool isDirty;
+
         [SerializeField] protected float ownerScreenPosXRightOfPivot;
         [SerializeField] protected float ownerScreenPosXLeftOfPivot;
         [SerializeField] protected float ownerScreenPosYTopOfPivot;
         [SerializeField] protected float ownerScreenPosYBottomOfPivot;
-
-
 
         [SerializeField] protected FourDirections currentDirection;
 
 
 
         // PROPERTIES
+        public GameObject Owner
+        {
+            get { return myOwner; }
+            set
+            {
+                myOwner = value;
+                UpdateOwnerData();
+
+                // TODO: protect against invalid owners.
+            }
+        }
+
+        public Sprite IconSprite
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.IconSprite;
+                }
+                else
+                { 
+                    return null; 
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.IconSprite = value;
+                    SetDirty();
+                }
+            }
+        }
+        public string TextContent
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.TextContent;
+                }
+                else
+                { 
+                    return string.Empty; 
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.TextContent = value;
+                    SetDirty();
+                }
+            }
+        }
+
+        public Vector2 DimensionRatio
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.DimensionRatio;
+                }
+                else
+                { 
+                    return Vector2.zero; 
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.DimensionRatio = value;
+                    SetDirty();
+                }
+            }
+        }
         public float InteriorPadding
         {
             get { return interiorPadding; }
             set
             {
                 interiorPadding = value;
+                SetDirty();
             }
         }
 
+        public bool HasIcon
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.HasIcon;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.HasIcon = value;
+                    SetDirty();
+                }
+            }
+        }
+        public Vector2 IconSize
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.IconSize;
+                }
+                else
+                {
+                    return Vector2.zero;
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.IconSize = value;
+                    SetDirty();
+                }
+            }
+        }
+        public float FontSize
+        {
+            get
+            {
+                if (myReflowableTextbox != null)
+                {
+                    return myReflowableTextbox.FontSize;
+                }
+                else
+                { 
+                    return 0.0f; 
+                }
+            }
+            set
+            {
+                if (myReflowableTextbox != null)
+                {
+                    myReflowableTextbox.FontSize = value;
+                    SetDirty();
+                }
+            }
+        }
 
+        public float DistanceFromOwner
+        {
+            get { return distanceFromOwner; }
+            set
+            {
+                distanceFromOwner = value;
+                SetDirty();
+            }
+        }
         public float TailDistance
         {
             get { return tailDistance; }
             set
             {
                 tailDistance = value;
-                // TODO: 
+                SetDirty();
+            }
+        }
+
+        public Vector2 TailSize
+        {
+            get
+            {
+                if (myTailsRect != null)
+                {
+                    return myTailsRect.sizeDelta;
+                }
+                else
+                {
+                    return Vector2.zero;
+                }
+            }
+            set
+            {
+                if (myTailsRect != null)
+                {
+                    myTailsRect.sizeDelta = value;
+                    SetDirty();
+                }
+            }
+        }
+
+        public bool IsDirty { get { return isDirty; } }
+        public void SetDirty() { isDirty = true; }
+
+        public FourDirections CurrentDirection
+        {
+            get { return currentDirection; }
+            set
+            {
+                currentDirection = value;
+                UpdateVisualBubbleDirection(currentDirection);
             }
         }
 
@@ -108,18 +274,31 @@ namespace QuilleUI
         {
             myRect = (RectTransform)transform;
 
-            if (myOwner != null)
-            {
-                SetOwner(myOwner);
-            }
-            else if (transform.parent != null && transform.parent.gameObject.GetComponent<CanvasRenderer>() != null)
+            if (myOwner == null && transform.parent != null && transform.parent.gameObject.GetComponent<CanvasRenderer>() != null)
             {
                 // If our parent gameObject possesses a CanvasRenderer, we assume it's an UI element that can be our owner.
-                SetOwner(transform.parent.gameObject);
+                Owner = transform.parent.gameObject;
+            }
+            if (myOwner != null)
+            {
+                UpdateOwnerData();
             }
             else
             {
                 Debug.LogWarning($"The PopUpBubble '{this.name}' lacks a valid owner and will not function properly.");
+            }
+
+            if (myReflowableTextbox == null)
+            {
+                myReflowableTextbox = gameObject.GetComponentInChildren<UI_ReflowableTextbox>();
+            }
+            if (myReflowableTextbox != null)
+            {
+                myReflowableTextboxsRect = (RectTransform)myReflowableTextbox.transform;
+            }
+            else
+            {
+                Debug.LogWarning($"The PopUpBubble '{this.name}' is missing its ReflowableTextbox reference and will not function properly.");
             }
 
             if (myTail != null)
@@ -131,37 +310,28 @@ namespace QuilleUI
             {
                 Debug.LogWarning($"The PopUpBubble '{this.name}' is missing its Tail reference and will not function properly.");
             }
-
-            if (myTextMain != null)
-            {
-                myTextMainsRect = (RectTransform)myTextMain.transform;
-            }
-            if (myTextOverflow != null)
-            {
-                myTextOverflowsRect = (RectTransform)myTextOverflow.transform;
-            }
-            if (myIcon!= null)
-            {
-                myIconsRect = (RectTransform)myIcon.transform;
-            }
-
-            // TODO: add warnings for missing refs
         }
 
-        protected void SetOwner(GameObject newOwner)
+
+        protected void UpdateOwnerData()
         {
-            myOwner = newOwner;
-            myOwnersRect = (RectTransform)newOwner.transform;
-
-            // Make owner my parent if it's not already.
-            if (transform.parent != newOwner.transform)
+            if (myOwner != null && myOwner.GetComponent<CanvasRenderer>() != null)
             {
-                transform.parent = newOwner.transform;
-                SetBubbleDirection(FourDirections.Top);
-            }
+                myOwnersRect = (RectTransform)myOwner.transform;
 
-            CalculateOwnerScreenPos();
+                // Make owner my parent if it's not already.
+                if (transform.parent != myOwner.transform)
+                {
+                    transform.parent = myOwner.transform;
+                    UpdateVisualBubbleDirection(currentDirection);
+                }
+
+                CalculateOwnerScreenPos();
+            }
         }
+
+
+
         protected void CalculateOwnerScreenPos()
         {
             // Determine owner's edge positions from its size and pivot.
@@ -177,26 +347,29 @@ namespace QuilleUI
         }
 
 
+        public void UpdateLayout()
+        {
+            if (myReflowableTextbox.IsDirty)
+            {
+                myReflowableTextbox.InteriorPadding = interiorPadding;
+                myRect.sizeDelta = myReflowableTextbox.UpdateLayout() + new Vector2(interiorPadding, interiorPadding) * 2.0f;
+            }
 
+            UpdateVisualBubbleDirection(currentDirection);
 
+            isDirty = false;
+        }
 
         protected void SetBubbleDirectionFromCursorPos(Vector2 cursorPos)
         {
             (FourDirections, float) closestSideToCursor = GetClosestSideToPoint(cursorPos);
 
-
             // TODO: account for the edge of the screen?
 
-
-
-
-
-
-            SetBubbleDirection(closestSideToCursor.Item1);
+            CurrentDirection = closestSideToCursor.Item1;
         }
-        protected void SetBubbleDirection(FourDirections direction)
+        protected void UpdateVisualBubbleDirection(FourDirections direction)
         {
-            currentDirection = direction;
             switch (direction)
             {
                 case FourDirections.Top:
@@ -260,9 +433,6 @@ namespace QuilleUI
             }
         }
 
-        
-
-
         protected (FourDirections, float) GetClosestSideToPoint(Vector2 point)
         {
             (FourDirections, float) closestTopBottom = GetSideTopBottomClosestToPoint(point);
@@ -307,147 +477,6 @@ namespace QuilleUI
         }
 
 
-
-
-        // Update text, image/icon
-        // Set size from text or image
-
-
-
-
-        public void SetBubbleText(string newBubbleText)
-        {
-            myTextMain.SetText(newBubbleText);
-            UpdateBubbleDimensions();
-        }
-
-        public void SetBubbleIcon(Sprite newBubbleIcon)
-        {
-            if (newBubbleIcon != null)
-            {
-                myIcon.sprite = newBubbleIcon;
-                myIcon.enabled = true;
-                hasIcon = true;
-            }
-            else
-            {
-                myIcon.sprite = null;
-                myIcon.enabled = false;
-                hasIcon = false;
-            }
-
-            UpdateBubbleDimensions();
-        }
-        public void ClearBubbleIcon()
-        {
-            SetBubbleIcon(null);
-        }
-
-
-        public void ResizeBubbleIcon(Vector2 newIconSize)
-        {
-            if (hasIcon)
-            {
-                myIconsRect.sizeDelta = newIconSize;
-                UpdateBubbleDimensions();
-            }
-        }
-
-
-        protected Vector2 CalculateSizeForRatio(float widthForSingularLine)
-        {
-            float ratio = bubbleRatio.x / bubbleRatio.y;
-            float lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
-
-            float mysteriousValue = Mathf.Sqrt(widthForSingularLine / (ratio * lineHeight));
-            float newWidth = widthForSingularLine / mysteriousValue;
-            float newHeight = lineHeight * mysteriousValue;
-
-            return new Vector2(newWidth, newHeight);
-        }
-
-     
-        public void UpdateBubbleDimensions()
-        {
-            float ratio = bubbleRatio.x / bubbleRatio.y;
-            float lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
-            float ratioTimesLineHeight = ratio * lineHeight;
-
-            // Adjust text flow and padding.
-            Vector2 topLeftCornerPadding = new Vector2(interiorPadding, -interiorPadding);
-
-            if (hasIcon)
-            {
-                myIcon.enabled = true;
-                myIconsRect.anchoredPosition = topLeftCornerPadding;
-
-                float paddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding * 2.0f;
-                float paddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding * 2.0f;
-                
-                float halfPaddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding;
-                float halfPaddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding;
-
-                float iconHeightInLines = halfPaddedIconHeight / lineHeight;
-                float iconAsAdditionalWidth = halfPaddedIconWidth * iconHeightInLines;
-                float totalPreferredWidth = myTextMain.preferredWidth + iconAsAdditionalWidth;
-
-                Vector2 potentialNewSize = CalculateSizeForRatio(totalPreferredWidth);
-
-                if (potentialNewSize.y > paddedIconHeight)
-                {
-                    myTextOverflow.enabled = true;
-                    myTextMain.overflowMode = TextOverflowModes.Linked;
-                    myTextMain.linkedTextComponent = myTextOverflow;
-
-                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, -interiorPadding);
-                    myTextMainsRect.sizeDelta = new Vector2(potentialNewSize.x - halfPaddedIconWidth, halfPaddedIconHeight);
-                    myTextMain.ForceMeshUpdate();
-
-                    myTextOverflowsRect.anchoredPosition = new Vector2(interiorPadding, -paddedIconHeight);
-                    myTextOverflowsRect.sizeDelta = new Vector2(potentialNewSize.x, myTextOverflow.preferredHeight);
-
-                    float newWidth = potentialNewSize.x + interiorPadding * 2.0f;
-                    float newHeight = paddedIconHeight + myTextOverflow.preferredHeight + interiorPadding;
-
-                    myRect.sizeDelta = new Vector2(newWidth, newHeight);
-                }
-                else
-                {
-                    myTextOverflow.enabled = false;
-
-                    float textPaddingY = -(paddedIconHeight - potentialNewSize.y) / 2.0f;
-
-                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, textPaddingY);
-                    myTextMainsRect.sizeDelta = new Vector2(potentialNewSize.x - paddedIconWidth, myTextMain.preferredHeight);
-                    myTextMain.ForceMeshUpdate();
-
-                    float newWidth = myTextMain.renderedWidth + paddedIconWidth + interiorPadding;
-
-                    myRect.sizeDelta = new Vector2(newWidth, paddedIconHeight);
-                }
-            }
-            else
-            {
-                myIcon.enabled = false;
-
-                myTextOverflow.enabled = false;
-                myTextMain.overflowMode = TextOverflowModes.Overflow;
-
-                Vector2 newDimensions = CalculateSizeForRatio(myTextMain.preferredWidth);
-
-                myTextMainsRect.anchoredPosition = topLeftCornerPadding;
-                myTextMainsRect.sizeDelta = newDimensions;
-                myTextMain.ForceMeshUpdate();
-
-                myRect.sizeDelta = new Vector2(newDimensions.x + interiorPadding * 2.0f, myTextMain.preferredHeight + interiorPadding * 2.0f);
-            }
-        }
-
-
-
-
-
-
         // EVENT LISTENERS
         public void DisplayBubble(BaseEventData eventData)
         {
@@ -462,22 +491,18 @@ namespace QuilleUI
             gameObject.SetActive(true);
         }
 
-
         public void HideBubble()
         {
-            //gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
 
+        // BUILT IN
 
-
-
-        [ExecuteInEditMode]
         private void Awake()
         {
             Init();
-
-            //SetBubbleText("A longer, quite longer and rambly text like the babblering of a senile old man whose brain has been destroyed by degenerescence.");
+            UpdateLayout();
         }
     }
 

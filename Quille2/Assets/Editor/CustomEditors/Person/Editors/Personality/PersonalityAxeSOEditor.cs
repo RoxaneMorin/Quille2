@@ -56,8 +56,8 @@ public class PersonalityAxeSOEditor : Editor
         EditorGUILayout.EndHorizontal();
 
         // Draw the paired properties.
-        EditorUtilities.drawAmbidextrousProperty(axeNameLeft, axeNameRight);
-        EditorUtilities.drawAmbidextrousProperty(axeIconLeft, axeIconRight);
+        EditorUtilities.DrawAmbidextrousProperty(axeNameLeft, axeNameRight);
+        EditorUtilities.DrawAmbidextrousProperty(axeIconLeft, axeIconRight);
 
         serializedObject.ApplyModifiedProperties();
     }

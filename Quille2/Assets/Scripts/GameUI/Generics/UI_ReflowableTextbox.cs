@@ -25,68 +25,152 @@ namespace QuilleUI
         [SerializeField] protected bool hasIcon = true;
         [SerializeField] protected Vector2 dimensionRatio;
         [SerializeField] protected float interiorPadding = 10.0f;
-        
+        // TODO: also have a surrounding padding?
 
         // Runtime
-        [SerializeField] protected Vector2 basePreferredDims;
-        [SerializeField] protected Vector2 handCalculatedDims;
+        [SerializeField] protected bool isDirty;
+
+        [SerializeField] protected Vector2 shortestTextDimensions;
+        [SerializeField] protected Vector2 calculatedTextDimensions;
+
+        [SerializeField] protected float paddedIconWidth;
+        [SerializeField] protected float paddedIconHeight;
 
         [SerializeField] protected float lineHeight;
         [SerializeField] protected int lineCount;
+
         [SerializeField] protected float summedTextLenght;
-
-
+        [SerializeField] protected float iconAsAdditionalTextLenght;
+        // TODO: deserialize these after testing.
+  
 
         // PROPERTIES
         public Sprite IconSprite
         {
-            get { return myIcon.sprite; }
-            set { myIcon.sprite = value; }
+            get 
+            { 
+                if (myIcon != null)
+                {
+                    return myIcon.sprite;
+                }
+               else
+                {
+                    return null;
+                }
+            }
+            set 
+            { 
+                if (myIcon != null)
+                {
+                    myIcon.sprite = value;
+                }
+            }
         }
         public string TextContent
         {
-            get { return myTextMain.text; }
+            get 
+            { 
+                if (myTextMain != null)
+                {
+                    return myTextMain.text;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
             set 
             {
-                myTextMain.SetText(value);
-                RefreshTextInfo();
+                if (myTextMain != null)
+                {
+                    myTextMain.SetText(value);
+                    RefreshTextData();
+                }
             }
         }
 
-        public bool HasIcon
-        {
-            get { return hasIcon; }
-            set { hasIcon = value; }
-        }
         public Vector2 DimensionRatio
         {
             get { return dimensionRatio; }
-            set 
-            { 
+            set
+            {
                 if (value.x >= 1 && value.y >= 1)
                 {
                     dimensionRatio = value;
+                    isDirty = true;
                 }
             }
         }
         public float InteriorPadding
         {
             get { return interiorPadding; }
-            set { interiorPadding = value; }
+            set
+            {
+                interiorPadding = value;
+                RefreshIconAndPaddingData();
+            }
+        }
+
+        public bool HasIcon
+        {
+            get { return hasIcon && myIcon != null; }
+            set 
+            {
+                hasIcon = value;
+                isDirty = true;
+            }
+        }
+        public Vector2 IconSize
+        {
+            get 
+            { 
+                if (myIconsRect != null)
+                {
+                    return myIconsRect.sizeDelta;
+                }
+                else
+                {
+                    return Vector2.zero;
+                }
+            }
+            set
+            {
+                if (myIconsRect != null)
+                {
+                    myIconsRect.sizeDelta = value;
+                    RefreshIconAndPaddingData();
+                }
+            }
         }
         public float FontSize
         {
-            get { return myTextMain.fontSize; }
-            set
-            {
-                if (value >= 1)
+            get 
+            { 
+                if (myTextMain != null)
                 {
-                    myTextMain.fontSize = myTextOverflow.fontSize = value;
-
-                    myTextMain.ForceMeshUpdate();
-                    myTextOverflow.ForceMeshUpdate();
+                    return myTextMain.fontSize;
+                }
+                else
+                { 
+                    return 0.0f; 
                 }
             }
+            set
+            {
+                if (myTextMain != null && value >= 1)
+                {
+                    myTextMain.fontSize = myTextOverflow.fontSize = value;
+                    RefreshTextData();
+                }
+            }
+        }
+
+        public bool IsDirty { get { return isDirty; } }
+        public void SetDirty() { isDirty = true; }
+
+        public Vector2 CurrentDimensions
+        {
+            get { return myRect.sizeDelta; }
         }
 
 
@@ -96,8 +180,10 @@ namespace QuilleUI
         {
             FetchComponents();
 
-            Vector2 everythingTopLeft = new Vector2(0.0f, 1.0f);
-            myIconsRect.anchorMin = myIconsRect.anchorMax = myIconsRect.pivot = everythingTopLeft;
+            myIconsRect.anchorMin = myIconsRect.anchorMax = myIconsRect.pivot = new Vector2(0.0f, 1.0f);
+
+            myTextMain.ForceMeshUpdate();
+            myTextOverflow.ForceMeshUpdate();
         }
         protected void FetchComponents()
         {
@@ -136,138 +222,160 @@ namespace QuilleUI
         }
 
 
-
-
-        public void RefreshTextInfo()
+        // -> LAYOUT MANAGEMENT
+        protected void RefreshIconAndPaddingData()
         {
-            lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
-            basePreferredDims = myTextMain.GetPreferredValues(myTextMain.preferredWidth, lineHeight);
-
-            myTextMainsRect.sizeDelta = basePreferredDims;
-            myTextMain.ForceMeshUpdate();
-
-            lineCount = myTextMain.textInfo.lineCount;
-
-            summedTextLenght = 0;
-            for (int i = 0; i < lineCount; i++)
+            if (myIcon != null)
             {
-                summedTextLenght += myTextMain.textInfo.lineInfo[i].length;
+                paddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding;
+                paddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding;
+                iconAsAdditionalTextLenght = paddedIconWidth * (paddedIconHeight / lineHeight); // should we round something here?
             }
-        }
-
-
-        
-        public void SetText(string newText)
-        {
-            myTextMain.SetText(newText);
-            RefreshTextInfo();
-        }
-
-
-
-        // TODO: move to a helper class.
-        protected (float, float) SolveQuadraticFormula(float a, float b, float c)
-        {
-            // x = (-b ± sqrt(b^2 - 4ac)) / 2a
-
-            float bSquared = b * b;
-            float fourAC = 4 * a * c;
-            float inSqrt = Mathf.Sqrt(bSquared - fourAC);
-
-            float numeratorAdd = -b + inSqrt;
-            float numeratorSub = -b - inSqrt;
-            float denumerator = 2 * a;
-
-            float resultAdd = numeratorAdd / denumerator;
-            float resultSub = numeratorSub / denumerator;
-
-            return (resultAdd, resultSub);
-        }
-
-
-
-
-        //
-        protected Vector2 CalculateDimensionsForSummedTextLenght(float summedTextLenght)
-        {
-            if (lineHeight == 0)
+            else
             {
-                lineHeight = myTextMain.textInfo.lineInfo[0].lineHeight;
+                paddedIconWidth = 0.0f;
+                paddedIconHeight = 0.0f;
+                iconAsAdditionalTextLenght = 0.0f;
             }
 
-            float currentRatio = basePreferredDims.x / basePreferredDims.y;
-            float targetRatio = dimensionRatio.x / dimensionRatio.y;
+            isDirty = true;
+        }
+        protected void RefreshTextData()
+        {
+            if (myTextMain != null)
+            {
+                myTextMain.ForceMeshUpdate();
+                myTextOverflow.ForceMeshUpdate();
+                // Not sure these are necessary;
+
+                Vector2 originalSizeDelta = myTextMainsRect.sizeDelta;
+                try
+                {
+                    shortestTextDimensions = myTextMainsRect.sizeDelta = myTextMain.GetPreferredValues(myTextMain.text, myTextMain.preferredWidth, Mathf.Infinity);
+                    myTextMain.ForceMeshUpdate();
+
+                    TMP_TextInfo mainTextInfo = myTextMain.textInfo;
+
+                    lineCount = mainTextInfo.lineCount;
+                    lineHeight = mainTextInfo.lineCount > 0 ? mainTextInfo.lineInfo[0].lineHeight : 0;
+
+                    summedTextLenght = 0;
+                    for (int i = 0; i < lineCount; i++)
+                    {
+                        summedTextLenght += mainTextInfo.lineInfo[i].length;
+                        //summedTextLenght += mainTextInfo.lineInfo[i].maxAdvance;
+                    }
+                }
+                finally
+                {
+                    myTextMainsRect.sizeDelta = originalSizeDelta;
+                    myTextMain.ForceMeshUpdate();
+                }
+            }
+            else
+            {
+                shortestTextDimensions = Vector2.zero;
+                lineCount = 0;
+                lineHeight = 0.0f;
+                summedTextLenght = 0.0f;
+            }
+
+            if (hasIcon)
+            {
+                RefreshIconAndPaddingData();
+            }
+
+            isDirty = true;
+        }
+
+        protected Vector2 CalculateTextDimensionsFromSummedLenght(float summedTextLenght, Vector2 dimensionRatio, float lineHeight, float lineCount)
+        {
+            float ratio = dimensionRatio.x / dimensionRatio.y;
 
             // ax^2 + bx + c -> rx^2 + rHmx - L
             // a -> rH -> targetRatio * lineHeight
             // b -> rHm -> targetRatio * lineHeight * lineCount
             // c -> -L -> -summedLineWidth;
 
-            float rH = targetRatio * lineHeight;
-            float rHm = targetRatio * lineHeight * lineCount;
-            (float, float) mysteryValue = SolveQuadraticFormula(rH, rHm, -summedTextLenght);
+            float rH = ratio * lineHeight;
+            float rHm = ratio * lineHeight * lineCount;
 
-            // TODO: verify which result to use.
-
-            float newWidth = summedTextLenght / mysteryValue.Item1;
-            float newHeight = lineHeight * (lineCount + mysteryValue.Item1);
-
-            return new Vector2(newWidth, newHeight);
+            Vector2 quadraticSolutions;
+            if (MathHelpers.TrySolveQuadratic(rH, rHm, -summedTextLenght, out quadraticSolutions))
+            {
+                if (quadraticSolutions.x > 0)
+                {
+                    return new Vector2(summedTextLenght / quadraticSolutions.x, 
+                                       lineHeight * (lineCount + quadraticSolutions.x));
+                }
+                else if (quadraticSolutions.y > 0)
+                {
+                    return new Vector2(summedTextLenght / quadraticSolutions.y, 
+                                       lineHeight * (lineCount + quadraticSolutions.y));
+                }
+            }
+            // Else,
+            return myTextMain.GetPreferredValues(myTextMain.text, summedTextLenght/lineCount, Mathf.Infinity);
         }
 
-
-        // TODO: figure out why the result of editor Ui manipulations is sometimes fucky
-
-
-
-
-        public void UpdateTextboxDimensions(bool refreshTextInfo = true)
+        public Vector2 UpdateLayout(bool refreshAllData = false)
         {
-            if (refreshTextInfo)
+            if (refreshAllData)
             {
-                RefreshTextInfo();
+                RefreshTextData();
+                RefreshIconAndPaddingData();
             }
 
-            if (hasIcon)
+            float totalSummedLength = summedTextLenght;
+            if (hasIcon && myIcon != null)
+            {
+                totalSummedLength += iconAsAdditionalTextLenght;
+            }
+            calculatedTextDimensions = CalculateTextDimensionsFromSummedLenght(totalSummedLength, dimensionRatio, lineHeight, lineCount);
+
+            if (hasIcon && myIcon != null)
             {
                 myIcon.gameObject.SetActive(true);
+                myIconsRect.anchoredPosition = Vector2.zero;
 
-                float paddedIconWidth = myIconsRect.sizeDelta.x + interiorPadding;
-                float paddedIconHeight = myIconsRect.sizeDelta.y + interiorPadding;
-
-                float iconHeightInLines = paddedIconHeight / lineHeight;
-                float iconAsAdditionalWidth = paddedIconWidth * iconHeightInLines;
-                float summedTextAndIconLenght = summedTextLenght + iconAsAdditionalWidth;
-
-                handCalculatedDims = CalculateDimensionsForSummedTextLenght(summedTextAndIconLenght);
-
-                myTextMainsRect.sizeDelta = new Vector2(handCalculatedDims.x - paddedIconWidth, paddedIconHeight);
+                myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, 0.0f);
+                myTextMainsRect.sizeDelta = new Vector2(calculatedTextDimensions.x - paddedIconWidth, paddedIconHeight);
                 myTextMain.ForceMeshUpdate();
 
                 if (myTextMain.isTextOverflowing)
                 {
                     myTextOverflow.gameObject.SetActive(true);
+
                     myTextMain.overflowMode = TextOverflowModes.Linked;
                     myTextMain.linkedTextComponent = myTextOverflow;
-
-                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, 0.0f);
                     myTextMain.ForceMeshUpdate();
 
                     myTextOverflowsRect.anchoredPosition = new Vector2(0.0f, -paddedIconHeight);
-                    myTextOverflowsRect.sizeDelta = new Vector2(handCalculatedDims.x, handCalculatedDims.y - paddedIconHeight);
+                    myTextOverflowsRect.sizeDelta = new Vector2(calculatedTextDimensions.x, calculatedTextDimensions.y - paddedIconHeight);
                     myTextOverflow.ForceMeshUpdate();
 
-                    myRect.sizeDelta = new Vector2(handCalculatedDims.x, paddedIconHeight + myTextOverflow.GetRenderedValues().y);
+                    float totalWidth = Mathf.Max(paddedIconWidth + myTextMain.renderedWidth, myTextOverflow.renderedWidth);
+                    float totalHeight = paddedIconHeight + myTextOverflow.renderedHeight;
+
+                    myRect.sizeDelta = new Vector2(totalWidth, totalHeight);
                 }
                 else
                 {
                     myTextOverflow.gameObject.SetActive(false);
+
                     myTextMain.overflowMode = TextOverflowModes.Overflow;
+                    myTextMain.ForceMeshUpdate();
 
-                    float textPaddingY = -(myIconsRect.sizeDelta.y - myTextMain.renderedHeight) / 2.0f;
-                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, textPaddingY);
+                    myTextOverflowsRect.sizeDelta = Vector2.zero;
+                    myTextOverflow.ForceMeshUpdate();
+                    
+                    myRect.sizeDelta = new Vector2(paddedIconWidth + myTextMain.renderedWidth, Mathf.Max(myIconsRect.sizeDelta.y, myTextMain.renderedHeight));
 
-                    myRect.sizeDelta = new Vector2(myTextMain.renderedWidth + paddedIconWidth, Mathf.Max(myIconsRect.sizeDelta.y, myTextMain.GetRenderedValues().y));
+                    myTextMainsRect.anchoredPosition = new Vector2(paddedIconWidth, -(myRect.sizeDelta.y - myTextMain.renderedHeight) / 2.0f);
+                    if (myIconsRect.sizeDelta.y < myTextMain.renderedHeight) // Not sure this is necessary / the offset is visible as such small values
+                    {
+                        myIconsRect.anchoredPosition = new Vector2(0.0f, -(myRect.sizeDelta.y - myIconsRect.sizeDelta.y) / 2.0f);
+                    }
                 }
             }
             else
@@ -277,19 +385,19 @@ namespace QuilleUI
 
                 myTextMain.overflowMode = TextOverflowModes.Overflow;
 
-                handCalculatedDims = CalculateDimensionsForSummedTextLenght(summedTextLenght);
-
                 myTextMainsRect.anchoredPosition = Vector2.zero;
-                myTextMainsRect.sizeDelta = handCalculatedDims;
+                myTextMainsRect.sizeDelta = calculatedTextDimensions;
                 myTextMain.ForceMeshUpdate();
 
                 myRect.sizeDelta = myTextMain.GetRenderedValues();
             }
+
+            isDirty = false;
+            return myRect.sizeDelta;
         }
 
 
-
-        [ExecuteInEditMode]
+        // BUILT IN
         private void Awake()
         {
             Init();

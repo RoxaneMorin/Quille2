@@ -133,7 +133,7 @@ public class SubjectiveNeedSOEditor : Editor
         EditorGUILayout.EndHorizontal();
 
         // Draw the paired properties.
-        EditorUtilities.drawAmbidextrousProperty(leftNeedSO, rightNeedSO, drawLabels: false);
+        EditorUtilities.DrawAmbidextrousProperty(leftNeedSO, rightNeedSO, drawLabels: false);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         if (serializedObject.ApplyModifiedProperties())
@@ -153,39 +153,39 @@ public class SubjectiveNeedSOEditor : Editor
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUILayout.BeginVertical("HelpBox");
-                EditorUtilities.drawLabelAndProperty(needNameLeft);
-                EditorUtilities.drawLabelAndProperty(needIconLeft);
+                EditorUtilities.DrawShortLabelAndProperty(needNameLeft);
+                EditorUtilities.DrawShortLabelAndProperty(needIconLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(aiPriorityWeightingLeft);
+                EditorUtilities.DrawShortLabelAndProperty(aiPriorityWeightingLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(defaultChangeRateLeft);
+                EditorUtilities.DrawShortLabelAndProperty(defaultChangeRateLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(thresholdElatedLeft);
-                EditorUtilities.drawLabelAndProperty(thresholdWarningLeft);
-                EditorUtilities.drawLabelAndProperty(thresholdCriticalLeft);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdElatedLeft);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdWarningLeft);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdCriticalLeft);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByLeft);
-                EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByLeft);
-                EditorUtilities.drawLabelAndProperty(thresholdsModulatedByLeft);
+                EditorUtilities.DrawShortLabelAndProperty(baseAIWeightingModulatedByLeft);
+                EditorUtilities.DrawShortLabelAndProperty(baseChangeRateModulatedByLeft);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdsModulatedByLeft);
                 EditorGUILayout.EndVertical();
 
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
                 EditorGUILayout.BeginVertical("HelpBox");
-                EditorUtilities.drawLabelAndProperty(needNameRight);
-                EditorUtilities.drawLabelAndProperty(needIconRight);
+                EditorUtilities.DrawShortLabelAndProperty(needNameRight);
+                EditorUtilities.DrawShortLabelAndProperty(needIconRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(aiPriorityWeightingRight);
+                EditorUtilities.DrawShortLabelAndProperty(aiPriorityWeightingRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(defaultChangeRateRight);
+                EditorUtilities.DrawShortLabelAndProperty(defaultChangeRateRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(thresholdElatedRight);
-                EditorUtilities.drawLabelAndProperty(thresholdWarningRight);
-                EditorUtilities.drawLabelAndProperty(thresholdCriticalRight);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdElatedRight);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdWarningRight);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdCriticalRight);
                 GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
-                EditorUtilities.drawLabelAndProperty(baseAIWeightingModulatedByRight);
-                EditorUtilities.drawLabelAndProperty(baseChangeRateModulatedByRight);
-                EditorUtilities.drawLabelAndProperty(thresholdsModulatedByRight);
+                EditorUtilities.DrawShortLabelAndProperty(baseAIWeightingModulatedByRight);
+                EditorUtilities.DrawShortLabelAndProperty(baseChangeRateModulatedByRight);
+                EditorUtilities.DrawShortLabelAndProperty(thresholdsModulatedByRight);
                 EditorGUILayout.EndVertical();
 
                 EditorGUILayout.EndHorizontal();
