@@ -11,6 +11,9 @@ namespace Quille
         [SerializeField] protected string itemName = "Undefined";
         [SerializeField] protected Sprite itemIcon;
 
+        // TODO: also include a description?
+        // TODO: make this a further base class also used by thoughts and needs?
+
         // PROPERTIES
         public string ItemName { get { return itemName; } }
         public Sprite ItemIcon { get { return itemIcon; } }

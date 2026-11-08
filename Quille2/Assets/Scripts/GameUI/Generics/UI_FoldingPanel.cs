@@ -46,6 +46,7 @@ namespace QuilleUI
         // TODO:
         // - drag grip only appears (or fully appears) on hover?
         // - update layout on resolution change
+        // - Add IsDirty, generally refresh the editor-side handling to better match newer UI items.
 
 
         // PROPERTIES
@@ -188,7 +189,7 @@ namespace QuilleUI
             currentClosedPanelWidth = currentButtonWidth + currentInteriorPadding * 2.0f;
         }
 
-#if (UNITY_EDITOR)
+//#if (UNITY_EDITOR)
         public void UpdatePadding(float newPadding)
         {
             if (newPadding < 0)
@@ -238,7 +239,7 @@ namespace QuilleUI
             currentDragGripDistance = newDragGripDistance;
             myDragGripsRect.anchoredPosition = new Vector2(isRightSidePanel ? -currentDragGripDistance : currentDragGripDistance, myDragGripsRect.anchoredPosition.y);
         }
-#endif
+//#endif
 
 
         // EVENT LISTENERS
