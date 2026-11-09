@@ -45,6 +45,7 @@ namespace Quille
         Normal,
         Elated
     }
+    // TODO: add notice
     
 
 
@@ -105,6 +106,9 @@ namespace Quille
         public const float MAX_NEED_PASSIVE_CHANGE_RATE = 0.5f;
         // Tweak these on a per-need basis?
         // Only apply to basic needs, as subjective needs could plausibly static for certain extreme personalities?
+
+
+        // TODO: move this to some simulation related class, where they can be shared by thoughts and the like.
 
         // NEEDS AI
         // Interval (in seconds) at which needs will change.

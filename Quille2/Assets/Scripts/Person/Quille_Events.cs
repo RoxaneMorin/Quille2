@@ -42,5 +42,10 @@ namespace Quille
 
 
 
+    // THOUGHT EVENTS
+    public delegate void ThoughtAcquired(ThoughtData thoughtIdentity, Thought thought);
+    public delegate void ThoughtExpired(ThoughtData thoughtIdentity, Thought thought);
+
+
     // OTHER EVENTS.
 }

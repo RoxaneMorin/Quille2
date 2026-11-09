@@ -395,6 +395,7 @@ namespace Quille
         }
 
 
+        // TODO: add notice threshold.
 
         // COROUTINES
         // Every second, alter this need's fulfillment level by its current change rate.

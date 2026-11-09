@@ -5,20 +5,17 @@ using ChecksAndMods;
 
 namespace Quille
 {
-    // TODO: decide whether this should be a C# object or a scriptable object.
-
-    // The C# object component of a Thought. Instances derive their specificities from their associated ThoughtData instance.
+    // The runtime component of a Thought. Instances derive their specificities from their associated ThoughtData instance.
     // These thoughs represent most of what may be on a character's mind, such as an interest, a person, an event or a memory.
     [System.Serializable]
-    public class Thought
+    public class Thought : ScriptableObject
     {
         // VARIABLES
         [SerializeField] protected ThoughtData data;
 
-        [SerializeField] protected float lifespan;
-        [SerializeField] protected float currentAge;
-
-        // Decay speed?
+        [SerializeField] protected float totalLifespan;
+        [SerializeField] protected float remainingLifespan;
+        [SerializeField] protected float decayRate;
 
         // Target?
 
@@ -30,37 +27,75 @@ namespace Quille
         public Sprite ItemIcon { get { return data.ItemIcon; } }
         public Color ItemColor { get { return data.ItemColor; } }
 
-        public float Lifespan { get { return lifespan; } }
-        public float CurrentAge { get { return currentAge; } }
+        public float TotalLifespan { get { return totalLifespan; } }
+        public float CurrentLifespan { get { return remainingLifespan; } }
+        public float CurrentAge { get { return totalLifespan - remainingLifespan; } }
+        public float DecayRate { get { return decayRate; } }
+        public bool ShouldDecay { get { return data.ShouldDecay; } }
 
-        // Decay rate?
+
+
+        // EVENTS
+        public event ThoughtAcquired OnThoughtAcquired;
+        public event ThoughtExpired OnThoughtExpired;
 
 
 
         // METHODS
 
-        //protected void OnAcquire() { } :
-        // Init for the given person, calculate thought lifespan, other stuff if needed. Send up an event?
-
-
-        //protected void OnExpire() { } 
-        // Probably just send up an event?
-
-
-        protected void CalculateLifespan(Person thoughtOwner)
+        // Initialization
+        public void Init(float lifespan, float decayRate)
         {
-            lifespan = data.DefaultLifespan;
-            foreach (Modulator modulator in data.LifespanModifiers)
-            {
-                lifespan = modulator.Execute(thoughtOwner, lifespan);
-            }
+            this.totalLifespan = this.remainingLifespan = lifespan;
+            this.decayRate = decayRate;
 
-            // If lifespan <= 0, kill the thought.
+            // Etc.
+
+            OnThoughtAcquired?.Invoke(data, this);
+        }
+        public void InitFor(Person thinker, float lifespan)
+        {
+            Init(lifespan, data.CalculateDecayRateFor(thinker));
+        }
+        public void InitFor(Person thinker)
+        {
+            float calculatedLifespan;
+            if (!data.CheckValidityFor(thinker, out calculatedLifespan))
+            {
+                Debug.LogWarning($"The thought '{ItemName}' is  being initialized for '{thinker.CharIDAndCharacterName}', but is not valid for them.");
+            }
+            InitFor(thinker, calculatedLifespan);
         }
 
 
-        // Some way to tick up its current age?
-        
+        // Management
+        public void ResetLifespan()
+        {
+            remainingLifespan = totalLifespan;
+        }
+
+        // Alter or recalculate rate and lifespan
+
+
+        // Lifecycle
+        protected void Expire()
+        {
+            OnThoughtExpired?.Invoke(data, this);
+        }
+
+        public IEnumerator AgeByDecayRate()
+        {
+            if (decayRate > 0.0f)
+            {
+                remainingLifespan -= decayRate;
+                if (remainingLifespan <= 0)
+                {
+                    Expire();
+                }
+
+                yield return new WaitForSeconds(Constants_Quille.NEED_DECAY_INTERVAL);
+            }
+        }
     }
 
 }

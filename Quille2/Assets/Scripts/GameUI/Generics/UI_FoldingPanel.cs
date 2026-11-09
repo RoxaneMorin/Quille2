@@ -23,10 +23,11 @@ namespace QuilleUI
         [SerializeField] protected RectTransform myButtonsRect;
         [SerializeField] protected RectTransform myContentsRect;
 
-        // Parameters
+        // Resources
         [SerializeField] protected Sprite dragGripSpriteLeft;
         [SerializeField] protected Sprite dragGripSpriteRight;
 
+        // Layout
         [SerializeField] protected float minOpenPanelWidth;
         [SerializeField] protected float maxOpenPanelWidth;
          
@@ -41,6 +42,8 @@ namespace QuilleUI
 
         [SerializeField] protected bool isRightSidePanel;
         [SerializeField] protected bool isOpen = true;
+
+        [SerializeField] protected bool isDirty;
 
 
         // TODO:
@@ -77,10 +80,34 @@ namespace QuilleUI
         public float CurrentOpenPanelWidth { get { return currentOpenPanelWidth; } }
         public float CurrentClosedPanelWidth { get { return currentClosedPanelWidth; } }
         public float CurrentInteriorPadding { get { return currentInteriorPadding; } }
-        public float CurrentButtonWidth { get { return currentButtonWidth; } }
+        public float ButtonWidth 
+        {
+            get
+            {
+                if (myButtonsRect != null)
+                {
+                    return myButtonsRect.sizeDelta.x;
+                }
+                else
+                {
+                    return 0.0f;
+                }
+            }
+            set
+            {
+                if (myButtonsRect != null)
+                {
+                    myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, value);
+                    SetDirty();
+                }
+            }
+        }
         public float CurrentDragGripDistance { get { return currentDragGripDistance; } }
         public bool IsRightSidePanel { get { return isRightSidePanel; } }
         public bool IsOpen { get { return isOpen; } }
+
+        public bool IsDirty { get { return isDirty; } }
+        public void SetDirty() { isDirty = true; }
 
 
 
@@ -181,12 +208,12 @@ namespace QuilleUI
         {
             RecalculateClosedPanelWidth();
 
-            currentContentWidth = currentOpenPanelWidth - (currentButtonWidth + currentInteriorPadding * 2.5f);
+            currentContentWidth = currentOpenPanelWidth - (myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.5f);
             myContentsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentContentWidth);
         }
         protected void RecalculateClosedPanelWidth()
         {
-            currentClosedPanelWidth = currentButtonWidth + currentInteriorPadding * 2.0f;
+            currentClosedPanelWidth = myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.0f;
         }
 
 //#if (UNITY_EDITOR)
@@ -198,7 +225,7 @@ namespace QuilleUI
             }
 
             currentInteriorPadding = newPadding;
-            currentClosedPanelWidth = currentButtonWidth + currentInteriorPadding * 2.0f;
+            currentClosedPanelWidth = myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.0f;
             currentContentHeight = Screen.currentResolution.height - currentInteriorPadding * 2.0f;
 
             myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, currentContentHeight);
@@ -214,18 +241,6 @@ namespace QuilleUI
                 myButtonsRect.anchoredPosition = new Vector2(-currentInteriorPadding, myButtonsRect.anchoredPosition.y);
                 myContentsRect.anchoredPosition = new Vector2(currentInteriorPadding, myContentsRect.anchoredPosition.y);
             }
-
-            UpdateContentWidth();
-        }
-        public void UpdateButtonWidth(float newButtonWidth)
-        {
-            if (newButtonWidth < 1.0f)
-            {
-                newButtonWidth = 1.0f;
-            }
-
-            currentButtonWidth = newButtonWidth;
-            myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentButtonWidth);
 
             UpdateContentWidth();
         }
