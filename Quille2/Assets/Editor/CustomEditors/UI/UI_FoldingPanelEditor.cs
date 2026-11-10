@@ -1,9 +1,7 @@
 using QuilleUI;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CustomEditor(typeof(QuilleUI.UI_FoldingPanel))]
 public class UI_FoldingPanelEditor : Editor
@@ -11,7 +9,11 @@ public class UI_FoldingPanelEditor : Editor
     // VARIABLES
     // Object References
     private UI_FoldingPanel targetFoldingPanel;
+
     private RectTransform targetFoldingPanelsRect;
+    private RectTransform targetButtonsRect;
+    private RectTransform targetDragGripsRect;
+    private RectTransform targetContentsRect;
 
     // Serialized Properties
     private SerializedProperty scriptProperty;
@@ -28,19 +30,18 @@ public class UI_FoldingPanelEditor : Editor
     private SerializedProperty dragGripSpriteLeft;
     private SerializedProperty dragGripSpriteRight;
 
-    private SerializedProperty currentClosedPanelWidth;
-    private SerializedProperty currentContentWidth;
-    private SerializedProperty currentContentHeight;
+    private SerializedProperty closedPanelWidth;
+    private SerializedProperty contentWidth;
+    private SerializedProperty contentHeight;
 
     // Locally cached values
     private float cachedMinOpenPanelWidth;
     private float cachedMaxOpenPanelWidth;
-    private float cachedCurrentOpenPanelWidth;
-    private float cachedCurrentInteriorPadding;
-    private float cachedCurrentButtomWidth;
-    private float cachedCurrentDragGripDistance;
+    private float cachedOpenPanelWidth;
+    private float cachedInteriorPadding;
+    private float cachedButtomWidth;
+    private float cachedDragGripDistance;
     private bool cachedIsRightSidePanel;
-
 
 
     // METHODS
@@ -48,10 +49,6 @@ public class UI_FoldingPanelEditor : Editor
     {
         // Fetch the target FoldingPanel proper.
         targetFoldingPanel = serializedObject.targetObject as UI_FoldingPanel;
-        if (targetFoldingPanel != null)
-        {
-            targetFoldingPanelsRect = (RectTransform)targetFoldingPanel.transform;
-        }
 
         // Fetch serialized properties
         scriptProperty = serializedObject.FindProperty("m_Script");
@@ -69,9 +66,15 @@ public class UI_FoldingPanelEditor : Editor
         dragGripSpriteLeft = serializedObject.FindProperty("dragGripSpriteLeft");
         dragGripSpriteRight = serializedObject.FindProperty("dragGripSpriteRight");
 
-        currentClosedPanelWidth = serializedObject.FindProperty("currentClosedPanelWidth");
-        currentContentWidth = serializedObject.FindProperty("currentContentWidth");
-        currentContentHeight = serializedObject.FindProperty("currentContentHeight");
+        closedPanelWidth = serializedObject.FindProperty("closedPanelWidth");
+        contentWidth = serializedObject.FindProperty("contentWidth");
+        contentHeight = serializedObject.FindProperty("contentHeight");
+
+        // Fetchrect rects from serialized properties
+        targetFoldingPanelsRect = (RectTransform)myRect.objectReferenceValue;
+        targetButtonsRect = (RectTransform)myButtonsRect.objectReferenceValue;
+        targetDragGripsRect = (RectTransform)myDragGripsRect.objectReferenceValue;
+        targetContentsRect = (RectTransform)myContentsRect.objectReferenceValue;
     }
 
     public override void OnInspectorGUI()
@@ -128,88 +131,98 @@ public class UI_FoldingPanelEditor : Editor
             cachedIsRightSidePanel = EditorGUILayout.Toggle(new GUIContent("Is Right Side Panel"), targetFoldingPanel.IsRightSidePanel);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Side");
-                targetFoldingPanel.SetPanelSide(cachedIsRightSidePanel);
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Side");
+                targetFoldingPanel.IsRightSidePanel = cachedIsRightSidePanel;
                 SceneView.RepaintAll();
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedInteriorPadding = EditorGUILayout.Slider(new GUIContent("Interior Padding"), targetFoldingPanel.InteriorPadding, 0.0f, 10.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Interior Padding");
+                targetFoldingPanel.InteriorPadding = cachedInteriorPadding;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedButtomWidth = EditorGUILayout.Slider(new GUIContent("Button Width"), targetFoldingPanel.ButtonWidth, 10.0f, 50.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObjects(new Object[] {targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect}, "Change FoldingPanel Button Width");
+                targetFoldingPanel.ButtonWidth = cachedButtomWidth;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            cachedDragGripDistance = EditorGUILayout.Slider(new GUIContent("Drag Grip Distance"), targetFoldingPanel.DragGripDistance, 0.0f, 60.0f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObjects(new Object[] {targetFoldingPanel, targetDragGripsRect}, "Change FoldingPanel Drag Grip Distance");
+                targetFoldingPanel.DragGripDistance = cachedDragGripDistance;
             }
 
             EditorGUILayout.Space(EditorGUIUtility.singleLineHeight * 0.1f);
 
             EditorGUI.BeginChangeCheck();
-            cachedMinOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Min Open Panel Width"), targetFoldingPanel.MinOpenPanelWidth, targetFoldingPanel.CurrentClosedPanelWidth, targetFoldingPanel.CurrentOpenPanelWidth);
+            cachedMinOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Min Open Panel Width"), targetFoldingPanel.MinOpenPanelWidth, targetFoldingPanel.ClosedPanelWidth, targetFoldingPanel.OpenPanelWidth);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Minimum Width");
+                Undo.RecordObject(targetFoldingPanel, "Change FoldingPanel Minimum Open Width");
                 targetFoldingPanel.MinOpenPanelWidth = cachedMinOpenPanelWidth;
                 SceneView.RepaintAll();
             }
             EditorGUI.BeginChangeCheck();
-            cachedMaxOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Max Open Panel Width"), targetFoldingPanel.MaxOpenPanelWidth, targetFoldingPanel.CurrentOpenPanelWidth, Screen.currentResolution.width);
+            cachedMaxOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Max Open Panel Width"), targetFoldingPanel.MaxOpenPanelWidth, targetFoldingPanel.OpenPanelWidth, Screen.currentResolution.width);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Maximum Width");
+                Undo.RecordObject(targetFoldingPanel, "Change FoldingPanel Maximum Open Width");
                 targetFoldingPanel.MaxOpenPanelWidth = cachedMaxOpenPanelWidth;
                 SceneView.RepaintAll();
             }
 
-            EditorGUI.BeginChangeCheck();
-            cachedCurrentOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Current Open Panel Width"), targetFoldingPanel.CurrentOpenPanelWidth, targetFoldingPanel.MinOpenPanelWidth, targetFoldingPanel.MaxOpenPanelWidth);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Current Width");
-                targetFoldingPanel.UpdatePanelWidth(cachedCurrentOpenPanelWidth);
-                SceneView.RepaintAll();
-            }
-            using (new EditorGUI.DisabledScope(true))
-                EditorGUILayout.PropertyField(currentClosedPanelWidth);
+            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
 
-            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight * 0.1f);
-
-            EditorGUI.BeginChangeCheck();
-            cachedCurrentInteriorPadding = EditorGUILayout.Slider(new GUIContent("Interior Padding"), targetFoldingPanel.CurrentInteriorPadding, 0.0f, 10.0f);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetFoldingPanel, "Change Interior Padding");
-                targetFoldingPanel.UpdatePadding(cachedCurrentInteriorPadding);
-                SceneView.RepaintAll();
-            }
-            EditorGUI.BeginChangeCheck();
-            cachedCurrentButtomWidth = EditorGUILayout.Slider(new GUIContent("Button Width"), targetFoldingPanel.CurrentButtonWidth, 10.0f, 50.0f);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetFoldingPanel, "Change Button Width");
-                targetFoldingPanel.UpdateButtonWidth(cachedCurrentButtomWidth);
-                SceneView.RepaintAll();
-            }
-            using (new EditorGUI.DisabledScope(true))
-            {
-                EditorGUILayout.PropertyField(currentContentWidth);
-                EditorGUILayout.PropertyField(currentContentHeight);
-            }
-
-            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight * 0.1f);
-
-            EditorGUI.BeginChangeCheck();
-            cachedCurrentDragGripDistance = EditorGUILayout.Slider(new GUIContent("Drag Grip Distance"), targetFoldingPanel.CurrentDragGripDistance, 0.0f, 60.0f);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(targetFoldingPanel, "Change Drag Grip Distance");
-                targetFoldingPanel.UpdateDragGripDistance(cachedCurrentDragGripDistance);
-                SceneView.RepaintAll();
-            }
-
-            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight * 0.1f);
+            GUILayout.Label("Runtime", EditorStyles.boldLabel);
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.Toggle(new GUIContent("Is Open"), targetFoldingPanel.IsOpen);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Toggle Folding Panel Open");
+                Undo.RecordObject(targetFoldingPanel, "Toggle FoldingPanel Open");
                 targetFoldingPanel.ToggleOpen();
                 SceneView.RepaintAll();
             }
 
+            EditorGUI.BeginChangeCheck();
+            cachedOpenPanelWidth = EditorGUILayout.Slider(new GUIContent("Open Panel Width"), targetFoldingPanel.OpenPanelWidth, targetFoldingPanel.MinOpenPanelWidth, targetFoldingPanel.MaxOpenPanelWidth);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Open Width");
+                targetFoldingPanel.OpenPanelWidth = cachedOpenPanelWidth;
+            }
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUILayout.PropertyField(closedPanelWidth);
+                EditorGUILayout.PropertyField(contentWidth);
+                EditorGUILayout.PropertyField(contentHeight);
+            }
+            
             serializedObject.ApplyModifiedProperties();
+
+            if (targetFoldingPanel.IsDirty)
+            {
+                targetFoldingPanel.UpdatePanelLayout(true);
+                SceneView.RepaintAll();
+            }
+
+
+            EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
+
+            if (GUILayout.Button(new GUIContent("Refresh Layout")))
+            {
+                Undo.RecordObject(targetFoldingPanel, "Refresh FoldingPanel Layout");
+                targetFoldingPanel.UpdatePanelLayout(true);
+                targetFoldingPanel.UpdatePanelSide();
+            }
         }
         else
         {
@@ -222,89 +235,75 @@ public class UI_FoldingPanelEditor : Editor
     {
         if (targetFoldingPanel != null)
         {
-            Vector3 panelWidthPreviewSize;
-            Vector3 panelWidthPreviewPos;
-            Vector3 panelWidthHandlePos;
-
             Quaternion handleQuat = Quaternion.AngleAxis(90, Vector3.up);
             float handleSize = HandleUtility.GetHandleSize(targetFoldingPanelsRect.position) * 5.0f;
 
-            // Open panel size.
-            panelWidthPreviewSize = new Vector3(targetFoldingPanel.CurrentOpenPanelWidth, targetFoldingPanelsRect.sizeDelta.y, 0.0f);
+            Vector3 panelOutwardBottomPos;
+            Vector3 panelWidthHandlePos;
+            float sideInfluence;
+
             if (targetFoldingPanel.IsRightSidePanel)
             {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x, 0.0f, 0.0f);
-
+                panelOutwardBottomPos = targetFoldingPanelsRect.GetWorldSpaceBottomRightPoint();
+                panelWidthHandlePos = targetFoldingPanelsRect.GetWorldSpaceMiddleLeftPoint();
                 handleSize *= -1.0f;
             }
             else
             {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x, 0.0f, 0.0f);
+                panelOutwardBottomPos = targetFoldingPanelsRect.GetWorldSpaceBottomLeftPoint();
+                panelWidthHandlePos = targetFoldingPanelsRect.GetWorldSpaceMiddleRightPoint();
             }
 
-            Handles.color = Color.green;
-            Handles.DrawWireCube(panelWidthPreviewPos, panelWidthPreviewSize);
 
+            // Open panel size (editable)
+            Handles.color = Color.green;
+            EditorUtilities.DrawSquare(panelOutwardBottomPos,
+                                                        new Vector2(targetFoldingPanel.IsRightSidePanel ? -targetFoldingPanel.OpenPanelWidth : targetFoldingPanel.OpenPanelWidth,
+                                                                    targetFoldingPanelsRect.sizeDelta.y));
             EditorGUI.BeginChangeCheck();
-            cachedCurrentOpenPanelWidth = Handles.ScaleValueHandle(targetFoldingPanel.CurrentOpenPanelWidth, panelWidthHandlePos, handleQuat, handleSize, Handles.ArrowHandleCap, 1.0f);
+            cachedOpenPanelWidth = Handles.ScaleValueHandle(targetFoldingPanel.OpenPanelWidth, panelWidthHandlePos, handleQuat, handleSize, Handles.ArrowHandleCap, 1.0f);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Open Width");
-                targetFoldingPanel.UpdatePanelWidth(cachedCurrentOpenPanelWidth);
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Open Width");
+                targetFoldingPanel.OpenPanelWidth = cachedOpenPanelWidth;
                 Repaint();
             }
 
+            // Closed panel size
+            Handles.color = Color.yellow;
+            EditorUtilities.DrawSquare(panelOutwardBottomPos,
+                                                        new Vector2(targetFoldingPanel.IsRightSidePanel ? -targetFoldingPanel.ClosedPanelWidth : targetFoldingPanel.ClosedPanelWidth,
+                                                                    targetFoldingPanelsRect.sizeDelta.y));
 
-            // Minimum (closed) panel size.
-            panelWidthPreviewSize = new Vector3(targetFoldingPanel.MinOpenPanelWidth, targetFoldingPanelsRect.sizeDelta.y, 0.0f);
-            if (targetFoldingPanel.IsRightSidePanel)
-            {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x, 0.0f, 0.0f);
-            }
-            else
-            {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x, 0.0f, 0.0f);
-            }
+
+            // Minimum panel size (editable)
+            sideInfluence = targetFoldingPanel.IsRightSidePanel ? -targetFoldingPanel.MinOpenPanelWidth : targetFoldingPanel.MinOpenPanelWidth;
+            panelWidthHandlePos.x = panelOutwardBottomPos.x + sideInfluence;
 
             Handles.color = Color.cyan;
-            Handles.DrawWireCube(panelWidthPreviewPos, panelWidthPreviewSize);
-
+            EditorUtilities.DrawSquare(panelOutwardBottomPos, new Vector2(sideInfluence, 
+                                                                                          targetFoldingPanelsRect.sizeDelta.y));
             EditorGUI.BeginChangeCheck();
             cachedMinOpenPanelWidth = Handles.ScaleValueHandle(targetFoldingPanel.MinOpenPanelWidth, panelWidthHandlePos, handleQuat, handleSize, Handles.ArrowHandleCap, 1.0f);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Minimum Width");
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Minimum Open Width");
                 targetFoldingPanel.MinOpenPanelWidth = cachedMinOpenPanelWidth;
                 Repaint();
             }
 
-
-            // Maximum panel size.
-            panelWidthPreviewSize.x = targetFoldingPanel.MaxOpenPanelWidth;
-
-            if (targetFoldingPanel.IsRightSidePanel)
-            {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(-panelWidthPreviewSize.x, 0.0f, 0.0f);
-            }
-            else
-            {
-                panelWidthPreviewPos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x / 2.0f, 0.0f, 0.0f);
-                panelWidthHandlePos = targetFoldingPanelsRect.position + new Vector3(panelWidthPreviewSize.x, 0.0f, 0.0f);
-            }
+            // Maximum panel size (editable)
+            sideInfluence = targetFoldingPanel.IsRightSidePanel ? -targetFoldingPanel.MaxOpenPanelWidth : targetFoldingPanel.MaxOpenPanelWidth;
+            panelWidthHandlePos.x = panelOutwardBottomPos.x + sideInfluence;
 
             Handles.color = Color.magenta;
-            Handles.DrawWireCube(panelWidthPreviewPos, panelWidthPreviewSize);
-
+            EditorUtilities.DrawSquare(panelOutwardBottomPos, new Vector2(sideInfluence,
+                                                                                          targetFoldingPanelsRect.sizeDelta.y));
             EditorGUI.BeginChangeCheck();
             cachedMaxOpenPanelWidth = Handles.ScaleValueHandle(targetFoldingPanel.MaxOpenPanelWidth, panelWidthHandlePos, handleQuat, handleSize, Handles.ArrowHandleCap, 1.0f);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targetFoldingPanel, "Change Folding Panel Maximum Width");
+                Undo.RecordObjects(new Object[] { targetFoldingPanel, targetFoldingPanelsRect, targetButtonsRect, targetContentsRect }, "Change FoldingPanel Maximum Open Width");
                 targetFoldingPanel.MaxOpenPanelWidth = cachedMaxOpenPanelWidth;
                 Repaint();
             }

@@ -5,6 +5,13 @@ using UnityEditor;
 
 public static class EditorUtilities
 {
+    // VARIABLES
+    public static readonly int[] rectSegmentIndices = { 0, 1, 1, 3, 3, 2, 2, 0 };
+    public static Vector3[] rectPoints = new Vector3[4];
+
+
+
+    // METHODS
     public static void DrawAmbidextrousProperty(SerializedProperty left, SerializedProperty right, float gapSpace = 8, bool drawLabels = true)
     {
         // Draw labels
@@ -35,22 +42,36 @@ public static class EditorUtilities
 
 
     // OnSceneGUI
-    public static void DrawDottedRect(Vector3 topLeftPoint, Vector2 dimensions, float screenSpaceDottingSize, Vector3[] rectPoints, int[] rectSegmentIndices)
+    public static void DrawSquare(Vector3 bottomLeftPoint, Vector2 dimensions)
     {
-        rectPoints[0] = topLeftPoint;
-        rectPoints[1] = topLeftPoint + new Vector3(dimensions.x, 0.0f, 0.0f);
-        rectPoints[2] = topLeftPoint + new Vector3(0.0f, -dimensions.y, 0.0f);
-        rectPoints[3] = topLeftPoint + new Vector3(dimensions.x, -dimensions.y, 0.0f);
+        rectPoints[0] = bottomLeftPoint;
+        rectPoints[1] = bottomLeftPoint + new Vector3(dimensions.x, 0.0f, 0.0f);
+        rectPoints[2] = bottomLeftPoint + new Vector3(0.0f, dimensions.y, 0.0f);
+        rectPoints[3] = bottomLeftPoint + new Vector3(dimensions.x, dimensions.y, 0.0f);
+
+        Handles.DrawLines(rectPoints, rectSegmentIndices);
+    }
+
+    public static void DrawDottedRect(Vector3 bottomLeftPoint, Vector2 dimensions, float screenSpaceDottingSize)
+    {
+        rectPoints[0] = bottomLeftPoint;
+        rectPoints[1] = bottomLeftPoint + new Vector3(dimensions.x, 0.0f, 0.0f);
+        rectPoints[2] = bottomLeftPoint + new Vector3(0.0f, dimensions.y, 0.0f);
+        rectPoints[3] = bottomLeftPoint + new Vector3(dimensions.x, dimensions.y, 0.0f);
 
         Handles.DrawDottedLines(rectPoints, rectSegmentIndices, screenSpaceDottingSize);
     }
-    public static void DrawTranslucentRect(Vector3 topLeftPoint, Vector2 dimensions, Vector3[] rectPoints)
+    public static void DrawTranslucentRect(Vector3 bottomLeftPoint, Vector2 dimensions)
     {
-        rectPoints[0] = topLeftPoint + new Vector3(0.0f, -dimensions.y, 0.0f);
-        rectPoints[1] = topLeftPoint;
-        rectPoints[2] = topLeftPoint + new Vector3(dimensions.x, 0.0f, 0.0f);
-        rectPoints[3] = topLeftPoint + new Vector3(dimensions.x, -dimensions.y, 0.0f);
+        rectPoints[0] = bottomLeftPoint + new Vector3(0.0f, dimensions.y, 0.0f);
+        rectPoints[1] = bottomLeftPoint;
+        rectPoints[2] = bottomLeftPoint + new Vector3(dimensions.x, 0.0f, 0.0f);
+        rectPoints[3] = bottomLeftPoint + new Vector3(dimensions.x, dimensions.y, 0.0f);
 
         Handles.DrawSolidRectangleWithOutline(rectPoints, new Color32(255, 255, 255, 20), new Color32(255, 255, 255, 75));
     }
+
+    
+
+    
 }

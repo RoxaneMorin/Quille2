@@ -28,19 +28,18 @@ namespace QuilleUI
         [SerializeField] protected Sprite dragGripSpriteRight;
 
         // Layout
+        [SerializeField] protected bool isRightSidePanel;
+        [SerializeField] protected float interiorPadding;
+        [SerializeField] protected float dragGripDistance;
+
         [SerializeField] protected float minOpenPanelWidth;
         [SerializeField] protected float maxOpenPanelWidth;
-         
-        [SerializeField] protected float currentOpenPanelWidth;
-        [SerializeField] protected float currentClosedPanelWidth;
-        
-        [SerializeField] protected float currentInteriorPadding;
-        [SerializeField] protected float currentButtonWidth;
-        [SerializeField] protected float currentContentWidth;
-        [SerializeField] protected float currentContentHeight;
-        [SerializeField] protected float currentDragGripDistance;
 
-        [SerializeField] protected bool isRightSidePanel;
+        // Runtime
+        [SerializeField] protected float openPanelWidth;
+        [SerializeField] protected float closedPanelWidth;
+        [SerializeField] protected float contentWidth;
+        [SerializeField] protected float contentHeight;
         [SerializeField] protected bool isOpen = true;
 
         [SerializeField] protected bool isDirty;
@@ -53,33 +52,27 @@ namespace QuilleUI
 
 
         // PROPERTIES
-        public float MinOpenPanelWidth 
+        public bool IsRightSidePanel 
         { 
-            get { return minOpenPanelWidth; } 
+            get { return isRightSidePanel; }
             set
             {
-                if (value < 0 || value > maxOpenPanelWidth)
-                {
-                    return;
-                }
-                minOpenPanelWidth = value;
+                isRightSidePanel = value;
+                UpdatePanelSide();
             }
         }
-        public float MaxOpenPanelWidth 
+        public float InteriorPadding 
         { 
-            get { return maxOpenPanelWidth; }
+            get { return interiorPadding; } 
             set
             {
-                if (value < minOpenPanelWidth || value > Screen.currentResolution.width)
+                if (value >= 0.0f)
                 {
-                    return;
+                    interiorPadding = value;
+                    SetDirty();
                 }
-                maxOpenPanelWidth = value;
             }
         }
-        public float CurrentOpenPanelWidth { get { return currentOpenPanelWidth; } }
-        public float CurrentClosedPanelWidth { get { return currentClosedPanelWidth; } }
-        public float CurrentInteriorPadding { get { return currentInteriorPadding; } }
         public float ButtonWidth 
         {
             get
@@ -95,15 +88,74 @@ namespace QuilleUI
             }
             set
             {
-                if (myButtonsRect != null)
+                if (myButtonsRect != null && value > 0.0f)
                 {
                     myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, value);
                     SetDirty();
                 }
             }
         }
-        public float CurrentDragGripDistance { get { return currentDragGripDistance; } }
-        public bool IsRightSidePanel { get { return isRightSidePanel; } }
+        public float DragGripDistance 
+        { 
+            get 
+            { 
+                if (myDragGripsRect != null)
+                {
+                    return Mathf.Abs(myDragGripsRect.anchoredPosition.x);
+                }
+                else
+                {
+                    return 0.0f;
+                }
+            }
+            set
+            {
+                if (myDragGripsRect != null)
+                {
+                    myDragGripsRect.anchoredPosition = new Vector2(isRightSidePanel ? -value : value, myDragGripsRect.anchoredPosition.y);
+                }
+            }
+        }
+
+        public float MinOpenPanelWidth
+        {
+            get { return minOpenPanelWidth; }
+            set
+            {
+                if (value < 0 || value > maxOpenPanelWidth)
+                {
+                    return;
+                }
+                minOpenPanelWidth = value;
+            }
+        }
+        public float MaxOpenPanelWidth
+        {
+            get { return maxOpenPanelWidth; }
+            set
+            {
+                if (value < minOpenPanelWidth || value > Screen.currentResolution.width)
+                {
+                    return;
+                }
+                maxOpenPanelWidth = value;
+            }
+        }
+        public float OpenPanelWidth 
+        { 
+            get { return openPanelWidth; } 
+            set
+            {
+                if (value >= minOpenPanelWidth && value <=  maxOpenPanelWidth)
+                {
+                    openPanelWidth = value;
+                    SetDirty();
+                }
+
+            }
+        }
+        public float ClosedPanelWidth { get { return closedPanelWidth; } }
+
         public bool IsOpen { get { return isOpen; } }
 
         public bool IsDirty { get { return isDirty; } }
@@ -115,9 +167,6 @@ namespace QuilleUI
         protected void Init()
         {
             FetchComponents();
-
-            UpdatePadding(currentInteriorPadding);
-            UpdatePanelWidth(currentOpenPanelWidth);
         }
         protected void FetchComponents()
         {
@@ -157,9 +206,46 @@ namespace QuilleUI
 
 
         // LAYOUT ADJUSTMENTS
-        public void SetPanelSide(bool isRightSide)
+        public void RecalculateLayout()
         {
-            isRightSidePanel = isRightSide;
+            contentWidth = openPanelWidth - (myButtonsRect.sizeDelta.x + interiorPadding * 2.5f);
+            contentHeight = Screen.currentResolution.height - interiorPadding * 2.0f;
+
+            closedPanelWidth = myButtonsRect.sizeDelta.x + interiorPadding * 2.0f;
+        }
+        public void UpdatePanelLayout(bool updatePadding = false)
+        {
+            RecalculateLayout();
+
+            myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, openPanelWidth);
+            myContentsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, contentWidth);
+
+            if (updatePadding)
+            {
+                myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight);
+                myContentsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight);
+
+                if (isRightSidePanel)
+                {
+                    myButtonsRect.anchoredPosition = new Vector2(interiorPadding, myButtonsRect.anchoredPosition.y);
+                    myContentsRect.anchoredPosition = new Vector2(-interiorPadding, myContentsRect.anchoredPosition.y);
+                }
+                else
+                {
+                    myButtonsRect.anchoredPosition = new Vector2(-interiorPadding, myButtonsRect.anchoredPosition.y);
+                    myContentsRect.anchoredPosition = new Vector2(interiorPadding, myContentsRect.anchoredPosition.y);
+                }
+            }
+
+            isDirty = false;
+        }
+        // TODO: review where we do what, when is what updated.
+        public void UpdatePanelSide()
+        {
+            // anchorInteriorStuff
+            // anchorOutsideStuff
+
+            // 
 
             if (isRightSidePanel)
             {
@@ -169,9 +255,9 @@ namespace QuilleUI
                 myButtonsRect.anchorMin = myButtonsRect.anchorMax = myButtonsRect.pivot = new Vector2(0.0f, 0.5f);
                 myDragGripsRect.anchorMin = myDragGripsRect.anchorMax = myDragGripsRect.pivot = new Vector2(0.0f, 0.5f);
 
-                myContentsRect.anchoredPosition = new Vector2(-currentInteriorPadding, myContentsRect.anchoredPosition.y);
-                myButtonsRect.anchoredPosition = new Vector2(currentInteriorPadding, myButtonsRect.anchoredPosition.y);
-                myDragGripsRect.anchoredPosition = new Vector2(-currentDragGripDistance, myDragGripsRect.anchoredPosition.y);
+                myContentsRect.anchoredPosition = new Vector2(-interiorPadding, myContentsRect.anchoredPosition.y);
+                myButtonsRect.anchoredPosition = new Vector2(interiorPadding, myButtonsRect.anchoredPosition.y);
+                myDragGripsRect.anchoredPosition = new Vector2(-dragGripDistance, myDragGripsRect.anchoredPosition.y);
 
                 myDragGripImage.sprite = dragGripSpriteRight;
             }
@@ -183,78 +269,33 @@ namespace QuilleUI
                 myButtonsRect.anchorMin = myButtonsRect.anchorMax = myButtonsRect.pivot = new Vector2(1.0f, 0.5f);
                 myDragGripsRect.anchorMin = myDragGripsRect.anchorMax = myDragGripsRect.pivot = new Vector2(1.0f, 0.5f);
 
-                myContentsRect.anchoredPosition = new Vector2(currentInteriorPadding, myContentsRect.anchoredPosition.y);
-                myButtonsRect.anchoredPosition = new Vector2(-currentInteriorPadding, myButtonsRect.anchoredPosition.y);
-                myDragGripsRect.anchoredPosition = new Vector2(currentDragGripDistance, myDragGripsRect.anchoredPosition.y);
+                myContentsRect.anchoredPosition = new Vector2(interiorPadding, myContentsRect.anchoredPosition.y);
+                myButtonsRect.anchoredPosition = new Vector2(-interiorPadding, myButtonsRect.anchoredPosition.y);
+                myDragGripsRect.anchoredPosition = new Vector2(dragGripDistance, myDragGripsRect.anchoredPosition.y);
 
                 myDragGripImage.sprite = dragGripSpriteLeft;
             }
 
             myRect.anchoredPosition = new Vector2(0.0f, myRect.anchoredPosition.y);
         }
-        public void UpdatePanelWidth(float newPanelWidth)
-        {
-            if (newPanelWidth < minOpenPanelWidth || newPanelWidth > maxOpenPanelWidth)
-            {
-                newPanelWidth = Mathf.Clamp(newPanelWidth, minOpenPanelWidth, maxOpenPanelWidth);
-            }
 
-            currentOpenPanelWidth = newPanelWidth;
-            myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentOpenPanelWidth);
 
-            UpdateContentWidth();
-        }
-        protected void UpdateContentWidth()
-        {
-            RecalculateClosedPanelWidth();
 
-            currentContentWidth = currentOpenPanelWidth - (myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.5f);
-            myContentsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentContentWidth);
-        }
-        protected void RecalculateClosedPanelWidth()
-        {
-            currentClosedPanelWidth = myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.0f;
-        }
+        
 
-//#if (UNITY_EDITOR)
-        public void UpdatePadding(float newPadding)
-        {
-            if (newPadding < 0)
-            {
-                newPadding = 0.0f;
-            }
 
-            currentInteriorPadding = newPadding;
-            currentClosedPanelWidth = myButtonsRect.sizeDelta.x + currentInteriorPadding * 2.0f;
-            currentContentHeight = Screen.currentResolution.height - currentInteriorPadding * 2.0f;
 
-            myButtonsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, currentContentHeight);
-            myContentsRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, currentContentHeight);
 
-            if (isRightSidePanel)
-            {
-                myButtonsRect.anchoredPosition = new Vector2(currentInteriorPadding, myButtonsRect.anchoredPosition.y);
-                myContentsRect.anchoredPosition = new Vector2(-currentInteriorPadding, myContentsRect.anchoredPosition.y);
-            }
-            else
-            {
-                myButtonsRect.anchoredPosition = new Vector2(-currentInteriorPadding, myButtonsRect.anchoredPosition.y);
-                myContentsRect.anchoredPosition = new Vector2(currentInteriorPadding, myContentsRect.anchoredPosition.y);
-            }
+        
 
-            UpdateContentWidth();
-        }
-        public void UpdateDragGripDistance(float newDragGripDistance)
-        {
-            if (newDragGripDistance < 0.0f)
-            {
-                newDragGripDistance = 0.0f;
-            }
 
-            currentDragGripDistance = newDragGripDistance;
-            myDragGripsRect.anchoredPosition = new Vector2(isRightSidePanel ? -currentDragGripDistance : currentDragGripDistance, myDragGripsRect.anchoredPosition.y);
-        }
-//#endif
+
+
+        
+
+        
+
+
 
 
         // EVENT LISTENERS
@@ -265,7 +306,7 @@ namespace QuilleUI
                 myContent.SetActive(false);
                 myDragGrip.SetActive(false);
 
-                myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentClosedPanelWidth);
+                myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, closedPanelWidth);
 
                 myButtonText.text = "open";
             }
@@ -274,7 +315,7 @@ namespace QuilleUI
                 myContent.SetActive(true);
                 myDragGrip.SetActive(true);
 
-                myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentOpenPanelWidth);
+                myRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, openPanelWidth);
 
                 myButtonText.text = "close";
             }
@@ -293,9 +334,8 @@ namespace QuilleUI
 
             if (isOpen)
             {
-                float newPanelWidth = currentOpenPanelWidth;
-                newPanelWidth += isRightSidePanel ? -pointerEventData.delta.x : pointerEventData.delta.x;
-                UpdatePanelWidth(newPanelWidth);
+                OpenPanelWidth = openPanelWidth + (isRightSidePanel ? -pointerEventData.delta.x : pointerEventData.delta.x);
+                UpdatePanelLayout();
             }
         }
 

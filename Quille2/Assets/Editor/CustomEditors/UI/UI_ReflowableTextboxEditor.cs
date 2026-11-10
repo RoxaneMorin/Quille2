@@ -56,8 +56,6 @@ public class UI_ReflowableTextboxEditor : Editor
     private Vector2 cachedIconSize;
     private float cachedFontSize;
 
-    private Vector3[] rectPoints;
-    private int[] rectSegmentIndices;
     private GUIStyle labelStyle;
 
 
@@ -101,12 +99,6 @@ public class UI_ReflowableTextboxEditor : Editor
         targetTextMainRect = (RectTransform)myTextMainsRect.objectReferenceValue;
         targetTextOverflowRect = (RectTransform)myTextOverflowsRect.objectReferenceValue;
         targetIconRect = (RectTransform)myIconsRect.objectReferenceValue;
-
-
-        // Generate misc values.
-        rectPoints = new Vector3[4];
-        rectSegmentIndices = new int[] { 0, 1, 2, 3, 0, 2, 1, 3 };
-        labelStyle = new GUIStyle() { alignment = TextAnchor.LowerLeft, fontSize = 10 };
     }
 
     public override void OnInspectorGUI()
@@ -260,6 +252,7 @@ public class UI_ReflowableTextboxEditor : Editor
             if (targetReflowableTextbox.IsDirty)
             {
                 targetReflowableTextbox.UpdateLayout();
+                SceneView.RepaintAll();
             }
         }
         else
@@ -278,19 +271,19 @@ public class UI_ReflowableTextboxEditor : Editor
             Handles.DrawWireCube(targetReflowableTextboxRect.TransformPoint(targetReflowableTextboxRect.rect.center), targetReflowableTextboxRect.sizeDelta);
 
 
-            // Preferred bounds for line height.
-            Handles.color = labelStyle.normal.textColor = new Color(1f, 1f, 0f, 0.75f);
             labelStyle.alignment = TextAnchor.LowerLeft;
+            Vector3 rectTopLeftPos = targetReflowableTextboxRect.GetWorldSpaceTopLeftPoint();
+            Vector3 textTopLeftPos = targetTextMainRect.GetWorldSpaceTopLeftPoint();
 
-            //Handles.Label(targetTextMainRect.position, "text bounds without added linebreaks", labelStyle);
-            //DrawDottedRect(targetTextMainRect.position, shortestTextDimensions.vector2Value, 4.0f);
+            //// Preferred bounds for line height.
+            //Handles.color = labelStyle.normal.textColor = new Color(1f, 1f, 0f, 0.75f);
+            //Handles.Label(textTopLeftPos, "text bounds without added linebreaks", labelStyle);
+            //EditorUtilities.DrawDottedRect(textTopLeftPos, shortestTextDimensions.vector2Value * new Vector2(1.0f, -1.0f), 4.0f);
 
             // Raw hand-calculated bounds.
-            Vector3 worldTopLeftPos = targetReflowableTextboxRect.TransformPoint(new Vector2(targetReflowableTextboxRect.rect.xMin, targetReflowableTextboxRect.rect.yMax));
             Handles.color = labelStyle.normal.textColor = new Color(1f, 0.65f, 0.25f, 0.75f);
-
-            Handles.Label(worldTopLeftPos, "text bounds calculated from ratio", labelStyle);
-            EditorUtilities.DrawDottedRect(worldTopLeftPos, calculatedTextDimensions.vector2Value, 4.0f, rectPoints, rectSegmentIndices);
+            Handles.Label(rectTopLeftPos, "raw bounds from ratio", labelStyle);
+            EditorUtilities.DrawDottedRect(rectTopLeftPos, calculatedTextDimensions.vector2Value * new Vector2(1.0f, -1.0f), 4.0f);
 
 
             // Actual bounds.
@@ -298,28 +291,29 @@ public class UI_ReflowableTextboxEditor : Editor
             // Icon.
             if (targetReflowableTextbox.HasIcon && targetIcon.isActiveAndEnabled)
             {
-                targetIconRect.GetWorldCorners(rectPoints);
-                Handles.color = Color.white;
-                Handles.DrawSolidRectangleWithOutline(rectPoints, new Color32(0, 250, 0, 20), new Color32(0, 250, 0, 150));
-            }
-
-            // Overflow text.
-            if (targetTextOverflow.isActiveAndEnabled)
-            {
-                Handles.color = labelStyle.normal.textColor = new Color32(200, 150, 255, 150);
-
-                Handles.Label(targetTextOverflowRect.position, "overflow text bounds", labelStyle);
-                EditorUtilities.DrawDottedRect(targetTextOverflowRect.position, targetTextOverflowRect.sizeDelta, 4.0f, rectPoints, rectSegmentIndices);
-                EditorUtilities.DrawTranslucentRect(targetTextOverflowRect.position, targetTextOverflow.GetRenderedValues(), rectPoints);
+                Handles.color = Color.green;
+                EditorUtilities.DrawTranslucentRect(targetIconRect.GetWorldSpaceBottomLeftPoint(), targetIconRect.sizeDelta);
             }
 
             // Main text.
             Handles.color = labelStyle.normal.textColor = new Color32(255, 150, 200, 150);
             labelStyle.alignment = TextAnchor.LowerRight;
 
-            Handles.Label(targetTextMainRect.position + new Vector3(targetTextMainRect.sizeDelta.x, 0.0f, 0.0f), "main text bounds", labelStyle);
-            EditorUtilities.DrawDottedRect(targetTextMainRect.position, targetTextMainRect.sizeDelta, 4.0f, rectPoints, rectSegmentIndices);
-            EditorUtilities.DrawTranslucentRect(targetTextMainRect.position, targetTextMain.GetRenderedValues(), rectPoints);
+            Handles.Label(targetTextMainRect.GetWorldSpaceTopRightPoint(), "main text bounds", labelStyle);
+            EditorUtilities.DrawDottedRect(textTopLeftPos, targetTextMainRect.sizeDelta * new Vector2(1.0f, -1.0f), 4.0f);
+            EditorUtilities.DrawTranslucentRect(textTopLeftPos, targetTextMain.GetRenderedValues() * new Vector2(1.0f, -1.0f));
+
+            // Overflow text.
+            if (targetTextOverflow.isActiveAndEnabled)
+            {
+                textTopLeftPos = targetTextOverflowRect.GetWorldSpaceTopLeftPoint();
+                Handles.color = labelStyle.normal.textColor = new Color32(200, 150, 255, 150);
+                labelStyle.alignment = TextAnchor.LowerLeft;
+
+                Handles.Label(textTopLeftPos, "overflow text bounds", labelStyle);
+                EditorUtilities.DrawDottedRect(textTopLeftPos, targetTextOverflowRect.sizeDelta * new Vector2(1.0f, -1.0f), 4.0f);
+                EditorUtilities.DrawTranslucentRect(textTopLeftPos, targetTextOverflow.GetRenderedValues() * new Vector2(1.0f, -1.0f));
+            }
 
 
             // TODO: ability to resize/scale for current ratio?

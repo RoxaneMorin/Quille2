@@ -76,6 +76,33 @@ public static class ExtensionMethods
     }
 
 
+    // RECT TRANSFORM
+    public static Vector3 GetWorldSpaceBottomLeftPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.TransformPoint(new Vector2(rectTransform.rect.xMin, rectTransform.rect.yMin));
+    }
+    public static Vector3 GetWorldSpaceTopLeftPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.TransformPoint(new Vector2(rectTransform.rect.xMin, rectTransform.rect.yMax));
+    }
+    public static Vector3 GetWorldSpaceBottomRightPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.TransformPoint(new Vector2(rectTransform.rect.xMax, rectTransform.rect.yMin));
+    }
+    public static Vector3 GetWorldSpaceTopRightPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.TransformPoint(new Vector2(rectTransform.rect.xMax, rectTransform.rect.yMax));
+    }
+    public static Vector3 GetWorldSpaceMiddleLeftPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.GetWorldSpaceBottomLeftPoint() + new Vector3(0.0f, rectTransform.sizeDelta.y / 2.0f, 0.0f);
+    }
+    public static Vector3 GetWorldSpaceMiddleRightPoint(this RectTransform rectTransform)
+    {
+        return rectTransform.GetWorldSpaceBottomRightPoint() + new Vector3(0.0f, rectTransform.sizeDelta.y / 2.0f, 0.0f);
+    }
+
+
     // LISTS
     public static void SortedInsert<T>(this List<T> list, T newItem, Func<T, T, bool> sortingCondition)
     {
