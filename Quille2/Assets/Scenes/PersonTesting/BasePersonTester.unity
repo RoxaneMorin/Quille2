@@ -122,6 +122,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &354302526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 354302528}
+  - component: {fileID: 354302527}
+  m_Layer: 0
+  m_Name: MindspaceTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &354302527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354302526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4a3e41cf815bf4da191e8eaacbf860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myThoughts:
+  - {fileID: 2143260060}
+  targetPerson: {fileID: 946547737}
+  exampleThoughtData: {fileID: 11400000, guid: 32959da8f27bbd14a945bbd201f2efdf, type: 2}
+  newThought: {fileID: 2143260060}
+--- !u!4 &354302528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354302526}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &946547737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3027416774607700952, guid: b55c8aefc9be69c468e02f442a7d0275,
+    type: 3}
+  m_PrefabInstance: {fileID: 8515285108158252275}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321a4ccbb2297de4ab9d029e654eabae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1448198730
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +369,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &2143260060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed8800f4c1e73d46b6a57d557bc34bd, type: 3}
+  m_Name: Thought_Peckish
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 32959da8f27bbd14a945bbd201f2efdf, type: 2}
+  totalLifespan: 10
+  remainingLifespan: 10
+  decayRate: 0
 --- !u!1001 &8515285108158252275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -383,3 +460,4 @@ SceneRoots:
   - {fileID: 1448198733}
   - {fileID: 1504172438}
   - {fileID: 8515285108158252275}
+  - {fileID: 354302528}

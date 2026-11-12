@@ -4,11 +4,22 @@ using UnityEngine;
 using UnityEditor;
 using ChecksAndMods;
 using System;
+using System.Linq;
+using System.Reflection;
 
 [CustomPropertyDrawer(typeof(PopulateCheckSubtypesAttribute))]
 public class PopulateCheckSubtypesDrawer : PropertyDrawer
 {
     SubtypeNames targetCheckType;
+
+
+
+
+
+
+
+
+
 
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

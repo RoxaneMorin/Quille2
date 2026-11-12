@@ -15,19 +15,20 @@ namespace Quille
     {
         // VARIABLES   
         [SerializeField] protected string itemName = "Undefined";
-        [SerializeField] protected string itemDescription;
+        [SerializeField, TextArea] protected string itemDescription;
         [SerializeField] protected Sprite itemIcon;
         [SerializeField] protected Color itemColor;
 
         // Vibe, positive vs negative, pleasant or unpleasant thought to have?
 
-        [SerializeReference] protected List<Check> validityChecks;
-
+        [SerializeField] bool isTemporary = true;
+        [SerializeReference, PopulateSubtypes] protected List<Check> validityChecks;
         [SerializeField] protected float defaultLifespan;
-        [SerializeReference] protected List<Modulator> lifespanModifiers;
-
+        [SerializeReference, PopulateSubtypes] protected List<Modulator> lifespanModifiers;
         [SerializeField] protected float defaultDecayRate;
-        [SerializeReference] protected List<Modulator> decayRateModifiers;
+        [SerializeReference, PopulateSubtypes] protected Modulator[] decayRateModifiers;
+
+        // Having both a customisable lifespan and decay rate is probably redundant.
 
         // Modifiers set on acquisition?
         // Modifiers to check while active?
@@ -51,6 +52,7 @@ namespace Quille
                 }
             }
         }
+        public bool IsTemporary { get { return isTemporary && defaultDecayRate > 0.0f; } }
         public float DefaultLifespan { get { return defaultLifespan; } }
         public IEnumerable<Modulator> LifespanModifiers
         {
@@ -63,7 +65,6 @@ namespace Quille
             }
         }
         public float DefaultDecayRate { get { return defaultDecayRate; } }
-        public bool ShouldDecay { get { return defaultDecayRate > 0.0f; } }
         public IEnumerable<Modulator> DecayRateModifiers
         {
             get
@@ -89,10 +90,17 @@ namespace Quille
                 }
             }
 
-            lifespanIfValid = CalculateLifespanFor(potentialThinker);
-            if (lifespanIfValid <= 0)
+            if (isTemporary)
             {
-                return false;
+                lifespanIfValid = CalculateLifespanFor(potentialThinker);
+                if (lifespanIfValid <= 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                lifespanIfValid = 0.0f;
             }
 
             return true;
@@ -100,27 +108,53 @@ namespace Quille
 
         public float CalculateLifespanFor(Person thinker)
         {
-            float lifespan = defaultLifespan;
-            foreach (Modulator modulator in lifespanModifiers)
+            if (isTemporary && defaultLifespan > 0.0f)
             {
-                lifespan = modulator.Execute(thinker, lifespan);
+                float lifespan = defaultLifespan;
+                foreach (Modulator modulator in lifespanModifiers)
+                {
+                    lifespan = modulator.Execute(thinker, lifespan);
+                }
+                return lifespan;
             }
-            return lifespan;
+            else
+            {
+                return 0.0f; // Non-decaying thought.
+            }
         }
 
         public float CalculateDecayRateFor(Person thinker)
         {
-            if (defaultDecayRate <= 0.0f)
+            if (isTemporary && defaultDecayRate > 0.0f)
+            {
+                float decayRate = defaultDecayRate;
+                foreach (Modulator modulator in decayRateModifiers)
+                {
+                    decayRate = modulator.Execute(thinker, decayRate);
+                }
+                return decayRate;
+            }
+            else
             {
                 return 0.0f; // Non-decaying thought.
             }
+        }
 
-            float decayRate = defaultDecayRate;
-            foreach (Modulator modulator in decayRateModifiers)
+
+        public Thought TryCreateThoughtFor(Person potentialThinker)
+        {
+            float potentialLifespan;
+            if (CheckValidityFor(potentialThinker, out potentialLifespan))
             {
-                decayRate = modulator.Execute(thinker, decayRate);
+                Thought newThought = ScriptableObject.CreateInstance<Thought>();
+                newThought.InitFor(potentialThinker, this, potentialLifespan);
+
+                return newThought;
             }
-            return decayRate;
+            else
+            {
+                return null;
+            }
         }
     }
 }

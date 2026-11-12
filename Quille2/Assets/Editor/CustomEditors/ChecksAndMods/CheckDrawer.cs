@@ -51,7 +51,7 @@ public abstract class CheckDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         // Draw the foldout header
-        property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), property.isExpanded, label);
+        property.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), property.isExpanded, label, EditorStyles.foldout);
 
         // If the foldout is open, draw everything else.
         if (property.isExpanded)

@@ -31,7 +31,7 @@ namespace Quille
         public float CurrentLifespan { get { return remainingLifespan; } }
         public float CurrentAge { get { return totalLifespan - remainingLifespan; } }
         public float DecayRate { get { return decayRate; } }
-        public bool ShouldDecay { get { return data.ShouldDecay; } }
+        public bool IsTemporary { get { return data.IsTemporary; } }
 
 
 
@@ -42,10 +42,12 @@ namespace Quille
 
 
         // METHODS
-
         // Initialization
-        public void Init(float lifespan, float decayRate)
+        public void Init(ThoughtData data, float lifespan, float decayRate)
         {
+            this.data = data;
+            this.name = $"Thought_{ItemName}";
+
             this.totalLifespan = this.remainingLifespan = lifespan;
             this.decayRate = decayRate;
 
@@ -53,18 +55,18 @@ namespace Quille
 
             OnThoughtAcquired?.Invoke(data, this);
         }
-        public void InitFor(Person thinker, float lifespan)
+        public void InitFor(Person thinker, ThoughtData data, float lifespan)
         {
-            Init(lifespan, data.CalculateDecayRateFor(thinker));
+            Init(data, lifespan, data.CalculateDecayRateFor(thinker));
         }
-        public void InitFor(Person thinker)
+        public void InitFor(Person thinker, ThoughtData data)
         {
             float calculatedLifespan;
             if (!data.CheckValidityFor(thinker, out calculatedLifespan))
             {
                 Debug.LogWarning($"The thought '{ItemName}' is  being initialized for '{thinker.CharIDAndCharacterName}', but is not valid for them.");
             }
-            InitFor(thinker, calculatedLifespan);
+            InitFor(thinker, data, calculatedLifespan);
         }
 
 

@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Reflection;
+using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 public static class EditorUtilities
 {
@@ -40,6 +43,14 @@ public static class EditorUtilities
         EditorGUILayout.PropertyField(property, GUIContent.none);
     }
 
+    public static void DrawBorderedRect(Rect rect, int borderThickness, Color borderColor, Color backgroundColor)
+    {
+        EditorGUI.DrawRect(rect, borderColor);
+
+        Rect innerRect = new Rect(rect.x + borderThickness, rect.y + borderThickness, rect.width - (borderThickness * 2), rect.height - (borderThickness * 2));
+        EditorGUI.DrawRect(innerRect, backgroundColor);
+    }
+
 
     // OnSceneGUI
     public static void DrawSquare(Vector3 bottomLeftPoint, Vector2 dimensions)
@@ -71,7 +82,27 @@ public static class EditorUtilities
         Handles.DrawSolidRectangleWithOutline(rectPoints, new Color32(255, 255, 255, 20), new Color32(255, 255, 255, 75));
     }
 
-    
 
-    
+
+
+
+
+    public static Type[] FindValidSubtypes(Type baseType, bool includeSelfIfValid = true)
+    {
+        return AppDomain.CurrentDomain.GetAssemblies()
+                                       .SelectMany(assembly =>
+                                       {
+                                           try
+                                           { return assembly.GetTypes(); }
+                                           catch (ReflectionTypeLoadException e)
+                                           {
+                                               return e.Types.Where(type => type != null);
+                                           }
+                                       }).Where(type => baseType.IsAssignableFrom(type) && (includeSelfIfValid || type != baseType) && !type.IsAbstract && !type.ContainsGenericParameters).ToArray();
+    }
+
+    public static string[] GetTypeNames(IEnumerable<Type> types)
+    {
+        return types.Select(type => type.Name).ToArray();
+    }
 }
