@@ -25,7 +25,7 @@ namespace Quille
         public string ItemName { get { return data.ItemName; } }
         public string ItemDescription { get { return data.ItemDescription; } }
         public Sprite ItemIcon { get { return data.ItemIcon; } }
-        public Color ItemColor { get { return data.ItemColor; } }
+        public Color ItemColor { get { return data.ItemColour; } }
 
         public float TotalLifespan { get { return totalLifespan; } }
         public float CurrentLifespan { get { return remainingLifespan; } }

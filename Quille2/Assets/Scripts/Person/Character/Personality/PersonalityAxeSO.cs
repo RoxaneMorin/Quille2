@@ -9,7 +9,7 @@ namespace Quille
 
 
     [CreateAssetMenu(fileName = "PersonalityAxe", menuName = "Quille/Character/Personality Axe", order = 0)]
-    public class PersonalityAxeSO : PersonalityItemSO
+    public class PersonalityAxeSO : ItemData
     {
         // VARIABLES/PARAMS 
         [SerializeField] private string axeNameLeft = "Undefined (Left)";

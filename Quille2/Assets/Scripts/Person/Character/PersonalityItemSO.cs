@@ -5,28 +5,16 @@ using UnityEngine;
 namespace Quille
 {
     // A base class for specific types of personality elements to inherit from.
-    public abstract class PersonalityItemSO : MenuSortableScriptableObject
+    public abstract class PersonalityItemSO : ItemData
     {
-        // VARIABLES/PARAMS 
-        [SerializeField] protected string itemName = "Undefined";
-        [SerializeField] protected Sprite itemIcon;
-
-        // TODO: also include a description?
-        // TODO: make this a further base class also used by thoughts and needs?
-
-        // PROPERTIES
-        public string ItemName { get { return itemName; } }
-        public Sprite ItemIcon { get { return itemIcon; } }
-
-
-        // TODO: Add Randomization Weights, what is favorable or defavorable to getting this item.
+        // TODO: determine if this actually needs to exist.
+        // TODO: Add Randomization Weights, what is favorable or defavorable to getting this item?
     }
+
 
     // As above, but may also be incompatible with certain checks.
     public abstract class ForbiddablePersonalityItemSO : PersonalityItemSO
     {
-        // TODO: transform this into an interface?
-
         // VARIABLES/PARAMS 
         [SerializeReference][PopulateCheckSubtypes] protected ChecksAndMods.Check[] incompatiblePersonChecks;
 
