@@ -2,36 +2,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class MenuSortableScriptableObject : ScriptableObject, IComparable
+// 
+public interface IMenuSortable : IComparable<IMenuSortable>
 {
-    // VARIALBE & PROPERTY
-    [SerializeField] protected int menuSortingIndex;
-    public int MenuSortingIndex { get { return menuSortingIndex; } set { menuSortingIndex = value; } }
+    public int SortingIndex { get; set; }
 
-
-    // METHODS
-    public int CompareTo(object obj)
+    int IComparable<IMenuSortable>.CompareTo(IMenuSortable? other)
     {
-        if (obj == null)
+        if (other == null)
         {
             return 1;
         }
 
-        MenuSortableScriptableObject otherSO = obj as MenuSortableScriptableObject;
-        if (otherSO != null)
-        {
-            return this.MenuSortingIndex.CompareTo(otherSO.MenuSortingIndex);
-        }
-        else
-        {
-            throw new ArgumentException(string.Format("{0} is not a MenuSortableScriptableObject.", obj));
-        }
+        // TODO: verify they are of the same actual type?
+        //Debug.Log(this);
+        //Debug.Log(other);
+
+        return this.SortingIndex.CompareTo(other.SortingIndex);
     }
 }
 
-// Interface doing the same thing just in case.
-public interface IMenuSortable : IComparable
+public abstract class MenuSortableScriptableObject : ScriptableObject, IMenuSortable
 {
-    public int MenuSortingIndex { get; set; }
+    // VARIALBE & PROPERTY
+    [SerializeField][FormerlySerializedAs("menuSortingIndex")] protected int sortingIndex;
+    public int SortingIndex { get { return sortingIndex; } set { sortingIndex = value; } }
 }
+
+

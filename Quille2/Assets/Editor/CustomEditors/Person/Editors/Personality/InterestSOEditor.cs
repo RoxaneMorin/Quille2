@@ -11,7 +11,7 @@ public class InterestSOEditor : Editor
 
     private SerializedProperty itemName;
     private SerializedProperty itemIcon;
-    private SerializedProperty menuSortingIndex;
+    private SerializedProperty sortingIndex;
 
     private SerializedProperty interestSpan;
 
@@ -24,7 +24,7 @@ public class InterestSOEditor : Editor
 
         itemName = serializedObject.FindProperty("itemName");
         itemIcon = serializedObject.FindProperty("itemIcon");
-        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+        sortingIndex = serializedObject.FindProperty("sortingIndex");
 
         interestSpan = serializedObject.FindProperty("interestSpan");
 
@@ -48,7 +48,7 @@ public class InterestSOEditor : Editor
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(menuSortingIndex);
+        EditorGUILayout.PropertyField(sortingIndex);
 
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 

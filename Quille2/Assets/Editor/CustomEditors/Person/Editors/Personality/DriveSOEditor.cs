@@ -10,7 +10,7 @@ public class DriveSOEditor : Editor
 
     private SerializedProperty itemName;
     private SerializedProperty itemIcon;
-    private SerializedProperty menuSortingIndex;
+    private SerializedProperty sortingIndex;
 
     private SerializedProperty driveSpan;
     private SerializedProperty driveMidpoint;
@@ -24,7 +24,7 @@ public class DriveSOEditor : Editor
 
         itemName = serializedObject.FindProperty("itemName");
         itemIcon = serializedObject.FindProperty("itemIcon");
-        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+        sortingIndex = serializedObject.FindProperty("sortingIndex");
 
         driveSpan = serializedObject.FindProperty("driveSpan");
         driveMidpoint = serializedObject.FindProperty("driveMidpoint");
@@ -55,7 +55,7 @@ public class DriveSOEditor : Editor
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(menuSortingIndex);
+        EditorGUILayout.PropertyField(sortingIndex);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.

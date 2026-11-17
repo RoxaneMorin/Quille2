@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Quille
 {
@@ -8,16 +9,21 @@ namespace Quille
 
 
     // BASE GENE TEMPLATE
-    public abstract class GeneSO : MenuSortableScriptableObject
+    public abstract class GeneSO : ScriptableObject, IMenuSortable
     {
         // VARIABLES/PARAMS
         [SerializeField] protected string colourName;
         [SerializeField, ColorUsage(false, false)] protected Color colour = Color.black;
 
+        [FormerlySerializedAs("menuSortingIndex")]
+        [SerializeField] protected int sortingIndex;
+
 
         // PROPERTIES
         public string ColourName { get { return colourName; } }
         public Color Colour { get { return colour; } }
+
+        public int SortingIndex { get { return sortingIndex; } set { sortingIndex = value; } }
     }
 
     public abstract class GeneWithDominanceSO : GeneSO

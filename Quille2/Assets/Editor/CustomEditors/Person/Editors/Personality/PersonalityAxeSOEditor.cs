@@ -9,7 +9,7 @@ public class PersonalityAxeSOEditor : Editor
     private SerializedProperty scriptProperty;
 
     private SerializedProperty itemName;
-    private SerializedProperty menuSortingIndex;
+    private SerializedProperty sortingIndex;
     private SerializedProperty axeSpan;
     private SerializedProperty axeNameLeft;
     private SerializedProperty axeNameRight;
@@ -21,7 +21,7 @@ public class PersonalityAxeSOEditor : Editor
         scriptProperty = serializedObject.FindProperty("m_Script");
 
         itemName = serializedObject.FindProperty("itemName");
-        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+        sortingIndex = serializedObject.FindProperty("sortingIndex");
 
         axeSpan = serializedObject.FindProperty("axeSpan");
         axeNameLeft = serializedObject.FindProperty("axeNameLeft");
@@ -45,7 +45,7 @@ public class PersonalityAxeSOEditor : Editor
 
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
-        EditorGUILayout.PropertyField(menuSortingIndex);
+        EditorGUILayout.PropertyField(sortingIndex);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw side labels.

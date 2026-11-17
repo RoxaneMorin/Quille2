@@ -11,7 +11,7 @@ public class DriveDomainSOEditor : Editor
     private SerializedProperty domainName;
     private SerializedProperty domainIcon;
     private SerializedProperty domainColour;
-    private SerializedProperty menuSortingIndex;
+    private SerializedProperty sortingIndex;
 
     private SerializedProperty itemsInThisDomain;
 
@@ -22,7 +22,7 @@ public class DriveDomainSOEditor : Editor
         domainName = serializedObject.FindProperty("domainName");
         domainIcon = serializedObject.FindProperty("domainIcon");
         domainColour = serializedObject.FindProperty("domainColour");
-        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+        sortingIndex = serializedObject.FindProperty("sortingIndex");
 
         itemsInThisDomain = serializedObject.FindProperty("itemsInThisDomain");
     }
@@ -40,7 +40,7 @@ public class DriveDomainSOEditor : Editor
         EditorGUILayout.PropertyField(domainName);
         EditorGUILayout.PropertyField(domainIcon);
         EditorGUILayout.PropertyField(domainColour);
-        EditorGUILayout.PropertyField(menuSortingIndex);
+        EditorGUILayout.PropertyField(sortingIndex);
 
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 

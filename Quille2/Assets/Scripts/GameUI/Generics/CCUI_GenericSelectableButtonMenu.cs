@@ -224,7 +224,7 @@ namespace QuilleUI
         protected virtual void LoadSOsAndCreateButtons(string SOsResourcePath)
         {
             PersonalityItemSO[] theSOs = Resources.LoadAll<PersonalityItemSO>(SOsResourcePath);
-            theSOs = theSOs.OrderBy(so => so.MenuSortingIndex).ToArray();
+            theSOs = theSOs.OrderBy(so => so.SortingIndex).ToArray();
             int noOfSOs = theSOs.Length;
 
             theButtons = new CCUI_GenericSelectableButton[noOfSOs];
@@ -273,7 +273,7 @@ namespace QuilleUI
             if (domainFilterPrefab)
             {
                 PersonalityItemDomainSO[] theDomainSOs = Resources.LoadAll<PersonalityItemDomainSO>(SOsResourcePath);
-                theDomainSOs = theDomainSOs.OrderBy(so => so.MenuSortingIndex).ToArray();
+                theDomainSOs = theDomainSOs.OrderBy(so => so.SortingIndex).ToArray();
                 int noOfDomains = theDomainSOs.Length;
 
                 // Create the arrays.

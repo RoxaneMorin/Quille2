@@ -10,7 +10,7 @@ public class PersonalityTraitSOEditor : Editor
 
     private SerializedProperty itemName;
     private SerializedProperty itemIcon;
-    private SerializedProperty menuSortingIndex;
+    private SerializedProperty sortingIndex;
 
     private SerializedProperty traitSpan;
     private SerializedProperty trainMidpoint;
@@ -24,7 +24,7 @@ public class PersonalityTraitSOEditor : Editor
 
         itemName = serializedObject.FindProperty("itemName");
         itemIcon = serializedObject.FindProperty("itemIcon");
-        menuSortingIndex = serializedObject.FindProperty("menuSortingIndex");
+        sortingIndex = serializedObject.FindProperty("sortingIndex");
 
         traitSpan = serializedObject.FindProperty("traitSpan");
         trainMidpoint = serializedObject.FindProperty("trainMidpoint");
@@ -55,7 +55,7 @@ public class PersonalityTraitSOEditor : Editor
         // Draw generic properties.
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(menuSortingIndex);
+        EditorGUILayout.PropertyField(sortingIndex);
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.

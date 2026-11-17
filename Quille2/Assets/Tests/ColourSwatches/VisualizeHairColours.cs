@@ -13,7 +13,7 @@ namespace Quille
         // Start is called before the first frame update
         void Start()
         {
-            hairColours = Resources.LoadAll<GeneHairColourSO>(Constants_PathResources.SO_PATH_HAIRCOLOURS).OrderBy(so => so.MenuSortingIndex).ToArray();
+            hairColours = Resources.LoadAll<GeneHairColourSO>(Constants_PathResources.SO_PATH_HAIRCOLOURS).OrderBy(so => so.SortingIndex).ToArray();
         }
 
 
@@ -39,7 +39,7 @@ namespace Quille
                     swatch.position = currentSpot;
                     currentSpot.z += 1.5f;
 
-                    swatch.name = colour.MenuSortingIndex + colour.ColourName;
+                    swatch.name = colour.SortingIndex + colour.ColourName;
                     swatch.GetComponent<MeshRenderer>().material.color = colour.Colour;
 
                 }
