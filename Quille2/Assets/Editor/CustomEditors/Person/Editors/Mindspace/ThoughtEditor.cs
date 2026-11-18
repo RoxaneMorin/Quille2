@@ -30,7 +30,6 @@ public class ThoughtEditor : Editor
 
 
 
-
     // METHODS
     private void OnEnable()
     {
@@ -87,7 +86,7 @@ public class ThoughtEditor : Editor
                 if (targetThought.ItemIcon != null)
                 {
                     foldoutRect = GUILayoutUtility.GetAspectRect(1.0f, GUILayout.MaxHeight(50.0f), GUILayout.MaxWidth(50.0f));
-                    EditorUtilities.DrawBorderedRect(foldoutRect, 1, EditorStyles.label.normal.textColor, targetThought.ItemColor);
+                    EditorUtilities.DrawBorderedRect(foldoutRect, 1, EditorStyles.label.normal.textColor, targetThought.ThoughtColour);
 
                     customGUIStyle = new GUIStyle("sv_iconselector_back");
                     customGUIStyle.padding = new RectOffset(8, 8, 8, 8);
@@ -96,7 +95,7 @@ public class ThoughtEditor : Editor
                 }
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 2f);
+                EditorGUILayout.Space(EditorGUIUtility.singleLineHeight / 4f);
             }
             EditorGUILayout.EndFadeGroup();
 

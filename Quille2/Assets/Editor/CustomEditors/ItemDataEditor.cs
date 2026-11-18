@@ -22,6 +22,7 @@ public class ItemDataEditor : Editor
 
     // Misc
     protected GUIStyle iconGUIStyle;
+    protected float halfLine;
 
     protected string cachedDescription;
 
@@ -42,11 +43,21 @@ public class ItemDataEditor : Editor
         //itemColour = serializedObject.FindProperty("itemColour");
 
         sortingIndex = serializedObject.FindProperty("sortingIndex");
+
+        // Misc
+        halfLine = EditorGUIUtility.singleLineHeight / 2f;
     }
 
-    protected void DrawItemDataProperties()
+    protected void DrawItemDataProperties(bool includeScriptProperty = false)
     {
+        if (includeScriptProperty)
+        {
+            using (new EditorGUI.DisabledScope(true))
+                EditorGUILayout.PropertyField(scriptProperty);
+            GUILayout.Space(halfLine);
+        }
 
+        // The properties proper
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.BeginVertical();
 
@@ -86,7 +97,5 @@ public class ItemDataEditor : Editor
             targetItemData.ItemDescription = cachedDescription;
         }
         EditorGUILayout.EndHorizontal();
-
-        
     }
 }

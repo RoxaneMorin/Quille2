@@ -15,9 +15,10 @@ MonoBehaviour:
   itemName: Peckish
   itemDescription: I am a wee bit hungry...
   itemIcon: {fileID: 21300000, guid: 0fc80e68a07174e4f8486444f35b7afb, type: 3}
-  itemColor: {r: 1, g: 0.7546348, b: 0.5801887, a: 1}
-  isTemporary: 0
+  sortingIndex: 0
+  itemColour: {r: 1, g: 0.44935167, b: 0, a: 1}
   validityChecks: []
+  isTemporary: 0
   defaultLifespan: 0
   lifespanModifiers: []
   defaultDecayRate: 0

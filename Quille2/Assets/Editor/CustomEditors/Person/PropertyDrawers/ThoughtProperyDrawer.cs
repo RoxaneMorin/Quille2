@@ -4,23 +4,55 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-//[CustomPropertyDrawer(typeof(Quille.Thought))]
+[CustomPropertyDrawer(typeof(Quille.Thought))]
 public class ThoughtProperyDrawer : PropertyDrawer
 {
     // VARIABLES
     private Thought targetThought;
-    private ThoughtEditor cachedEditor;
+
+    private Editor cachedEditor;
+    private ThoughtEditor cachedThoughtEditor;
+
+    // Misc
+    private GUIStyle customGUIStyle;
 
 
     // METHODS
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        EditorGUILayout.PropertyField(property);
-
         targetThought = (Thought)property.objectReferenceValue;
 
-        cachedEditor = (ThoughtEditor)Editor.CreateEditor(targetThought);
-        cachedEditor.drawScriptProperty = false;
-        cachedEditor.OnInspectorGUI();
+        EditorGUI.BeginProperty(position, label, property);
+        EditorGUI.PropertyField(position, property, label, true);
+
+        if (property.objectReferenceValue != null)
+        {
+            property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
+        }
+        if (property.isExpanded)
+        {
+            EditorGUI.indentLevel++;
+
+            if (!cachedEditor)
+            {
+                Editor.CreateCachedEditor(property.objectReferenceValue, typeof(ThoughtEditor), ref cachedEditor);
+                cachedThoughtEditor = cachedEditor as ThoughtEditor;
+                cachedThoughtEditor.drawScriptProperty = false;
+            }
+
+            EditorGUI.BeginChangeCheck();
+            if (cachedEditor)
+            {
+                cachedEditor.OnInspectorGUI();
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                property.serializedObject.ApplyModifiedProperties();
+            }
+
+            EditorGUI.indentLevel--;
+        }
+
+        EditorGUI.EndProperty();
     }
 }

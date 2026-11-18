@@ -2,27 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChecksAndMods;
-using QuilleUI;
 
 namespace Quille
 {
-    // TODO: review the general structure, naming scheme and organisation of other data SOs.
-
     // The data component of Thoughts, used for the creation of specific thoughts as assets.
     // These thoughs represent most of what may be on a character's mind, such as an interest, a person or a recent memory.
-    [CreateAssetMenu(fileName = "Thought_", menuName = "Quille/Mindspace/Generic Thought", order = 0)]
-    public class ThoughtData : ScriptableObject
+    [CreateAssetMenu(fileName = "Thought_", menuName = "Quille/Mindspace/Basic Thought", order = 0)]
+    public class ThoughtData : ItemData
     {
         // VARIABLES   
-        [SerializeField] protected string itemName = "Undefined";
-        [SerializeField, TextArea] protected string itemDescription;
-        [SerializeField] protected Sprite itemIcon;
-        [SerializeField] protected Color itemColor;
+        [SerializeField] protected Color itemColour;
 
         // Vibe, positive vs negative, pleasant or unpleasant thought to have?
 
-        [SerializeField] bool isTemporary = true;
         [SerializeReference, PopulateSubtypes] protected List<Check> validityChecks;
+
+        [SerializeField] bool isTemporary = true;
+
         [SerializeField] protected float defaultLifespan;
         [SerializeReference, PopulateSubtypes] protected List<Modulator> lifespanModifiers;
         [SerializeField] protected float defaultDecayRate;
@@ -37,11 +33,7 @@ namespace Quille
 
 
         // PROPERTIES
-        public string ItemName { get { return itemName; } }
-        public string ItemDescription { get { return itemDescription; } }
-        public Sprite ItemIcon { get { return itemIcon; } }
-        public Color ItemColor { get { return itemColor; } }
-
+        public Color ThoughtColour { get { return itemColour; } }
         public IEnumerable<Check> ValidityChecks
         {
             get

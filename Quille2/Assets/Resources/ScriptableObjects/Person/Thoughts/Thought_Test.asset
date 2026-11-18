@@ -15,13 +15,22 @@ MonoBehaviour:
   itemName: Hello World
   itemDescription: I have become aware of my own existence...
   itemIcon: {fileID: 21300000, guid: 23b5132932276f54e82f817f73559816, type: 3}
-  itemColor: {r: 0.6884568, g: 0.75531137, b: 0.764151, a: 1}
-  isTemporary: 1
+  sortingIndex: 0
+  itemColour: {r: 0.8392666, g: 0.84841615, b: 0.8679245, a: 1}
   validityChecks: []
+  isTemporary: 1
   defaultLifespan: 100
-  lifespanModifiers: []
+  lifespanModifiers:
+  - rid: 2339103662146060291
   defaultDecayRate: 1
   decayRateModifiers: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2339103662146060291
+      type: {class: Modulator_PersonalityAxeScore, ns: ChecksAndMods, asm: Assembly-CSharp}
+      data:
+        modOpIdx: 3
+        modifier: 10
+        mainOpIdx: 1
+        target: {fileID: 11400000, guid: e771b483ef734df4091f97e046289c92, type: 2}
