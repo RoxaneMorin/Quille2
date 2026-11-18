@@ -8,9 +8,9 @@ public abstract class ItemData : ScriptableObject, IMenuSortable
 {
     // VARIABLES   
     [SerializeField] protected string itemName = "Undefined";
-    [SerializeField, TextArea] protected string itemDescription;
+    [SerializeField] protected string itemDescription;
     [SerializeField] protected Sprite itemIcon;
-    [SerializeField] protected Color itemColour; // do we need this?
+    //[SerializeField] protected Color itemColour; // do we need this?
 
     [SerializeField][FormerlySerializedAs("menuSortingIndex")] protected int sortingIndex;
     
@@ -18,9 +18,9 @@ public abstract class ItemData : ScriptableObject, IMenuSortable
 
     // PROPERTIES
     public string ItemName { get { return itemName; } }
-    public string ItemDescription { get { return itemDescription; } }
+    public string ItemDescription { get { return itemDescription; } set { itemDescription = value; } }
     public Sprite ItemIcon { get { return itemIcon; } }
-    public Color ItemColour { get { return itemColour; } }
+    //public Color ItemColour { get { return itemColour; } }
 
     public int SortingIndex { get { return sortingIndex; } set { sortingIndex = value; } }
 }

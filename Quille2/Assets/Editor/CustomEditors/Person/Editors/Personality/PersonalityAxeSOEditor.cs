@@ -4,12 +4,8 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Quille.PersonalityAxeSO)), CanEditMultipleObjects]
-public class PersonalityAxeSOEditor : Editor
+public class PersonalityAxeSOEditor : ItemDataEditor
 {
-    private SerializedProperty scriptProperty;
-
-    private SerializedProperty itemName;
-    private SerializedProperty sortingIndex;
     private SerializedProperty axeSpan;
     private SerializedProperty axeNameLeft;
     private SerializedProperty axeNameRight;
@@ -18,10 +14,7 @@ public class PersonalityAxeSOEditor : Editor
     
     private void OnEnable()
     {
-        scriptProperty = serializedObject.FindProperty("m_Script");
-
-        itemName = serializedObject.FindProperty("itemName");
-        sortingIndex = serializedObject.FindProperty("sortingIndex");
+        base.OnEnable();
 
         axeSpan = serializedObject.FindProperty("axeSpan");
         axeNameLeft = serializedObject.FindProperty("axeNameLeft");
@@ -43,9 +36,7 @@ public class PersonalityAxeSOEditor : Editor
         GUI.enabled = true;
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // Draw generic properties.
-        EditorGUILayout.PropertyField(itemName);
-        EditorGUILayout.PropertyField(sortingIndex);
+        DrawItemDataProperties();
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw side labels.

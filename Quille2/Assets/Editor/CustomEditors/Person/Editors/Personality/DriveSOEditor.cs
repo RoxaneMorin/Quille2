@@ -4,14 +4,8 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Quille.DriveSO)), CanEditMultipleObjects]
-public class DriveSOEditor : Editor
+public class DriveSOEditor : ItemDataEditor
 {
-    private SerializedProperty scriptProperty;
-
-    private SerializedProperty itemName;
-    private SerializedProperty itemIcon;
-    private SerializedProperty sortingIndex;
-
     private SerializedProperty driveSpan;
     private SerializedProperty driveMidpoint;
 
@@ -20,11 +14,7 @@ public class DriveSOEditor : Editor
 
     private void OnEnable()
     {
-        scriptProperty = serializedObject.FindProperty("m_Script");
-
-        itemName = serializedObject.FindProperty("itemName");
-        itemIcon = serializedObject.FindProperty("itemIcon");
-        sortingIndex = serializedObject.FindProperty("sortingIndex");
+        base.OnEnable();
 
         driveSpan = serializedObject.FindProperty("driveSpan");
         driveMidpoint = serializedObject.FindProperty("driveMidpoint");
@@ -52,10 +42,8 @@ public class DriveSOEditor : Editor
         GUI.enabled = true;
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // Draw generic properties.
-        EditorGUILayout.PropertyField(itemName);
-        EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(sortingIndex);
+        DrawItemDataProperties();
+
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.

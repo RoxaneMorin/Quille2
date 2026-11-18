@@ -4,14 +4,8 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Quille.PersonalityTraitSO)), CanEditMultipleObjects]
-public class PersonalityTraitSOEditor : Editor
+public class PersonalityTraitSOEditor : ItemDataEditor
 {
-    private SerializedProperty scriptProperty;
-
-    private SerializedProperty itemName;
-    private SerializedProperty itemIcon;
-    private SerializedProperty sortingIndex;
-
     private SerializedProperty traitSpan;
     private SerializedProperty trainMidpoint;
 
@@ -20,11 +14,7 @@ public class PersonalityTraitSOEditor : Editor
 
     private void OnEnable()
     {
-        scriptProperty = serializedObject.FindProperty("m_Script");
-
-        itemName = serializedObject.FindProperty("itemName");
-        itemIcon = serializedObject.FindProperty("itemIcon");
-        sortingIndex = serializedObject.FindProperty("sortingIndex");
+        base.OnEnable();
 
         traitSpan = serializedObject.FindProperty("traitSpan");
         trainMidpoint = serializedObject.FindProperty("trainMidpoint");
@@ -52,10 +42,7 @@ public class PersonalityTraitSOEditor : Editor
         GUI.enabled = true;
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // Draw generic properties.
-        EditorGUILayout.PropertyField(itemName);
-        EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(sortingIndex);
+        DrawItemDataProperties();
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.

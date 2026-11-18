@@ -5,14 +5,8 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Quille.InterestSO)), CanEditMultipleObjects]
-public class InterestSOEditor : Editor
+public class InterestSOEditor : ItemDataEditor
 {
-    private SerializedProperty scriptProperty;
-
-    private SerializedProperty itemName;
-    private SerializedProperty itemIcon;
-    private SerializedProperty sortingIndex;
-
     private SerializedProperty interestSpan;
 
     private SerializedProperty inDomains;
@@ -20,11 +14,7 @@ public class InterestSOEditor : Editor
 
     private void OnEnable()
     {
-        scriptProperty = serializedObject.FindProperty("m_Script");
-
-        itemName = serializedObject.FindProperty("itemName");
-        itemIcon = serializedObject.FindProperty("itemIcon");
-        sortingIndex = serializedObject.FindProperty("sortingIndex");
+        base.OnEnable();
 
         interestSpan = serializedObject.FindProperty("interestSpan");
 
@@ -45,11 +35,7 @@ public class InterestSOEditor : Editor
         GUI.enabled = true;
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
-        // Draw generic properties.
-        EditorGUILayout.PropertyField(itemName);
-        EditorGUILayout.PropertyField(itemIcon);
-        EditorGUILayout.PropertyField(sortingIndex);
-
+        DrawItemDataProperties();
         GUILayout.Space(EditorGUIUtility.singleLineHeight / 2);
 
         // Draw inDomains, and handle potential warning message.
