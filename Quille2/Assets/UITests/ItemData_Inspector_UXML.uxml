@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UITests/TesterStyleSheet.uss?fileID=7433441132597879392&amp;guid=fc87644bcaae9734b987f5fecf2e3b3d&amp;type=3#TesterStyleSheet" />
+    <ui:GroupBox name="Box_Horizontal" style="flex-direction: row; justify-content: flex-start; align-self: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-wrap: nowrap; flex-shrink: 0; align-items: flex-start; padding-right: 3px;">
+        <ui:GroupBox name="Box_Fields" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 3px; margin-bottom: 0; margin-left: 0; align-self: auto; overflow: visible; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch; -unity-background-scale-mode: stretch-to-fill; flex-shrink: 1; flex-grow: 1; flex-direction: column;">
+            <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="m_ItemName" name="Field_Name" style="margin-left: 0; margin-right: 0;" />
+            <ui:TextField picking-mode="Ignore" label="Description" value="a longer filler text, which can hopefully demonstrate multiple lines." multiline="true" name="Field_Description" binding-path="m_ItemDescription" password="false" auto-correction="false" readonly="false" is-delayed="false" style="flex-grow: 1; flex-shrink: 0; margin-left: 0; margin-right: 0; text-overflow: ellipsis; white-space: normal; min-height: 36px;" />
+        </ui:GroupBox>
+        <ui:GroupBox name="Box_Icon" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1;">
+            <ui:VisualElement name="IconPreview" style="flex-grow: 1; flex-direction: column; position: relative; flex-wrap: nowrap; justify-content: center; align-items: stretch; align-self: stretch; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; background-color: rgb(217, 42, 104); min-width: 66px; min-height: 66px; background-image: resource(&apos;Sprites/UI/UI_Placeholder&apos;);" />
+            <uie:ObjectField type="UnityEngine.Sprite, UnityEngine.CoreModule" name="Field_Icon" binding-path="m_ItemIcon" style="height: auto; flex-wrap: nowrap; flex-direction: row; margin-right: 0; margin-left: 0;" />
+        </ui:GroupBox>
+    </ui:GroupBox>
+    <ui:IntegerField label="Index" value="42" name="Field_Index" binding-path="m_SortingIndex" />
+</ui:UXML>

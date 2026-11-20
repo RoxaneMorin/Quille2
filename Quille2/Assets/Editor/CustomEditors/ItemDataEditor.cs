@@ -57,45 +57,131 @@ public class ItemDataEditor : Editor
             GUILayout.Space(halfLine);
         }
 
-        // The properties proper
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.BeginVertical();
 
-        EditorGUILayout.PropertyField(itemName, new GUIContent("Name"));
         EditorGUILayout.PropertyField(sortingIndex, new GUIContent("Index"));
-        EditorGUILayout.PropertyField(itemIcon, new GUIContent("Icon"));
-        //EditorGUILayout.PropertyField(itemColour, new GUIContent("Colour"));
 
-        EditorGUILayout.EndVertical();
-        if (targetItemData.ItemIcon != null)
-        {
-            float iconDim = EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
-            Rect iconRect = GUILayoutUtility.GetAspectRect(1.0f, GUILayout.MaxHeight(iconDim), GUILayout.MaxWidth(iconDim));
 
-            iconGUIStyle = new GUIStyle("sv_iconselector_back");
-            iconGUIStyle.alignment = TextAnchor.MiddleCenter;
-            iconGUIStyle.overflow = new RectOffset(0, 0, -2, 2);
-            iconGUIStyle.padding = new RectOffset(4, 4, 2, -2);
 
-            GUI.Box(iconRect, targetItemData.ItemIcon.texture, iconGUIStyle);
+
+
+
+        float blockHeight = EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing;
+        Rect blockRect = EditorGUILayout.GetControlRect(true, blockHeight);
+
+        float propWidth = blockRect.width - blockHeight;
+
+
+
+        Rect namePropRect = new Rect(blockRect.position, new Vector2(propWidth, EditorGUIUtility.singleLineHeight));
+
+        Rect descLabelRect = new Rect(blockRect.position + new Vector2(0f, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing), new Vector2(EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight));
+
+
+        Rect descPropRect = new Rect(descLabelRect.position + new Vector2(descLabelRect.width, 0f), new Vector2(blockRect.width - EditorGUIUtility.labelWidth, blockHeight - EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing));
+
+        Rect iconRect = new Rect(blockRect.position + new Vector2(propWidth, 0f), new Vector2(blockHeight, blockHeight));
+
+
+        EditorGUI.PropertyField(namePropRect, itemName, new GUIContent("Name"));
+        EditorGUI.LabelField(descLabelRect, new GUIContent("Description"));
+
+        EditorGUI.TextArea(descPropRect, targetItemData.ItemDescription);
         
-        EditorGUILayout.EndHorizontal();
-        GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
-        }
-        else
-        {
-            EditorGUILayout.EndHorizontal();
-        }
-        
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PrefixLabel("Description");
-        GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
-        EditorGUI.BeginChangeCheck();
-        cachedDescription = EditorGUILayout.TextArea(targetItemData.ItemDescription, GUILayout.MinHeight(EditorGUIUtility.singleLineHeight * 2f));
-        if (EditorGUI.EndChangeCheck())
-        {
-            targetItemData.ItemDescription = cachedDescription;
-        }
-        EditorGUILayout.EndHorizontal();
+
+        iconGUIStyle = new GUIStyle("sv_iconselector_back");
+        iconGUIStyle.alignment = TextAnchor.MiddleCenter;
+        //iconGUIStyle.overflow = new RectOffset(0, 0, -2, 2);
+        iconGUIStyle.padding = new RectOffset(4, 4, 4, 4);
+
+        GUI.Box(iconRect, targetItemData.ItemIcon.texture, iconGUIStyle);
+
+
+
+        //EditorGUILayout.BeginHorizontal();
+
+        //// Name & description
+        //EditorGUILayout.BeginVertical();
+        //EditorGUILayout.PropertyField(itemName, new GUIContent("Name"));
+        //EditorGUILayout.BeginHorizontal();
+        //EditorGUILayout.PrefixLabel("Description");
+        //GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+        //EditorGUI.BeginChangeCheck();
+        //cachedDescription = EditorGUILayout.TextArea(targetItemData.ItemDescription, GUILayout.MinHeight(EditorGUIUtility.singleLineHeight * 3f));
+        //if (EditorGUI.EndChangeCheck())
+        //{
+        //    targetItemData.ItemDescription = cachedDescription;
+        //}
+        //EditorGUILayout.EndHorizontal();
+        //EditorGUILayout.EndVertical();
+
+        //// Icon
+        //EditorGUILayout.BeginVertical();
+        //float iconDim = EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing;
+        //if (targetItemData.ItemIcon != null)
+        //{
+        //    iconGUIStyle = new GUIStyle("sv_iconselector_back");
+        //    iconGUIStyle.alignment = TextAnchor.MiddleCenter;
+        //    iconGUIStyle.overflow = new RectOffset(0, 0, -2, 2);
+        //    iconGUIStyle.padding = new RectOffset(4, 4, 2, -2);
+
+        //    GUILayout.Box(targetItemData.ItemIcon.texture, iconGUIStyle, GUILayout.MaxHeight(iconDim), GUILayout.MaxWidth(iconDim));
+        //}
+
+        //EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+
+        //EditorGUILayout.PropertyField(itemIcon, GUIContent.none, GUILayout.MaxWidth(iconDim));
+
+        //EditorGUILayout.EndVertical();
+
+        //EditorGUILayout.EndHorizontal();
+
+
+
+
+        EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+
+
+
+
+        //// The properties proper
+        //EditorGUILayout.BeginHorizontal();
+        //EditorGUILayout.BeginVertical();
+
+        //EditorGUILayout.PropertyField(itemName, new GUIContent("Name"));
+        //EditorGUILayout.PropertyField(sortingIndex, new GUIContent("Index"));
+        //EditorGUILayout.PropertyField(itemIcon, new GUIContent("Icon"));
+        ////EditorGUILayout.PropertyField(itemColour, new GUIContent("Colour"));
+
+        //EditorGUILayout.EndVertical();
+        //if (targetItemData.ItemIcon != null)
+        //{
+        //    float iconDim = EditorGUIUtility.singleLineHeight * 3f + EditorGUIUtility.standardVerticalSpacing * 2f;
+        //    Rect iconRect = GUILayoutUtility.GetAspectRect(1.0f, GUILayout.MaxHeight(iconDim), GUILayout.MaxWidth(iconDim));
+
+        //    iconGUIStyle = new GUIStyle("sv_iconselector_back");
+        //    iconGUIStyle.alignment = TextAnchor.MiddleCenter;
+        //    iconGUIStyle.overflow = new RectOffset(0, 0, -2, 2);
+        //    iconGUIStyle.padding = new RectOffset(4, 4, 2, -2);
+
+        //    GUI.Box(iconRect, targetItemData.ItemIcon.texture, iconGUIStyle);
+
+        //EditorGUILayout.EndHorizontal();
+        //GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+        //}
+        //else
+        //{
+        //    EditorGUILayout.EndHorizontal();
+        //}
+
+        //EditorGUILayout.BeginHorizontal();
+        //EditorGUILayout.PrefixLabel("Description");
+        //GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+        //EditorGUI.BeginChangeCheck();
+        //cachedDescription = EditorGUILayout.TextArea(targetItemData.ItemDescription, GUILayout.MinHeight(EditorGUIUtility.singleLineHeight * 2f));
+        //if (EditorGUI.EndChangeCheck())
+        //{
+        //    targetItemData.ItemDescription = cachedDescription;
+        //}
+        //EditorGUILayout.EndHorizontal();
     }
 }

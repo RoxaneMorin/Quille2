@@ -1,0 +1,22 @@
+#IconPreview {
+    border-top-color: var(--unity-colors-default-border);
+    border-right-color: var(--unity-colors-default-border);
+    border-bottom-color: var(--unity-colors-default-border);
+    border-left-color: var(--unity-colors-default-border);
+    min-width: 20px;
+    min-height: 20px;
+    align-self: stretch;
+    -unity-background-scale-mode: scale-to-fit;
+    justify-content: flex-start;
+    flex-direction: row;
+    background-image: resource('Sprites/UI/UI_Placeholder');
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    flex-grow: 1;
+    display: flex;
+    overflow: visible;
+    visibility: visible;
+    opacity: 1;
+}
