@@ -15,7 +15,8 @@ namespace Quille
 
         [SerializeField] protected float totalLifespan;
         [SerializeField] protected float remainingLifespan;
-        [SerializeField] protected float decayRate;
+
+        // TODO: have a derived class for decaying thought here instead?
 
         // Target?
 
@@ -27,11 +28,12 @@ namespace Quille
         public Sprite ItemIcon { get { return data.ItemIcon; } }
         public Color ThoughtColour { get { return data.ThoughtColour; } }
 
+        public bool IsTemporary { get { return data.IsTemporary; } }
+
         public float TotalLifespan { get { return totalLifespan; } }
         public float CurrentLifespan { get { return remainingLifespan; } }
         public float CurrentAge { get { return totalLifespan - remainingLifespan; } }
-        public float DecayRate { get { return decayRate; } }
-        public bool IsTemporary { get { return data.IsTemporary; } }
+        
 
 
 
@@ -43,21 +45,16 @@ namespace Quille
 
         // METHODS
         // Initialization
-        public void Init(ThoughtData data, float lifespan, float decayRate)
+        public void Init(ThoughtData data, float lifespan)
         {
             this.data = data;
             this.name = $"Thought_{ItemName}";
 
             this.totalLifespan = this.remainingLifespan = lifespan;
-            this.decayRate = decayRate;
 
             // Etc.
 
             OnThoughtAcquired?.Invoke(data, this);
-        }
-        public void InitFor(Person thinker, ThoughtData data, float lifespan)
-        {
-            Init(data, lifespan, data.CalculateDecayRateFor(thinker));
         }
         public void InitFor(Person thinker, ThoughtData data)
         {
@@ -66,7 +63,7 @@ namespace Quille
             {
                 Debug.LogWarning($"The thought '{ItemName}' is  being initialized for '{thinker.CharIDAndCharacterName}', but is not valid for them.");
             }
-            InitFor(thinker, data, calculatedLifespan);
+            Init(data, calculatedLifespan);
         }
 
 
@@ -85,19 +82,19 @@ namespace Quille
             OnThoughtExpired?.Invoke(data, this);
         }
 
-        public IEnumerator AgeByDecayRate()
-        {
-            if (decayRate > 0.0f)
-            {
-                remainingLifespan -= decayRate;
-                if (remainingLifespan <= 0)
-                {
-                    Expire();
-                }
+        //public IEnumerator AgeByDecayRate()
+        //{
+        //    if (decayRate > 0.0f)
+        //    {
+        //        remainingLifespan -= decayRate;
+        //        if (remainingLifespan <= 0)
+        //        {
+        //            Expire();
+        //        }
 
-                yield return new WaitForSeconds(Constants_Quille.NEED_DECAY_INTERVAL);
-            }
-        }
+        //        yield return new WaitForSeconds(Constants_Quille.NEED_DECAY_INTERVAL);
+        //    }
+        //}
     }
 
 }

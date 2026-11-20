@@ -20,7 +20,6 @@ public class ThoughtEditor : Editor
     protected SerializedProperty data;
     protected SerializedProperty totalLifespan;
     protected SerializedProperty remainingLifespan;
-    protected SerializedProperty decayRate;
 
     // Misc
     public bool drawScriptProperty = true;
@@ -42,8 +41,6 @@ public class ThoughtEditor : Editor
         data = serializedObject.FindProperty("data");
         totalLifespan = serializedObject.FindProperty("totalLifespan");
         remainingLifespan = serializedObject.FindProperty("remainingLifespan");
-        decayRate = serializedObject.FindProperty("decayRate");
-
     }
 
     public override void OnInspectorGUI()
@@ -107,9 +104,10 @@ public class ThoughtEditor : Editor
             EditorGUILayout.PropertyField(remainingLifespan, GUIContent.none);
             GUILayout.Label("/ Total");
             EditorGUILayout.PropertyField(totalLifespan, GUIContent.none);
-            EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.PropertyField(decayRate);
+            // TODO: what if the thought doesn't decay?
+
+            EditorGUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();
         }

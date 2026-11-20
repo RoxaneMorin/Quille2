@@ -12,8 +12,6 @@ public class ThoughtDataEditor : ItemDataEditor
     private SerializedProperty isTemporary;
     private SerializedProperty defaultLifespan;
     private SerializedProperty lifespanModifiers;
-    private SerializedProperty defaultDecayRate;
-    private SerializedProperty decayRateModifiers;
 
 
 
@@ -27,8 +25,6 @@ public class ThoughtDataEditor : ItemDataEditor
         isTemporary = serializedObject.FindProperty("isTemporary");
         defaultLifespan = serializedObject.FindProperty("defaultLifespan");
         lifespanModifiers = serializedObject.FindProperty("lifespanModifiers");
-        defaultDecayRate = serializedObject.FindProperty("defaultDecayRate");
-        decayRateModifiers = serializedObject.FindProperty("decayRateModifiers");
     }
 
     public override void OnInspectorGUI()
@@ -37,18 +33,23 @@ public class ThoughtDataEditor : ItemDataEditor
 
         // Inherited properties.
         DrawItemDataProperties(true);
-
         EditorGUILayout.PropertyField(itemColour, new GUIContent("Colour"));
 
         GUILayout.Space(halfLine);
 
         EditorGUILayout.PropertyField(validityChecks);
+        if (validityChecks.arraySize == 0)
+        {
+            EditorGUILayout.HelpBox("This thought will always be viable.", MessageType.Info);
+            GUILayout.Space(halfLine);
+        }
 
         EditorGUILayout.PropertyField(isTemporary);
-        EditorGUILayout.PropertyField(defaultLifespan);
-        EditorGUILayout.PropertyField(lifespanModifiers);
-        EditorGUILayout.PropertyField(defaultDecayRate);
-        EditorGUILayout.PropertyField(decayRateModifiers);
+        using (new EditorGUI.DisabledScope(!isTemporary.boolValue))
+        {
+            EditorGUILayout.PropertyField(defaultLifespan);
+            EditorGUILayout.PropertyField(lifespanModifiers);
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

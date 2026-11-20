@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChecksAndMods;
+using UnityEngine.UIElements.Experimental;
 
 namespace Quille
 {
@@ -21,10 +22,6 @@ namespace Quille
 
         [SerializeField] protected float defaultLifespan;
         [SerializeReference, PopulateSubtypes] protected List<Modulator> lifespanModifiers;
-        [SerializeField] protected float defaultDecayRate;
-        [SerializeReference, PopulateSubtypes] protected Modulator[] decayRateModifiers;
-
-        // Having both a customisable lifespan and decay rate is probably redundant.
 
         // Modifiers set on acquisition?
         // Modifiers to check while active?
@@ -44,7 +41,7 @@ namespace Quille
                 }
             }
         }
-        public bool IsTemporary { get { return isTemporary && defaultDecayRate > 0.0f; } }
+        public bool IsTemporary { get { return isTemporary; } }
         public float DefaultLifespan { get { return defaultLifespan; } }
         public IEnumerable<Modulator> LifespanModifiers
         {
@@ -56,46 +53,38 @@ namespace Quille
                 }
             }
         }
-        public float DefaultDecayRate { get { return defaultDecayRate; } }
-        public IEnumerable<Modulator> DecayRateModifiers
-        {
-            get
-            {
-                foreach (Modulator modulator in decayRateModifiers)
-                {
-                    yield return modulator;
-                }
-            }
-        }
 
 
 
         // METHODS
-        public bool CheckValidityFor(Person potentialThinker, out float lifespanIfValid)
+
+
+        public bool CheckValidityFor(Person potentialThinker)
         {
-            foreach (Check check in validityChecks)
+            if (validityChecks != null)
             {
-                if (!check.Execute(potentialThinker))
+                foreach(Check check in validityChecks)
                 {
-                    lifespanIfValid = 0f;
-                    return false;
+                    if (!check.Execute(potentialThinker))
+                    {
+                        return false;
+                    }
                 }
             }
+            return true;
+        }
+        public bool CheckValidityFor(Person potentialThinker, out float lifespanIfValid)
+        {
+            lifespanIfValid = 0.0f;
 
-            if (isTemporary)
+            if (CheckValidityFor(potentialThinker))
             {
-                lifespanIfValid = CalculateLifespanFor(potentialThinker);
-                if (lifespanIfValid <= 0)
-                {
-                    return false;
-                }
+                return !isTemporary || (lifespanIfValid = CalculateLifespanFor(potentialThinker)) > 0;
             }
             else
             {
-                lifespanIfValid = 0.0f;
+                return false;
             }
-
-            return true;
         }
 
         public float CalculateLifespanFor(Person thinker)
@@ -115,31 +104,13 @@ namespace Quille
             }
         }
 
-        public float CalculateDecayRateFor(Person thinker)
-        {
-            if (isTemporary && defaultDecayRate > 0.0f)
-            {
-                float decayRate = defaultDecayRate;
-                foreach (Modulator modulator in decayRateModifiers)
-                {
-                    decayRate = modulator.Execute(thinker, decayRate);
-                }
-                return decayRate;
-            }
-            else
-            {
-                return 0.0f; // Non-decaying thought.
-            }
-        }
-
-
         public Thought TryCreateThoughtFor(Person potentialThinker)
         {
             float potentialLifespan;
             if (CheckValidityFor(potentialThinker, out potentialLifespan))
             {
                 Thought newThought = ScriptableObject.CreateInstance<Thought>();
-                newThought.InitFor(potentialThinker, this, potentialLifespan);
+                newThought.Init(this, potentialLifespan);
 
                 return newThought;
             }

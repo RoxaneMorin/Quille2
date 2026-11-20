@@ -46,7 +46,10 @@ namespace Quille
         Elated
     }
     // TODO: add notice
-    
+
+
+    // MINDSPACE
+
 
 
     public static class Constants_Quille
@@ -116,5 +119,9 @@ namespace Quille
 
         // Interval (in seconds) at which the PersonAI will check the current state of needs.
         public const float NEED_CHECK_INTERVAL = 5f;
+
+
+        // MINDSPACE
+
     }
 }

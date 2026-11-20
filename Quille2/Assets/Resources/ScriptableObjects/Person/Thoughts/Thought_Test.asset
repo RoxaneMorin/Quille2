@@ -22,8 +22,6 @@ MonoBehaviour:
   defaultLifespan: 100
   lifespanModifiers:
   - rid: 2339103662146060291
-  defaultDecayRate: 1
-  decayRateModifiers: []
   references:
     version: 2
     RefIds:

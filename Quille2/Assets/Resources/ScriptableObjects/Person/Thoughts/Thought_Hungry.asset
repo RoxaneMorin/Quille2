@@ -18,11 +18,9 @@ MonoBehaviour:
   sortingIndex: 0
   itemColour: {r: 1, g: 0.44935167, b: 0, a: 1}
   validityChecks: []
-  isTemporary: 0
+  isTemporary: 1
   defaultLifespan: 0
   lifespanModifiers: []
-  defaultDecayRate: 0
-  decayRateModifiers: []
   references:
     version: 2
     RefIds: []
