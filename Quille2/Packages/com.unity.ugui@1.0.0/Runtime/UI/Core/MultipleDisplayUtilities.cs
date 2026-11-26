@@ -2,7 +2,7 @@ using UnityEngine.EventSystems;
 
 namespace UnityEngine.UI
 {
-    internal static class MultipleDisplayUtilities
+    public static class MultipleDisplayUtilities
     {
         /// <summary>
         /// Converts the current drag position into a relative position for the display.
