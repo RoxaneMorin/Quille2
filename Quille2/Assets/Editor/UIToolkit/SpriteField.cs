@@ -5,10 +5,10 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
-public class SpriteField : BaseField<Sprite>
+[UxmlElement]
+public partial class SpriteField : BaseField<Sprite>
 {
-    public new class UxmlFactory : UxmlFactory<SpriteField, UxmlTraits> { }
+    //public new class UxmlFactory : UxmlFactory<SpriteField, UxmlTraits> { }
 
     public new static readonly string ussClassName = "sprite-field";
 
