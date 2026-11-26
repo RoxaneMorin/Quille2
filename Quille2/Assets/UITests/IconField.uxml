@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UITests/TesterStyleSheet.uss?fileID=7433441132597879392&amp;guid=fc87644bcaae9734b987f5fecf2e3b3d&amp;type=3#TesterStyleSheet" />
+    <ui:VisualElement name="IconPreview" style="flex-grow: 1; align-items: stretch;" />
+    <uie:ObjectField label="Object Field" name="IconField" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
+</ui:UXML>

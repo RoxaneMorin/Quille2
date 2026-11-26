@@ -6,7 +6,6 @@
     min-width: 20px;
     min-height: 20px;
     align-self: stretch;
-    -unity-background-scale-mode: scale-to-fit;
     justify-content: flex-start;
     flex-direction: row;
     background-image: resource('Sprites/UI/UI_Placeholder');
@@ -19,4 +18,13 @@
     overflow: visible;
     visibility: visible;
     opacity: 1;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
 }

@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/UIToolkit/SpriteFieldStyleSheet.uss?fileID=7433441132597879392&amp;guid=10c844fcedf5f3c4f81989ed8400e483&amp;type=3#SpriteFieldStyleSheet" />
+    <SpriteField label="Arg caliss" />
+</ui:UXML>

@@ -1,0 +1,42 @@
+.sprite-field {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.sprite-field__background {
+    flex-grow: 1;
+    border-top-color: var(--unity-colors-default-border);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-right-color: var(--unity-colors-default-border);
+    border-bottom-color: var(--unity-colors-default-border);
+    border-left-color: var(--unity-colors-default-border);
+    -unity-background-scale-mode: scale-to-fit;
+    min-height: var(--unity-metrics-single_line-height);
+    background-color: var(--unity-colors-preview-background);
+}
+
+.sprite-field__preview {
+    flex-grow: 1;
+    background-image: url("project://database/Packages/com.unity.timeline/Editor/StyleSheets/Images/Icons/TrackMuteButtonDisabled@2x.png?fileID=2800000&guid=db31466324572e740a431e4e0e03a016&type=3#TrackMuteButtonDisabled@2x");
+    -unity-background-scale-mode: scale-to-fit;
+    margin-top: 6px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    margin-left: 6px;
+}
+
+.sprite-field .unity-object-field__label {
+    opacity: 1;
+    -unity-text-align: middle-left;
+    max-width: 50%;
+    min-width: 10%;
+}
